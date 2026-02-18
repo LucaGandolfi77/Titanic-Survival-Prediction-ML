@@ -1,0 +1,5 @@
+# GAN project – compatible with macOS Apple Silicon (MPS backend)
+# Install:  pip install -r requirements.txt
+torch>=2.1.0
+torchvision>=0.16.0
+Pillow>=10.0.0

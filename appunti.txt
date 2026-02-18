@@ -1,0 +1,10 @@
+6. Recommender System (Collaborative Filtering)Build a movie recommender (MovieLens dataset) using matrix factorization (SVD via surprise library) and content-based filtering. Great project to explain in interviews because it demonstrates both mathematical intuition (linear algebra) and practical implementation.
+
+7. End-to-End ML Pipeline with MLflowTake any of the above projects and wrap it in a proper MLOps pipeline: experiment tracking with MLflow, model versioning, hyperparameter tuning with Optuna, and a simple REST API endpoint with FastAPI to serve predictions. This is what separates a Data Scientist from an ML Engineer — exactly the role split you'll face in interviews.
+
+
+8. GAN for Image Synthesis (Already started!)You already have the perfect prompt for this. As a next step, ask Claude to upgrade your GAN to a DCGAN (convolutional) or a Conditional GAN that generates images conditioned on a class label. Add FID score evaluation to quantify image quality objectively.
+
+9. Reinforcement Learning — Cart-Pole to Custom EnvironmentImplement a Deep Q-Network (DQN) agent using PyTorch that learns to balance a Cart-Pole (gymnasium library). Then, given your embedded systems background, ask Claude to create a custom gymnasium environment that simulates a simplified control system (e.g., a PID-like thermal regulation loop). This directly connects your domain expertise to RL.
+
+10. Quantum ML with Qiskit + Classical Hybrid ModelGiven your existing QAOA/Qiskit experience, ask Claude to build a Quantum-Classical Hybrid Neural Network using PennyLane (or Qiskit Machine Learning): a variational quantum circuit replaces a layer in a classical PyTorch network for binary classification. This is a niche, highly differentiating project for companies in the research/aerospace/advanced computing sector.

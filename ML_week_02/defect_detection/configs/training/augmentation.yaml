@@ -1,0 +1,48 @@
+# Augmentation Configuration — PCB Defect Detection
+# Fine-tuned for manufacturing / PCB images
+
+# ── Colour space ──────────────────────────────────
+hsv_h: 0.015        # hue shift – keep low for PCB colours
+hsv_s: 0.7          # saturation
+hsv_v: 0.4          # value (brightness)
+
+# ── Geometric ─────────────────────────────────────
+degrees: 5.0         # moderate rotation – PCBs can be rotated
+translate: 0.1       # small translation
+scale: 0.5           # scale augmentation
+shear: 2.0           # slight shear
+perspective: 0.0001  # minimal perspective warp
+
+# ── Flipping ──────────────────────────────────────
+flipud: 0.5          # vertical flip – PCB orientation varies
+fliplr: 0.5          # horizontal flip
+
+# ── Mosaic & Mix-up ──────────────────────────────
+mosaic: 1.0          # mosaic probability
+mixup: 0.1           # light mix-up
+copy_paste: 0.1      # copy-paste augmentation
+
+# ── Albumentations (additional pipeline) ─────────
+albumentations:
+  enabled: true
+  transforms:
+    - name: "RandomBrightnessContrast"
+      p: 0.4
+      brightness_limit: 0.2
+      contrast_limit: 0.2
+    - name: "GaussianBlur"
+      p: 0.2
+      blur_limit: [3, 7]
+    - name: "GaussNoise"
+      p: 0.3
+      var_limit: [10.0, 50.0]
+    - name: "CLAHE"
+      p: 0.3
+      clip_limit: 4.0
+    - name: "RandomShadow"
+      p: 0.2
+    - name: "CoarseDropout"
+      p: 0.15
+      max_holes: 4
+      max_height: 32
+      max_width: 32

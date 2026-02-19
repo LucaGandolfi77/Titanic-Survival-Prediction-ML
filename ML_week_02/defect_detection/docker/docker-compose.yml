@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  # ── FastAPI Inference API ────────────────────────
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/app/models
+      - ../data:/app/data
+    environment:
+      - DEVICE=cpu
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # ── Streamlit Demo UI ──────────────────────────
+  ui:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ["streamlit", "run", "src/ui/streamlit_app.py", "--server.port", "8503", "--server.headless", "true"]
+    ports:
+      - "8503:8503"
+    volumes:
+      - ../models:/app/models
+      - ../data:/app/data
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # ── Training Job (run once) ────────────────────
+  trainer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.training
+    volumes:
+      - ../models:/app/models
+      - ../data:/app/data
+      - ../experiments:/app/experiments
+    profiles:
+      - training

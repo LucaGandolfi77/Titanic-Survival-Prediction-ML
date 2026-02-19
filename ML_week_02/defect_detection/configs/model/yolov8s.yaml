@@ -1,0 +1,7 @@
+# YOLOv8s (Small) – balanced speed & accuracy  [DEFAULT]
+model_size: "s"
+pretrained: true
+imgsz: 640
+parameters: "11.2M"
+gflops: 28.6
+notes: "Recommended starting point for defect detection."

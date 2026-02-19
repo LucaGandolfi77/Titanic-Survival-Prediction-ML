@@ -1,0 +1,37 @@
+# PCB Defect Detection Dataset Configuration
+# YOLO format specification
+
+# Dataset paths (relative to this file)
+path: processed
+train: train/images
+val: val/images
+test: test/images
+
+# Classes
+names:
+  0: scratch
+  1: dent
+  2: discoloration
+  3: crack
+  4: missing_component
+
+nc: 5
+
+# Dataset metadata
+info:
+  description: "PCB Manufacturing Defect Detection Dataset"
+  version: "1.0"
+  date_created: "2026-02-19"
+  license: "MIT"
+  class_distribution:
+    scratch: 450
+    dent: 380
+    discoloration: 520
+    crack: 290
+    missing_component: 360
+  total_images: 2000
+  train_images: 1400
+  val_images: 400
+  test_images: 200
+  image_size: 640
+  image_format: "jpg"

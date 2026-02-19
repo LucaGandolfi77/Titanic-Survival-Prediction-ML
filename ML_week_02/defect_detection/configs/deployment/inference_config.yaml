@@ -1,0 +1,41 @@
+# Inference Configuration
+
+model:
+  weights: "models/trained/best.pt"
+  format: "pt"                        # pt, onnx, coreml
+  device: "cpu"                       # mps, cpu, cuda:0
+  half: false                         # FP16 inference
+
+detection:
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  max_detections: 100
+  image_size: 640
+  agnostic_nms: false                 # class-agnostic NMS
+  classes: null                       # filter specific classes
+
+visualisation:
+  line_width: 2
+  font_size: 0.6
+  show_labels: true
+  show_confidence: true
+  colour_map:
+    scratch: [255, 107, 53]           # orange
+    dent: [66, 133, 244]              # blue
+    discoloration: [52, 168, 83]      # green
+    crack: [234, 67, 53]              # red
+    missing_component: [156, 39, 176] # purple
+
+batch:
+  max_batch_size: 32
+  video_stride: 1                     # process every N-th frame
+  save_predictions: true
+  output_dir: "outputs/predictions"
+
+webcam:
+  camera_id: 0
+  fps: 30
+  resolution: [1280, 720]
+  show_fps: true
+  record: false
+  record_dir: "outputs/visualizations"

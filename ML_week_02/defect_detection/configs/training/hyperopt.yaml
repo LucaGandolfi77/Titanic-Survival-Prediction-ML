@@ -1,0 +1,67 @@
+# Hyperparameter Optimisation Search Space (Optuna / Ray Tune)
+
+search_space:
+  # Learning rate
+  lr0:
+    type: loguniform
+    low: 0.0001
+    high: 0.05
+  lrf:
+    type: uniform
+    low: 0.001
+    high: 0.1
+
+  # Batch & image size
+  batch:
+    type: categorical
+    choices: [8, 16, 32]
+  imgsz:
+    type: categorical
+    choices: [416, 512, 640]
+
+  # Optimiser
+  optimizer:
+    type: categorical
+    choices: ["SGD", "Adam", "AdamW"]
+  momentum:
+    type: uniform
+    low: 0.85
+    high: 0.98
+  weight_decay:
+    type: loguniform
+    low: 0.0001
+    high: 0.01
+
+  # Loss weights
+  box:
+    type: uniform
+    low: 5.0
+    high: 10.0
+  cls:
+    type: uniform
+    low: 0.2
+    high: 1.0
+
+  # Augmentation
+  mosaic:
+    type: uniform
+    low: 0.5
+    high: 1.0
+  mixup:
+    type: uniform
+    low: 0.0
+    high: 0.3
+  scale:
+    type: uniform
+    low: 0.3
+    high: 0.7
+
+# Optuna settings
+n_trials: 50
+study_name: "defect_detection_hpo"
+direction: "maximize"          # maximise mAP@0.5
+metric: "metrics/mAP50(B)"
+pruner:
+  type: "MedianPruner"
+  n_startup_trials: 5
+  n_warmup_steps: 10

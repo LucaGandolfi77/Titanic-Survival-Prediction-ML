@@ -1,0 +1,9 @@
+# YOLOv8n (Nano) – fastest, smallest footprint
+# Use for real-time on constrained hardware
+
+model_size: "n"
+pretrained: true
+imgsz: 640
+parameters: "3.2M"
+gflops: 8.7
+notes: "Best for edge / embedded deployment. Low accuracy trade-off."

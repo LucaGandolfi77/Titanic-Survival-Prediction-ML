@@ -1,0 +1,23 @@
+# FastAPI / Inference API Configuration
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  title: "Defect Detection API"
+  version: "1.0.0"
+  description: "Real-time PCB defect detection powered by YOLOv8"
+
+cors:
+  allow_origins: ["*"]
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+upload:
+  max_file_size_mb: 50
+  allowed_extensions: ["jpg", "jpeg", "png", "bmp", "tiff", "mp4", "avi", "mov"]
+  temp_dir: "outputs/predictions"
+
+rate_limit:
+  requests_per_minute: 60
+  burst: 10

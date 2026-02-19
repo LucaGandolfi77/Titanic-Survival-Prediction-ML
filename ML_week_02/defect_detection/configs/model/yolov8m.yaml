@@ -1,0 +1,7 @@
+# YOLOv8m (Medium) – higher accuracy, slower
+model_size: "m"
+pretrained: true
+imgsz: 640
+parameters: "25.9M"
+gflops: 78.9
+notes: "Use when accuracy is more important than speed."

@@ -1,0 +1,86 @@
+# ============================================================================
+# Stage 3: Conditional GAN (class-conditioned generation) — Configuration
+# ============================================================================
+
+experiment:
+  name: "conditional-gan-mnist"
+  stage: "conditional_gan"
+  seed: 42
+  device: "auto"
+
+# Dataset
+data:
+  dataset_name: "mnist"
+  image_size: 64
+  batch_size: 128
+  num_workers: 0
+  shuffle: true
+  n_classes: 10              # number of classes for conditioning
+
+# Model architecture
+model:
+  latent_dim: 100
+  n_channels: 1
+  n_classes: 10
+  ngf: 64
+  ndf: 64
+  embedding_dim: 50          # class embedding dimension
+
+  generator:
+    architecture: "conditional_dcgan"
+    use_batch_norm: true
+    activation: "relu"
+    output_activation: "tanh"
+
+  discriminator:
+    architecture: "conditional_dcgan"
+    use_spectral_norm: true
+    use_batch_norm: false
+    activation: "leaky_relu"
+    leaky_slope: 0.2
+    use_projection: true     # projection discriminator for cGAN
+
+# Training
+training:
+  n_epochs: 100
+  d_steps_per_g_step: 1
+
+  optimizer_g:
+    type: "adam"
+    lr: 0.0002
+    betas: [0.5, 0.999]
+
+  optimizer_d:
+    type: "adam"
+    lr: 0.0002
+    betas: [0.5, 0.999]
+
+  label_smoothing: 0.1
+  label_noise: 0.05
+  gradient_penalty: false
+  gradient_penalty_lambda: 10.0
+
+  loss_type: "bce"
+
+# Evaluation
+evaluation:
+  sample_interval: 5
+  fid_interval: 10
+  n_fid_samples: 10000
+  inception_splits: 10
+  n_interpolation_steps: 10
+  n_classes_to_sample: 10    # generate samples for all classes
+
+# Logging
+logging:
+  tensorboard: true
+  log_dir: "outputs/tensorboard"
+  save_interval: 10
+  log_every_n_steps: 50
+
+# Paths
+paths:
+  data_dir: "data/datasets"
+  models_dir: "outputs/models/conditional_gan"
+  samples_dir: "outputs/samples"
+  interpolations_dir: "outputs/interpolations"

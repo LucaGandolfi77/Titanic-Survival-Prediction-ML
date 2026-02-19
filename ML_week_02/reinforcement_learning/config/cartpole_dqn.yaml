@@ -1,0 +1,65 @@
+# ============================================================
+# Stage 1 — Vanilla DQN on CartPole-v1
+# ============================================================
+
+experiment:
+  name: "dqn-cartpole"
+  seed: 42
+  device: "auto"  # auto-detect: mps → cuda → cpu
+
+# Environment
+environment:
+  name: "CartPole-v1"
+  render_mode: null
+  max_episode_steps: 500
+
+# Agent
+agent:
+  type: "dqn"
+  state_dim: 4
+  action_dim: 2
+  hidden_dims: [128, 128]
+
+  # Learning hyperparameters
+  learning_rate: 0.001
+  gamma: 0.99
+  batch_size: 64
+  buffer_size: 100000
+
+  # Exploration
+  epsilon_start: 1.0
+  epsilon_end: 0.01
+  epsilon_decay: 0.995
+
+  # Target network
+  target_update_frequency: 10   # episodes
+  soft_update_tau: 0.005
+  use_soft_update: false        # hard copy by default
+
+  # Training
+  n_episodes: 500
+  max_steps_per_episode: 500
+  learning_starts: 1000         # steps before training begins
+  train_frequency: 4            # train every N env steps
+  gradient_clip: 1.0
+
+# Evaluation
+evaluation:
+  eval_frequency: 50
+  n_eval_episodes: 10
+  render_eval: false
+  save_video: true
+  video_frequency: 100
+
+# Logging
+logging:
+  tensorboard: true
+  log_dir: "outputs/tensorboard"
+  checkpoint_frequency: 50
+  save_best_only: true
+
+# Paths
+paths:
+  models_dir: "outputs/models/cartpole"
+  videos_dir: "outputs/videos"
+  plots_dir: "outputs/plots"

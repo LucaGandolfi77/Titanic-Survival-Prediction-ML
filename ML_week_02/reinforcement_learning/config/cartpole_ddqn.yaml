@@ -1,0 +1,70 @@
+# ============================================================
+# Stage 2 — DQN Variants Comparison on CartPole-v1
+# ============================================================
+
+experiment:
+  name: "ddqn-cartpole"
+  seed: 42
+  device: "auto"
+
+environment:
+  name: "CartPole-v1"
+  render_mode: null
+  max_episode_steps: 500
+
+# ── Variant selector ──────────────────────────────────────
+# agent.type: "dqn" | "ddqn" | "dueling_dqn"
+agent:
+  type: "ddqn"
+  state_dim: 4
+  action_dim: 2
+  hidden_dims: [128, 128]
+
+  learning_rate: 0.0005
+  gamma: 0.99
+  batch_size: 64
+  buffer_size: 100000
+
+  # Exploration
+  epsilon_start: 1.0
+  epsilon_end: 0.01
+  epsilon_decay: 0.995
+
+  # Target network
+  target_update_frequency: 10
+  soft_update_tau: 0.005
+  use_soft_update: true
+
+  # Training
+  n_episodes: 500
+  max_steps_per_episode: 500
+  learning_starts: 1000
+  train_frequency: 4
+  gradient_clip: 1.0
+
+  # Prioritized experience replay (only used when buffer_type = "prioritized")
+  buffer_type: "prioritized"   # "standard" | "prioritized"
+  per_alpha: 0.6               # prioritization exponent
+  per_beta_start: 0.4          # importance sampling initial β
+  per_beta_end: 1.0
+  per_beta_anneal_episodes: 400
+
+# Evaluation
+evaluation:
+  eval_frequency: 50
+  n_eval_episodes: 10
+  render_eval: false
+  save_video: true
+  video_frequency: 100
+
+# Logging
+logging:
+  tensorboard: true
+  log_dir: "outputs/tensorboard"
+  checkpoint_frequency: 50
+  save_best_only: true
+
+paths:
+  models_dir: "outputs/models/cartpole"
+  videos_dir: "outputs/videos"
+  plots_dir: "outputs/plots"

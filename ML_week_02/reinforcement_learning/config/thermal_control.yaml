@@ -1,0 +1,109 @@
+# ============================================================
+# Stage 3 — Thermal Regulation System (Custom Environment)
+# ============================================================
+# Simulates an avionics electronic box with active cooling.
+# The agent decides the fan-speed level each step to keep the
+# component temperature within a safe band while minimising
+# energy consumption.
+
+experiment:
+  name: "dqn-thermal"
+  seed: 42
+  device: "auto"
+
+# ── Custom environment parameters ─────────────────────────
+environment:
+  name: "ThermalControl-v0"
+  render_mode: null
+  max_episode_steps: 500
+
+  # Physics model (simplified lumped-capacitance)
+  thermal:
+    ambient_temp: 25.0          # °C — baseline ambient
+    target_temp: 55.0           # °C — desired operating point
+    temp_tolerance: 5.0         # °C — acceptable band ±
+    critical_temp: 85.0         # °C — shutdown threshold
+    min_temp: 15.0              # °C — lower bound (condensation)
+    
+    # Thermal dynamics
+    thermal_mass: 50.0          # J/°C — electronic box capacitance
+    thermal_resistance: 1.5     # °C/W — passive heat-sink
+    heat_generation_base: 30.0  # W   — chip baseline dissipation
+    heat_generation_var: 15.0   # W   — workload variation amplitude
+    fan_cooling_power: [0.0, 5.0, 15.0, 30.0, 50.0]  # W per level
+    fan_energy_cost:   [0.0, 0.5, 1.5,  3.5,  7.0]   # normalised
+    
+    # External disturbances
+    enable_disturbances: true
+    disturbance_amplitude: 5.0  # °C — random ambient perturbation
+    workload_frequency: 0.02    # Hz — sinusoidal workload variation
+
+    dt: 1.0                     # seconds per step
+
+  # Reward shaping
+  reward:
+    temp_in_band: 1.0           # reward for being in target band
+    temp_deviation_penalty: -0.1 # per °C outside band
+    energy_penalty: -0.05       # multiplier on fan cost
+    critical_penalty: -50.0     # hitting critical temp
+    smoothness_bonus: 0.1       # for small action changes
+
+# Agent
+agent:
+  type: "ddqn"
+  state_dim: 5                  # [temp, ambient, heat_gen, fan_level, error]
+  action_dim: 5                 # fan levels 0-4
+  hidden_dims: [256, 256, 128]
+
+  learning_rate: 0.0003
+  gamma: 0.99
+  batch_size: 128
+  buffer_size: 200000
+
+  epsilon_start: 1.0
+  epsilon_end: 0.02
+  epsilon_decay: 0.998
+
+  target_update_frequency: 10
+  soft_update_tau: 0.005
+  use_soft_update: true
+
+  n_episodes: 1000
+  max_steps_per_episode: 500
+  learning_starts: 2000
+  train_frequency: 2
+  gradient_clip: 1.0
+
+  buffer_type: "prioritized"
+  per_alpha: 0.6
+  per_beta_start: 0.4
+  per_beta_end: 1.0
+  per_beta_anneal_episodes: 800
+
+# PID baseline
+pid:
+  kp: 2.0
+  ki: 0.1
+  kd: 1.0
+  setpoint: 55.0
+  output_limits: [0, 4]        # fan level range
+  dt: 1.0
+
+# Evaluation
+evaluation:
+  eval_frequency: 50
+  n_eval_episodes: 20
+  render_eval: false
+  save_video: false
+  video_frequency: 200
+
+logging:
+  tensorboard: true
+  log_dir: "outputs/tensorboard"
+  checkpoint_frequency: 100
+  save_best_only: true
+
+paths:
+  models_dir: "outputs/models/thermal_control"
+  videos_dir: "outputs/videos"
+  plots_dir: "outputs/plots"

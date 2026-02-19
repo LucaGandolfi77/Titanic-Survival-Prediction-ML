@@ -1,0 +1,85 @@
+# ============================================================================
+# Stage 1: Vanilla GAN (MLP-based) — Configuration
+# ============================================================================
+
+experiment:
+  name: "vanilla-gan-mnist"
+  stage: "vanilla_gan"
+  seed: 42
+  device: "auto"  # auto-detect: mps > cuda > cpu
+
+# Dataset
+data:
+  dataset_name: "mnist"
+  image_size: 28            # native MNIST resolution
+  batch_size: 128
+  num_workers: 0            # MPS requires 0
+  shuffle: true
+
+# Model architecture
+model:
+  latent_dim: 100
+  n_channels: 1             # grayscale
+  image_size: 28
+
+  generator:
+    architecture: "vanilla"
+    hidden_dims: [256, 512, 1024]
+    use_batch_norm: true
+    activation: "leaky_relu"
+    leaky_slope: 0.2
+    output_activation: "tanh"
+    dropout: 0.0
+
+  discriminator:
+    architecture: "vanilla"
+    hidden_dims: [512, 256]
+    use_spectral_norm: true
+    activation: "leaky_relu"
+    leaky_slope: 0.2
+    dropout: 0.3
+
+# Training
+training:
+  n_epochs: 100
+  d_steps_per_g_step: 1
+
+  optimizer_g:
+    type: "adam"
+    lr: 0.0002
+    betas: [0.5, 0.999]
+
+  optimizer_d:
+    type: "adam"
+    lr: 0.0002
+    betas: [0.5, 0.999]
+
+  # Stability techniques
+  label_smoothing: 0.1
+  label_noise: 0.05
+  gradient_penalty: false
+  gradient_penalty_lambda: 10.0
+
+  loss_type: "bce"          # bce | wasserstein | hinge
+
+# Evaluation
+evaluation:
+  sample_interval: 5
+  fid_interval: 20
+  n_fid_samples: 5000
+  inception_splits: 10
+  n_interpolation_steps: 10
+
+# Logging
+logging:
+  tensorboard: true
+  log_dir: "outputs/tensorboard"
+  save_interval: 10
+  log_every_n_steps: 50
+
+# Paths (relative to project root)
+paths:
+  data_dir: "data/datasets"
+  models_dir: "outputs/models/vanilla_gan"
+  samples_dir: "outputs/samples"
+  interpolations_dir: "outputs/interpolations"

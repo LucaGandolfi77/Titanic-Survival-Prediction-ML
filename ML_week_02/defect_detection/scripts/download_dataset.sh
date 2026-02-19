@@ -43,7 +43,7 @@ stratified_split(
 echo "✓ Dataset split complete!"
 echo ""
 echo "Dataset structure:"
-find "$DATA_DIR/processed" -type f | head -20
+find "$DATA_DIR/processed" -type f | head -20 || true
 echo "..."
 echo ""
 echo "Image counts:"

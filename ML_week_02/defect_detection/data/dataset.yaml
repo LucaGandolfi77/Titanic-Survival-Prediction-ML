@@ -1,8 +1,8 @@
 # PCB Defect Detection Dataset Configuration
 # YOLO format specification
 
-# Dataset paths (relative to this file)
-path: processed
+# Dataset paths (absolute to avoid Ultralytics datasets_dir resolution)
+path: /Users/lgandolfi/Desktop/AI/fcc-ML/Titanic-Survival-Prediction-ML/ML_week_02/defect_detection/data/processed
 train: train/images
 val: val/images
 test: test/images

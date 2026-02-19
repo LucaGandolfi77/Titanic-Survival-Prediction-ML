@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Technical Report – XAI Dashboard</title>
+    <style>
+        :root { --primary: #4A90D9; --success: #5CB85C; --warn: #F5A623; --danger: #D9534F; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; max-width: 900px; margin: 0 auto; }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 10px; }
+        h2 { color: #444; margin: 28px 0 12px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+        h3 { color: #555; margin: 16px 0 8px; }
+        .meta { color: #888; font-size: 0.85em; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f7f9fc; color: #555; font-weight: 600; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 600; }
+        .badge-pass { background: #d4edda; color: #155724; }
+        .badge-warn { background: #fff3cd; color: #856404; }
+        .badge-fail { background: #f8d7da; color: #721c24; }
+        .badge-high { background: #f8d7da; color: #721c24; }
+        .badge-medium { background: #fff3cd; color: #856404; }
+        .badge-low { background: #d4edda; color: #155724; }
+        .badge-critical { background: #721c24; color: #fff; }
+        .mono { font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.85em; }
+        .bar { height: 14px; border-radius: 3px; display: inline-block; }
+        .rec-box { background: #f7f9fc; border-radius: 8px; padding: 14px; margin: 10px 0; border-left: 4px solid var(--primary); }
+        .rec-box p { margin: 4px 0; }
+        pre { background: #f7f9fc; padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 0.85em; }
+        footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #eee; color: #aaa; font-size: 0.75em; }
+    </style>
+</head>
+<body>
+
+<h1>🔍 Technical Report – Explainable AI</h1>
+<p class="meta">Generated {{ report.generated_at }}</p>
+
+<!-- ─── Model Information ─── -->
+<h2>1. Model Information</h2>
+<table>
+    <tr><th>Property</th><th>Value</th></tr>
+    <tr><td>Type</td><td class="mono">{{ report.model.type }}</td></tr>
+    <tr><td>Task</td><td>{{ report.model.task }}</td></tr>
+    <tr><td>Number of Features</td><td>{{ report.model.n_features }}</td></tr>
+    {% if report.model.classes %}
+    <tr><td>Classes</td><td class="mono">{{ report.model.classes | join(', ') }}</td></tr>
+    {% endif %}
+</table>
+
+{% if report.model.params %}
+<h3>Hyperparameters</h3>
+<table>
+    <tr><th>Parameter</th><th>Value</th></tr>
+    {% for k, v in report.model.params.items() %}
+    <tr><td class="mono">{{ k }}</td><td class="mono">{{ v }}</td></tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<!-- ─── Dataset ─── -->
+{% if report.dataset %}
+<h2>2. Dataset</h2>
+<table>
+    <tr><th>Property</th><th>Value</th></tr>
+    {% for k, v in report.dataset.items() %}
+    <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<!-- ─── Performance ─── -->
+<h2>3. Model Performance</h2>
+<table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    {% for k, v in report.performance.items() %}
+    <tr>
+        <td>{{ k }}</td>
+        <td>
+            {{ "%.4f"|format(v) }}
+            <span class="bar" style="width: {{ (v * 200)|int }}px; background: var(--primary); opacity: 0.3;"></span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- ─── SHAP Global ─── -->
+{% if report.shap_global %}
+<h2>4. Global Feature Importance (SHAP)</h2>
+<table>
+    <tr><th>Feature</th><th>Mean |SHAP|</th></tr>
+    {% for k, v in report.shap_global.items() %}
+    <tr>
+        <td class="mono">{{ k }}</td>
+        <td>
+            {{ "%+.4f"|format(v) }}
+            <span class="bar" style="width: {{ (v|abs * 400)|int }}px;
+                background: {% if v > 0 %}var(--danger){% else %}var(--primary){% endif %}; opacity: 0.3;"></span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<!-- ─── Fairness ─── -->
+{% if report.fairness %}
+<h2>5. Fairness Analysis</h2>
+<table>
+    <tr><th>Attribute</th><th>Metric</th><th>Value</th><th>Threshold</th><th>Status</th></tr>
+    {% for row in report.fairness %}
+    <tr>
+        <td>{{ row.protected_attribute }}</td>
+        <td class="mono">{{ row.metric }}</td>
+        <td>{{ "%.4f"|format(row.value) }}</td>
+        <td>{{ row.threshold }}</td>
+        <td>
+            {% if '✅' in row.status %}
+            <span class="badge badge-pass">PASS</span>
+            {% elif '⚠️' in row.status %}
+            <span class="badge badge-warn">WARNING</span>
+            {% else %}
+            <span class="badge badge-fail">FAIL</span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<!-- ─── Recommendations ─── -->
+{% if report.recommendations %}
+<h2>6. Recommendations</h2>
+{% for rec in report.recommendations %}
+<div class="rec-box" style="border-left-color:
+    {% if rec.severity == 'CRITICAL' %}var(--danger)
+    {% elif rec.severity == 'HIGH' %}var(--danger)
+    {% elif rec.severity == 'MEDIUM' %}var(--warn)
+    {% else %}var(--success){% endif %};">
+    <p><span class="badge badge-{{ rec.severity|lower }}">{{ rec.severity }}</span>
+       <strong>{{ rec.category }}</strong></p>
+    <p><em>{{ rec.finding }}</em></p>
+    <p>{{ rec.recommendation | replace('\n', '<br>') }}</p>
+    {% if rec.regulation %}
+    <p style="color: #888; font-size: 0.85em;">📜 {{ rec.regulation }}</p>
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+<footer>
+    Explainable AI Dashboard &mdash; Auto-generated technical report<br>
+    Generated at {{ now.strftime('%Y-%m-%d %H:%M:%S') }}
+</footer>
+
+</body>
+</html>

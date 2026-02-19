@@ -1,0 +1,84 @@
+# Dashboard Configuration
+
+dashboard:
+  title: "Explainable AI Dashboard"
+  subtitle: "Model Transparency & Fairness Analysis"
+  theme: "light"
+
+# Model settings
+models:
+  default_model: "credit_risk_model"
+  auto_load: true
+  cache_explanations: true
+
+# Explainability settings
+explainability:
+  shap:
+    algorithm: "auto"
+    n_samples: 100
+    check_additivity: false
+
+  lime:
+    n_samples: 5000
+    n_features: 10
+    kernel_width: null
+
+  pdp:
+    grid_resolution: 50
+    n_jobs: -1
+
+  counterfactuals:
+    algorithm: "dice"
+    max_iterations: 1000
+    diversity_weight: 1.0
+
+# Fairness settings
+fairness:
+  protected_attributes:
+    - age
+    - gender
+    - race
+    - ethnicity
+
+  metrics:
+    - demographic_parity_difference
+    - equal_opportunity_difference
+    - disparate_impact_ratio
+    - theil_index
+
+  thresholds:
+    disparate_impact_min: 0.8
+    demographic_parity_max: 0.1
+
+  reference_groups:
+    age: "25-45"
+    gender: "male"
+    race: "white"
+
+# Reporting
+reporting:
+  languages: ["en", "it"]
+  formats: ["pdf", "html"]
+
+  executive_summary:
+    max_length: 500
+    reading_level: "8th_grade"
+
+  compliance_standards:
+    - "GDPR Article 22"
+    - "EU AI Act"
+    - "Equal Credit Opportunity Act"
+    - "Fair Housing Act"
+
+# Visualization
+visualization:
+  color_scheme: "viridis"
+  plot_backend: "plotly"
+  dpi: 150
+  max_features_display: 20
+
+# Performance
+performance:
+  max_data_points: 10000
+  cache_size_mb: 500
+  parallel_processing: true

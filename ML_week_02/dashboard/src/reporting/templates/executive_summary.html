@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Executive Summary – XAI Dashboard</title>
+    <style>
+        :root { --primary: #4A90D9; --success: #5CB85C; --warn: #F5A623; --danger: #D9534F; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #333; }
+        h1 { color: var(--primary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { color: #555; margin: 24px 0 12px; }
+        .meta { color: #888; font-size: 0.85em; margin-bottom: 24px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0; }
+        .card { background: #f7f9fc; border-radius: 8px; padding: 16px; border-left: 4px solid var(--primary); }
+        .card .label { font-size: 0.8em; color: #888; text-transform: uppercase; }
+        .card .value { font-size: 1.6em; font-weight: 700; color: var(--primary); }
+        .perf-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+        .perf-table th, .perf-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .perf-table th { background: #f7f9fc; color: #555; font-weight: 600; }
+        .features { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+        .features span { background: #e8f0fe; color: var(--primary); padding: 4px 10px; border-radius: 12px; font-size: 0.85em; }
+        .verdict-pass { color: var(--success); font-weight: 700; }
+        .verdict-warn { color: var(--warn); font-weight: 700; }
+        .verdict-fail { color: var(--danger); font-weight: 700; }
+        footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #eee; color: #aaa; font-size: 0.75em; }
+    </style>
+</head>
+<body>
+    <h1>🧠 Executive Summary</h1>
+    <p class="meta">Generated {{ summary.generated_at }} | Model: {{ summary.model_type }}</p>
+
+    <div class="card-grid">
+        <div class="card">
+            <div class="label">Model Type</div>
+            <div class="value">{{ summary.model_type }}</div>
+        </div>
+        <div class="card">
+            <div class="label">Task</div>
+            <div class="value" style="text-transform:capitalize">{{ summary.task }}</div>
+        </div>
+        <div class="card">
+            <div class="label">Features</div>
+            <div class="value">{{ summary.n_features }}</div>
+        </div>
+        <div class="card">
+            <div class="label">{{ summary.primary_metric_name }}</div>
+            <div class="value">{{ "%.3f"|format(summary.primary_metric_value) }}</div>
+        </div>
+    </div>
+
+    <h2>Performance Metrics</h2>
+    <table class="perf-table">
+        <tr><th>Metric</th><th>Value</th></tr>
+        {% for k, v in summary.performance.items() %}
+        <tr><td>{{ k }}</td><td>{{ "%.4f"|format(v) }}</td></tr>
+        {% endfor %}
+    </table>
+
+    {% if summary.top_features %}
+    <h2>Top Influential Features</h2>
+    <div class="features">
+        {% for f in summary.top_features %}
+        <span>{{ f }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if summary.fairness %}
+    <h2>Fairness Assessment</h2>
+    <div class="card-grid">
+        <div class="card" style="border-left-color: var(--success)">
+            <div class="label">Pass</div>
+            <div class="value" style="color: var(--success)">{{ summary.fairness.pass }}</div>
+        </div>
+        <div class="card" style="border-left-color: var(--warn)">
+            <div class="label">Warning</div>
+            <div class="value" style="color: var(--warn)">{{ summary.fairness.warn }}</div>
+        </div>
+        <div class="card" style="border-left-color: var(--danger)">
+            <div class="label">Fail</div>
+            <div class="value" style="color: var(--danger)">{{ summary.fairness.fail }}</div>
+        </div>
+    </div>
+    <p>Overall Verdict:
+        <span class="verdict-{{ summary.fairness.verdict|lower }}">{{ summary.fairness.verdict }}</span>
+    </p>
+    {% endif %}
+
+    <footer>Explainable AI Dashboard &mdash; Auto-generated report</footer>
+</body>
+</html>

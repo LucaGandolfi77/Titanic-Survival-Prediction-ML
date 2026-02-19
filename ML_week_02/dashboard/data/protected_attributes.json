@@ -1,0 +1,4 @@
+{
+    "credit_risk": ["age", "gender"],
+    "medical": ["age", "gender", "ethnicity"]
+}

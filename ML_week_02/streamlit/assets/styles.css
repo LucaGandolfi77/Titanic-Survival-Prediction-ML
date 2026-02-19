@@ -1,0 +1,82 @@
+/* ─────────────────────────────────────────────
+   ML Playground – Custom Streamlit CSS
+   ───────────────────────────────────────────── */
+
+/* Main container tweaks */
+.block-container {
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+/* Metric cards */
+div[data-testid="stMetric"] {
+    background-color: #F0F2F6;
+    border-radius: 0.6rem;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+div[data-testid="stMetric"] label {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+/* Sidebar polish */
+section[data-testid="stSidebar"] {
+    background-color: #FAFAFA;
+}
+
+section[data-testid="stSidebar"] h1 {
+    font-size: 1.3rem;
+}
+
+/* Expanders */
+details[data-testid="stExpander"] {
+    border: 1px solid #E0E0E0;
+    border-radius: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+/* Upload zone */
+section[data-testid="stFileUploader"] {
+    border: 2px dashed #FF4B4B;
+    border-radius: 0.6rem;
+    padding: 1rem;
+}
+
+/* Buttons */
+.stButton > button {
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.stButton > button:hover {
+    border-color: #FF4B4B;
+    color: #FF4B4B;
+}
+
+/* Dataframe container */
+[data-testid="stDataFrame"] {
+    border: 1px solid #E0E0E0;
+    border-radius: 0.5rem;
+}
+
+/* Tab styling */
+button[data-baseweb="tab"] {
+    font-weight: 600;
+}
+
+/* Progress bar color */
+.stProgress > div > div > div {
+    background-color: #FF4B4B;
+}
+
+/* Toast messages */
+.stToast {
+    border-radius: 0.5rem;
+}

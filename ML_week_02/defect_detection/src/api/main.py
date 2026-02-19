@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.routes import router, set_predictor
+from src.api.websocket import ws_router, set_ws_predictor
 from src.inference.predictor import DefectPredictor
 from src.utils.config import load_api_config, load_inference_config, project_root
 from src.utils.logging import get_logger
@@ -38,6 +39,7 @@ async def lifespan(application: FastAPI):
         imgsz=inf_cfg["detection"]["image_size"],
     )
     set_predictor(predictor)
+    set_ws_predictor(predictor)
     logger.success("Model loaded — API ready")
     yield
     logger.info("Shutting down")
@@ -62,6 +64,7 @@ def create_app() -> FastAPI:
     )
 
     application.include_router(router, tags=["Detection"])
+    application.include_router(ws_router, tags=["WebSocket"])
 
     return application
 

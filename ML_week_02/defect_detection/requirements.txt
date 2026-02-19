@@ -4,6 +4,7 @@ torch>=2.1.0
 torchvision>=0.16.0
 onnx>=1.15.0
 onnxruntime>=1.17.0
+coremltools>=7.0
 
 # ── Data & Image Processing ──────────────────────
 numpy>=1.26.0

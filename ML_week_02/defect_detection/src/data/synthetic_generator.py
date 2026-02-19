@@ -160,11 +160,12 @@ class SyntheticDefectGenerator:
         h, w = img.shape[:2]
         pw, ph = self.rng.randint(30, 80), self.rng.randint(30, 80)
         x, y = self.rng.randint(0, w - pw), self.rng.randint(0, h - ph)
-        shift = self.rng.choice([
+        shifts = [
             np.array([0, 30, -20]),
             np.array([0, -20, 30]),
             np.array([-20, -20, 0]),
-        ])
+        ]
+        shift = shifts[self.rng.randint(0, len(shifts))]
         out = img.copy()
         patch = np.clip(out[y:y + ph, x:x + pw].astype(np.int16) + shift, 0, 255).astype(np.uint8)
         mask = cv2.GaussianBlur(np.ones((ph, pw), np.float32), (15, 15), 0)

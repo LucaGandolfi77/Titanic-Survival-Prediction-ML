@@ -1,0 +1,28 @@
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — GET /health → 200 (1.2 ms)
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — POST /predict → 200 (1.1 ms)
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — POST /predict → 422 (1.0 ms)
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — POST /predict → 422 (0.9 ms)
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — POST /predict/batch → 200 (1.1 ms)
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — POST /predict/batch → 200 (1.0 ms)
+2026-02-19 07:49:15 — titanic_mlops.api — INFO — log_requests:89 — GET /model/info → 200 (0.9 ms)
+2026-02-19 07:49:15 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:49:15 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:49:15 — titanic_mlops.predictor — DEBUG — predict:103 — Predicted 1 passengers
+2026-02-19 07:49:15 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:49:15 — titanic_mlops.predictor — DEBUG — predict:103 — Predicted 2 passengers
+2026-02-19 07:49:15 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:49:15 — titanic_mlops.predictor — DEBUG — predict:103 — Predicted 1 passengers
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — GET /health → 200 (1.4 ms)
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — POST /predict → 200 (1.5 ms)
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — POST /predict → 422 (1.3 ms)
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — POST /predict → 422 (1.2 ms)
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — POST /predict/batch → 200 (3.0 ms)
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — POST /predict/batch → 200 (1.1 ms)
+2026-02-19 07:51:25 — titanic_mlops.api — INFO — log_requests:89 — GET /model/info → 200 (0.9 ms)
+2026-02-19 07:51:25 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:51:25 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:51:25 — titanic_mlops.predictor — DEBUG — predict:103 — Predicted 1 passengers
+2026-02-19 07:51:25 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:51:25 — titanic_mlops.predictor — DEBUG — predict:103 — Predicted 2 passengers
+2026-02-19 07:51:25 — titanic_mlops.predictor — INFO — __init__:63 — Predictor ready
+2026-02-19 07:51:25 — titanic_mlops.predictor — DEBUG — predict:103 — Predicted 1 passengers

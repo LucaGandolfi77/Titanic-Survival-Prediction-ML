@@ -1,0 +1,71 @@
+# ============================================================
+# Titanic MLOps Pipeline — Master Configuration
+# ============================================================
+# All hyperparams, paths, and constants live here.  
+# Never hard-code values in Python — read from this file.
+# ============================================================
+
+# Project metadata
+project:
+  name: "titanic-mlops"
+  version: "1.0.0"
+  random_seed: 42
+
+# Data paths (relative to project root)
+paths:
+  data_dir: "data"
+  processed_dir: "data/processed"
+  models_dir: "models"
+  logs_dir: "logs"
+
+# MLflow configuration
+mlflow:
+  tracking_uri: "http://localhost:5000"
+  experiment_name: "titanic-classification"
+  registry_name: "titanic-model"
+  artifact_location: "./mlruns"
+
+# Preprocessing
+preprocessing:
+  target_column: "Survived"
+  drop_columns: ["PassengerId", "Name", "Ticket", "Cabin"]
+  numeric_features: ["Age", "Fare", "SibSp", "Parch"]
+  categorical_features: ["Pclass", "Sex", "Embarked"]
+  test_size: 0.2
+
+# Model training
+training:
+  models:
+    logistic_regression:
+      C: 1.0
+      max_iter: 1000
+      solver: "lbfgs"
+    random_forest:
+      n_estimators: 200
+      max_depth: 10
+      min_samples_split: 5
+    xgboost:
+      n_estimators: 200
+      max_depth: 6
+      learning_rate: 0.05
+  cv_folds: 5
+
+# Optuna HPO
+optuna:
+  n_trials: 50
+  timeout: 300  # seconds
+  model_type: "xgboost"  # which model to optimize
+  search_space:
+    n_estimators: [50, 500]
+    max_depth: [3, 12]
+    learning_rate: [0.01, 0.3]
+    subsample: [0.6, 1.0]
+    colsample_bytree: [0.6, 1.0]
+
+# FastAPI serving
+serving:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  log_level: "info"
+  model_stage: "Production"  # MLflow model stage to serve

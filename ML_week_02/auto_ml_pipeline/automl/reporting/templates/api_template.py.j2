@@ -1,0 +1,49 @@
+"""
+Auto-generated FastAPI inference API.
+Run:  uvicorn app:app --reload
+"""
+
+import joblib
+import numpy as np
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI(title="AutoML-Lite Inference API")
+
+MODEL = joblib.load("{{ model_path }}")
+
+FEATURE_NAMES = {{ feature_names }}
+
+
+class PredictRequest(BaseModel):
+    """Input features as a list of floats."""
+    features: list[float]
+
+
+class PredictResponse(BaseModel):
+    prediction: float | int | str
+    {% if task == "classification" %}
+    probabilities: list[float] | None = None
+    {% endif %}
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
+@app.post("/predict", response_model=PredictResponse)
+def predict(req: PredictRequest):
+    X = np.array(req.features).reshape(1, -1)
+    pred = MODEL.predict(X)[0]
+    resp = {"prediction": pred}
+    {% if task == "classification" %}
+    if hasattr(MODEL, "predict_proba"):
+        resp["probabilities"] = MODEL.predict_proba(X)[0].tolist()
+    {% endif %}
+    return resp
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

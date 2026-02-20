@@ -1,0 +1,463 @@
+2026-02-20 00:35:35 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:35:35 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:35:36 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:36:25 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:36:25 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:36:25 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:36:25 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:23 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:23 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:23 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:23 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:50 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:50 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:50 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:38:50 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:19 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:19 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:19 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:19 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:41 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:41 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:41 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:41 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:39:41 | INFO     | automl.eda.profiler:profile:83 — Profile: 200 rows × 7 cols, 0.03 MB
+2026-02-20 00:40:15 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 00:40:15 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 00:40:56 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.5496 ± 0.0461  (10.2s)
+2026-02-20 00:41:08 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.5196 ± 0.0304  (12.6s)
+2026-02-20 00:41:08 | INFO     | automl.models.screener:screen:76 — Top-2 models: ['logistic_regression', 'random_forest']
+2026-02-20 00:41:09 | INFO     | automl.models.ensemble:build:43 — Building soft_voting ensemble from ['rf', 'lr']
+2026-02-20 00:41:19 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 00:42:04 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-0/test_generate_report0/report.html
+2026-02-20 00:42:04 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-0/test_generate_api0/app.py
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/titanic_test.csv  shape=(200, 7)
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:96 — Task detected: classification
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 00:42:47 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 4, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 00:42:47 | INFO     | automl.eda.profiler:profile:83 — Profile: 160 rows × 6 cols, 0.02 MB
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 00:42:47 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 00:42:47 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 20 → 18 (after selection)
+2026-02-20 00:42:47 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 00:42:57 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.4503 ± 0.0340  (9.7s)
+2026-02-20 00:43:05 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.4748 ± 0.0194  (8.0s)
+2026-02-20 00:43:12 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=0.4126 ± 0.0286  (7.0s)
+2026-02-20 00:43:12 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=0.4811 ± 0.0204  (0.3s)
+2026-02-20 00:43:16 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=0.4752 ± 0.0217  (3.8s)
+2026-02-20 00:43:23 | INFO     | automl.models.screener:screen:65 —   catboost                  score=0.4500 ± 0.0159  (6.6s)
+2026-02-20 00:43:23 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 00:43:23 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 00:43:23 | INFO     | automl.models.optimizer:optimize:67 —   Optimising xgboost (100 trials) …
+2026-02-20 00:43:45 | INFO     | automl.models.optimizer:optimize:121 —   xgboost best score=0.5375 params={'n_estimators': 63, 'max_depth': 9, 'learning_rate': 0.27968751520559376, 'subsample': 0.8204342256957862}
+2026-02-20 00:43:45 | INFO     | automl.models.optimizer:optimize:67 —   Optimising lightgbm (100 trials) …
+2026-02-20 00:48:17 | INFO     | automl.models.optimizer:optimize:121 —   lightgbm best score=0.5375 params={'n_estimators': 414, 'max_depth': 8, 'learning_rate': 0.24346285151922295, 'num_leaves': 75}
+2026-02-20 00:48:17 | INFO     | automl.models.optimizer:optimize:67 —   Optimising random_forest (100 trials) …
+2026-02-20 00:50:00 | INFO     | automl.models.optimizer:optimize:121 —   random_forest best score=0.5563 params={'n_estimators': 260, 'max_depth': 14, 'min_samples_split': 2}
+2026-02-20 00:50:00 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 00:50:00 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 00:50:04 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 00:50:04 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 00:50:06 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/out/model.pkl  (4.6 MB)
+2026-02-20 00:50:07 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/out/report.html
+2026-02-20 00:50:07 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/out/app.py
+2026-02-20 00:50:07 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 00:50:07 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 439.9s
+2026-02-20 00:50:07 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/out/model.pkl
+2026-02-20 00:50:07 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/out/report.html
+2026-02-20 00:50:07 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-1/test_binary_classification0/out/app.py
+2026-02-20 00:50:07 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/titanic_test.csv  shape=(200, 7)
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:96 — Task detected: classification
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 00:55:41 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 4, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 00:55:41 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 6 cols, 0.02 MB
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 00:55:41 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 00:55:41 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 20 → 18 (after selection)
+2026-02-20 00:55:41 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 00:55:45 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.4503 ± 0.0340  (4.4s)
+2026-02-20 00:55:48 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.4748 ± 0.0194  (2.4s)
+2026-02-20 00:55:49 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=0.4126 ± 0.0286  (1.9s)
+2026-02-20 00:55:50 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=0.4811 ± 0.0204  (0.1s)
+2026-02-20 00:55:51 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=0.4752 ± 0.0217  (1.0s)
+2026-02-20 00:55:52 | INFO     | automl.models.screener:screen:65 —   catboost                  score=0.4500 ± 0.0159  (1.5s)
+2026-02-20 00:55:52 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 00:55:52 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 00:55:52 | INFO     | automl.models.optimizer:optimize:67 —   Optimising xgboost (100 trials) …
+2026-02-20 00:56:01 | INFO     | automl.models.optimizer:optimize:121 —   xgboost best score=0.5375 params={'n_estimators': 63, 'max_depth': 9, 'learning_rate': 0.27968751520559376, 'subsample': 0.8204342256957862}
+2026-02-20 00:56:01 | INFO     | automl.models.optimizer:optimize:67 —   Optimising lightgbm (100 trials) …
+2026-02-20 00:57:38 | INFO     | automl.models.optimizer:optimize:121 —   lightgbm best score=0.5375 params={'n_estimators': 414, 'max_depth': 8, 'learning_rate': 0.24346285151922295, 'num_leaves': 75}
+2026-02-20 00:57:38 | INFO     | automl.models.optimizer:optimize:67 —   Optimising random_forest (100 trials) …
+2026-02-20 00:58:53 | INFO     | automl.models.optimizer:optimize:121 —   random_forest best score=0.5563 params={'n_estimators': 260, 'max_depth': 14, 'min_samples_split': 2}
+2026-02-20 00:58:53 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 00:58:53 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 00:58:55 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 00:58:55 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 00:58:55 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/out/model.pkl  (4.6 MB)
+2026-02-20 00:58:56 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/out/report.html
+2026-02-20 00:58:56 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/out/app.py
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 194.9s
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/out/model.pkl
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/out/report.html
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-2/test_binary_classification0/out/app.py
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-2/test_regression0/regression_test.csv  shape=(200, 4)
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:96 — Task detected: regression
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 00:58:56 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=1
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 1, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 00:58:56 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 3 cols, 0.01 MB
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 00:58:56 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 00:58:56 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 10 → 5 (after selection)
+2026-02-20 00:58:56 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 00:58:56 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=-37.6052 ± 4.6745  (0.0s)
+2026-02-20 00:58:56 | INFO     | automl.models.screener:screen:65 —   random_forest             score=-196.3590 ± 21.4458  (0.1s)
+2026-02-20 00:58:56 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=-73.8117 ± 6.5576  (0.2s)
+2026-02-20 00:58:56 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=-138.4678 ± 33.5571  (0.1s)
+2026-02-20 00:58:56 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=-204.1466 ± 25.2983  (0.1s)
+2026-02-20 00:58:57 | INFO     | automl.models.screener:screen:65 —   catboost                  score=-96.8333 ± 5.1053  (1.1s)
+2026-02-20 00:58:57 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 00:58:57 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 00:58:57 | INFO     | automl.models.optimizer:optimize:67 —   Optimising logistic_regression (100 trials) …
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-3/test_regression0/regression_test.csv  shape=(200, 4)
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:96 — Task detected: regression
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:01:39 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=1
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 1, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:01:39 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 3 cols, 0.01 MB
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:01:39 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:01:39 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 10 → 5 (after selection)
+2026-02-20 01:01:39 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:01:42 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=-37.6052 ± 4.6745  (3.2s)
+2026-02-20 01:01:45 | INFO     | automl.models.screener:screen:65 —   random_forest             score=-196.3590 ± 21.4458  (3.5s)
+2026-02-20 01:01:48 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=-73.8117 ± 6.5576  (2.2s)
+2026-02-20 01:01:50 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=-138.4678 ± 33.5571  (2.0s)
+2026-02-20 01:01:51 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=-204.1466 ± 25.2983  (1.7s)
+2026-02-20 01:01:53 | INFO     | automl.models.screener:screen:65 —   catboost                  score=-96.8333 ± 5.1053  (1.4s)
+2026-02-20 01:01:53 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:01:53 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:01:53 | INFO     | automl.models.optimizer:optimize:67 —   Optimising logistic_regression (100 trials) …
+2026-02-20 01:01:53 | DEBUG    | automl.models.registry:build:85 — Dropping params {'C'} not accepted by Ridge
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-4/test_regression0/regression_test.csv  shape=(200, 4)
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:96 — Task detected: regression
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:03:04 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=1
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 1, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:03:04 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 3 cols, 0.01 MB
+2026-02-20 01:03:04 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:03:04 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:03:05 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 10 → 5 (after selection)
+2026-02-20 01:03:05 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:03:07 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=-37.6052 ± 4.6745  (2.6s)
+2026-02-20 01:03:10 | INFO     | automl.models.screener:screen:65 —   random_forest             score=-196.3590 ± 21.4458  (2.3s)
+2026-02-20 01:03:11 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=-73.8117 ± 6.5576  (2.0s)
+2026-02-20 01:03:12 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=-138.4678 ± 33.5571  (0.1s)
+2026-02-20 01:03:13 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=-204.1466 ± 25.2983  (1.0s)
+2026-02-20 01:03:14 | INFO     | automl.models.screener:screen:65 —   catboost                  score=-96.8333 ± 5.1053  (1.1s)
+2026-02-20 01:03:14 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:03:14 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:03:14 | INFO     | automl.models.optimizer:optimize:67 —   Optimising logistic_regression (100 trials) …
+2026-02-20 01:03:14 | DEBUG    | automl.models.registry:build:85 — Dropping params {'C'} not accepted by Ridge
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/regression_test.csv  shape=(200, 4)
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:96 — Task detected: regression
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:04:58 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=1
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 1, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:04:58 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 3 cols, 0.01 MB
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:04:58 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:04:58 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 10 → 5 (after selection)
+2026-02-20 01:04:58 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:05:01 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=-37.6052 ± 4.6745  (2.2s)
+2026-02-20 01:05:03 | INFO     | automl.models.screener:screen:65 —   random_forest             score=-196.3590 ± 21.4458  (2.4s)
+2026-02-20 01:05:05 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=-73.8117 ± 6.5576  (1.9s)
+2026-02-20 01:05:06 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=-138.4678 ± 33.5571  (1.5s)
+2026-02-20 01:05:08 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=-204.1466 ± 25.2983  (1.2s)
+2026-02-20 01:05:09 | INFO     | automl.models.screener:screen:65 —   catboost                  score=-96.8333 ± 5.1053  (1.6s)
+2026-02-20 01:05:09 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:05:09 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:05:09 | INFO     | automl.models.optimizer:optimize:67 —   Optimising logistic_regression (100 trials) …
+2026-02-20 01:05:11 | INFO     | automl.models.optimizer:optimize:121 —   logistic_regression best score=-29.6292 params={'alpha': 0.0010008679573059193}
+2026-02-20 01:05:11 | INFO     | automl.models.optimizer:optimize:67 —   Optimising extra_trees (100 trials) …
+2026-02-20 01:05:58 | INFO     | automl.models.optimizer:optimize:121 —   extra_trees best score=-64.6004 params={'n_estimators': 314, 'max_depth': 15, 'min_samples_split': 2}
+2026-02-20 01:05:58 | INFO     | automl.models.optimizer:optimize:67 —   Optimising catboost (100 trials) …
+2026-02-20 01:06:45 | INFO     | automl.models.optimizer:optimize:121 —   catboost best score=-49.4579 params={'iterations': 452, 'depth': 3, 'learning_rate': 0.036591497526479055}
+2026-02-20 01:06:45 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 01:06:45 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:06:46 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:06:46 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 01:06:47 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/out/model.pkl  (14.1 MB)
+2026-02-20 01:06:47 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/out/report.html
+2026-02-20 01:06:47 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/out/app.py
+2026-02-20 01:06:47 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 01:06:47 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 108.6s
+2026-02-20 01:06:47 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/out/model.pkl
+2026-02-20 01:06:47 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/out/report.html
+2026-02-20 01:06:47 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-5/test_regression0/out/app.py
+2026-02-20 01:06:47 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 01:07:24 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:07:24 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:07:24 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:07:24 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:07:24 | INFO     | automl.eda.profiler:profile:75 — Profile: 200 rows × 7 cols, 0.03 MB
+2026-02-20 01:07:24 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:07:24 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:07:27 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.5496 ± 0.0461  (2.9s)
+2026-02-20 01:07:30 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.5196 ± 0.0304  (2.5s)
+2026-02-20 01:07:30 | INFO     | automl.models.screener:screen:76 — Top-2 models: ['logistic_regression', 'random_forest']
+2026-02-20 01:07:30 | INFO     | automl.models.ensemble:build:43 — Building soft_voting ensemble from ['rf', 'lr']
+2026-02-20 01:07:31 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/titanic_test.csv  shape=(200, 7)
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:96 — Task detected: classification
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:07:31 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 4, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:07:31 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 6 cols, 0.02 MB
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:07:31 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:07:31 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 20 → 18 (after selection)
+2026-02-20 01:07:31 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:07:32 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.4503 ± 0.0340  (1.3s)
+2026-02-20 01:07:33 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.4748 ± 0.0194  (0.3s)
+2026-02-20 01:07:33 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=0.4126 ± 0.0286  (0.3s)
+2026-02-20 01:07:33 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=0.4811 ± 0.0204  (0.1s)
+2026-02-20 01:07:34 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=0.4752 ± 0.0217  (1.1s)
+2026-02-20 01:07:36 | INFO     | automl.models.screener:screen:65 —   catboost                  score=0.4500 ± 0.0159  (1.7s)
+2026-02-20 01:07:36 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 01:07:36 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:07:36 | INFO     | automl.models.optimizer:optimize:67 —   Optimising xgboost (100 trials) …
+2026-02-20 01:07:45 | INFO     | automl.models.optimizer:optimize:121 —   xgboost best score=0.5375 params={'n_estimators': 63, 'max_depth': 9, 'learning_rate': 0.27968751520559376, 'subsample': 0.8204342256957862}
+2026-02-20 01:07:45 | INFO     | automl.models.optimizer:optimize:67 —   Optimising lightgbm (100 trials) …
+2026-02-20 01:09:18 | INFO     | automl.models.optimizer:optimize:121 —   lightgbm best score=0.5375 params={'n_estimators': 414, 'max_depth': 8, 'learning_rate': 0.24346285151922295, 'num_leaves': 75}
+2026-02-20 01:09:18 | INFO     | automl.models.optimizer:optimize:67 —   Optimising random_forest (100 trials) …
+2026-02-20 01:10:20 | INFO     | automl.models.optimizer:optimize:121 —   random_forest best score=0.5563 params={'n_estimators': 260, 'max_depth': 14, 'min_samples_split': 2}
+2026-02-20 01:10:20 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 01:10:20 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 01:10:22 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:10:22 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 01:10:23 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/out/model.pkl  (4.6 MB)
+2026-02-20 01:10:23 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/out/report.html
+2026-02-20 01:10:23 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/out/app.py
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 171.7s
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/out/model.pkl
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/out/report.html
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-6/test_binary_classification0/out/app.py
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/regression_test.csv  shape=(200, 4)
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:96 — Task detected: regression
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:10:23 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=1
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 1, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:10:23 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 3 cols, 0.01 MB
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:10:23 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:10:23 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 10 → 5 (after selection)
+2026-02-20 01:10:23 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:10:23 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=-37.6052 ± 4.6745  (0.0s)
+2026-02-20 01:10:23 | INFO     | automl.models.screener:screen:65 —   random_forest             score=-196.3590 ± 21.4458  (0.1s)
+2026-02-20 01:10:23 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=-73.8117 ± 6.5576  (0.1s)
+2026-02-20 01:10:23 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=-138.4678 ± 33.5571  (0.0s)
+2026-02-20 01:10:23 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=-204.1466 ± 25.2983  (0.1s)
+2026-02-20 01:10:25 | INFO     | automl.models.screener:screen:65 —   catboost                  score=-96.8333 ± 5.1053  (1.3s)
+2026-02-20 01:10:25 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:10:25 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:10:25 | INFO     | automl.models.optimizer:optimize:67 —   Optimising logistic_regression (100 trials) …
+2026-02-20 01:10:26 | INFO     | automl.models.optimizer:optimize:121 —   logistic_regression best score=-29.6292 params={'alpha': 0.0010008679573059193}
+2026-02-20 01:10:26 | INFO     | automl.models.optimizer:optimize:67 —   Optimising extra_trees (100 trials) …
+2026-02-20 01:11:15 | INFO     | automl.models.optimizer:optimize:121 —   extra_trees best score=-64.6004 params={'n_estimators': 314, 'max_depth': 15, 'min_samples_split': 2}
+2026-02-20 01:11:15 | INFO     | automl.models.optimizer:optimize:67 —   Optimising catboost (100 trials) …
+2026-02-20 01:11:56 | INFO     | automl.models.optimizer:optimize:121 —   catboost best score=-49.4579 params={'iterations': 452, 'depth': 3, 'learning_rate': 0.036591497526479055}
+2026-02-20 01:11:56 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 01:11:56 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:11:57 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 01:11:57 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/out/model.pkl  (14.1 MB)
+2026-02-20 01:11:57 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/out/report.html
+2026-02-20 01:11:57 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/out/app.py
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 94.2s
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/out/model.pkl
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/out/report.html
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-6/test_regression0/out/app.py
+2026-02-20 01:11:57 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 01:11:57 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-6/test_generate_report0/report.html
+2026-02-20 01:11:57 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-6/test_generate_api0/app.py
+2026-02-20 01:14:27 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:14:27 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:14:27 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:14:27 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:14:27 | INFO     | automl.eda.profiler:profile:75 — Profile: 200 rows × 7 cols, 0.03 MB
+2026-02-20 01:14:27 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:14:27 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:14:29 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.5496 ± 0.0461  (2.2s)
+2026-02-20 01:14:31 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.5196 ± 0.0304  (1.9s)
+2026-02-20 01:14:31 | INFO     | automl.models.screener:screen:76 — Top-2 models: ['logistic_regression', 'random_forest']
+2026-02-20 01:14:31 | INFO     | automl.models.ensemble:build:43 — Building soft_voting ensemble from ['rf', 'lr']
+2026-02-20 01:14:31 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/titanic_test.csv  shape=(200, 7)
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:96 — Task detected: classification
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:14:31 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=4
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 4, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:14:31 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 6 cols, 0.02 MB
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:14:31 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:14:31 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 20 → 18 (after selection)
+2026-02-20 01:14:31 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:14:31 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=0.4503 ± 0.0340  (0.0s)
+2026-02-20 01:14:31 | INFO     | automl.models.screener:screen:65 —   random_forest             score=0.4748 ± 0.0194  (0.1s)
+2026-02-20 01:14:32 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=0.4126 ± 0.0286  (0.2s)
+2026-02-20 01:14:33 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=0.4811 ± 0.0204  (1.3s)
+2026-02-20 01:14:34 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=0.4752 ± 0.0217  (1.0s)
+2026-02-20 01:14:36 | INFO     | automl.models.screener:screen:65 —   catboost                  score=0.4500 ± 0.0159  (2.0s)
+2026-02-20 01:14:36 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 01:14:36 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:14:36 | INFO     | automl.models.optimizer:optimize:67 —   Optimising xgboost (100 trials) …
+2026-02-20 01:14:49 | INFO     | automl.models.optimizer:optimize:121 —   xgboost best score=0.5375 params={'n_estimators': 63, 'max_depth': 9, 'learning_rate': 0.27968751520559376, 'subsample': 0.8204342256957862}
+2026-02-20 01:14:49 | INFO     | automl.models.optimizer:optimize:67 —   Optimising lightgbm (100 trials) …
+2026-02-20 01:16:18 | INFO     | automl.models.optimizer:optimize:121 —   lightgbm best score=0.5375 params={'n_estimators': 414, 'max_depth': 8, 'learning_rate': 0.24346285151922295, 'num_leaves': 75}
+2026-02-20 01:16:18 | INFO     | automl.models.optimizer:optimize:67 —   Optimising random_forest (100 trials) …
+2026-02-20 01:17:21 | INFO     | automl.models.optimizer:optimize:121 —   random_forest best score=0.5563 params={'n_estimators': 260, 'max_depth': 14, 'min_samples_split': 2}
+2026-02-20 01:17:21 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 01:17:21 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['xgboost', 'lightgbm', 'random_forest']
+2026-02-20 01:17:23 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:17:23 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 01:17:24 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/out/model.pkl  (4.6 MB)
+2026-02-20 01:17:24 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/out/report.html
+2026-02-20 01:17:24 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/out/app.py
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 172.6s
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/out/model.pkl
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/out/report.html
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-7/test_binary_classification0/out/app.py
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:81 — ============================================================
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:82 — AutoML-Lite  — starting pipeline
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:83 — ============================================================
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:87 — Loaded /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/regression_test.csv  shape=(200, 4)
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:96 — Task detected: regression
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:105 — 
+[Stage 1/6] Auto-EDA
+2026-02-20 01:17:24 | INFO     | automl.eda.type_detector:detect:73 — Type detection: numeric=2, categorical=1
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:108 —   Column types: {'numeric': 2, 'categorical': 1, 'datetime': 0, 'text': 0, 'boolean': 0, 'id': 0, 'drop': 0}
+2026-02-20 01:17:24 | INFO     | automl.eda.profiler:profile:75 — Profile: 160 rows × 3 cols, 0.01 MB
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:123 — 
+[Stage 2/6] Feature Engineering
+2026-02-20 01:17:24 | DEBUG    | automl.features.numeric:fit_transform:96 — Numeric features: 2 → 7
+2026-02-20 01:17:24 | INFO     | automl.pipeline:_engineer_features:303 —   Features: 10 → 5 (after selection)
+2026-02-20 01:17:24 | INFO     | automl.pipeline:fit:130 — 
+[Stage 3/6] Model Screening
+2026-02-20 01:17:24 | INFO     | automl.models.screener:screen:65 —   logistic_regression       score=-37.6052 ± 4.6745  (0.0s)
+2026-02-20 01:17:24 | INFO     | automl.models.screener:screen:65 —   random_forest             score=-196.3590 ± 21.4458  (0.1s)
+2026-02-20 01:17:24 | INFO     | automl.models.screener:screen:65 —   extra_trees               score=-73.8117 ± 6.5576  (0.1s)
+2026-02-20 01:17:24 | INFO     | automl.models.screener:screen:65 —   xgboost                   score=-138.4678 ± 33.5571  (0.0s)
+2026-02-20 01:17:24 | INFO     | automl.models.screener:screen:65 —   lightgbm                  score=-204.1466 ± 25.2983  (0.1s)
+2026-02-20 01:17:25 | INFO     | automl.models.screener:screen:65 —   catboost                  score=-96.8333 ± 5.1053  (1.1s)
+2026-02-20 01:17:25 | INFO     | automl.models.screener:screen:76 — Top-3 models: ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:17:25 | INFO     | automl.pipeline:fit:136 — 
+[Stage 4/6] Bayesian Hyper-parameter Optimisation
+2026-02-20 01:17:25 | INFO     | automl.models.optimizer:optimize:67 —   Optimising logistic_regression (100 trials) …
+2026-02-20 01:17:27 | INFO     | automl.models.optimizer:optimize:121 —   logistic_regression best score=-29.6292 params={'alpha': 0.0010008679573059193}
+2026-02-20 01:17:27 | INFO     | automl.models.optimizer:optimize:67 —   Optimising extra_trees (100 trials) …
+2026-02-20 01:18:04 | INFO     | automl.models.optimizer:optimize:121 —   extra_trees best score=-64.6004 params={'n_estimators': 314, 'max_depth': 15, 'min_samples_split': 2}
+2026-02-20 01:18:04 | INFO     | automl.models.optimizer:optimize:67 —   Optimising catboost (100 trials) …
+2026-02-20 01:18:46 | INFO     | automl.models.optimizer:optimize:121 —   catboost best score=-49.4579 params={'iterations': 452, 'depth': 3, 'learning_rate': 0.036591497526479055}
+2026-02-20 01:18:46 | INFO     | automl.pipeline:fit:143 — 
+[Stage 5/6] Ensemble Building
+2026-02-20 01:18:46 | INFO     | automl.models.ensemble:build:43 — Building stacking ensemble from ['logistic_regression', 'extra_trees', 'catboost']
+2026-02-20 01:18:47 | INFO     | automl.models.ensemble:build:73 — Ensemble fitted successfully.
+2026-02-20 01:18:47 | INFO     | automl.pipeline:fit:158 — 
+[Stage 6/6] Evaluation & Output
+2026-02-20 01:18:48 | INFO     | automl.utils.serializer:save_model:21 — Model saved → /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/out/model.pkl  (14.1 MB)
+2026-02-20 01:18:48 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/out/report.html
+2026-02-20 01:18:48 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/out/app.py
+2026-02-20 01:18:48 | INFO     | automl.pipeline:fit:202 — ============================================================
+2026-02-20 01:18:48 | INFO     | automl.pipeline:fit:203 — Pipeline complete in 83.8s
+2026-02-20 01:18:48 | INFO     | automl.pipeline:fit:204 —   Model  → /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/out/model.pkl
+2026-02-20 01:18:48 | INFO     | automl.pipeline:fit:205 —   Report → /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/out/report.html
+2026-02-20 01:18:48 | INFO     | automl.pipeline:fit:206 —   API    → /private/tmp/pytest-of-lgandolfi/pytest-7/test_regression0/out/app.py
+2026-02-20 01:18:48 | INFO     | automl.pipeline:fit:207 — ============================================================
+2026-02-20 01:18:48 | INFO     | automl.reporting.html_report:generate:75 — Report saved → /private/tmp/pytest-of-lgandolfi/pytest-7/test_generate_report0/report.html
+2026-02-20 01:18:48 | INFO     | automl.reporting.api_generator:generate:52 — FastAPI app generated → /private/tmp/pytest-of-lgandolfi/pytest-7/test_generate_api0/app.py

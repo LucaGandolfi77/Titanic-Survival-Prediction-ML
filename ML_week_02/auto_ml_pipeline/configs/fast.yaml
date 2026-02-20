@@ -1,0 +1,90 @@
+# AutoML-Lite Fast Configuration — Quick iteration, fewer trials
+
+pipeline:
+  task: "auto"
+  target_column: null
+  random_state: 42
+  n_jobs: -1
+
+eda:
+  type_detection:
+    numeric_threshold: 0.05
+    text_threshold: 50
+    datetime_formats: ["%Y-%m-%d", "%d/%m/%Y"]
+  missing:
+    drop_column_threshold: 0.7
+    drop_row_threshold: 0.5
+    strategies: {low_missing: "median", medium_missing: "median", high_missing: "constant"}
+  outliers:
+    method: "iqr"
+    threshold: 3.0
+    treatment: "clip"
+
+features:
+  numeric:
+    polynomial: {enabled: false, degree: 2, interaction_only: false, max_features: 30}
+    binning: {enabled: false, n_bins: 10, strategy: "quantile"}
+    scaling: {method: "standard"}
+  categorical:
+    high_cardinality_threshold: 10
+    encoders: {low_cardinality: "onehot", high_cardinality: "target", very_high_cardinality: "frequency"}
+  datetime:
+    features: [month, day_of_week, is_weekend]
+    cyclical_encoding: false
+  text:
+    enabled: false
+    method: "tfidf"
+    max_features: 50
+    ngram_range: [1, 1]
+  selection:
+    variance_threshold: 0.01
+    correlation_threshold: 0.95
+    importance_threshold: 0.005
+
+screening:
+  candidates:
+    - random_forest
+    - xgboost
+    - lightgbm
+  cv_folds: 3
+  metric: "accuracy"
+  top_k: 2
+
+hpo:
+  n_trials: 5
+  timeout_seconds: 120
+  enable_mlflow: false
+  search_spaces:
+    random_forest:
+      n_estimators: {type: int, low: 50, high: 300}
+      max_depth: {type: int, low: 3, high: 15}
+    xgboost:
+      n_estimators: {type: int, low: 50, high: 300}
+      max_depth: {type: int, low: 3, high: 10}
+      learning_rate: {type: float, low: 0.01, high: 0.3, log: true}
+    lightgbm:
+      n_estimators: {type: int, low: 50, high: 300}
+      max_depth: {type: int, low: 3, high: 10}
+      learning_rate: {type: float, low: 0.01, high: 0.3, log: true}
+
+ensemble:
+  enabled: false
+  method: "soft_voting"
+  meta_learner: "logistic_regression"
+
+mlflow:
+  enabled: false
+  tracking_uri: "./outputs/mlruns"
+  experiment_name: "automl_lite_fast"
+
+reporting:
+  html_report: true
+  open_in_browser: false
+  include_shap: false
+  n_shap_samples: 50
+  api_generator: false
+
+paths:
+  models_dir: "outputs/models"
+  reports_dir: "outputs/reports"
+  apis_dir: "outputs/generated_apis"

@@ -1,0 +1,40 @@
+# ── Core ML ───────────────────────────────────
+scikit-learn>=1.4.0
+xgboost>=2.0.0
+lightgbm>=4.2.0
+catboost>=1.2.2
+
+# ── Hyperparameter Optimization ──────────────
+optuna>=3.5.0
+
+# ── Data ─────────────────────────────────────
+numpy>=1.26.0
+pandas>=2.1.0
+scipy>=1.12.0
+
+# ── Experiment Tracking ──────────────────────
+mlflow>=2.10.0
+
+# ── Reporting & Templating ───────────────────
+jinja2>=3.1.3
+plotly>=5.18.0
+kaleido>=0.2.1
+
+# ── API (for generated code) ────────────────
+fastapi>=0.108.0
+uvicorn[standard]>=0.25.0
+pydantic>=2.5.0
+
+# ── Utilities ────────────────────────────────
+pyyaml>=6.0.1
+joblib>=1.3.2
+loguru>=0.7.2
+rich>=13.7.0
+tqdm>=4.66.0
+
+# ── NLP (optional text features) ────────────
+# nltk>=3.8.1
+
+# ── Testing ──────────────────────────────────
+pytest>=8.0.0
+pytest-cov>=4.1.0

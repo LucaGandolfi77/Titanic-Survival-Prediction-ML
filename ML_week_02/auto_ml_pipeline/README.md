@@ -1,0 +1,177 @@
+# AutoML-Lite
+
+> Automatic machine-learning pipeline for **any** CSV + target column.
+>
+> 6-stage pipeline: **Auto-EDA → Feature Engineering → Model Screening → Bayesian HPO → Ensemble → Output**.
+
+---
+
+## Quick Start
+
+```bash
+# 1. Install
+make install          # creates venv & pip-installs all deps
+
+# 2. Run on Titanic
+make demo-titanic     # uses ML_week_01/titanic/train.csv
+
+# 3. Run on any CSV
+python -m automl fit --csv data.csv --target Survived
+python -m automl fit --csv data.csv --target Price --config configs/thorough.yaml
+```
+
+### Output
+
+| File | Description |
+|------|-------------|
+| `outputs/model.pkl` | Serialised best model (or ensemble) |
+| `outputs/report.html` | Self-contained HTML report with metrics, charts, feature importances |
+| `outputs/app.py` | Ready-to-run FastAPI inference API |
+
+---
+
+## Pipeline Stages
+
+### 1. Auto-EDA
+- **Type detection**: numeric / categorical / datetime / text / boolean / ID
+- **Missing value handling**: KNN (< 15%), median/mode (15-50%), constant (> 50%)
+- **Outlier detection**: IQR or z-score, with clip / remove / flag treatment
+- **Data profiling**: descriptive stats, correlations, memory usage
+
+### 2. Feature Engineering
+- **Numeric**: RobustScaler, optional polynomial features, optional binning
+- **Categorical**: auto-routing by cardinality (Label / OHE / Bayesian Target / Frequency)
+- **DateTime**: cyclical sin/cos encoding (month, day-of-week, hour)
+- **Text**: TF-IDF vectorization
+- **Selection**: variance threshold → correlation filter → importance filter (quick RF)
+
+### 3. Model Screening
+Quick 3-fold CV on all candidate models, rank, keep top-K.
+
+Default candidates:
+- Logistic Regression / Ridge
+- Random Forest
+- Extra Trees
+- XGBoost
+- LightGBM
+- CatBoost
+
+### 4. Bayesian HPO
+[Optuna](https://optuna.org/) TPE sampler + MedianPruner.
+- 100 trials per model (configurable)
+- Optional MLflow nested-run logging
+- Search spaces defined in YAML (overridable)
+
+### 5. Ensemble
+- `stacking` (default) — StackingClassifier/Regressor with LogisticRegression/Ridge meta-learner
+- `soft_voting` — VotingClassifier with `voting='soft'`
+- `hard_voting` — VotingClassifier with `voting='hard'`
+
+### 6. Output
+- **model.pkl** — joblib-serialised model
+- **report.html** — Jinja2-templated HTML + Plotly charts
+- **app.py** — Jinja2-generated FastAPI inference server
+
+---
+
+## Configuration
+
+Three built-in presets:
+
+| Config | Trials | Models | Poly | Ensemble |
+|--------|--------|--------|------|----------|
+| `configs/fast.yaml` | 5 | 2 | ✗ | ✗ |
+| `configs/default.yaml` | 100 | 6 | ✓ | ✓ (stacking) |
+| `configs/thorough.yaml` | 200 | 6 | ✓ | ✓ (stacking) |
+
+```bash
+python -m automl fit --csv data.csv --target y --config configs/thorough.yaml
+```
+
+---
+
+## Project Structure
+
+```
+auto_ml_pipeline/
+├── automl/
+│   ├── __init__.py
+│   ├── __main__.py          # CLI entry point
+│   ├── pipeline.py          # Main orchestrator
+│   ├── eda/
+│   │   ├── type_detector.py
+│   │   ├── missing_handler.py
+│   │   ├── outlier_detector.py
+│   │   └── profiler.py
+│   ├── features/
+│   │   ├── numeric.py
+│   │   ├── categorical.py
+│   │   ├── datetime_features.py
+│   │   ├── text_features.py
+│   │   └── selector.py
+│   ├── models/
+│   │   ├── registry.py
+│   │   ├── screener.py
+│   │   ├── optimizer.py
+│   │   └── ensemble.py
+│   ├── evaluation/
+│   │   ├── metrics.py
+│   │   ├── cross_validator.py
+│   │   └── analyzer.py
+│   ├── reporting/
+│   │   ├── html_report.py
+│   │   ├── api_generator.py
+│   │   └── templates/
+│   └── utils/
+│       ├── config.py
+│       ├── logger.py
+│       └── serializer.py
+├── configs/
+│   ├── default.yaml
+│   ├── fast.yaml
+│   └── thorough.yaml
+├── examples/
+│   ├── binary_classification.py
+│   ├── multiclass.py
+│   └── regression.py
+├── tests/
+├── Makefile
+├── requirements.txt
+├── setup.py
+└── pyproject.toml
+```
+
+---
+
+## Development
+
+```bash
+make install
+make test           # pytest -v
+make clean          # remove outputs, __pycache__, etc.
+```
+
+---
+
+## Benchmarks (indicative)
+
+| Dataset | Task | Rows | Accuracy / R² | Time |
+|---------|------|------|----------------|------|
+| Titanic | Binary CLF | 891 | ~0.82 | ~30s |
+| Iris | Multi CLF | 150 | ~0.97 | ~15s |
+| California Housing | Regression | 20640 | ~0.83 R² | ~2min |
+
+*Results with `configs/default.yaml` on Apple M1.*
+
+---
+
+## Requirements
+
+- Python ≥ 3.10
+- scikit-learn, xgboost, lightgbm, catboost, optuna
+- plotly, jinja2, loguru
+- fastapi, uvicorn (for generated API)
+
+## License
+
+MIT

@@ -1,0 +1,109 @@
+# AutoML-Lite Thorough Configuration — Maximum accuracy, long run
+
+pipeline:
+  task: "auto"
+  target_column: null
+  random_state: 42
+  n_jobs: -1
+
+eda:
+  type_detection:
+    numeric_threshold: 0.05
+    text_threshold: 50
+    datetime_formats: ["%Y-%m-%d", "%d/%m/%Y", "%Y-%m-%d %H:%M:%S", "%m/%d/%Y"]
+  missing:
+    drop_column_threshold: 0.8
+    drop_row_threshold: 0.6
+    strategies: {low_missing: "median", medium_missing: "knn", high_missing: "constant"}
+  outliers:
+    method: "iqr"
+    threshold: 2.5
+    treatment: "clip"
+
+features:
+  numeric:
+    polynomial: {enabled: true, degree: 2, interaction_only: true, max_features: 80}
+    binning: {enabled: true, n_bins: 15, strategy: "quantile"}
+    scaling: {method: "robust"}
+  categorical:
+    high_cardinality_threshold: 10
+    encoders: {low_cardinality: "onehot", high_cardinality: "target", very_high_cardinality: "frequency"}
+  datetime:
+    features: [year, month, day, hour, minute, day_of_week, is_weekend, quarter]
+    cyclical_encoding: true
+  text:
+    enabled: true
+    method: "tfidf"
+    max_features: 200
+    ngram_range: [1, 2]
+  selection:
+    variance_threshold: 0.005
+    correlation_threshold: 0.98
+    importance_threshold: 0.0005
+
+screening:
+  candidates:
+    - logistic_regression
+    - random_forest
+    - extra_trees
+    - xgboost
+    - lightgbm
+    - catboost
+  cv_folds: 5
+  metric: "accuracy"
+  top_k: 3
+
+hpo:
+  n_trials: 200
+  timeout_seconds: 1200
+  enable_mlflow: true
+  search_spaces:
+    logistic_regression:
+      C: {type: float, low: 0.0001, high: 1000.0, log: true}
+      solver: {type: categorical, choices: ["lbfgs", "saga"]}
+    random_forest:
+      n_estimators: {type: int, low: 100, high: 1000}
+      max_depth: {type: int, low: 3, high: 30}
+      min_samples_split: {type: int, low: 2, high: 50}
+    xgboost:
+      n_estimators: {type: int, low: 100, high: 1000}
+      max_depth: {type: int, low: 3, high: 15}
+      learning_rate: {type: float, low: 0.001, high: 0.3, log: true}
+      subsample: {type: float, low: 0.5, high: 1.0}
+      colsample_bytree: {type: float, low: 0.3, high: 1.0}
+      reg_alpha: {type: float, low: 0.0001, high: 20.0, log: true}
+      reg_lambda: {type: float, low: 0.0001, high: 20.0, log: true}
+    lightgbm:
+      n_estimators: {type: int, low: 100, high: 1000}
+      max_depth: {type: int, low: 3, high: 15}
+      learning_rate: {type: float, low: 0.001, high: 0.3, log: true}
+      num_leaves: {type: int, low: 15, high: 255}
+      subsample: {type: float, low: 0.5, high: 1.0}
+      colsample_bytree: {type: float, low: 0.3, high: 1.0}
+    catboost:
+      iterations: {type: int, low: 100, high: 1000}
+      depth: {type: int, low: 3, high: 12}
+      learning_rate: {type: float, low: 0.001, high: 0.3, log: true}
+      l2_leaf_reg: {type: float, low: 0.5, high: 20.0}
+
+ensemble:
+  enabled: true
+  method: "stacking"
+  meta_learner: "logistic_regression"
+
+mlflow:
+  enabled: true
+  tracking_uri: "./outputs/mlruns"
+  experiment_name: "automl_lite_thorough"
+
+reporting:
+  html_report: true
+  open_in_browser: false
+  include_shap: true
+  n_shap_samples: 200
+  api_generator: true
+
+paths:
+  models_dir: "outputs/models"
+  reports_dir: "outputs/reports"
+  apis_dir: "outputs/generated_apis"

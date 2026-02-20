@@ -1,0 +1,198 @@
+# AutoML-Lite Default Configuration
+
+pipeline:
+  task: "auto"            # auto, classification, regression
+  target_column: null     # set at runtime
+  random_state: 42
+  n_jobs: -1              # use all M1 cores
+
+# ── EDA ──────────────────────────────────────
+eda:
+  type_detection:
+    numeric_threshold: 0.05
+    text_threshold: 50
+    datetime_formats:
+      - "%Y-%m-%d"
+      - "%d/%m/%Y"
+      - "%Y-%m-%d %H:%M:%S"
+
+  missing:
+    drop_column_threshold: 0.7
+    drop_row_threshold: 0.5
+    strategies:
+      low_missing: "median"
+      medium_missing: "knn"
+      high_missing: "constant"
+
+  outliers:
+    method: "iqr"
+    threshold: 3.0
+    treatment: "clip"
+
+# ── Feature Engineering ──────────────────────
+features:
+  numeric:
+    polynomial:
+      enabled: true
+      degree: 2
+      interaction_only: false
+      max_features: 50
+    binning:
+      enabled: true
+      n_bins: 10
+      strategy: "quantile"
+    scaling:
+      method: "robust"
+
+  categorical:
+    high_cardinality_threshold: 10
+    encoders:
+      low_cardinality: "onehot"
+      high_cardinality: "target"
+      very_high_cardinality: "frequency"
+
+  datetime:
+    features:
+      - year
+      - month
+      - day
+      - hour
+      - day_of_week
+      - is_weekend
+      - quarter
+    cyclical_encoding: true
+
+  text:
+    enabled: true
+    method: "tfidf"
+    max_features: 100
+    ngram_range: [1, 2]
+
+  selection:
+    variance_threshold: 0.01
+    correlation_threshold: 0.95
+    importance_threshold: 0.001
+
+# ── Model Screening ─────────────────────────
+screening:
+  candidates:
+    - logistic_regression
+    - random_forest
+    - extra_trees
+    - xgboost
+    - lightgbm
+    - catboost
+  cv_folds: 3
+  metric: "accuracy"
+  top_k: 3
+
+# ── Hyperparameter Optimization ─────────────
+hpo:
+  n_trials: 100
+  timeout_seconds: 600
+  n_jobs: 1
+  enable_mlflow: true
+
+  search_spaces:
+    logistic_regression:
+      C:
+        type: float
+        low: 0.001
+        high: 100.0
+        log: true
+      solver:
+        type: categorical
+        choices: ["lbfgs", "saga"]
+
+    random_forest:
+      n_estimators:
+        type: int
+        low: 50
+        high: 500
+      max_depth:
+        type: int
+        low: 3
+        high: 20
+      min_samples_split:
+        type: int
+        low: 2
+        high: 30
+
+    xgboost:
+      n_estimators:
+        type: int
+        low: 50
+        high: 500
+      max_depth:
+        type: int
+        low: 3
+        high: 12
+      learning_rate:
+        type: float
+        low: 0.01
+        high: 0.3
+        log: true
+      subsample:
+        type: float
+        low: 0.6
+        high: 1.0
+
+    lightgbm:
+      n_estimators:
+        type: int
+        low: 50
+        high: 500
+      max_depth:
+        type: int
+        low: 3
+        high: 12
+      learning_rate:
+        type: float
+        low: 0.01
+        high: 0.3
+        log: true
+      num_leaves:
+        type: int
+        low: 20
+        high: 150
+
+    catboost:
+      iterations:
+        type: int
+        low: 50
+        high: 500
+      depth:
+        type: int
+        low: 3
+        high: 10
+      learning_rate:
+        type: float
+        low: 0.01
+        high: 0.3
+        log: true
+
+# ── Ensemble ─────────────────────────────────
+ensemble:
+  enabled: true
+  method: "stacking"
+  meta_learner: "logistic_regression"
+
+# ── MLflow ───────────────────────────────────
+mlflow:
+  enabled: true
+  tracking_uri: "./outputs/mlruns"
+  experiment_name: "automl_lite"
+
+# ── Reporting ────────────────────────────────
+reporting:
+  html_report: true
+  open_in_browser: false
+  include_shap: false
+  n_shap_samples: 100
+  api_generator: true
+
+# ── Paths ────────────────────────────────────
+paths:
+  models_dir: "outputs/models"
+  reports_dir: "outputs/reports"
+  apis_dir: "outputs/generated_apis"

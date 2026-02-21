@@ -1,0 +1,35 @@
+{
+  "id": "595ee615",
+  "generation": 0,
+  "fitness": 0.453,
+  "parent_ids": null,
+  "layers": [
+    {
+      "layer_type": "conv2d",
+      "params": {
+        "filters": 32,
+        "kernel_size": 3,
+        "activation": "relu"
+      }
+    },
+    {
+      "layer_type": "batchnorm",
+      "params": {}
+    },
+    {
+      "layer_type": "dense",
+      "params": {
+        "units": 64,
+        "activation": "relu"
+      }
+    },
+    {
+      "layer_type": "dense",
+      "params": {
+        "units": 64,
+        "activation": "relu"
+      }
+    }
+  ],
+  "skip_connections": []
+}

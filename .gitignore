@@ -3,4 +3,11 @@
 /ML_week_02/defect_detection/experiments/runs/train
 /ML_week_02/defect_detection/experiments/runs/val
 /ML_week_02/defect_detection/experiments/runs/test
+/ML_week_03/mot/.venv
+/ML_week_03/nas/data/cifar-10-batches-py
+/ML_week_03/nas/src/__pycache__
+/ML_week_03/mot/src/__pycache__
+/ML_week_03/nas/src/training/__pycache__
+/ML_week_03/mot/src/training/__pycache__
+/ML_week_03/nas/tests/__pycache__
 

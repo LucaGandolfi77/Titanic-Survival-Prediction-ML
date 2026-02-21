@@ -1,0 +1,18 @@
+# ── Runtime tracker parameters ────────────────────────────────
+tracker:
+  tflite_model: "models/siamese_tracker.tflite"
+  template_update:
+    enabled: true
+    ema_decay: 0.95          # exponential moving average for template
+  search:
+    context_amount: 0.5
+    scale_step: 1.0375
+    num_scales: 3
+  scoring:
+    window_influence: 0.4    # cosine-window penalty
+    score_threshold: 0.3
+  display:
+    bbox_color: [0, 255, 0]  # BGR
+    text_color: [255, 255, 255]
+    thickness: 2
+    font_scale: 0.6

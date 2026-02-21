@@ -1,0 +1,21 @@
+# ── Model & Tracker geometry ──────────────────────────────────
+template:
+  size: 127                 # template patch (px)
+  context_amount: 0.5       # extra context around bbox
+
+search:
+  size: 255                 # search region (px)
+  scale_step: 1.0375        # multi-scale step
+  num_scales: 3             # how many scales to test
+
+backbone:
+  type: "light_mobilenet"   # lightweight depthwise-separable CNN
+  channels: [32, 64, 128, 256]
+  kernel_sizes: [3, 3, 3, 3]
+  activation: "relu6"
+
+inference:
+  stride: 8
+  score_threshold: 0.3
+  window_influence: 0.4     # cosine-window penalty weight
+  lr: 0.4                   # learning rate for online template update

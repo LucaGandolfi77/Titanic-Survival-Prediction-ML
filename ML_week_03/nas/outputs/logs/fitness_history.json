@@ -1,0 +1,20 @@
+[
+  {
+    "generation": 0,
+    "best": 0.5512,
+    "mean": 0.50885,
+    "worst": 0.4182
+  },
+  {
+    "generation": 1,
+    "best": 0.5992,
+    "mean": 0.5058,
+    "worst": 0.3214
+  },
+  {
+    "generation": 2,
+    "best": 0.5968,
+    "mean": 0.52395,
+    "worst": 0.3506
+  }
+]

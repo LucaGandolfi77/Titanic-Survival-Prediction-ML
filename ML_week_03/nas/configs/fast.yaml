@@ -1,0 +1,72 @@
+# ── NAS fast configuration ────────────────────────────────────────────────────
+# Smoke-test — runs in < 5 min on M1.
+
+search_space:
+  min_depth: 3
+  max_depth: 6
+  layer_types: [conv2d, maxpool, batchnorm, dropout, dense]
+  conv:
+    kernel_sizes: [3, 5]
+    filters: [32, 64]
+    activations: [relu]
+    padding: same
+  pool:
+    size: 2
+  dropout:
+    rates: [0.2, 0.3]
+  dense:
+    units: [64, 128]
+    activations: [relu]
+  skip_connections:
+    enabled: false
+    max_span: 2
+
+evolution:
+  population: 4
+  generations: 3
+  tournament_size: 2
+  crossover_rate: 0.8
+  mutation:
+    rate: 0.4
+    add_layer_prob: 0.25
+    remove_layer_prob: 0.20
+    change_param_prob: 0.35
+    toggle_skip_prob: 0.20
+  elitism: 1
+
+training:
+  epochs: 2
+  batch_size: 256
+  lr: 0.01
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 1.0e-4
+  scheduler: cosine
+  early_stop:
+    enabled: false
+    patience_epoch: 1
+    min_accuracy: 0.15
+
+data:
+  dataset: cifar10
+  val_split: 0.1
+  augmentation:
+    random_crop: 32
+    random_flip: true
+    normalize: true
+
+device: auto
+num_workers: 2
+parallel_trainers: 2
+
+weight_inheritance:
+  enabled: false
+
+predictor:
+  enabled: false
+  hidden_size: 64
+  train_after_gen: 2
+  top_k: 2
+
+output_dir: outputs
+seed: 42

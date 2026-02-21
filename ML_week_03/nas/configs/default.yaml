@@ -1,0 +1,72 @@
+# ── NAS default configuration ────────────────────────────────────────────────
+# Full search — expect ~24 h on an M1 MacBook Pro.
+
+search_space:
+  min_depth: 5
+  max_depth: 15
+  layer_types: [conv2d, maxpool, avgpool, batchnorm, dropout, dense]
+  conv:
+    kernel_sizes: [3, 5, 7]
+    filters: [32, 64, 128]
+    activations: [relu, elu]
+    padding: same           # keep spatial dims unless pooling
+  pool:
+    size: 2
+  dropout:
+    rates: [0.1, 0.2, 0.3, 0.4, 0.5]
+  dense:
+    units: [64, 128, 256, 512]
+    activations: [relu, elu]
+  skip_connections:
+    enabled: true
+    max_span: 4             # max layers a skip can jump
+
+evolution:
+  population: 20
+  generations: 50
+  tournament_size: 5        # top 25 % of population
+  crossover_rate: 0.8
+  mutation:
+    rate: 0.3
+    add_layer_prob: 0.25
+    remove_layer_prob: 0.20
+    change_param_prob: 0.35
+    toggle_skip_prob: 0.20
+  elitism: 2                # carry best N unchanged to next gen
+
+training:
+  epochs: 10
+  batch_size: 128
+  lr: 0.01
+  optimizer: sgd
+  momentum: 0.9
+  weight_decay: 1.0e-4
+  scheduler: cosine
+  early_stop:
+    enabled: true
+    patience_epoch: 3       # check accuracy at this epoch
+    min_accuracy: 0.40      # kill arch if below this
+
+data:
+  dataset: cifar10
+  val_split: 0.1            # fraction of train set used for validation
+  augmentation:
+    random_crop: 32
+    random_flip: true
+    normalize: true
+
+device: auto                # auto | cpu | mps | cuda
+num_workers: 4              # DataLoader workers
+parallel_trainers: 4        # simultaneous architecture trainers
+
+weight_inheritance:
+  enabled: true
+
+predictor:
+  enabled: false            # turn on for PNAS-style pre-screening
+  hidden_size: 128
+  train_after_gen: 5        # start using predictor after N generations
+  top_k: 10                 # only fully train top-k predicted architectures
+
+output_dir: outputs
+seed: 42

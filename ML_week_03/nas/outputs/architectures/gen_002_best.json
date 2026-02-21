@@ -1,0 +1,43 @@
+{
+  "id": "d3220a06",
+  "generation": 1,
+  "fitness": 0.5992,
+  "parent_ids": [
+    "4c9526ee",
+    "4c9526ee"
+  ],
+  "layers": [
+    {
+      "layer_type": "conv2d",
+      "params": {
+        "filters": 64,
+        "kernel_size": 3,
+        "activation": "relu"
+      }
+    },
+    {
+      "layer_type": "maxpool",
+      "params": {
+        "size": 2
+      }
+    },
+    {
+      "layer_type": "batchnorm",
+      "params": {}
+    },
+    {
+      "layer_type": "maxpool",
+      "params": {
+        "size": 2
+      }
+    },
+    {
+      "layer_type": "dense",
+      "params": {
+        "units": 128,
+        "activation": "relu"
+      }
+    }
+  ],
+  "skip_connections": []
+}

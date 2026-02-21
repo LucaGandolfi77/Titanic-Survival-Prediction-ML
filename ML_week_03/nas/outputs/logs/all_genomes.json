@@ -1,0 +1,506 @@
+[
+  {
+    "id": "a10b336e",
+    "generation": 0,
+    "fitness": 0.4182,
+    "parent_ids": null,
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 32,
+          "kernel_size": 5,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "f0730fe3",
+    "generation": 0,
+    "fitness": 0.54,
+    "parent_ids": null,
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 32,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 64,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "4c9526ee",
+    "generation": 0,
+    "fitness": 0.5512,
+    "parent_ids": null,
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dropout",
+        "params": {
+          "rate": 0.3
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "2b254da6",
+    "generation": 0,
+    "fitness": 0.526,
+    "parent_ids": null,
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 5,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 5,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 32,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 32,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "78a5e88e",
+    "generation": 1,
+    "fitness": 0.551,
+    "parent_ids": null,
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dropout",
+        "params": {
+          "rate": 0.3
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "d3220a06",
+    "generation": 1,
+    "fitness": 0.5992,
+    "parent_ids": [
+      "4c9526ee",
+      "4c9526ee"
+    ],
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "06500bad",
+    "generation": 1,
+    "fitness": 0.3214,
+    "parent_ids": [
+      "4c9526ee",
+      "4c9526ee"
+    ],
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dropout",
+        "params": {
+          "rate": 0.3
+        }
+      },
+      {
+        "layer_type": "dropout",
+        "params": {
+          "rate": 0.3
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "6d596f56",
+    "generation": 1,
+    "fitness": 0.5516,
+    "parent_ids": [
+      "4c9526ee",
+      "4c9526ee"
+    ],
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "cf856d4a",
+    "generation": 2,
+    "fitness": 0.5968,
+    "parent_ids": [
+      "4c9526ee",
+      "4c9526ee"
+    ],
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "fe738d37",
+    "generation": 2,
+    "fitness": 0.5924,
+    "parent_ids": [
+      "d3220a06",
+      "78a5e88e"
+    ],
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "97f13cb5",
+    "generation": 2,
+    "fitness": 0.3506,
+    "parent_ids": [
+      "d3220a06",
+      "78a5e88e"
+    ],
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dropout",
+        "params": {
+          "rate": 0.3
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      }
+    ],
+    "skip_connections": []
+  },
+  {
+    "id": "51291988",
+    "generation": 2,
+    "fitness": 0.556,
+    "parent_ids": null,
+    "layers": [
+      {
+        "layer_type": "conv2d",
+        "params": {
+          "filters": 64,
+          "kernel_size": 3,
+          "activation": "relu"
+        }
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dropout",
+        "params": {
+          "rate": 0.3
+        }
+      },
+      {
+        "layer_type": "batchnorm",
+        "params": {}
+      },
+      {
+        "layer_type": "maxpool",
+        "params": {
+          "size": 2
+        }
+      },
+      {
+        "layer_type": "dense",
+        "params": {
+          "units": 128,
+          "activation": "relu"
+        }
+      }
+    ],
+    "skip_connections": []
+  }
+]

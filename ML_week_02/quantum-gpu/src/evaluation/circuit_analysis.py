@@ -139,23 +139,27 @@ def _meyer_wallach(state: np.ndarray, n_qubits: int) -> float:
 
 def _partial_trace(rho: np.ndarray, keep: int, n_qubits: int) -> np.ndarray:
     """Partial trace: keep qubit *keep*, trace out the rest."""
-    dim = 2 ** n_qubits
-    rho = rho.reshape([2] * (2 * n_qubits))
+    # Reshape to separate each qubit's bra and ket indices:
+    # shape = (2,)*n_qubits + (2,)*n_qubits
+    rho_tensor = rho.reshape((2,) * n_qubits + (2,) * n_qubits)
 
-    # Move kept qubit to first position
-    axes_order = list(range(2 * n_qubits))
-    # Bra indices: 0..n-1, Ket indices: n..2n-1
-    # We want to trace over all except qubit `keep`
-    trace_axes = [i for i in range(n_qubits) if i != keep]
+    # Identify axes: bra indices 0..n_qubits-1, ket indices n_qubits..2*n_qubits-1
+    bra_keep = keep
+    ket_keep = keep + n_qubits
 
-    # Trace by contracting pairs
-    result = rho
-    offset = 0
-    for ax in sorted(trace_axes, reverse=True):
-        result = np.trace(result, axis1=ax - offset, axis2=ax + n_qubits - 2 * offset - offset)
-        offset += 1
+    # Permute axes so kept bra/ket come first, environment axes follow
+    env_bra = [i for i in range(n_qubits) if i != keep]
+    env_ket = [i + n_qubits for i in range(n_qubits) if i != keep]
+    perm = [bra_keep] + env_bra + [ket_keep] + env_ket
+    rho_perm = np.transpose(rho_tensor, axes=perm)
 
-    return result.reshape(2, 2)
+    # Collapse environment axes into single dimension
+    env_dim = 2 ** (n_qubits - 1)
+    rho_reshaped = rho_perm.reshape(2, env_dim, 2, env_dim)
+
+    # Partial trace over environment: result[i,j] = sum_a rho_reshaped[i,a,j,a]
+    reduced = np.einsum('i a j a -> i j', rho_reshaped)
+    return reduced
 
 
 # ──────────────────────────────────────────────────────────

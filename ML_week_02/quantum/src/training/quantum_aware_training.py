@@ -48,8 +48,15 @@ class QuantumAwareTrainer(Trainer):
     # ── Optimizer with per-group LR ──────────────────────
     def _build_optimizer(self) -> torch.optim.Optimizer:
         """Create optimizer with separate LR for quantum parameters."""
-        lr = self.train_cfg.get("learning_rate", 0.01)
-        wd = self.train_cfg.get("weight_decay", 1e-4)
+        # Coerce numeric values to floats to handle YAML/string overrides
+        def _to_float(v, default: float):
+            try:
+                return float(v)
+            except Exception:
+                return default
+
+        lr = _to_float(self.train_cfg.get("learning_rate", 0.01), 0.01)
+        wd = _to_float(self.train_cfg.get("weight_decay", 1e-4), 1e-4)
         q_scale = self.train_cfg.get("quantum_lr_scale", 1.0)
 
         classical_params = []

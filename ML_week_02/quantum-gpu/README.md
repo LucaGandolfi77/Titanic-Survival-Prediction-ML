@@ -156,6 +156,40 @@ pip install -r requirements.txt
 .\run.ps1 test
 ```
 
+### Analyze CLI options
+
+The project includes a dedicated script for circuit property analysis: `analyze_circuits.py`.
+You can run a full suite or a focused run for a single ansatz.
+
+- Full analysis (default behaviour):
+
+```bash
+python analyze_circuits.py --n-qubits 4 --max-layers 6 --samples 300
+```
+
+- Single-ansatz analysis (focus on one ansatz / entanglement / depth):
+
+```bash
+python analyze_circuits.py --n-qubits 4 --ansatz strongly_entangling --entanglement full --depth 3 --samples 300
+```
+
+- Common options:
+  - `--n-qubits, -q` : number of qubits (default 4)
+  - `--max-layers, -l` : maximum circuit depth for scalability runs
+  - `--samples, -s` : random parameter samples per estimate
+  - `--ansatz, -a` : run a single ansatz (choices: `strongly_entangling`, `hardware_efficient`, `basic_entangler`)
+  - `--entanglement, -e` : entanglement pattern when using `--ansatz` (choices: `full`, `linear`, `circular`)
+  - `--depth, -d` : depth to use for the single-ansatz run
+  - `--output-dir, -o` : where to save plots (default `outputs/circuits`)
+
+Note: when using the PowerShell helper `run.ps1`, arguments must be forwarded explicitly. Example:
+
+```powershell
+.
+un.ps1 analyze -- --ansatz strongly_entangling --depth 3 --samples 200
+```
+
+
 ### Available commands
 
 Run `.\run.ps1 help` for the full list:

@@ -11,7 +11,16 @@ from typing import Any
 
 import torch
 from torch import Tensor
-from torch.utils.tensorboard import SummaryWriter
+from typing import Optional
+
+# `torch.utils.tensorboard` requires the `tensorboard` package. Make imports
+# optional so tests can run without installing tensorboard.
+try:
+    from torch.utils.tensorboard import SummaryWriter  # type: ignore
+    _HAS_TENSORBOARD = True
+except Exception:  # ImportError or other backend import errors
+    SummaryWriter = None  # type: ignore
+    _HAS_TENSORBOARD = False
 
 
 class GANLogger:
@@ -35,13 +44,19 @@ class GANLogger:
         self.log_dir = Path(log_dir)
         self.experiment_name = experiment_name
 
-        # TensorBoard
-        self.use_tensorboard = use_tensorboard
-        self._writer: SummaryWriter | None = None
-        if use_tensorboard:
+        # TensorBoard (optional)
+        self.use_tensorboard = use_tensorboard and _HAS_TENSORBOARD
+        self._writer: Optional[SummaryWriter] = None
+        if use_tensorboard and _HAS_TENSORBOARD:
             tb_dir = self.log_dir / experiment_name
             tb_dir.mkdir(parents=True, exist_ok=True)
             self._writer = SummaryWriter(log_dir=str(tb_dir))
+        elif use_tensorboard and not _HAS_TENSORBOARD:
+            # avoid raising during import; tests may not have tensorboard installed
+            self._logger = logging.getLogger(f"GAN.{experiment_name}")
+            self._logger.warning(
+                "TensorBoard requested but `tensorboard` package not available; continuing without TB."
+            )
 
         # Python logger
         self._logger = logging.getLogger(f"GAN.{experiment_name}")

@@ -35,7 +35,10 @@ from src.evaluation.visualization import plot_circuit_properties, plot_scalabili
 @click.option("--max-layers", "-l", type=int, default=5, help="Maximum circuit depth.")
 @click.option("--samples", "-s", type=int, default=200, help="Random samples per estimate.")
 @click.option("--output-dir", "-o", type=str, default="outputs/circuits", help="Output directory.")
-def main(n_qubits, max_layers, samples, output_dir):
+@click.option("--ansatz", "-a", type=click.Choice(["strongly_entangling","hardware_efficient","basic_entangler"]), default=None, help="Run analysis for a single ansatz.")
+@click.option("--entanglement", "-e", type=click.Choice(["full","linear","circular"]), default=None, help="Entanglement pattern when running a single-ansatz analysis.")
+@click.option("--depth", "-d", type=int, default=None, help="Depth to use for single-ansatz analysis (overrides --max-layers for that run).")
+def main(n_qubits, max_layers, samples, output_dir, ansatz, entanglement, depth):
     """Analyze VQC expressibility and entangling capability."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -43,38 +46,62 @@ def main(n_qubits, max_layers, samples, output_dir):
     ansatz_types = ["strongly_entangling", "hardware_efficient", "basic_entangler"]
     entanglement_patterns = ["full", "linear", "circular"]
 
-    # ── 1. Compare ansatzes at fixed depth ───────────────
-    click.echo(f"\n═══ Circuit Analysis: {n_qubits} qubits ═══\n")
+    # If user requested a single-ansatz run, do a focused analysis
+    if ansatz is not None:
+        ent_pat = entanglement if entanglement is not None else "full"
+        depth_val = depth if depth is not None else 3
+        click.echo(f"\n═══ Single Ansatz Analysis: {ansatz} | ent={ent_pat} | depth={depth_val} ═══\n")
 
-    results: dict[str, dict[str, float]] = {}
+        try:
+            w_shape = get_weight_shape(ansatz, n_qubits, depth_val)
+            sv_fn = make_statevector_fn(n_qubits, depth_val, ansatz, ent_pat)
 
-    for ansatz in ansatz_types:
-        for ent in entanglement_patterns:
-            name = f"{ansatz[:8]}_{ent[:4]}"
-            click.echo(f"Analysing {name}...", nl=False)
+            expr = compute_expressibility(sv_fn, n_qubits, w_shape, n_samples=samples)
+            ent_cap = compute_entangling_capability(sv_fn, n_qubits, w_shape, n_samples=samples)
 
-            try:
-                n_layers = 3
-                w_shape = get_weight_shape(ansatz, n_qubits, n_layers)
-                sv_fn = make_statevector_fn(n_qubits, n_layers, ansatz, ent)
+            click.echo(f"  expr={expr:.4f}  ent={ent_cap:.4f}")
+            # Save single-result plot
+            plot_circuit_properties(
+                {f"{ansatz}_{ent_pat}": {"expressibility": expr, "entangling_capability": ent_cap}},
+                title=f"Circuit Properties ({ansatz}, {ent_pat}, depth={depth_val})",
+                save_path=output_path / "circuit_comparison_single.png",
+            )
+        except Exception as e:
+            click.echo(f"  SKIPPED ({e})")
 
-                expr = compute_expressibility(sv_fn, n_qubits, w_shape, n_samples=samples)
-                ent_cap = compute_entangling_capability(sv_fn, n_qubits, w_shape, n_samples=samples)
+    else:
+        # ── 1. Compare ansatzes at fixed depth ───────────────
+        click.echo(f"\n═══ Circuit Analysis: {n_qubits} qubits ═══\n")
 
-                results[name] = {
-                    "expressibility": expr,
-                    "entangling_capability": ent_cap,
-                }
-                click.echo(f"  expr={expr:.4f}  ent={ent_cap:.4f}")
-            except Exception as e:
-                click.echo(f"  SKIPPED ({e})")
+        results: dict[str, dict[str, float]] = {}
 
-    if results:
-        plot_circuit_properties(
-            results,
-            title=f"Circuit Properties ({n_qubits} qubits, depth=3)",
-            save_path=output_path / "circuit_comparison.png",
-        )
+        for a in ansatz_types:
+            for ent in entanglement_patterns:
+                name = f"{a[:8]}_{ent[:4]}"
+                click.echo(f"Analysing {name}...", nl=False)
+
+                try:
+                    n_layers = 3
+                    w_shape = get_weight_shape(a, n_qubits, n_layers)
+                    sv_fn = make_statevector_fn(n_qubits, n_layers, a, ent)
+
+                    expr = compute_expressibility(sv_fn, n_qubits, w_shape, n_samples=samples)
+                    ent_cap = compute_entangling_capability(sv_fn, n_qubits, w_shape, n_samples=samples)
+
+                    results[name] = {
+                        "expressibility": expr,
+                        "entangling_capability": ent_cap,
+                    }
+                    click.echo(f"  expr={expr:.4f}  ent={ent_cap:.4f}")
+                except Exception as e:
+                    click.echo(f"  SKIPPED ({e})")
+
+        if results:
+            plot_circuit_properties(
+                results,
+                title=f"Circuit Properties ({n_qubits} qubits, depth=3)",
+                save_path=output_path / "circuit_comparison.png",
+            )
 
     # ── 2. Depth vs expressibility ───────────────────────
     click.echo(f"\n═══ Depth Analysis (strongly_entangling, full) ═══\n")

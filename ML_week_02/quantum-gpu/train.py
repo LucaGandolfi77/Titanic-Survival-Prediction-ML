@@ -113,6 +113,17 @@ def main(config, epochs, lr, device, seed, quantum_warmup):
     dev = get_device(cfg["experiment"].get("device", "cpu"))
     if framework == "classical":
         model = model.to(dev)
+    else:
+        # For hybrid models, move only the classical submodules to the accelerator
+        # and keep the quantum simulator on CPU to avoid device mismatches.
+        try:
+            if hasattr(model, "pre_net"):
+                model.pre_net.to(dev)
+            if hasattr(model, "post_net"):
+                model.post_net.to(dev)
+        except Exception:
+            # best-effort move; if it fails, continue and let runtime reveal issues
+            pass
 
     # Trainer
     if framework != "classical" and quantum_warmup:

@@ -77,8 +77,15 @@ class Trainer:
     # ── Optimizer & scheduler builders ───────────────────
     def _build_optimizer(self) -> torch.optim.Optimizer:
         opt_name = self.train_cfg.get("optimizer", "adam").lower()
-        lr = self.train_cfg.get("learning_rate", 0.01)
-        wd = self.train_cfg.get("weight_decay", 1e-4)
+        # Coerce numeric values to floats to handle YAML/string overrides
+        def _to_float(v, default: float):
+            try:
+                return float(v)
+            except Exception:
+                return default
+
+        lr = _to_float(self.train_cfg.get("learning_rate", 0.01), 0.01)
+        wd = _to_float(self.train_cfg.get("weight_decay", 1e-4), 1e-4)
 
         if opt_name == "adam":
             return torch.optim.Adam(self.model.parameters(), lr=lr, weight_decay=wd)

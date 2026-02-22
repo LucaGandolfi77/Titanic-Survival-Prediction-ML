@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: nn_from_scratch
+Version: 1.0.0
+Summary: Educational neural network framework built with NumPy only
+Author: Luca Gandolfi
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: matplotlib>=3.8.0
+Requires-Dist: scikit-learn>=1.3.0
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

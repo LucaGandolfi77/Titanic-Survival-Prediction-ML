@@ -65,7 +65,13 @@ print(f'CUDA available  : {torch.cuda.is_available()}')
 if torch.cuda.is_available():
     print(f'CUDA version    : {torch.version.cuda}')
     print(f'GPU device      : {torch.cuda.get_device_name(0)}')
-    print(f'GPU memory      : {torch.cuda.get_device_properties(0).total_mem / 1024**3:.1f} GB')
+    prop = torch.cuda.get_device_properties(0)
+    # Property name changed between PyTorch versions: prefer total_memory
+    mem = getattr(prop, 'total_memory', None) or getattr(prop, 'total_mem', None)
+    if mem is not None:
+        print(f'GPU memory      : {mem / 1024**3:.1f} GB')
+    else:
+        print('GPU memory      : <unknown>')
     print(f'Compute cap.    : {torch.cuda.get_device_capability(0)}')
 else:
     print('WARNING: CUDA not detected — running on CPU only.')

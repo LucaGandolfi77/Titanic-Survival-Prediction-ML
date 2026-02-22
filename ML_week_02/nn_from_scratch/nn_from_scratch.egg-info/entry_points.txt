@@ -1,0 +1,2 @@
+[console_scripts]
+train-mnist = train_mnist:main

@@ -10,4 +10,21 @@
 /ML_week_03/nas/src/training/__pycache__
 /ML_week_03/mot/src/training/__pycache__
 /ML_week_03/nas/tests/__pycache__
+/ML_week_02/quantum-gpu/.venv
+/ML_week_02/**/pycache/
+/ML_week_02/**/*.pyc
+
+/ML_week_02/**/.venv/
+/ML_week_02/**/.pytest_cache/
+/ML_week_02/**/.ipynb_checkpoints/
+/ML_week_02/**/outputs/
+/ML_week_02/**/data/
+/ML_week_02/**/logs/
+/ML_week_02/**/outputs/tensorboard/
+*.env
+.DS_Store
+
+/ML_week_03/nas/data/cifar-10-batches-py
+
+/ML_week_03/nas/data/cifar-10-python.tar.gz 
 

@@ -1,0 +1,26 @@
+{
+  "logistic_regression": {
+    "train_time_mean": 0.0059146881103515625,
+    "train_time_std": 0.0008985139758414419,
+    "infer_time_mean": 0.0001354217529296875,
+    "infer_time_std": 6.506774564706158e-05,
+    "samples_per_sec": 221530.14084507042,
+    "runs": 5
+  },
+  "random_forest": {
+    "train_time_mean": 0.07330050468444824,
+    "train_time_std": 0.0022330239907057416,
+    "infer_time_mean": 0.0052031993865966795,
+    "infer_time_std": 0.0003855894493594101,
+    "samples_per_sec": 5765.683336540841,
+    "runs": 5
+  },
+  "svm": {
+    "train_time_mean": 0.0014926433563232423,
+    "train_time_std": 0.0001607788270195535,
+    "infer_time_mean": 0.0002086162567138672,
+    "infer_time_std": 5.556309051700293e-05,
+    "samples_per_sec": 143804.70857142858,
+    "runs": 5
+  }
+}

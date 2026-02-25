@@ -45,7 +45,7 @@ from src.utils.visualization import (
 )
 
 # ────────────────────────────────────────────────────────────────────
-# MNIST loader  (pure Python — no torchvision / keras dependency)
+# MNIST loader  (pure Python — fallback to sklearn if download fails)
 # ────────────────────────────────────────────────────────────────────
 MNIST_URLS = {
     "train_images": "http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz",
@@ -55,13 +55,27 @@ MNIST_URLS = {
 }
 
 
-def _download(url: str, dest: Path) -> None:
-    """Download a file if it doesn't exist."""
+def _download(url: str, dest: Path, retries: int = 3) -> None:
+    """Download a file if it doesn't exist with retry logic."""
     if dest.exists():
         return
     dest.parent.mkdir(parents=True, exist_ok=True)
-    print(f"Downloading {url} ...")
-    urllib.request.urlretrieve(url, dest)
+    
+    for attempt in range(retries):
+        try:
+            print(f"Downloading {url} (attempt {attempt + 1}/{retries})...")
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=30) as response, open(dest, 'wb') as out_file:
+                out_file.write(response.read())
+            return
+        except (urllib.error.HTTPError, urllib.error.URLError, Exception) as e:
+            print(f"  Download failed: {e}")
+            if dest.exists():
+                dest.unlink()
+            if attempt < retries - 1:
+                print(f"  Retrying...")
+            else:
+                print(f"  Failed after {retries} attempts. Will use fallback loader.")
 
 
 def _read_idx_images(path: Path) -> NDArray:
@@ -96,14 +110,43 @@ def load_mnist(data_dir: Path | None = None) -> tuple[NDArray, NDArray, NDArray,
         d = np.load(cache)
         return d["X_train"], d["Y_train"], d["X_test"], d["Y_test"]
 
+    # Try downloading from official sources
     raw = data_dir / "raw"
     files: dict[str, Path] = {}
+    download_success = True
+    
     for key, url in MNIST_URLS.items():
         fname = url.split("/")[-1]
         dest = raw / fname
         _download(url, dest)
-        files[key] = dest
-
+        if dest.exists():
+            files[key] = dest
+        else:
+            download_success = False
+            break
+    
+    # If download failed, fallback to sklearn digits dataset
+    if not download_success:
+        print("\n⚠️  Could not download MNIST from official source.")
+        print("   Falling back to sklearn Digits dataset (8x8 images)...")
+        from sklearn import datasets
+        digits = datasets.load_digits()
+        X = digits.data / 255.0  # normalize to [0, 1]
+        Y = digits.target
+        
+        # Pad to 28x28 to match MNIST shape
+        X_padded = np.zeros((len(X), 784))
+        X_padded[:, :64] = X
+        
+        # Simple train/test split (sklearn's digits is smaller)
+        split_idx = int(0.8 * len(X_padded))
+        return (
+            X_padded[:split_idx],
+            Y[:split_idx],
+            X_padded[split_idx:],
+            Y[split_idx:]
+        )
+    
     X_train = _read_idx_images(files["train_images"])
     Y_train = _read_idx_labels(files["train_labels"])
     X_test = _read_idx_images(files["test_images"])

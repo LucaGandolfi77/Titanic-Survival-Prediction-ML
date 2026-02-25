@@ -1,0 +1,35 @@
+# Default experiment configuration
+
+dataset:
+  name: "iris"
+  train_size: 0.8
+  random_state: 42
+
+algorithms:
+  - name: "logistic_regression"
+    params:
+      C: 1.0
+      max_iter: 1000
+  - name: "random_forest"
+    params:
+      n_estimators: 100
+      max_depth: 10
+  - name: "svm"
+    params:
+      C: 1.0
+      kernel: "rbf"
+
+features:
+  scale: true
+  reduction: null
+  n_components: 2
+
+benchmark:
+  n_runs: 5
+  measure_memory: false
+  compute_shap: false
+
+output:
+  models_dir: "outputs/models/"
+  results_dir: "results/"
+  plots_dir: "outputs/plots/"

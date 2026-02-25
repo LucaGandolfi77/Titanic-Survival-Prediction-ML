@@ -1,0 +1,4 @@
+"""
+Utility: generate the final HTML report from saved results.
+Run this at the end after the analysis notebooks produce JSON artifacts.
+"""

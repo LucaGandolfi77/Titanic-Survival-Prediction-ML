@@ -152,7 +152,12 @@ def _partial_trace(rho: np.ndarray, keep: int, n_qubits: int) -> np.ndarray:
     result = rho
     offset = 0
     for ax in sorted(trace_axes, reverse=True):
-        result = np.trace(result, axis1=ax - offset, axis2=ax + n_qubits - 2 * offset - offset)
+        # axis1: bra index (shifted left by number of removed axes = offset)
+        # axis2: corresponding ket index (originally ax + n_qubits),
+        # after removing `offset` pairs the ket index shifts left by `offset` as well.
+        axis1 = ax - offset
+        axis2 = ax + n_qubits - offset
+        result = np.trace(result, axis1=axis1, axis2=axis2)
         offset += 1
 
     return result.reshape(2, 2)

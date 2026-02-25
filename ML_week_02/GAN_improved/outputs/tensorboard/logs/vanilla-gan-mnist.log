@@ -112,3 +112,62 @@
 [2026-02-19 10:59:38] [GAN.vanilla-gan-mnist] [INFO] Epoch [100/100] G_loss: 0.7638 | D_loss: 1.3784
 [2026-02-19 10:59:38] [GAN.vanilla-gan-mnist] [INFO] Checkpoint saved at epoch 100
 [2026-02-19 10:59:38] [GAN.vanilla-gan-mnist] [INFO] Training completed in 68.9 minutes
+[2026-02-24 23:03:24] [GAN.vanilla-gan-mnist] [INFO] Starting training: vanilla-gan-mnist on mps for 50 epochs
+[2026-02-24 23:03:24] [GAN.vanilla-gan-mnist] [INFO] Generator params: 1,489,936
+[2026-02-24 23:03:24] [GAN.vanilla-gan-mnist] [INFO] Discriminator params: 533,505
+[2026-02-24 23:03:42] [GAN.vanilla-gan-mnist] [INFO] Epoch [1/50] G_loss: 0.8152 | D_loss: 1.3319
+[2026-02-24 23:03:56] [GAN.vanilla-gan-mnist] [INFO] Epoch [2/50] G_loss: 0.8593 | D_loss: 1.3090
+[2026-02-24 23:04:10] [GAN.vanilla-gan-mnist] [INFO] Epoch [3/50] G_loss: 0.8623 | D_loss: 1.3049
+[2026-02-24 23:04:24] [GAN.vanilla-gan-mnist] [INFO] Epoch [4/50] G_loss: 0.8544 | D_loss: 1.3110
+[2026-02-24 23:04:38] [GAN.vanilla-gan-mnist] [INFO] Epoch [5/50] G_loss: 0.8484 | D_loss: 1.3158
+[2026-02-24 23:04:53] [GAN.vanilla-gan-mnist] [INFO] Epoch [6/50] G_loss: 0.8424 | D_loss: 1.3237
+[2026-02-24 23:05:07] [GAN.vanilla-gan-mnist] [INFO] Epoch [7/50] G_loss: 0.8407 | D_loss: 1.3250
+[2026-02-24 23:05:21] [GAN.vanilla-gan-mnist] [INFO] Epoch [8/50] G_loss: 0.8280 | D_loss: 1.3382
+[2026-02-24 23:05:36] [GAN.vanilla-gan-mnist] [INFO] Epoch [9/50] G_loss: 0.8190 | D_loss: 1.3458
+[2026-02-24 23:05:50] [GAN.vanilla-gan-mnist] [INFO] Epoch [10/50] G_loss: 0.8111 | D_loss: 1.3533
+[2026-02-24 23:05:50] [GAN.vanilla-gan-mnist] [INFO] Checkpoint saved at epoch 10
+[2026-02-24 23:06:05] [GAN.vanilla-gan-mnist] [INFO] Epoch [11/50] G_loss: 0.8082 | D_loss: 1.3569
+[2026-02-24 23:06:20] [GAN.vanilla-gan-mnist] [INFO] Epoch [12/50] G_loss: 0.8047 | D_loss: 1.3609
+[2026-02-24 23:06:35] [GAN.vanilla-gan-mnist] [INFO] Epoch [13/50] G_loss: 0.8001 | D_loss: 1.3626
+[2026-02-24 23:06:50] [GAN.vanilla-gan-mnist] [INFO] Epoch [14/50] G_loss: 0.7944 | D_loss: 1.3646
+[2026-02-24 23:07:04] [GAN.vanilla-gan-mnist] [INFO] Epoch [15/50] G_loss: 0.7970 | D_loss: 1.3635
+[2026-02-24 23:07:19] [GAN.vanilla-gan-mnist] [INFO] Epoch [16/50] G_loss: 0.7971 | D_loss: 1.3622
+[2026-02-24 23:07:35] [GAN.vanilla-gan-mnist] [INFO] Epoch [17/50] G_loss: 0.7982 | D_loss: 1.3628
+[2026-02-24 23:07:49] [GAN.vanilla-gan-mnist] [INFO] Epoch [18/50] G_loss: 0.7948 | D_loss: 1.3639
+[2026-02-24 23:08:04] [GAN.vanilla-gan-mnist] [INFO] Epoch [19/50] G_loss: 0.7953 | D_loss: 1.3649
+[2026-02-24 23:08:19] [GAN.vanilla-gan-mnist] [INFO] Epoch [20/50] G_loss: 0.7939 | D_loss: 1.3638
+[2026-02-24 23:08:19] [GAN.vanilla-gan-mnist] [INFO] Checkpoint saved at epoch 20
+[2026-02-24 23:08:34] [GAN.vanilla-gan-mnist] [INFO] Epoch [21/50] G_loss: 0.7898 | D_loss: 1.3665
+[2026-02-24 23:08:49] [GAN.vanilla-gan-mnist] [INFO] Epoch [22/50] G_loss: 0.7886 | D_loss: 1.3672
+[2026-02-24 23:09:04] [GAN.vanilla-gan-mnist] [INFO] Epoch [23/50] G_loss: 0.7885 | D_loss: 1.3678
+[2026-02-24 23:09:19] [GAN.vanilla-gan-mnist] [INFO] Epoch [24/50] G_loss: 0.7870 | D_loss: 1.3675
+[2026-02-24 23:09:34] [GAN.vanilla-gan-mnist] [INFO] Epoch [25/50] G_loss: 0.7886 | D_loss: 1.3678
+[2026-02-24 23:09:49] [GAN.vanilla-gan-mnist] [INFO] Epoch [26/50] G_loss: 0.7847 | D_loss: 1.3688
+[2026-02-24 23:10:03] [GAN.vanilla-gan-mnist] [INFO] Epoch [27/50] G_loss: 0.7834 | D_loss: 1.3688
+[2026-02-24 23:10:18] [GAN.vanilla-gan-mnist] [INFO] Epoch [28/50] G_loss: 0.7834 | D_loss: 1.3706
+[2026-02-24 23:10:32] [GAN.vanilla-gan-mnist] [INFO] Epoch [29/50] G_loss: 0.7821 | D_loss: 1.3696
+[2026-02-24 23:10:46] [GAN.vanilla-gan-mnist] [INFO] Epoch [30/50] G_loss: 0.7790 | D_loss: 1.3709
+[2026-02-24 23:10:46] [GAN.vanilla-gan-mnist] [INFO] Checkpoint saved at epoch 30
+[2026-02-24 23:11:00] [GAN.vanilla-gan-mnist] [INFO] Epoch [31/50] G_loss: 0.7793 | D_loss: 1.3723
+[2026-02-24 23:11:14] [GAN.vanilla-gan-mnist] [INFO] Epoch [32/50] G_loss: 0.7768 | D_loss: 1.3730
+[2026-02-24 23:11:27] [GAN.vanilla-gan-mnist] [INFO] Epoch [33/50] G_loss: 0.7758 | D_loss: 1.3734
+[2026-02-24 23:11:42] [GAN.vanilla-gan-mnist] [INFO] Epoch [34/50] G_loss: 0.7776 | D_loss: 1.3734
+[2026-02-24 23:11:55] [GAN.vanilla-gan-mnist] [INFO] Epoch [35/50] G_loss: 0.7757 | D_loss: 1.3742
+[2026-02-24 23:12:09] [GAN.vanilla-gan-mnist] [INFO] Epoch [36/50] G_loss: 0.7736 | D_loss: 1.3748
+[2026-02-24 23:12:23] [GAN.vanilla-gan-mnist] [INFO] Epoch [37/50] G_loss: 0.7717 | D_loss: 1.3756
+[2026-02-24 23:12:37] [GAN.vanilla-gan-mnist] [INFO] Epoch [38/50] G_loss: 0.7732 | D_loss: 1.3754
+[2026-02-24 23:12:51] [GAN.vanilla-gan-mnist] [INFO] Epoch [39/50] G_loss: 0.7720 | D_loss: 1.3756
+[2026-02-24 23:13:05] [GAN.vanilla-gan-mnist] [INFO] Epoch [40/50] G_loss: 0.7709 | D_loss: 1.3758
+[2026-02-24 23:13:05] [GAN.vanilla-gan-mnist] [INFO] Checkpoint saved at epoch 40
+[2026-02-24 23:13:19] [GAN.vanilla-gan-mnist] [INFO] Epoch [41/50] G_loss: 0.7705 | D_loss: 1.3767
+[2026-02-24 23:13:33] [GAN.vanilla-gan-mnist] [INFO] Epoch [42/50] G_loss: 0.7704 | D_loss: 1.3770
+[2026-02-24 23:13:47] [GAN.vanilla-gan-mnist] [INFO] Epoch [43/50] G_loss: 0.7691 | D_loss: 1.3769
+[2026-02-24 23:14:01] [GAN.vanilla-gan-mnist] [INFO] Epoch [44/50] G_loss: 0.7698 | D_loss: 1.3769
+[2026-02-24 23:14:15] [GAN.vanilla-gan-mnist] [INFO] Epoch [45/50] G_loss: 0.7681 | D_loss: 1.3774
+[2026-02-24 23:14:28] [GAN.vanilla-gan-mnist] [INFO] Epoch [46/50] G_loss: 0.7668 | D_loss: 1.3780
+[2026-02-24 23:14:42] [GAN.vanilla-gan-mnist] [INFO] Epoch [47/50] G_loss: 0.7677 | D_loss: 1.3771
+[2026-02-24 23:14:56] [GAN.vanilla-gan-mnist] [INFO] Epoch [48/50] G_loss: 0.7676 | D_loss: 1.3775
+[2026-02-24 23:15:10] [GAN.vanilla-gan-mnist] [INFO] Epoch [49/50] G_loss: 0.7678 | D_loss: 1.3777
+[2026-02-24 23:15:24] [GAN.vanilla-gan-mnist] [INFO] Epoch [50/50] G_loss: 0.7662 | D_loss: 1.3780
+[2026-02-24 23:15:24] [GAN.vanilla-gan-mnist] [INFO] Checkpoint saved at epoch 50
+[2026-02-24 23:15:24] [GAN.vanilla-gan-mnist] [INFO] Training completed in 12.0 minutes

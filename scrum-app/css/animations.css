@@ -1,0 +1,157 @@
+/* =====================================================
+   ANIMATIONS.CSS — All Keyframes + Transitions
+   ===================================================== */
+
+/* Fade In */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Fade Out */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Slide Up (for modals) */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide In Right (for toast) */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide In Left */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulsing border (active sprint) */
+@keyframes pulseBorder {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--success), 0 0 15px rgba(34, 197, 94, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 0 2px var(--success), 0 0 25px rgba(34, 197, 94, 0.2);
+  }
+}
+
+/* Dashed border pulse (drop zone) */
+@keyframes dashPulse {
+  0%, 100% {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  50% {
+    border-color: var(--accent-hover);
+    background: rgba(99, 102, 241, 0.1);
+  }
+}
+
+/* Card flash (status change) */
+@keyframes statusFlash {
+  0% { background: var(--bg-card); }
+  25% { background: var(--accent-light); }
+  100% { background: var(--bg-card); }
+}
+
+/* Scale pop */
+@keyframes scalePop {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Spin */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Page transition */
+.page-enter {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Card drag styles */
+.story-card.drag-ghost {
+  transform: scale(1.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  opacity: 0.9;
+}
+
+/* Column drop hover */
+.kanban-column.drag-over {
+  animation: dashPulse 1s infinite;
+}
+
+/* Status change flash */
+.story-card.status-changed {
+  animation: statusFlash 0.5s ease;
+}
+
+/* Notification badge bounce */
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.notification-badge.bouncing {
+  animation: bounce 0.3s ease;
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-secondary) 50%, var(--bg-card) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
+}
+
+/* Smooth transitions for all interactive elements */
+.story-card,
+.backlog-story-row,
+.sprint-row,
+.team-card,
+.epic-card,
+.nav-link,
+.btn,
+.btn-icon,
+.btn-sm {
+  transition: all 0.2s ease;
+}
+
+/* Drag over effect */
+.backlog-list.drag-over {
+  animation: dashPulse 1s infinite;
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+}

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScrumFlow — Agile Project Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/board.css">
+  <link rel="stylesheet" href="css/backlog.css">
+  <link rel="stylesheet" href="css/modals.css">
+  <link rel="stylesheet" href="css/charts.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="dark-mode">
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- AUTOSAVE INDICATOR -->
+  <div id="autosave-indicator" class="autosave-badge hidden">
+    <i class="fa-solid fa-check"></i> Saved
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon"><i class="fa-solid fa-arrows-spin"></i></div>
+        <span class="logo-text">ScrumFlow</span>
+      </div>
+      <button id="sidebar-toggle" class="sidebar-toggle" title="Toggle sidebar">
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
+    </div>
+
+    <div class="sidebar-project">
+      <label class="sidebar-label">Project</label>
+      <div class="project-selector" id="project-selector">
+        <select id="project-dropdown"></select>
+        <button id="btn-new-project" class="btn-icon" title="New Project"><i class="fa-solid fa-plus"></i></button>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="nav-link" data-page="dashboard">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </a>
+      <a href="#board" class="nav-link" data-page="board">
+        <i class="fa-solid fa-columns"></i><span>Board</span>
+      </a>
+      <a href="#backlog" class="nav-link" data-page="backlog">
+        <i class="fa-solid fa-list-check"></i><span>Backlog</span>
+      </a>
+      <a href="#sprints" class="nav-link" data-page="sprints">
+        <i class="fa-solid fa-rocket"></i><span>Sprints</span>
+      </a>
+      <a href="#team" class="nav-link" data-page="team">
+        <i class="fa-solid fa-users"></i><span>Team</span>
+      </a>
+      <a href="#analytics" class="nav-link" data-page="analytics">
+        <i class="fa-solid fa-chart-line"></i><span>Analytics</span>
+      </a>
+      <a href="#epics" class="nav-link" data-page="epics">
+        <i class="fa-solid fa-layer-group"></i><span>Epics</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sprint-info-box" id="sprint-info-box">
+        <div class="sprint-info-label">Active Sprint</div>
+        <div class="sprint-info-name" id="sidebar-sprint-name">No active sprint</div>
+        <div class="sprint-info-days" id="sidebar-sprint-days"></div>
+      </div>
+      <div class="sidebar-actions">
+        <button id="btn-import-sample" class="btn-sm" title="Load demo data">
+          <i class="fa-solid fa-download"></i><span>Demo Data</span>
+        </button>
+        <button id="btn-theme-toggle" class="btn-icon" title="Toggle theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div id="main-wrapper" class="main-wrapper">
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <h1 id="page-title" class="page-title">Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <div class="search-box" id="global-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="global-search-input" placeholder="Search stories... (Ctrl+K)">
+        </div>
+        <button id="btn-notification" class="btn-icon notification-btn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notification-badge" id="notification-badge">0</span>
+        </button>
+        <div class="active-sprint-badge" id="header-sprint-badge"></div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main id="app-content" class="app-content">
+      <!-- Dynamic content rendered here by router -->
+    </main>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Card Detail Modal -->
+  <div id="modal-card-detail" class="modal-overlay hidden">
+    <div class="modal modal-card-detail">
+      <button class="modal-close" data-modal="modal-card-detail"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-card-body">
+        <div class="modal-card-left">
+          <div class="card-detail-title-wrap">
+            <input type="text" id="card-detail-title" class="card-detail-title" placeholder="Story title...">
+          </div>
+          <div class="card-detail-section">
+            <h4><i class="fa-solid fa-align-left"></i> Description</h4>
+            <textarea id="card-detail-desc" class="card-detail-textarea" placeholder="Add a description... (supports markdown)"></textarea>
+            <div id="card-detail-desc-preview" class="markdown-preview hidden"></div>
+          </div>
+          <div class="card-detail-section">
+            <h4><i class="fa-solid fa-clipboard-check"></i> Acceptance Criteria</h4>
+            <textarea id="card-detail-criteria" class="card-detail-textarea" placeholder="Add acceptance criteria..."></textarea>
+          </div>
+          <div class="card-detail-section">
+            <h4><i class="fa-solid fa-list-check"></i> Subtasks</h4>
+            <div id="card-detail-subtasks" class="subtasks-list"></div>
+            <div class="subtask-add">
+              <input type="text" id="subtask-input" placeholder="Add subtask...">
+              <button id="btn-add-subtask" class="btn-sm btn-accent"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div class="subtask-progress-wrap" id="subtask-progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" id="subtask-progress-bar"></div></div>
+              <span id="subtask-progress-text">0/0</span>
+            </div>
+          </div>
+          <div class="card-detail-section">
+            <h4><i class="fa-solid fa-tags"></i> Tags</h4>
+            <div class="tags-container" id="card-detail-tags"></div>
+            <input type="text" id="tag-input" class="tag-input" placeholder="Type tag and press Enter...">
+          </div>
+          <div class="card-detail-section">
+            <h4><i class="fa-solid fa-clock-rotate-left"></i> Activity Log</h4>
+            <div id="card-detail-activity" class="activity-log"></div>
+          </div>
+        </div>
+        <div class="modal-card-right">
+          <div class="card-detail-field">
+            <label>Status</label>
+            <select id="card-detail-status">
+              <option value="todo">To Do</option>
+              <option value="inprogress">In Progress</option>
+              <option value="review">In Review</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="card-detail-field">
+            <label>Assignee</label>
+            <select id="card-detail-assignee"><option value="">Unassigned</option></select>
+          </div>
+          <div class="card-detail-field">
+            <label>Story Points</label>
+            <div class="fibonacci-selector" id="fibonacci-selector">
+              <button data-points="1" class="fib-btn">1</button>
+              <button data-points="2" class="fib-btn">2</button>
+              <button data-points="3" class="fib-btn">3</button>
+              <button data-points="5" class="fib-btn">5</button>
+              <button data-points="8" class="fib-btn">8</button>
+              <button data-points="13" class="fib-btn">13</button>
+              <button data-points="21" class="fib-btn">21</button>
+            </div>
+          </div>
+          <div class="card-detail-field">
+            <label>Priority</label>
+            <select id="card-detail-priority">
+              <option value="critical">🔴 Critical</option>
+              <option value="high">🟠 High</option>
+              <option value="medium">🟡 Medium</option>
+              <option value="low">🔵 Low</option>
+            </select>
+          </div>
+          <div class="card-detail-field">
+            <label>Epic</label>
+            <select id="card-detail-epic"><option value="">No Epic</option></select>
+          </div>
+          <div class="card-detail-field">
+            <label>Sprint</label>
+            <select id="card-detail-sprint"><option value="">Backlog</option></select>
+          </div>
+          <div class="card-detail-meta">
+            <div><small>Created: <span id="card-detail-created"></span></small></div>
+            <div><small>Updated: <span id="card-detail-updated"></span></small></div>
+          </div>
+          <div class="card-detail-actions">
+            <button id="btn-save-card" class="btn btn-accent"><i class="fa-solid fa-check"></i> Save (Ctrl+Enter)</button>
+            <button id="btn-delete-card" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Project Modal -->
+  <div id="modal-new-project" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+      <button class="modal-close" data-modal="modal-new-project"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title">New Project</h2>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Project Name</label>
+          <input type="text" id="new-project-name" placeholder="My Project">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="new-project-desc" placeholder="Project description..."></textarea>
+        </div>
+        <button id="btn-create-project" class="btn btn-accent btn-full">Create Project</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Sprint Modal -->
+  <div id="modal-new-sprint" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+      <button class="modal-close" data-modal="modal-new-sprint"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title">New Sprint</h2>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Sprint Name</label>
+          <input type="text" id="new-sprint-name" placeholder="Sprint 1">
+        </div>
+        <div class="form-group">
+          <label>Sprint Goal</label>
+          <textarea id="new-sprint-goal" placeholder="Sprint goal..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" id="new-sprint-start">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="date" id="new-sprint-end">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Capacity (Story Points)</label>
+          <input type="number" id="new-sprint-capacity" value="40" min="0">
+        </div>
+        <button id="btn-create-sprint" class="btn btn-accent btn-full">Create Sprint</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Member Modal -->
+  <div id="modal-team-member" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+      <button class="modal-close" data-modal="modal-team-member"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title" id="team-modal-title">Add Team Member</h2>
+      <div class="modal-body">
+        <input type="hidden" id="team-member-id">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="team-member-name" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="team-member-role">
+            <option value="Developer">Developer</option>
+            <option value="Designer">Designer</option>
+            <option value="QA">QA</option>
+            <option value="Scrum Master">Scrum Master</option>
+            <option value="Product Owner">Product Owner</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Capacity (Story Points per Sprint)</label>
+          <input type="number" id="team-member-capacity" value="10" min="0" max="50">
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <input type="color" id="team-member-color" value="#6366f1">
+        </div>
+        <button id="btn-save-member" class="btn btn-accent btn-full">Save Member</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Epic Modal -->
+  <div id="modal-epic" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+      <button class="modal-close" data-modal="modal-epic"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title" id="epic-modal-title">Add Epic</h2>
+      <div class="modal-body">
+        <input type="hidden" id="epic-id">
+        <div class="form-group">
+          <label>Epic Name</label>
+          <input type="text" id="epic-name" placeholder="User Authentication">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="epic-desc" placeholder="Epic description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <input type="color" id="epic-color" value="#6366f1">
+        </div>
+        <button id="btn-save-epic" class="btn btn-accent btn-full">Save Epic</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete Sprint Modal -->
+  <div id="modal-complete-sprint" class="modal-overlay hidden">
+    <div class="modal modal-md">
+      <button class="modal-close" data-modal="modal-complete-sprint"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title">Complete Sprint</h2>
+      <div class="modal-body">
+        <div class="complete-sprint-summary" id="complete-sprint-summary"></div>
+        <h3>Sprint Retrospective</h3>
+        <div class="form-group">
+          <label>What went well?</label>
+          <textarea id="retro-well" placeholder="Things that went well..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>What to improve?</label>
+          <textarea id="retro-improve" placeholder="Things to improve..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Action Items</label>
+          <div id="retro-actions-list" class="retro-actions-list"></div>
+          <div class="subtask-add">
+            <input type="text" id="retro-action-input" placeholder="Add action item...">
+            <button id="btn-add-retro-action" class="btn-sm btn-accent"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+        <div class="form-row">
+          <button id="btn-confirm-complete-sprint" class="btn btn-accent">Complete Sprint</button>
+          <button id="btn-export-retro" class="btn btn-outline">Export Report (JSON)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Search Modal -->
+  <div id="modal-search" class="modal-overlay hidden">
+    <div class="modal modal-search">
+      <div class="search-modal-input-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="search-modal-input" placeholder="Search stories by title or description..." autofocus>
+        <kbd>ESC</kbd>
+      </div>
+      <div id="search-results" class="search-results"></div>
+    </div>
+  </div>
+
+  <!-- Standup Helper Modal -->
+  <div id="modal-standup" class="modal-overlay hidden">
+    <div class="modal modal-md">
+      <button class="modal-close" data-modal="modal-standup"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title"><i class="fa-solid fa-sun"></i> Daily Standup</h2>
+      <div class="modal-body" id="standup-content"></div>
+    </div>
+  </div>
+
+  <!-- Planning Poker Modal -->
+  <div id="modal-poker" class="modal-overlay hidden">
+    <div class="modal modal-md">
+      <button class="modal-close" data-modal="modal-poker"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title"><i class="fa-solid fa-cards"></i> Planning Poker</h2>
+      <div class="modal-body" id="poker-content"></div>
+    </div>
+  </div>
+
+  <!-- Definition of Done Modal -->
+  <div id="modal-dod" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+      <button class="modal-close" data-modal="modal-dod"><i class="fa-solid fa-xmark"></i></button>
+      <h2 class="modal-title"><i class="fa-solid fa-clipboard-check"></i> Definition of Done</h2>
+      <div class="modal-body" id="dod-content"></div>
+    </div>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <div id="modal-confirm" class="modal-overlay hidden">
+    <div class="modal modal-xs">
+      <h3 id="confirm-title">Confirm</h3>
+      <p id="confirm-message">Are you sure?</p>
+      <div class="form-row" style="margin-top:1rem">
+        <button id="btn-confirm-yes" class="btn btn-danger">Confirm</button>
+        <button id="btn-confirm-no" class="btn btn-outline">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Panel -->
+  <div id="notification-panel" class="notification-panel hidden">
+    <div class="notification-header">
+      <h3>Activity</h3>
+      <button id="btn-clear-notifications" class="btn-sm">Clear All</button>
+    </div>
+    <div id="notification-list" class="notification-list"></div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/sampleData.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/backlog.js"></script>
+  <script src="js/sprints.js"></script>
+  <script src="js/team.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/epics.js"></script>
+  <script src="js/modals.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

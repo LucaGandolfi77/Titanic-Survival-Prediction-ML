@@ -1,0 +1,323 @@
+/* =====================================================
+   CHARTS.CSS — Analytics Page
+   ===================================================== */
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.chart-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.chart-card h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-height: 350px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  max-height: 350px;
+}
+
+/* Sprint comparison table */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.comparison-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table tr:hover td {
+  background: var(--bg-primary);
+}
+
+/* Team page */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.team-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.team-card:hover {
+  border-color: var(--border-light);
+  box-shadow: var(--shadow);
+}
+
+.team-card .team-avatar {
+  margin: 0 auto 1rem;
+}
+
+.team-card .team-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.team-role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.team-role-badge.Developer { background: var(--accent-light); color: var(--accent); }
+.team-role-badge.Designer { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+.team-role-badge.QA { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.team-role-badge.Scrum\ Master { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.team-role-badge.Product\ Owner { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.role-Developer { background: var(--accent-light); color: var(--accent); }
+.role-Designer { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+.role-QA { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.role-ScrumMaster { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.role-ProductOwner { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+.team-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.team-stat {
+  text-align: center;
+}
+
+.team-stat .stat-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.team-stat .stat-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.workload-indicator {
+  margin-top: 0.75rem;
+}
+
+.workload-indicator .workload-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.workload-indicator .workload-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.workload-indicator .workload-text {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.team-card-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Capacity slider */
+.capacity-slider {
+  margin-top: 0.75rem;
+}
+
+.capacity-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.capacity-slider input[type="range"]:focus {
+  box-shadow: none;
+}
+
+.capacity-slider .capacity-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Velocity table */
+.velocity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.velocity-table th,
+.velocity-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.velocity-table th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.velocity-table td:first-child {
+  text-align: left;
+}
+
+/* Epic page */
+.epics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.epic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.epic-card:hover {
+  border-color: var(--border-light);
+  box-shadow: var(--shadow);
+}
+
+.epic-card-header {
+  padding: 1rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.epic-card-body {
+  padding: 1rem;
+}
+
+.epic-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.epic-card-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.epic-card-stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-muted);
+}
+
+.epic-card-progress {
+  margin-top: 0.5rem;
+}
+
+.epic-card-progress .progress-text {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  text-align: right;
+}
+
+.epic-expanded {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.epic-expanded .epic-story-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.epic-expanded .epic-story-item:last-child {
+  border-bottom: none;
+}
+
+.epic-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 1024px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}

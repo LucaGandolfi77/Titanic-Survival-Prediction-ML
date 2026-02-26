@@ -1,0 +1,409 @@
+/* =====================================================
+   BACKLOG.CSS — Backlog Page + Sprint Management List
+   ===================================================== */
+
+/* Two-panel layout */
+.backlog-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  min-height: calc(100vh - 200px);
+}
+
+.backlog-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.backlog-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.backlog-panel-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.backlog-panel-stats {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.backlog-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.backlog-group-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-primary);
+}
+
+.backlog-group-bar label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.backlog-group-bar .group-btn {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.backlog-group-bar .group-btn:hover,
+.backlog-group-bar .group-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.sort-btn {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: var(--text-muted);
+  transition: var(--transition);
+  margin-left: 0.25rem;
+}
+.sort-btn:hover, .sort-btn.active {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* Backlog stories list */
+.backlog-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.backlog-list.drag-over {
+  background: var(--accent-light);
+}
+
+/* Inline create form */
+.inline-create-form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.inline-create-form input,
+.inline-create-form select {
+  font-size: 0.8rem;
+  height: 32px;
+  padding: 0 0.5rem;
+}
+
+.inline-create-form input[type="text"] {
+  flex: 2;
+}
+.inline-create-form input[type="number"] {
+  width: 60px;
+  flex: none;
+}
+.inline-create-form select {
+  flex: 1;
+  min-width: 80px;
+}
+
+/* Backlog Story Row */
+.backlog-story-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-bottom: 2px;
+}
+
+.backlog-story-row:hover {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+.backlog-story-row.dragging {
+  opacity: 0.4;
+}
+
+.backlog-story-row.selected {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.backlog-drag-handle {
+  color: var(--text-muted);
+  cursor: grab;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+}
+
+.backlog-drag-handle:active {
+  cursor: grabbing;
+}
+
+.backlog-story-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.backlog-priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.backlog-priority-dot.critical { background: var(--priority-critical); }
+.backlog-priority-dot.high { background: var(--priority-high); }
+.backlog-priority-dot.medium { background: var(--priority-medium); }
+.backlog-priority-dot.low { background: var(--priority-low); }
+
+.backlog-story-title {
+  flex: 1;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.backlog-story-title.editable {
+  cursor: text;
+  border: 1px solid transparent;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+}
+
+.backlog-story-title.editable:focus {
+  border-color: var(--accent);
+  background: var(--bg-primary);
+  outline: none;
+}
+
+.backlog-story-points {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.backlog-story-assignee {
+  flex-shrink: 0;
+}
+
+.backlog-story-epic {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.backlog-story-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.backlog-story-row:hover .backlog-story-actions {
+  opacity: 1;
+}
+
+.backlog-story-actions button {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  transition: var(--transition);
+}
+
+.backlog-story-actions button:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Bulk actions bar */
+.bulk-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent-light);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+  font-size: 0.8rem;
+}
+
+.bulk-actions-bar .selected-count {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Group header */
+.backlog-group-header {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.backlog-group-header .group-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+/* Sprint list page */
+.sprint-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sprint-row {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  transition: var(--transition);
+}
+
+.sprint-row:hover {
+  border-color: var(--border-light);
+}
+
+.sprint-row.active-sprint {
+  border-color: var(--success);
+  box-shadow: 0 0 0 1px var(--success), 0 0 20px rgba(34, 197, 94, 0.1);
+  animation: pulseBorder 2s infinite;
+}
+
+.sprint-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.sprint-row-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sprint-row-title h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.sprint-status-badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-weight: 600;
+}
+
+.sprint-status-badge.planned { background: var(--accent-light); color: var(--accent); }
+.sprint-status-badge.active { background: var(--success-light); color: var(--success); }
+.sprint-status-badge.completed { background: rgba(148,163,184,0.15); color: var(--text-muted); }
+
+.sprint-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.sprint-row-meta i {
+  margin-right: 0.35rem;
+}
+
+.sprint-row-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sprint-row-progress {
+  margin-top: 0.5rem;
+}
+
+.sprint-row-progress .progress-bar {
+  height: 6px;
+}
+
+.sprint-detail-expand {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+.empty-state p {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1024px) {
+  .backlog-layout {
+    grid-template-columns: 1fr;
+  }
+}

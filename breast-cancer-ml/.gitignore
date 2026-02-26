@@ -1,0 +1,33 @@
+# Byte-compiled / optimised / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs (optional: keep structure, ignore generated content)
+outputs/models/*.pkl
+outputs/reports/*.csv
+outputs/reports/*.txt
+outputs/plots/*.png
+
+# Jupyter checkpoints
+.ipynb_checkpoints/

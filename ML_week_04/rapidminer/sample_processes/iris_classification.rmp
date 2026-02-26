@@ -1,0 +1,56 @@
+{
+  "version": "1.0",
+  "name": "Iris Classification",
+  "operators": [
+    {
+      "id": "op_read01",
+      "type": "Read CSV",
+      "display_name": "Read Iris",
+      "position": [60, 80],
+      "params": {"filepath": "sample_data/iris.csv", "separator": ",", "header": true}
+    },
+    {
+      "id": "op_role01",
+      "type": "Set Role",
+      "display_name": "Set Target",
+      "position": [300, 80],
+      "params": {"column": "species", "role": "label"}
+    },
+    {
+      "id": "op_split01",
+      "type": "Split Data",
+      "display_name": "Split 70/30",
+      "position": [540, 80],
+      "params": {"ratio": 0.7, "stratified": true, "seed": 42}
+    },
+    {
+      "id": "op_rf01",
+      "type": "Random Forest",
+      "display_name": "Random Forest",
+      "position": [780, 40],
+      "params": {"n_estimators": 100, "max_depth": 10}
+    },
+    {
+      "id": "op_apply01",
+      "type": "Apply Model",
+      "display_name": "Apply Model",
+      "position": [780, 160],
+      "params": {}
+    },
+    {
+      "id": "op_perf01",
+      "type": "Performance (Classification)",
+      "display_name": "Evaluate",
+      "position": [1020, 160],
+      "params": {}
+    }
+  ],
+  "connections": [
+    {"from": "op_read01", "from_port": "output", "to": "op_role01", "to_port": "input"},
+    {"from": "op_role01", "from_port": "output", "to": "op_split01", "to_port": "input"},
+    {"from": "op_split01", "from_port": "train", "to": "op_rf01", "to_port": "training"},
+    {"from": "op_rf01", "from_port": "model", "to": "op_apply01", "to_port": "model"},
+    {"from": "op_split01", "from_port": "test", "to": "op_apply01", "to_port": "unlabelled"},
+    {"from": "op_apply01", "from_port": "labelled", "to": "op_perf01", "to_port": "labelled"}
+  ]
+}

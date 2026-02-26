@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "name": "Iris Clustering",
+  "operators": [
+    {
+      "id": "op_read01",
+      "type": "Read CSV",
+      "display_name": "Read Iris",
+      "position": [60, 80],
+      "params": {"filepath": "sample_data/iris.csv", "separator": ",", "header": true}
+    },
+    {
+      "id": "op_select01",
+      "type": "Select Attributes",
+      "display_name": "Numeric Only",
+      "position": [300, 80],
+      "params": {"mode": "keep", "columns": "sepal_length,sepal_width,petal_length,petal_width"}
+    },
+    {
+      "id": "op_norm01",
+      "type": "Normalize",
+      "display_name": "Z-Score",
+      "position": [540, 80],
+      "params": {"method": "z-score", "columns": ""}
+    },
+    {
+      "id": "op_km01",
+      "type": "KMeans",
+      "display_name": "K-Means (k=3)",
+      "position": [780, 80],
+      "params": {"n_clusters": 3, "init": "k-means++", "max_iter": 300}
+    },
+    {
+      "id": "op_perf01",
+      "type": "Performance (Clustering)",
+      "display_name": "Evaluate",
+      "position": [1020, 80],
+      "params": {}
+    }
+  ],
+  "connections": [
+    {"from": "op_read01", "from_port": "output", "to": "op_select01", "to_port": "input"},
+    {"from": "op_select01", "from_port": "output", "to": "op_norm01", "to_port": "input"},
+    {"from": "op_norm01", "from_port": "output", "to": "op_km01", "to_port": "training"},
+    {"from": "op_km01", "from_port": "model", "to": "op_perf01", "to_port": "model"},
+    {"from": "op_km01", "from_port": "training", "to": "op_perf01", "to_port": "labelled"}
+  ]
+}

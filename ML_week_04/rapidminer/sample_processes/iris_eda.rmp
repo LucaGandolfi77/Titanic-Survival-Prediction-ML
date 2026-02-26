@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "name": "Iris EDA",
+  "operators": [
+    {
+      "id": "op_read01",
+      "type": "Read CSV",
+      "display_name": "Read Iris",
+      "position": [60, 120],
+      "params": {"filepath": "sample_data/iris.csv", "separator": ",", "header": true}
+    },
+    {
+      "id": "op_dist01",
+      "type": "Data Distribution",
+      "display_name": "Distribution",
+      "position": [340, 40],
+      "params": {"column": "sepal_length", "bins": 20}
+    },
+    {
+      "id": "op_scatter01",
+      "type": "Scatter Plot",
+      "display_name": "Scatter Plot",
+      "position": [340, 140],
+      "params": {"x_column": "sepal_length", "y_column": "petal_length", "color_by": "species"}
+    },
+    {
+      "id": "op_corr01",
+      "type": "Correlation Heatmap",
+      "display_name": "Correlations",
+      "position": [340, 240],
+      "params": {}
+    }
+  ],
+  "connections": [
+    {"from": "op_read01", "from_port": "output", "to": "op_dist01", "to_port": "input"},
+    {"from": "op_read01", "from_port": "output", "to": "op_scatter01", "to_port": "input"},
+    {"from": "op_read01", "from_port": "output", "to": "op_corr01", "to_port": "input"}
+  ]
+}

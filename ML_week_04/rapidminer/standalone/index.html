@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RapidMiner Lite – Standalone</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="toolbar">
+  <div class="tb-left">
+    <span class="logo">⚡ RapidMiner Lite</span>
+    <button id="btn-new" title="New Process">📄 New</button>
+    <button id="btn-open" title="Open .rmp">📂 Open</button>
+    <button id="btn-save" title="Save .rmp">💾 Save</button>
+    <select id="sel-sample-process">
+      <option value="">— Sample Processes —</option>
+      <option value="iris_classification">Iris Classification</option>
+      <option value="iris_clustering">Iris Clustering</option>
+    </select>
+    <select id="sel-sample-data">
+      <option value="">— Load Sample Data —</option>
+      <option value="iris">iris (60 rows)</option>
+      <option value="titanic">titanic (30 rows)</option>
+      <option value="housing">housing (60 rows)</option>
+    </select>
+  </div>
+  <div class="tb-center">
+    <button id="btn-run" class="btn-run" title="Run Process (F5)">▶ Run</button>
+    <button id="btn-stop" title="Stop">⏹</button>
+    <button id="btn-undo" title="Undo (Ctrl+Z)">↩</button>
+    <button id="btn-redo" title="Redo (Ctrl+Y)">↪</button>
+  </div>
+  <div class="tb-right">
+    <button id="btn-automodel" title="AutoModel Wizard">🤖 AutoModel</button>
+    <button id="btn-clear" title="Clear Canvas">🗑️</button>
+  </div>
+</header>
+
+<div id="workspace">
+  <aside id="left-panel">
+    <input type="text" id="palette-search" placeholder="🔍 Search operators…">
+    <div id="palette"></div>
+  </aside>
+
+  <main id="center">
+    <nav id="tabs">
+      <button class="tab-btn active" data-tab="tab-design">Design</button>
+      <button class="tab-btn" data-tab="tab-results">Results</button>
+      <button class="tab-btn" data-tab="tab-log">Log</button>
+    </nav>
+    <div id="tab-design" class="tab-content active">
+      <canvas id="design-canvas"></canvas>
+    </div>
+    <div id="tab-results" class="tab-content">
+      <div id="results"></div>
+    </div>
+    <div id="tab-log" class="tab-content">
+      <pre id="log"></pre>
+    </div>
+  </main>
+
+  <aside id="right-panel">
+    <h3 id="prop-title">Properties</h3>
+    <div id="props"><p class="prop-empty">Select an operator on the canvas to view its properties.</p></div>
+  </aside>
+</div>
+
+<!-- Modal overlay -->
+<div id="modal-overlay" onclick="if(event.target===this)app.closeModal()">
+  <div id="modal">
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="file-open" accept=".rmp,.json,.rmp.json" hidden>
+<input type="file" id="file-csv" accept=".csv" hidden>
+
+<!-- Engine layer (order matters: foundational → dependent) -->
+<script src="js/dataframe.js"></script>
+<script src="js/ml.js"></script>
+<script src="js/operators.js"></script>
+<script src="js/operators_data.js"></script>
+<script src="js/operators_transform.js"></script>
+<script src="js/operators_feature.js"></script>
+<script src="js/operators_model.js"></script>
+<script src="js/operators_eval.js"></script>
+<script src="js/operators_viz.js"></script>
+<script src="js/process.js"></script>
+
+<!-- GUI layer -->
+<script src="js/canvas.js"></script>
+<script src="js/palette.js"></script>
+<script src="js/properties.js"></script>
+<script src="js/results.js"></script>
+<script src="js/app_main.js"></script>
+</body>
+</html>

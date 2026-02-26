@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataikuLite DSS – Standalone</title>
+<!-- Chart.js (MIT) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<!-- ml.js – basic ML in the browser (MIT) -->
+<script src="https://cdn.jsdelivr.net/npm/ml-matrix@6.11.1/matrix.umd.min.js"></script>
+<style>
+/* ================================================================
+   CSS – Dark‑theme mirroring the Python tkinter desktop app
+   Palette: BG #1e1e2e  PANEL #2a2a3e  ACCENT #7c3aed
+   ================================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e2e;--panel:#2a2a3e;--surface:#33334d;--border:#444466;
+  --accent:#7c3aed;--accent-hover:#6d28d9;--accent-light:#a78bfa;
+  --text:#e0e0e0;--text-dim:#999;--success:#22c55e;--danger:#ef4444;
+  --warning:#f59e0b;--font:'Segoe UI',system-ui,-apple-system,sans-serif;
+  --mono:'Cascadia Code','Fira Code','Consolas',monospace;
+  --radius:8px;--shadow:0 4px 24px rgba(0,0,0,.4);
+}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden}
+a{color:var(--accent-light);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- layout ---------- */
+#app{display:flex;flex-direction:column;height:100vh}
+header{display:flex;align-items:center;gap:12px;padding:0 16px;height:48px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+header h1{font-size:16px;font-weight:700;letter-spacing:.5px}
+header h1 span{color:var(--accent-light)}
+.header-actions{margin-left:auto;display:flex;gap:8px}
+.body-wrap{display:flex;flex:1;overflow:hidden}
+aside{width:220px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+aside .section-title{padding:12px 16px 4px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim)}
+aside ul{list-style:none;padding:0}
+aside li{padding:8px 16px;cursor:pointer;font-size:13px;transition:background .15s}
+aside li:hover,aside li.active{background:var(--surface)}
+aside li.active{border-left:3px solid var(--accent);padding-left:13px}
+aside li .badge{float:right;background:var(--accent);color:#fff;border-radius:10px;font-size:10px;padding:1px 7px}
+main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.tab-bar{display:flex;gap:0;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0}
+.tab-bar button{background:none;border:none;color:var(--text-dim);padding:10px 20px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font)}
+.tab-bar button:hover{color:var(--text)}
+.tab-bar button.active{color:var(--accent-light);border-bottom-color:var(--accent)}
+.tab-content{flex:1;overflow:auto;padding:20px}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+footer{height:28px;background:var(--panel);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 16px;font-size:11px;color:var(--text-dim);flex-shrink:0}
+footer .status-dot{width:8px;height:8px;border-radius:50%;background:var(--success);margin-right:8px}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:none;border-radius:var(--radius);font-size:13px;cursor:pointer;transition:background .15s;font-family:var(--font);color:#fff}
+.btn-primary{background:var(--accent)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--surface);color:var(--text)}
+.btn-secondary:hover{background:var(--border)}
+.btn-danger{background:var(--danger)}
+.btn-sm{padding:4px 10px;font-size:12px}
+.btn-icon{padding:6px;border-radius:6px;background:none;border:1px solid var(--border);color:var(--text);cursor:pointer}
+.btn-icon:hover{background:var(--surface)}
+
+/* ---------- forms ---------- */
+select,input[type=text],input[type=number],textarea{
+  background:var(--surface);color:var(--text);border:1px solid var(--border);
+  border-radius:var(--radius);padding:6px 10px;font-size:13px;font-family:var(--font);
+  outline:none;transition:border-color .15s}
+select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+textarea{font-family:var(--mono);resize:vertical}
+label{font-size:12px;color:var(--text-dim);margin-bottom:4px;display:block}
+.form-group{margin-bottom:14px}
+.form-row{display:flex;gap:12px;align-items:flex-end}
+
+/* ---------- cards & panels ---------- */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card h3{font-size:14px;margin-bottom:10px;color:var(--accent-light)}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.section-header h2{font-size:18px;font-weight:600}
+
+/* ---------- table ---------- */
+.table-wrap{overflow:auto;max-height:400px;border:1px solid var(--border);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+thead{position:sticky;top:0;z-index:2}
+th{background:var(--surface);padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--accent);white-space:nowrap}
+td{padding:6px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+tr:hover td{background:rgba(124,58,237,.06)}
+
+/* ---------- chart container ---------- */
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:16px}
+.chart-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.chart-card h4{font-size:13px;margin-bottom:8px;color:var(--accent-light)}
+
+/* ---------- notebook ---------- */
+.nb-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;position:relative}
+.nb-cell .cell-header{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--border);font-size:11px;color:var(--text-dim)}
+.nb-cell textarea{width:100%;min-height:60px;border:none;background:transparent;color:var(--text);padding:10px;font-family:var(--mono);font-size:13px;resize:vertical;outline:none}
+.nb-cell .cell-output{padding:8px 10px;font-family:var(--mono);font-size:12px;background:rgba(0,0,0,.2);color:var(--success);white-space:pre-wrap;max-height:200px;overflow:auto;border-top:1px solid var(--border)}
+.nb-cell .cell-output.error{color:var(--danger)}
+
+/* ---------- flow canvas ---------- */
+#flow-svg{width:100%;height:100%;min-height:500px}
+.flow-node{cursor:grab}
+.flow-node rect{fill:var(--surface);stroke:var(--border);stroke-width:1.5;rx:8;ry:8;transition:stroke .15s}
+.flow-node:hover rect{stroke:var(--accent)}
+.flow-node text{fill:var(--text);font-size:12px;font-family:var(--font)}
+.flow-edge{stroke:var(--border);stroke-width:2;fill:none;marker-end:url(#arrowhead)}
+
+/* ---------- prepare ---------- */
+.step-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px}
+.step-item .step-type{font-weight:600;color:var(--accent-light);min-width:120px;font-size:12px}
+.step-item .step-detail{flex:1;font-size:12px;color:var(--text-dim)}
+
+/* ---------- ML ---------- */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
+.metric-card .value{font-size:22px;font-weight:700;color:var(--accent-light)}
+.metric-card .label{font-size:11px;color:var(--text-dim);margin-top:2px}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;bottom:40px;right:20px;background:var(--accent);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ---------- modal ---------- */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000;display:none}
+.modal-overlay.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;width:480px;max-width:90vw;box-shadow:var(--shadow)}
+.modal h3{margin-bottom:16px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+
+/* ---------- misc ---------- */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-dim)}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:var(--surface);border:1px solid var(--border);margin:2px}
+.progress-bar{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-bar .fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
+
+@media(max-width:768px){
+  aside{display:none}
+  .chart-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- ====== HEADER ====== -->
+<header>
+  <h1>Dataiku<span>Lite</span> DSS</h1>
+  <div class="header-actions">
+    <button class="btn btn-primary btn-sm" onclick="openImport()">&#128449; Import CSV</button>
+    <button class="btn btn-secondary btn-sm" onclick="exportDataCSV()">&#128190; Export</button>
+  </div>
+</header>
+
+<!-- ====== BODY ====== -->
+<div class="body-wrap">
+
+<!-- sidebar -->
+<aside>
+  <div class="section-title">Datasets</div>
+  <ul id="dataset-list"></ul>
+  <div class="section-title" style="margin-top:auto;padding-bottom:8px">
+    <span style="font-size:10px">DataikuLite v1.0 – Standalone</span>
+  </div>
+</aside>
+
+<!-- main -->
+<main>
+  <div class="tab-bar" id="tab-bar">
+    <button class="active" data-tab="flow">&#127760; Flow</button>
+    <button data-tab="datasets">&#128202; Datasets</button>
+    <button data-tab="eda">&#128200; EDA</button>
+    <button data-tab="prepare">&#9874; Prepare</button>
+    <button data-tab="ml">&#129302; ML Lab</button>
+    <button data-tab="notebook">&#128221; Notebook</button>
+  </div>
+
+  <div class="tab-content">
+
+    <!-- -------- FLOW -------- -->
+    <div class="tab-pane active" id="pane-flow">
+      <div class="section-header">
+        <h2>Visual Flow</h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm" onclick="addFlowNode('dataset')">+ Dataset</button>
+          <button class="btn btn-secondary btn-sm" onclick="addFlowNode('recipe')">+ Recipe</button>
+          <button class="btn btn-secondary btn-sm" onclick="addFlowNode('model')">+ Model</button>
+          <button class="btn btn-danger btn-sm" onclick="clearFlow()">Clear</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;height:calc(100vh - 220px)">
+        <svg id="flow-svg" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+            </marker>
+          </defs>
+          <g id="flow-edges"></g>
+          <g id="flow-nodes"></g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- -------- DATASETS -------- -->
+    <div class="tab-pane" id="pane-datasets">
+      <div class="section-header">
+        <h2>Dataset Explorer</h2>
+        <span id="ds-info" style="font-size:12px;color:var(--text-dim)"></span>
+      </div>
+      <div id="ds-empty" class="empty-state">
+        <div class="icon">&#128449;</div>
+        <p>No datasets loaded. Click <strong>Import CSV</strong> to begin.</p>
+      </div>
+      <div id="ds-view" style="display:none">
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group" style="flex:1">
+            <label>Search columns</label>
+            <input type="text" id="col-search" placeholder="Filter columns…" oninput="renderTable()">
+          </div>
+          <div class="form-group">
+            <label>Page</label>
+            <div style="display:flex;gap:4px">
+              <button class="btn-icon" onclick="changePage(-1)">&#9664;</button>
+              <span id="page-info" style="padding:6px 8px;font-size:12px">1 / 1</span>
+              <button class="btn-icon" onclick="changePage(1)">&#9654;</button>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap" id="table-wrap"></div>
+        <div class="card" style="margin-top:16px">
+          <h3>Column Statistics</h3>
+          <div id="col-stats-grid" class="metric-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- -------- EDA -------- -->
+    <div class="tab-pane" id="pane-eda">
+      <div class="section-header">
+        <h2>Exploratory Data Analysis</h2>
+        <button class="btn btn-primary btn-sm" onclick="runAutoEDA()">&#9889; Auto EDA</button>
+      </div>
+      <div class="form-row" style="margin-bottom:16px">
+        <div class="form-group">
+          <label>Chart type</label>
+          <select id="eda-chart-type">
+            <option value="histogram">Histogram</option>
+            <option value="scatter">Scatter</option>
+            <option value="bar">Bar</option>
+            <option value="box">Box Plot</option>
+            <option value="line">Line</option>
+            <option value="correlation">Correlation Heatmap</option>
+            <option value="missing">Missing Values</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>X column</label>
+          <select id="eda-x"></select>
+        </div>
+        <div class="form-group">
+          <label>Y column</label>
+          <select id="eda-y"></select>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="drawChart()">Draw</button>
+        </div>
+      </div>
+      <div class="chart-grid" id="eda-charts"></div>
+    </div>
+
+    <!-- -------- PREPARE -------- -->
+    <div class="tab-pane" id="pane-prepare">
+      <div class="section-header">
+        <h2>Prepare Recipe</h2>
+        <button class="btn btn-primary btn-sm" onclick="executeAllSteps()">&#9654; Execute</button>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group">
+          <label>Step type</label>
+          <select id="step-type" onchange="updateStepForm()">
+            <option value="filter">Filter rows</option>
+            <option value="drop_columns">Drop columns</option>
+            <option value="rename_column">Rename column</option>
+            <option value="fill_na">Fill missing</option>
+            <option value="label_encode">Label encode</option>
+            <option value="onehot_encode">One‑hot encode</option>
+            <option value="normalize">Normalize</option>
+            <option value="standardize">Standardize</option>
+            <option value="custom_formula">Custom formula</option>
+          </select>
+        </div>
+        <div id="step-params" class="form-row" style="flex:1"></div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="addStep()">+ Add Step</button>
+        </div>
+      </div>
+      <div id="step-list"></div>
+      <div class="card" style="margin-top:16px">
+        <h3>Preview (first 10 rows)</h3>
+        <div class="table-wrap" id="prepare-preview"></div>
+      </div>
+    </div>
+
+    <!-- -------- ML LAB -------- -->
+    <div class="tab-pane" id="pane-ml">
+      <div class="section-header">
+        <h2>ML Lab</h2>
+      </div>
+      <div class="card">
+        <h3>Configure Training</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Task</label>
+            <select id="ml-task" onchange="updateMLAlgos()">
+              <option value="classification">Classification</option>
+              <option value="regression">Regression</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Algorithm</label>
+            <select id="ml-algo"></select>
+          </div>
+          <div class="form-group">
+            <label>Target column</label>
+            <select id="ml-target"></select>
+          </div>
+          <div class="form-group">
+            <label>Test size (%)</label>
+            <input type="number" id="ml-test-size" value="20" min="5" max="50" style="width:70px">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:8px">
+          <div class="form-group" style="flex:1">
+            <label>Feature columns (hold Ctrl to multi‑select)</label>
+            <select id="ml-features" multiple style="height:90px;width:100%"></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="trainModel()" style="margin-top:8px">&#9654; Train Model</button>
+      </div>
+      <div id="ml-results" style="display:none">
+        <div class="card">
+          <h3>Results</h3>
+          <div class="metric-grid" id="ml-metrics"></div>
+        </div>
+        <div class="chart-grid" id="ml-charts"></div>
+      </div>
+      <div id="ml-history" style="margin-top:16px">
+        <h3 style="margin-bottom:8px">Training History</h3>
+        <div class="table-wrap" id="ml-history-table"></div>
+      </div>
+    </div>
+
+    <!-- -------- NOTEBOOK -------- -->
+    <div class="tab-pane" id="pane-notebook">
+      <div class="section-header">
+        <h2>Code Notebook</h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary btn-sm" onclick="addNotebookCell()">+ Cell</button>
+          <button class="btn btn-primary btn-sm" onclick="runAllCells()">&#9654; Run All</button>
+          <button class="btn btn-secondary btn-sm" onclick="exportNotebook()">&#128190; Export .py</button>
+        </div>
+      </div>
+      <div id="nb-cells"></div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <span class="status-dot"></span>
+  <span id="status-text">Ready</span>
+</footer>
+
+</div>
+
+<!-- ====== IMPORT MODAL ====== -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal">
+    <h3>Import CSV Dataset</h3>
+    <div class="form-group">
+      <label>File</label>
+      <input type="file" id="csv-file" accept=".csv,.tsv,.txt">
+    </div>
+    <div class="form-group">
+      <label>Delimiter</label>
+      <select id="csv-delim">
+        <option value=",">Comma (,)</option>
+        <option value=";">Semicolon (;)</option>
+        <option value="\t">Tab</option>
+        <option value="|">Pipe (|)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Dataset name</label>
+      <input type="text" id="csv-name" placeholder="auto-detect from filename">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeImport()">Cancel</button>
+      <button class="btn btn-primary" onclick="doImport()">Import</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TOAST ====== -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* =================================================================
+   JAVASCRIPT — Full standalone app logic
+   ================================================================= */
+
+// ─── State ──────────────────────────────────────────────────────
+const state = {
+  datasets: {},        // name -> {cols:[], data:[[]], name}
+  active: null,        // currently selected dataset name
+  page: 0,
+  pageSize: 50,
+  steps: [],           // prepare steps
+  flowNodes: [],
+  flowEdges: [],
+  flowDrag: null,
+  notebookCells: [],
+  mlHistory: [],
+  edaChartIdx: 0,      // for unique chart ids
+};
+
+// ─── Utility functions ──────────────────────────────────────────
+
+function toast(msg, ms=2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), ms);
+}
+
+function setStatus(msg) {
+  document.getElementById('status-text').textContent = msg;
+}
+
+// ─── Tab navigation ─────────────────────────────────────────────
+document.getElementById('tab-bar').addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  document.querySelectorAll('#tab-bar button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('pane-' + e.target.dataset.tab).classList.add('active');
+});
+
+// ─── CSV parser (handles quotes, newlines) ──────────────────────
+function parseCSV(text, delim = ',') {
+  const rows = [];
+  let row = [], field = '', inQuote = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuote) {
+      if (ch === '"' && text[i+1] === '"') { field += '"'; i++; }
+      else if (ch === '"') { inQuote = false; }
+      else { field += ch; }
+    } else {
+      if (ch === '"') { inQuote = true; }
+      else if (ch === delim) { row.push(field.trim()); field = ''; }
+      else if (ch === '\n' || (ch === '\r' && text[i+1] === '\n')) {
+        if (ch === '\r') i++;
+        row.push(field.trim());
+        if (row.length > 1 || row[0] !== '') rows.push(row);
+        row = []; field = '';
+      } else { field += ch; }
+    }
+  }
+  row.push(field.trim());
+  if (row.length > 1 || row[0] !== '') rows.push(row);
+  return rows;
+}
+
+// ─── Dataset import ─────────────────────────────────────────────
+function openImport() { document.getElementById('import-modal').classList.add('show'); }
+function closeImport() { document.getElementById('import-modal').classList.remove('show'); }
+
+function doImport() {
+  const file = document.getElementById('csv-file').files[0];
+  if (!file) { toast('Select a file first'); return; }
+  const delim = document.getElementById('csv-delim').value;
+  const name = document.getElementById('csv-name').value.trim() || file.name.replace(/\.[^.]+$/, '');
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const parsed = parseCSV(reader.result, delim);
+    if (parsed.length < 2) { toast('File appears empty'); return; }
+    const cols = parsed[0];
+    const data = parsed.slice(1).filter(r => r.length === cols.length);
+    // auto-detect numeric columns
+    const numericCols = new Set();
+    cols.forEach((c, ci) => {
+      if (data.length > 0 && data.slice(0, 20).every(r => r[ci] === '' || !isNaN(Number(r[ci])))) {
+        numericCols.add(ci);
+      }
+    });
+    data.forEach(r => {
+      numericCols.forEach(ci => { if (r[ci] !== '') r[ci] = Number(r[ci]); });
+    });
+
+    state.datasets[name] = { cols, data, name };
+    state.active = name;
+    state.page = 0;
+    refreshSidebar();
+    refreshAll();
+    closeImport();
+    toast(`Imported "${name}" – ${data.length} rows, ${cols.length} cols`);
+    setStatus(`Dataset "${name}" loaded`);
+  };
+  reader.readAsText(file);
+}
+
+// ─── Export ─────────────────────────────────────────────────────
+function exportDataCSV() {
+  const ds = activeDS();
+  if (!ds) { toast('No dataset selected'); return; }
+  let csv = ds.cols.join(',') + '\n';
+  ds.data.forEach(r => { csv += r.map(v => typeof v === 'string' && v.includes(',') ? `"${v}"` : v).join(',') + '\n'; });
+  download(ds.name + '.csv', csv, 'text/csv');
+  toast('Exported ' + ds.name + '.csv');
+}
+
+function download(name, content, mime) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type: mime }));
+  a.download = name;
+  a.click();
+}
+
+// ─── Sidebar ────────────────────────────────────────────────────
+function refreshSidebar() {
+  const ul = document.getElementById('dataset-list');
+  ul.innerHTML = '';
+  Object.keys(state.datasets).forEach(name => {
+    const li = document.createElement('li');
+    li.textContent = name;
+    li.className = name === state.active ? 'active' : '';
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = state.datasets[name].data.length;
+    li.appendChild(badge);
+    li.onclick = () => { state.active = name; state.page = 0; refreshSidebar(); refreshAll(); };
+    ul.appendChild(li);
+  });
+}
+
+function activeDS() { return state.active ? state.datasets[state.active] : null; }
+
+// ─── Dataset table ──────────────────────────────────────────────
+function refreshAll() {
+  renderTable();
+  renderColumnStats();
+  populateSelects();
+  updateStepForm();
+  renderPreparePreview();
+}
+
+function renderTable() {
+  const ds = activeDS();
+  const emptyEl = document.getElementById('ds-empty');
+  const viewEl = document.getElementById('ds-view');
+  if (!ds) { emptyEl.style.display = ''; viewEl.style.display = 'none'; return; }
+  emptyEl.style.display = 'none'; viewEl.style.display = '';
+
+  const search = (document.getElementById('col-search').value || '').toLowerCase();
+  const visibleCols = ds.cols.map((c, i) => ({ name: c, idx: i })).filter(c => c.name.toLowerCase().includes(search));
+
+  const totalPages = Math.max(1, Math.ceil(ds.data.length / state.pageSize));
+  state.page = Math.max(0, Math.min(state.page, totalPages - 1));
+  document.getElementById('page-info').textContent = `${state.page + 1} / ${totalPages}`;
+
+  const start = state.page * state.pageSize;
+  const pageRows = ds.data.slice(start, start + state.pageSize);
+
+  let html = '<table><thead><tr><th>#</th>';
+  visibleCols.forEach(c => { html += `<th>${esc(c.name)}</th>`; });
+  html += '</tr></thead><tbody>';
+  pageRows.forEach((r, ri) => {
+    html += `<tr><td style="color:var(--text-dim)">${start + ri + 1}</td>`;
+    visibleCols.forEach(c => {
+      const v = r[c.idx];
+      html += `<td>${v === null || v === undefined || v === '' ? '<span style="color:var(--warning)">null</span>' : esc(String(v))}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('table-wrap').innerHTML = html;
+  document.getElementById('ds-info').textContent = `${ds.data.length} rows × ${ds.cols.length} columns · "${ds.name}"`;
+}
+
+function changePage(d) { state.page += d; renderTable(); }
+
+function esc(s) { const el = document.createElement('span'); el.textContent = s; return el.innerHTML; }
+
+// ─── Column statistics ─────────────────────────────────────────
+function renderColumnStats() {
+  const ds = activeDS();
+  const grid = document.getElementById('col-stats-grid');
+  if (!ds) { grid.innerHTML = ''; return; }
+  let html = '';
+  ds.cols.forEach((col, ci) => {
+    const vals = ds.data.map(r => r[ci]).filter(v => v !== null && v !== undefined && v !== '');
+    const isNum = vals.length > 0 && vals.every(v => typeof v === 'number' || !isNaN(Number(v)));
+    const missing = ds.data.length - vals.length;
+    if (isNum) {
+      const nums = vals.map(Number);
+      const mean = nums.reduce((a, b) => a + b, 0) / nums.length;
+      const min = Math.min(...nums);
+      const max = Math.max(...nums);
+      html += `<div class="metric-card"><div class="value">${mean.toFixed(2)}</div><div class="label">${esc(col)} (mean) · min ${min.toFixed(1)} · max ${max.toFixed(1)} · miss ${missing}</div></div>`;
+    } else {
+      const unique = new Set(vals).size;
+      html += `<div class="metric-card"><div class="value">${unique}</div><div class="label">${esc(col)} (unique) · miss ${missing}</div></div>`;
+    }
+  });
+  grid.innerHTML = html;
+}
+
+// ─── Populate select dropdowns ──────────────────────────────────
+function populateSelects() {
+  const ds = activeDS();
+  const cols = ds ? ds.cols : [];
+  ['eda-x', 'eda-y', 'ml-target'].forEach(id => {
+    const sel = document.getElementById(id);
+    const prev = sel.value;
+    sel.innerHTML = cols.map(c => `<option>${c}</option>`).join('');
+    if (cols.includes(prev)) sel.value = prev;
+  });
+  const feat = document.getElementById('ml-features');
+  feat.innerHTML = cols.map(c => `<option>${c}</option>`).join('');
+  updateMLAlgos();
+}
+
+// ─── EDA Charts ─────────────────────────────────────────────────
+function getNumericColumn(ds, colName) {
+  const ci = ds.cols.indexOf(colName);
+  return ds.data.map(r => Number(r[ci])).filter(v => !isNaN(v));
+}
+
+function getColumn(ds, colName) {
+  const ci = ds.cols.indexOf(colName);
+  return ds.data.map(r => r[ci]);
+}
+
+function addChartCard(title) {
+  const id = 'chart-' + (state.edaChartIdx++);
+  const container = document.getElementById('eda-charts');
+  const div = document.createElement('div');
+  div.className = 'chart-card';
+  div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+    <h4>${esc(title)}</h4>
+    <button class="btn-icon" onclick="this.closest('.chart-card').remove()" title="Remove">✕</button>
+  </div><canvas id="${id}" height="260"></canvas>`;
+  container.prepend(div);
+  return document.getElementById(id);
+}
+
+function drawChart() {
+  const ds = activeDS();
+  if (!ds) { toast('Load a dataset first'); return; }
+  const type = document.getElementById('eda-chart-type').value;
+  const xCol = document.getElementById('eda-x').value;
+  const yCol = document.getElementById('eda-y').value;
+
+  if (type === 'correlation') { drawCorrelation(ds); return; }
+  if (type === 'missing') { drawMissing(ds); return; }
+
+  const canvas = addChartCard(`${type} – ${xCol}${yCol && type !== 'histogram' ? ' vs ' + yCol : ''}`);
+
+  if (type === 'histogram') {
+    const vals = getNumericColumn(ds, xCol);
+    const bins = buildHistogram(vals, 25);
+    new Chart(canvas, { type: 'bar', data: { labels: bins.labels, datasets: [{ label: xCol, data: bins.counts, backgroundColor: '#7c3aed88', borderColor: '#7c3aed', borderWidth: 1 }] }, options: chartOpts('Count') });
+  } else if (type === 'scatter') {
+    const xv = getNumericColumn(ds, xCol);
+    const yv = getNumericColumn(ds, yCol);
+    const pts = xv.map((x, i) => ({ x, y: yv[i] })).filter(p => !isNaN(p.y));
+    new Chart(canvas, { type: 'scatter', data: { datasets: [{ label: `${xCol} vs ${yCol}`, data: pts, backgroundColor: '#7c3aed88' }] }, options: chartOpts(yCol) });
+  } else if (type === 'bar') {
+    const counts = countValues(getColumn(ds, xCol));
+    new Chart(canvas, { type: 'bar', data: { labels: counts.labels, datasets: [{ label: xCol, data: counts.values, backgroundColor: '#7c3aed88', borderColor: '#7c3aed', borderWidth: 1 }] }, options: chartOpts('Count') });
+  } else if (type === 'line') {
+    const yv = getNumericColumn(ds, yCol);
+    new Chart(canvas, { type: 'line', data: { labels: yv.map((_, i) => i), datasets: [{ label: yCol, data: yv, borderColor: '#7c3aed', fill: false, pointRadius: 1 }] }, options: chartOpts(yCol) });
+  } else if (type === 'box') {
+    const vals = getNumericColumn(ds, xCol);
+    vals.sort((a, b) => a - b);
+    const q1 = vals[Math.floor(vals.length * .25)];
+    const med = vals[Math.floor(vals.length * .5)];
+    const q3 = vals[Math.floor(vals.length * .75)];
+    const mn = vals[0], mx = vals[vals.length - 1];
+    // Simulate box plot with bar chart
+    const canvas2 = addChartCard(`Box – ${xCol}: min=${mn.toFixed(2)} Q1=${q1.toFixed(2)} med=${med.toFixed(2)} Q3=${q3.toFixed(2)} max=${mx.toFixed(2)}`);
+    new Chart(canvas2, { type: 'bar', data: { labels: ['Min', 'Q1', 'Median', 'Q3', 'Max'], datasets: [{ label: xCol, data: [mn, q1, med, q3, mx], backgroundColor: ['#ef444488', '#f59e0b88', '#7c3aed88', '#22c55e88', '#3b82f688'] }] }, options: chartOpts(xCol) });
+  }
+  toast('Chart created');
+}
+
+function chartOpts(yLabel) {
+  return {
+    responsive: true, plugins: { legend: { labels: { color: '#e0e0e0' } } },
+    scales: { x: { ticks: { color: '#999', maxTicksLimit: 15 }, grid: { color: '#333' } }, y: { title: { display: true, text: yLabel, color: '#999' }, ticks: { color: '#999' }, grid: { color: '#333' } } }
+  };
+}
+
+function buildHistogram(vals, bins) {
+  const mn = Math.min(...vals), mx = Math.max(...vals);
+  const w = (mx - mn) / bins || 1;
+  const counts = new Array(bins).fill(0);
+  vals.forEach(v => { const b = Math.min(Math.floor((v - mn) / w), bins - 1); counts[b]++; });
+  const labels = counts.map((_, i) => (mn + i * w).toFixed(1));
+  return { labels, counts };
+}
+
+function countValues(arr) {
+  const map = {};
+  arr.forEach(v => { const k = String(v); map[k] = (map[k] || 0) + 1; });
+  const entries = Object.entries(map).sort((a, b) => b[1] - a[1]).slice(0, 30);
+  return { labels: entries.map(e => e[0]), values: entries.map(e => e[1]) };
+}
+
+function drawCorrelation(ds) {
+  const numCols = ds.cols.filter((c, ci) => ds.data.slice(0, 20).every(r => r[ci] === '' || !isNaN(Number(r[ci]))));
+  if (numCols.length < 2) { toast('Need at least 2 numeric columns'); return; }
+  const cols = numCols.slice(0, 12); // limit
+  const matrix = [];
+  cols.forEach(c1 => {
+    const row = [];
+    cols.forEach(c2 => { row.push(pearson(getNumericColumn(ds, c1), getNumericColumn(ds, c2))); });
+    matrix.push(row);
+  });
+  // Render as colored table
+  const container = document.getElementById('eda-charts');
+  const div = document.createElement('div');
+  div.className = 'chart-card';
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center"><h4>Correlation Matrix</h4><button class="btn-icon" onclick="this.closest('.chart-card').remove()">✕</button></div>`;
+  html += '<div style="overflow:auto;margin-top:8px"><table><thead><tr><th></th>';
+  cols.forEach(c => { html += `<th>${esc(c)}</th>`; });
+  html += '</tr></thead><tbody>';
+  matrix.forEach((row, ri) => {
+    html += `<tr><td style="font-weight:600">${esc(cols[ri])}</td>`;
+    row.forEach(v => {
+      const r = Math.abs(v);
+      const bg = v >= 0 ? `rgba(124,58,237,${r * .6})` : `rgba(239,68,68,${r * .6})`;
+      html += `<td style="background:${bg};text-align:center">${v.toFixed(2)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  div.innerHTML = html;
+  container.prepend(div);
+  toast('Correlation matrix created');
+}
+
+function pearson(x, y) {
+  const n = Math.min(x.length, y.length);
+  if (n === 0) return 0;
+  const mx = x.slice(0, n).reduce((a, b) => a + b, 0) / n;
+  const my = y.slice(0, n).reduce((a, b) => a + b, 0) / n;
+  let num = 0, dx = 0, dy = 0;
+  for (let i = 0; i < n; i++) {
+    const a = x[i] - mx, b = y[i] - my;
+    num += a * b; dx += a * a; dy += b * b;
+  }
+  return dx && dy ? num / Math.sqrt(dx * dy) : 0;
+}
+
+function drawMissing(ds) {
+  const canvas = addChartCard('Missing Values per Column');
+  const missing = ds.cols.map((c, ci) => ds.data.filter(r => r[ci] === null || r[ci] === undefined || r[ci] === '').length);
+  new Chart(canvas, { type: 'bar', data: { labels: ds.cols, datasets: [{ label: 'Missing', data: missing, backgroundColor: '#f59e0b88', borderColor: '#f59e0b', borderWidth: 1 }] }, options: chartOpts('Missing count') });
+  toast('Missing values chart created');
+}
+
+function runAutoEDA() {
+  const ds = activeDS();
+  if (!ds) { toast('Load a dataset first'); return; }
+  document.getElementById('eda-charts').innerHTML = '';
+  // Missing values
+  drawMissing(ds);
+  // Correlation
+  drawCorrelation(ds);
+  // Histograms for first 6 numeric cols
+  const numCols = ds.cols.filter((c, ci) => ds.data.slice(0, 20).every(r => r[ci] === '' || !isNaN(Number(r[ci]))));
+  numCols.slice(0, 6).forEach(c => {
+    const canvas = addChartCard(`Distribution – ${c}`);
+    const vals = getNumericColumn(ds, c);
+    const bins = buildHistogram(vals, 25);
+    new Chart(canvas, { type: 'bar', data: { labels: bins.labels, datasets: [{ label: c, data: bins.counts, backgroundColor: '#7c3aed88', borderColor: '#7c3aed', borderWidth: 1 }] }, options: chartOpts('Count') });
+  });
+  toast('Auto EDA complete');
+}
+
+// ─── Prepare Recipe ─────────────────────────────────────────────
+function updateStepForm() {
+  const type = document.getElementById('step-type').value;
+  const ds = activeDS();
+  const cols = ds ? ds.cols : [];
+  const colOpts = cols.map(c => `<option>${c}</option>`).join('');
+  let html = '';
+  switch (type) {
+    case 'filter':
+      html = `<div class="form-group"><label>Column</label><select id="sp-col">${colOpts}</select></div>
+              <div class="form-group"><label>Op</label><select id="sp-op"><option>==</option><option>!=</option><option>&gt;</option><option>&lt;</option><option>&gt;=</option><option>&lt;=</option><option>contains</option></select></div>
+              <div class="form-group"><label>Value</label><input type="text" id="sp-val"></div>`;
+      break;
+    case 'drop_columns':
+      html = `<div class="form-group"><label>Columns (comma-sep)</label><input type="text" id="sp-cols" placeholder="col1,col2"></div>`;
+      break;
+    case 'rename_column':
+      html = `<div class="form-group"><label>Column</label><select id="sp-col">${colOpts}</select></div>
+              <div class="form-group"><label>New name</label><input type="text" id="sp-new"></div>`;
+      break;
+    case 'fill_na':
+      html = `<div class="form-group"><label>Column</label><select id="sp-col">${colOpts}</select></div>
+              <div class="form-group"><label>Strategy</label><select id="sp-strat"><option>constant</option><option>mean</option><option>median</option><option>mode</option></select></div>
+              <div class="form-group"><label>Value (if constant)</label><input type="text" id="sp-val"></div>`;
+      break;
+    case 'label_encode':
+    case 'onehot_encode':
+    case 'normalize':
+    case 'standardize':
+      html = `<div class="form-group"><label>Column</label><select id="sp-col">${colOpts}</select></div>`;
+      break;
+    case 'custom_formula':
+      html = `<div class="form-group"><label>New column</label><input type="text" id="sp-new" placeholder="new_col"></div>
+              <div class="form-group"><label>Formula (JS)</label><input type="text" id="sp-formula" placeholder="row.col1 * 2 + row.col2"></div>`;
+      break;
+  }
+  document.getElementById('step-params').innerHTML = html;
+}
+
+function addStep() {
+  const type = document.getElementById('step-type').value;
+  const step = { type };
+  const el = id => { const e = document.getElementById(id); return e ? e.value : ''; };
+  switch (type) {
+    case 'filter': step.column = el('sp-col'); step.op = el('sp-op'); step.value = el('sp-val'); break;
+    case 'drop_columns': step.columns = el('sp-cols').split(',').map(s => s.trim()).filter(Boolean); break;
+    case 'rename_column': step.column = el('sp-col'); step.newName = el('sp-new'); break;
+    case 'fill_na': step.column = el('sp-col'); step.strategy = el('sp-strat'); step.value = el('sp-val'); break;
+    case 'label_encode': case 'onehot_encode': case 'normalize': case 'standardize':
+      step.column = el('sp-col'); break;
+    case 'custom_formula': step.newColumn = el('sp-new'); step.formula = el('sp-formula'); break;
+  }
+  state.steps.push(step);
+  renderSteps();
+  renderPreparePreview();
+  toast('Step added');
+}
+
+function removeStep(i) { state.steps.splice(i, 1); renderSteps(); renderPreparePreview(); }
+
+function renderSteps() {
+  const div = document.getElementById('step-list');
+  div.innerHTML = state.steps.map((s, i) => {
+    let detail = '';
+    if (s.type === 'filter') detail = `${s.column} ${s.op} ${s.value}`;
+    else if (s.type === 'drop_columns') detail = s.columns.join(', ');
+    else if (s.type === 'rename_column') detail = `${s.column} → ${s.newName}`;
+    else if (s.type === 'fill_na') detail = `${s.column} (${s.strategy})`;
+    else if (s.type === 'custom_formula') detail = `${s.newColumn} = ${s.formula}`;
+    else detail = s.column || '';
+    return `<div class="step-item">
+      <span class="step-type">${s.type}</span>
+      <span class="step-detail">${esc(detail)}</span>
+      <button class="btn-icon" onclick="removeStep(${i})" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function applySteps(ds) {
+  if (!ds) return null;
+  let cols = [...ds.cols];
+  let data = ds.data.map(r => [...r]);
+
+  for (const step of state.steps) {
+    const ci = cols.indexOf(step.column);
+    switch (step.type) {
+      case 'filter': {
+        const op = step.op;
+        let testVal = step.value;
+        data = data.filter(r => {
+          const v = r[ci];
+          const nv = Number(v), nt = Number(testVal);
+          if (op === '==' || op === '===') return String(v) === testVal;
+          if (op === '!=' || op === '!==') return String(v) !== testVal;
+          if (op === '>') return nv > nt;
+          if (op === '<') return nv < nt;
+          if (op === '>=') return nv >= nt;
+          if (op === '<=') return nv <= nt;
+          if (op === 'contains') return String(v).includes(testVal);
+          return true;
+        });
+        break;
+      }
+      case 'drop_columns': {
+        const dropIdx = step.columns.map(c => cols.indexOf(c)).filter(i => i >= 0).sort((a, b) => b - a);
+        dropIdx.forEach(idx => {
+          cols.splice(idx, 1);
+          data.forEach(r => r.splice(idx, 1));
+        });
+        break;
+      }
+      case 'rename_column': {
+        if (ci >= 0) cols[ci] = step.newName;
+        break;
+      }
+      case 'fill_na': {
+        if (ci < 0) break;
+        let fill;
+        if (step.strategy === 'mean') {
+          const nums = data.map(r => Number(r[ci])).filter(v => !isNaN(v));
+          fill = nums.reduce((a, b) => a + b, 0) / nums.length;
+        } else if (step.strategy === 'median') {
+          const nums = data.map(r => Number(r[ci])).filter(v => !isNaN(v)).sort((a, b) => a - b);
+          fill = nums[Math.floor(nums.length / 2)];
+        } else if (step.strategy === 'mode') {
+          const freq = {};
+          data.forEach(r => { const k = String(r[ci]); if (k) freq[k] = (freq[k] || 0) + 1; });
+          fill = Object.entries(freq).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '';
+        } else {
+          fill = step.value;
+        }
+        data.forEach(r => { if (r[ci] === null || r[ci] === undefined || r[ci] === '') r[ci] = fill; });
+        break;
+      }
+      case 'label_encode': {
+        if (ci < 0) break;
+        const uniq = [...new Set(data.map(r => r[ci]))];
+        const map = {};
+        uniq.forEach((v, i) => { map[v] = i; });
+        data.forEach(r => { r[ci] = map[r[ci]] ?? r[ci]; });
+        break;
+      }
+      case 'onehot_encode': {
+        if (ci < 0) break;
+        const cats = [...new Set(data.map(r => r[ci]))];
+        const newCols = cats.map(c => `${step.column}_${c}`);
+        cols.splice(ci, 1, ...newCols);
+        data = data.map(r => {
+          const v = r[ci];
+          const encoded = cats.map(c => c === v ? 1 : 0);
+          return [...r.slice(0, ci), ...encoded, ...r.slice(ci + 1)];
+        });
+        break;
+      }
+      case 'normalize': {
+        if (ci < 0) break;
+        const nums = data.map(r => Number(r[ci])).filter(v => !isNaN(v));
+        const mn = Math.min(...nums), mx = Math.max(...nums);
+        const rng = mx - mn || 1;
+        data.forEach(r => { const v = Number(r[ci]); if (!isNaN(v)) r[ci] = (v - mn) / rng; });
+        break;
+      }
+      case 'standardize': {
+        if (ci < 0) break;
+        const nums = data.map(r => Number(r[ci])).filter(v => !isNaN(v));
+        const mean = nums.reduce((a, b) => a + b, 0) / nums.length;
+        const std = Math.sqrt(nums.reduce((a, v) => a + (v - mean) ** 2, 0) / nums.length) || 1;
+        data.forEach(r => { const v = Number(r[ci]); if (!isNaN(v)) r[ci] = (v - mean) / std; });
+        break;
+      }
+      case 'custom_formula': {
+        const newCI = cols.length;
+        cols.push(step.newColumn);
+        data.forEach(r => {
+          const row = {};
+          cols.forEach((c, j) => { row[c] = r[j]; });
+          try { r.push(new Function('row', 'return ' + step.formula)(row)); }
+          catch { r.push(null); }
+        });
+        break;
+      }
+    }
+  }
+  return { cols, data, name: ds.name + '_prepared' };
+}
+
+function renderPreparePreview() {
+  const ds = activeDS();
+  const result = applySteps(ds);
+  const wrap = document.getElementById('prepare-preview');
+  if (!result) { wrap.innerHTML = '<p style="color:var(--text-dim)">No dataset</p>'; return; }
+  const rows = result.data.slice(0, 10);
+  let html = '<table><thead><tr>';
+  result.cols.forEach(c => { html += `<th>${esc(c)}</th>`; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    html += '<tr>';
+    result.cols.forEach((_, ci) => { html += `<td>${r[ci] === null ? '<span style="color:var(--warning)">null</span>' : esc(String(r[ci] ?? ''))}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+function executeAllSteps() {
+  const ds = activeDS();
+  if (!ds || state.steps.length === 0) { toast('Add steps first'); return; }
+  const result = applySteps(ds);
+  const name = result.name;
+  state.datasets[name] = result;
+  state.active = name;
+  state.page = 0;
+  state.steps = [];
+  refreshSidebar();
+  refreshAll();
+  renderSteps();
+  toast(`Created dataset "${name}"`);
+}
+
+// ─── ML Lab (browser-side) ──────────────────────────────────────
+const ML_ALGOS = {
+  classification: ['Logistic Regression', 'K-Nearest Neighbors', 'Decision Stump'],
+  regression: ['Linear Regression', 'K-Nearest Neighbors Regressor']
+};
+
+function updateMLAlgos() {
+  const task = document.getElementById('ml-task').value;
+  const sel = document.getElementById('ml-algo');
+  sel.innerHTML = ML_ALGOS[task].map(a => `<option>${a}</option>`).join('');
+}
+updateMLAlgos();
+
+function trainModel() {
+  const ds = activeDS();
+  if (!ds) { toast('Load a dataset first'); return; }
+  const task = document.getElementById('ml-task').value;
+  const algo = document.getElementById('ml-algo').value;
+  const target = document.getElementById('ml-target').value;
+  const featureEls = document.getElementById('ml-features');
+  const features = Array.from(featureEls.selectedOptions).map(o => o.value);
+  if (features.length === 0) { toast('Select feature columns'); return; }
+  const testPct = parseInt(document.getElementById('ml-test-size').value) / 100;
+
+  setStatus('Training…');
+
+  // Prepare data
+  const ti = ds.cols.indexOf(target);
+  const fis = features.map(f => ds.cols.indexOf(f));
+
+  // Filter rows with valid data
+  let rows = ds.data.filter(r => {
+    if (r[ti] === null || r[ti] === undefined || r[ti] === '') return false;
+    return fis.every(fi => r[fi] !== null && r[fi] !== undefined && r[fi] !== '' && !isNaN(Number(r[fi])));
+  });
+
+  // Encode target for classification
+  let yRaw = rows.map(r => r[ti]);
+  let classes = null;
+  let yVals;
+  if (task === 'classification') {
+    classes = [...new Set(yRaw)].sort();
+    const cmap = {};
+    classes.forEach((c, i) => { cmap[c] = i; });
+    yVals = yRaw.map(v => cmap[v] ?? Number(v));
+  } else {
+    yVals = yRaw.map(Number);
+  }
+
+  const X = rows.map(r => fis.map(fi => Number(r[fi])));
+
+  // Train/test split
+  const splitIdx = Math.floor(X.length * (1 - testPct));
+  const idx = X.map((_, i) => i);
+  // shuffle
+  for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  const trainIdx = idx.slice(0, splitIdx);
+  const testIdx = idx.slice(splitIdx);
+
+  const Xtrain = trainIdx.map(i => X[i]);
+  const ytrain = trainIdx.map(i => yVals[i]);
+  const Xtest = testIdx.map(i => X[i]);
+  const ytest = testIdx.map(i => yVals[i]);
+
+  // Simple ML implementations
+  let ypred;
+  try {
+    if (algo === 'Logistic Regression') {
+      ypred = logisticRegression(Xtrain, ytrain, Xtest, classes ? classes.length : 2);
+    } else if (algo === 'K-Nearest Neighbors' || algo === 'K-Nearest Neighbors Regressor') {
+      ypred = knn(Xtrain, ytrain, Xtest, 5, task);
+    } else if (algo === 'Decision Stump') {
+      ypred = decisionStump(Xtrain, ytrain, Xtest);
+    } else if (algo === 'Linear Regression') {
+      ypred = linearRegression(Xtrain, ytrain, Xtest);
+    }
+  } catch (err) {
+    toast('Training error: ' + err.message);
+    setStatus('Error');
+    return;
+  }
+
+  // Metrics
+  const metrics = {};
+  if (task === 'classification') {
+    let correct = 0;
+    ytest.forEach((y, i) => { if (y === ypred[i]) correct++; });
+    metrics['Accuracy'] = (correct / ytest.length).toFixed(4);
+    metrics['Test size'] = ytest.length;
+    metrics['Train size'] = ytrain.length;
+    if (classes && classes.length === 2) {
+      // Precision, recall
+      let tp = 0, fp = 0, fn = 0;
+      ytest.forEach((y, i) => {
+        if (ypred[i] === 1 && y === 1) tp++;
+        if (ypred[i] === 1 && y === 0) fp++;
+        if (ypred[i] === 0 && y === 1) fn++;
+      });
+      metrics['Precision'] = tp + fp > 0 ? (tp / (tp + fp)).toFixed(4) : 'N/A';
+      metrics['Recall'] = tp + fn > 0 ? (tp / (tp + fn)).toFixed(4) : 'N/A';
+    }
+  } else {
+    const ssRes = ytest.reduce((s, y, i) => s + (y - ypred[i]) ** 2, 0);
+    const mean = ytest.reduce((a, b) => a + b, 0) / ytest.length;
+    const ssTot = ytest.reduce((s, y) => s + (y - mean) ** 2, 0);
+    metrics['R²'] = (1 - ssRes / (ssTot || 1)).toFixed(4);
+    metrics['MAE'] = (ytest.reduce((s, y, i) => s + Math.abs(y - ypred[i]), 0) / ytest.length).toFixed(4);
+    metrics['RMSE'] = Math.sqrt(ssRes / ytest.length).toFixed(4);
+    metrics['Test size'] = ytest.length;
+  }
+
+  // Show results
+  const resultsDiv = document.getElementById('ml-results');
+  resultsDiv.style.display = '';
+  document.getElementById('ml-metrics').innerHTML = Object.entries(metrics).map(([k, v]) =>
+    `<div class="metric-card"><div class="value">${v}</div><div class="label">${k}</div></div>`
+  ).join('');
+
+  // Charts
+  const chartsDiv = document.getElementById('ml-charts');
+  chartsDiv.innerHTML = '';
+  if (task === 'classification' && classes) {
+    // Confusion matrix-like display
+    const div = document.createElement('div');
+    div.className = 'chart-card';
+    const nClasses = classes.length;
+    const cm = Array.from({ length: nClasses }, () => new Array(nClasses).fill(0));
+    ytest.forEach((y, i) => { if (ypred[i] >= 0 && ypred[i] < nClasses && y >= 0 && y < nClasses) cm[y][ypred[i]]++; });
+    let html = '<h4>Confusion Matrix</h4><table><thead><tr><th>Actual \\ Pred</th>';
+    classes.forEach(c => { html += `<th>${esc(String(c))}</th>`; });
+    html += '</tr></thead><tbody>';
+    cm.forEach((row, ri) => {
+      html += `<tr><td style="font-weight:600">${esc(String(classes[ri]))}</td>`;
+      row.forEach((v, ci) => {
+        const bg = ri === ci ? 'rgba(34,197,94,.3)' : v > 0 ? 'rgba(239,68,68,.2)' : 'transparent';
+        html += `<td style="text-align:center;background:${bg}">${v}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    div.innerHTML = html;
+    chartsDiv.appendChild(div);
+  } else if (task === 'regression') {
+    // Actual vs predicted scatter
+    const div = document.createElement('div');
+    div.className = 'chart-card';
+    div.innerHTML = '<h4>Actual vs Predicted</h4><canvas id="ml-scatter" height="260"></canvas>';
+    chartsDiv.appendChild(div);
+    const pts = ytest.map((y, i) => ({ x: y, y: ypred[i] }));
+    new Chart(document.getElementById('ml-scatter'), {
+      type: 'scatter',
+      data: { datasets: [
+        { label: 'Predictions', data: pts, backgroundColor: '#7c3aed88' },
+        { label: 'Ideal', data: [{ x: Math.min(...ytest), y: Math.min(...ytest) }, { x: Math.max(...ytest), y: Math.max(...ytest) }], type: 'line', borderColor: '#22c55e', borderDash: [5, 5], pointRadius: 0, fill: false }
+      ] },
+      options: chartOpts('Predicted')
+    });
+  }
+
+  // History
+  state.mlHistory.push({ algo, task, ...metrics, time: new Date().toLocaleTimeString() });
+  renderMLHistory();
+  setStatus(`Training complete – ${algo}`);
+  toast(`Model trained: ${algo}`);
+}
+
+function renderMLHistory() {
+  if (state.mlHistory.length === 0) return;
+  const keys = Object.keys(state.mlHistory[0]);
+  let html = '<table><thead><tr>';
+  keys.forEach(k => { html += `<th>${k}</th>`; });
+  html += '</tr></thead><tbody>';
+  state.mlHistory.forEach(row => {
+    html += '<tr>';
+    keys.forEach(k => { html += `<td>${row[k] ?? ''}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('ml-history-table').innerHTML = html;
+}
+
+// --- Simple ML algorithms (pure JS) ---
+
+function logisticRegression(Xtrain, ytrain, Xtest, nClasses) {
+  // Simple gradient descent logistic regression (binary / OvR)
+  const nFeat = Xtrain[0].length;
+  // Normalize
+  const means = new Array(nFeat).fill(0);
+  const stds = new Array(nFeat).fill(1);
+  Xtrain.forEach(x => x.forEach((v, j) => { means[j] += v; }));
+  means.forEach((_, j) => { means[j] /= Xtrain.length; });
+  Xtrain.forEach(x => x.forEach((v, j) => { stds[j] += (v - means[j]) ** 2; }));
+  stds.forEach((_, j) => { stds[j] = Math.sqrt(stds[j] / Xtrain.length) || 1; });
+
+  const norm = X => X.map(x => x.map((v, j) => (v - means[j]) / stds[j]));
+  const Xn = norm(Xtrain);
+  const Xt = norm(Xtest);
+
+  if (nClasses <= 2) {
+    const w = trainBinaryLR(Xn, ytrain, nFeat);
+    return Xt.map(x => sigmoid(dot(x, w.slice(0, nFeat)) + w[nFeat]) >= .5 ? 1 : 0);
+  }
+  // OvR
+  const classifiers = [];
+  for (let c = 0; c < nClasses; c++) {
+    const ybin = ytrain.map(y => y === c ? 1 : 0);
+    classifiers.push(trainBinaryLR(Xn, ybin, nFeat));
+  }
+  return Xt.map(x => {
+    let best = -Infinity, bestC = 0;
+    classifiers.forEach((w, c) => {
+      const score = dot(x, w.slice(0, nFeat)) + w[nFeat];
+      if (score > best) { best = score; bestC = c; }
+    });
+    return bestC;
+  });
+}
+
+function trainBinaryLR(X, y, nFeat, lr = .1, epochs = 200) {
+  const w = new Array(nFeat + 1).fill(0); // last = bias
+  for (let e = 0; e < epochs; e++) {
+    const grad = new Array(nFeat + 1).fill(0);
+    X.forEach((x, i) => {
+      const p = sigmoid(dot(x, w.slice(0, nFeat)) + w[nFeat]);
+      const err = p - y[i];
+      x.forEach((v, j) => { grad[j] += err * v; });
+      grad[nFeat] += err;
+    });
+    w.forEach((_, j) => { w[j] -= lr * grad[j] / X.length; });
+  }
+  return w;
+}
+
+function sigmoid(z) { return 1 / (1 + Math.exp(-Math.max(-500, Math.min(500, z)))); }
+function dot(a, b) { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * (b[i] || 0); return s; }
+
+function knn(Xtrain, ytrain, Xtest, k, task) {
+  return Xtest.map(xt => {
+    const dists = Xtrain.map((xtr, i) => ({
+      d: Math.sqrt(xtr.reduce((s, v, j) => s + (v - xt[j]) ** 2, 0)),
+      y: ytrain[i]
+    })).sort((a, b) => a.d - b.d).slice(0, k);
+
+    if (task === 'classification') {
+      const freq = {};
+      dists.forEach(({ y }) => { freq[y] = (freq[y] || 0) + 1; });
+      return Number(Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0]);
+    }
+    return dists.reduce((s, { y }) => s + y, 0) / k;
+  });
+}
+
+function decisionStump(Xtrain, ytrain, Xtest) {
+  // Find best single feature + threshold (Gini-based)
+  const nFeat = Xtrain[0].length;
+  let bestFeat = 0, bestThresh = 0, bestGini = Infinity;
+  for (let f = 0; f < nFeat; f++) {
+    const vals = [...new Set(Xtrain.map(x => x[f]))].sort((a, b) => a - b);
+    for (let v = 0; v < vals.length - 1; v++) {
+      const thresh = (vals[v] + vals[v + 1]) / 2;
+      const left = [], right = [];
+      Xtrain.forEach((x, i) => { (x[f] <= thresh ? left : right).push(ytrain[i]); });
+      const g = (gini(left) * left.length + gini(right) * right.length) / ytrain.length;
+      if (g < bestGini) { bestGini = g; bestFeat = f; bestThresh = thresh; }
+    }
+  }
+  const leftVals = [], rightVals = [];
+  Xtrain.forEach((x, i) => { (x[bestFeat] <= bestThresh ? leftVals : rightVals).push(ytrain[i]); });
+  const leftPred = majority(leftVals);
+  const rightPred = majority(rightVals);
+  return Xtest.map(x => x[bestFeat] <= bestThresh ? leftPred : rightPred);
+}
+
+function gini(arr) {
+  if (arr.length === 0) return 0;
+  const freq = {};
+  arr.forEach(v => { freq[v] = (freq[v] || 0) + 1; });
+  let g = 1;
+  Object.values(freq).forEach(n => { const p = n / arr.length; g -= p * p; });
+  return g;
+}
+
+function majority(arr) {
+  const freq = {};
+  arr.forEach(v => { freq[v] = (freq[v] || 0) + 1; });
+  return Number(Object.entries(freq).sort((a, b) => b[1] - a[1])[0]?.[0] ?? 0);
+}
+
+function linearRegression(Xtrain, ytrain, Xtest) {
+  // Normal equation with ridge regularization: w = (X'X + λI)^-1 X'y
+  const n = Xtrain.length, p = Xtrain[0].length;
+  // Add bias column
+  const X = Xtrain.map(r => [...r, 1]);
+  const Xt = Xtest.map(r => [...r, 1]);
+  const pp = p + 1;
+  const lambda = 0.01;
+
+  // X'X
+  const XtX = Array.from({ length: pp }, (_, i) =>
+    Array.from({ length: pp }, (_, j) =>
+      X.reduce((s, r) => s + r[i] * r[j], 0) + (i === j ? lambda : 0)
+    )
+  );
+  // X'y
+  const Xty = Array.from({ length: pp }, (_, i) =>
+    X.reduce((s, r, ri) => s + r[i] * ytrain[ri], 0)
+  );
+
+  // Solve via Gauss elimination
+  const A = XtX.map((row, i) => [...row, Xty[i]]);
+  for (let i = 0; i < pp; i++) {
+    let maxRow = i;
+    for (let k = i + 1; k < pp; k++) { if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) maxRow = k; }
+    [A[i], A[maxRow]] = [A[maxRow], A[i]];
+    if (Math.abs(A[i][i]) < 1e-12) continue;
+    for (let k = i + 1; k < pp; k++) {
+      const f = A[k][i] / A[i][i];
+      for (let j = i; j <= pp; j++) A[k][j] -= f * A[i][j];
+    }
+  }
+  const w = new Array(pp).fill(0);
+  for (let i = pp - 1; i >= 0; i--) {
+    w[i] = A[i][pp];
+    for (let j = i + 1; j < pp; j++) w[i] -= A[i][j] * w[j];
+    w[i] /= A[i][i] || 1;
+  }
+
+  return Xt.map(x => dot(x, w));
+}
+
+// ─── Flow canvas ────────────────────────────────────────────────
+let flowIdCounter = 0;
+
+function addFlowNode(type) {
+  const colors = { dataset: '#3b82f6', recipe: '#f59e0b', model: '#22c55e' };
+  const icons = { dataset: '📊', recipe: '⚙️', model: '🤖' };
+  const id = 'node-' + (flowIdCounter++);
+  const x = 80 + Math.random() * 400;
+  const y = 60 + Math.random() * 300;
+  state.flowNodes.push({ id, type, x, y, label: `${type}_${flowIdCounter}`, color: colors[type], icon: icons[type] });
+  renderFlow();
+}
+
+function clearFlow() { state.flowNodes = []; state.flowEdges = []; renderFlow(); }
+
+let dragNode = null, dragOffset = { x: 0, y: 0 };
+let connectMode = false, connectFrom = null;
+
+function renderFlow() {
+  const svg = document.getElementById('flow-svg');
+  const nodesG = document.getElementById('flow-nodes');
+  const edgesG = document.getElementById('flow-edges');
+  nodesG.innerHTML = '';
+  edgesG.innerHTML = '';
+
+  // Edges
+  state.flowEdges.forEach(e => {
+    const from = state.flowNodes.find(n => n.id === e.from);
+    const to = state.flowNodes.find(n => n.id === e.to);
+    if (!from || !to) return;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const mx = (from.x + 140 + to.x) / 2;
+    path.setAttribute('d', `M${from.x + 140},${from.y + 25} C${mx},${from.y + 25} ${mx},${to.y + 25} ${to.x},${to.y + 25}`);
+    path.setAttribute('class', 'flow-edge');
+    edgesG.appendChild(path);
+  });
+
+  // Nodes
+  state.flowNodes.forEach(n => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'flow-node');
+    g.setAttribute('transform', `translate(${n.x}, ${n.y})`);
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('width', '140');
+    rect.setAttribute('height', '50');
+    rect.setAttribute('stroke', n.color);
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '70');
+    text.setAttribute('y', '30');
+    text.setAttribute('text-anchor', 'middle');
+    text.textContent = `${n.icon} ${n.label}`;
+
+    g.appendChild(rect);
+    g.appendChild(text);
+
+    g.addEventListener('mousedown', e => {
+      if (connectMode) {
+        if (!connectFrom) { connectFrom = n.id; toast('Click target node…'); }
+        else {
+          if (connectFrom !== n.id) {
+            state.flowEdges.push({ from: connectFrom, to: n.id });
+            renderFlow();
+          }
+          connectFrom = null;
+          connectMode = false;
+          toast('Edge created');
+        }
+        return;
+      }
+      dragNode = n;
+      const pt = svgPoint(svg, e);
+      dragOffset = { x: pt.x - n.x, y: pt.y - n.y };
+      e.preventDefault();
+    });
+
+    // Double-click to rename
+    g.addEventListener('dblclick', () => {
+      const newLabel = prompt('Node label:', n.label);
+      if (newLabel !== null) { n.label = newLabel; renderFlow(); }
+    });
+
+    // Right-click context menu: connect / delete
+    g.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      const action = confirm(`Delete node "${n.label}"? (Cancel = start connection)`);
+      if (action) {
+        state.flowNodes = state.flowNodes.filter(fn => fn.id !== n.id);
+        state.flowEdges = state.flowEdges.filter(fe => fe.from !== n.id && fe.to !== n.id);
+        renderFlow();
+      } else {
+        connectMode = true;
+        connectFrom = n.id;
+        toast('Click target node to connect…');
+      }
+    });
+
+    nodesG.appendChild(g);
+  });
+}
+
+function svgPoint(svg, e) {
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+
+document.getElementById('flow-svg').addEventListener('mousemove', e => {
+  if (!dragNode) return;
+  const svg = document.getElementById('flow-svg');
+  const pt = svgPoint(svg, e);
+  dragNode.x = pt.x - dragOffset.x;
+  dragNode.y = pt.y - dragOffset.y;
+  renderFlow();
+});
+
+document.addEventListener('mouseup', () => { dragNode = null; });
+
+// ─── Notebook ───────────────────────────────────────────────────
+let cellCounter = 0;
+const nbNamespace = {};
+
+function addNotebookCell(source = '') {
+  const id = 'cell-' + (cellCounter++);
+  state.notebookCells.push({ id, source, output: '', error: false, execCount: 0 });
+  renderNotebook();
+  return id;
+}
+
+function renderNotebook() {
+  const container = document.getElementById('nb-cells');
+  container.innerHTML = state.notebookCells.map((cell, idx) => {
+    return `<div class="nb-cell" id="${cell.id}">
+      <div class="cell-header">
+        <span>In [${cell.execCount || ' '}]</span>
+        <button class="btn btn-sm btn-primary" onclick="runCell('${cell.id}')">▶ Run</button>
+        <button class="btn-icon" onclick="moveCell('${cell.id}', -1)" title="Move up">↑</button>
+        <button class="btn-icon" onclick="moveCell('${cell.id}', 1)" title="Move down">↓</button>
+        <button class="btn-icon" onclick="deleteCell('${cell.id}')" title="Delete">✕</button>
+      </div>
+      <textarea oninput="updateCellSource('${cell.id}', this.value)" placeholder="# Write JavaScript code here…">${escHtml(cell.source)}</textarea>
+      ${cell.output ? `<div class="cell-output${cell.error ? ' error' : ''}">${escHtml(cell.output)}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function escHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function updateCellSource(id, src) {
+  const cell = state.notebookCells.find(c => c.id === id);
+  if (cell) cell.source = src;
+}
+
+function runCell(id) {
+  const cell = state.notebookCells.find(c => c.id === id);
+  if (!cell) return;
+
+  // Make datasets available in notebook
+  nbNamespace.datasets = state.datasets;
+  nbNamespace.activeDS = activeDS();
+
+  let output = '';
+  let isError = false;
+  // Capture console.log
+  const origLog = console.log;
+  const logs = [];
+  console.log = (...args) => { logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ')); };
+
+  try {
+    const fn = new Function('ctx', `with(ctx) { ${cell.source} }`);
+    const result = fn(nbNamespace);
+    output = logs.join('\n');
+    if (result !== undefined && logs.length === 0) output = String(result);
+    else if (result !== undefined) output += '\n→ ' + String(result);
+  } catch (e) {
+    output = e.toString();
+    isError = true;
+  }
+  console.log = origLog;
+
+  cell.output = output;
+  cell.error = isError;
+  cell.execCount++;
+  renderNotebook();
+}
+
+function runAllCells() {
+  state.notebookCells.forEach(cell => runCell(cell.id));
+  toast('All cells executed');
+}
+
+function moveCell(id, dir) {
+  const idx = state.notebookCells.findIndex(c => c.id === id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= state.notebookCells.length) return;
+  [state.notebookCells[idx], state.notebookCells[newIdx]] = [state.notebookCells[newIdx], state.notebookCells[idx]];
+  renderNotebook();
+}
+
+function deleteCell(id) {
+  state.notebookCells = state.notebookCells.filter(c => c.id !== id);
+  renderNotebook();
+}
+
+function exportNotebook() {
+  if (state.notebookCells.length === 0) { toast('No cells to export'); return; }
+  let py = '# DataikuLite Notebook Export\n\n';
+  state.notebookCells.forEach((cell, i) => {
+    py += `// --- Cell ${i + 1} ---\n${cell.source}\n\n`;
+  });
+  download('notebook_export.js', py, 'text/javascript');
+  toast('Notebook exported');
+}
+
+// Add initial demo cell
+addNotebookCell('// Welcome to DataikuLite Notebook!\n// Use JavaScript. Datasets available as ctx.datasets\nconsole.log("Hello DataikuLite!");');
+
+// ─── Init ───────────────────────────────────────────────────────
+renderFlow();
+renderNotebook();
+setStatus('Ready – Import a CSV to get started');
+
+</script>
+</body>
+</html>

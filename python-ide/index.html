@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python IDE — Browser-Based Python Development Environment</title>
+  <meta name="description" content="A fully-featured Python IDE running 100% in the browser via Pyodide (WebAssembly). No server required.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/editor.css">
+  <link rel="stylesheet" href="css/output.css">
+  <link rel="stylesheet" href="css/filetree.css">
+  <link rel="stylesheet" href="css/modals.css">
+  <link rel="stylesheet" href="css/splash.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+</head>
+<body>
+
+  <!-- ================= SPLASH SCREEN ================= -->
+  <div id="splash-screen">
+    <div class="splash-logo">
+      <div class="splash-icon"><i class="fab fa-python"></i></div>
+      <div class="splash-title">Python IDE</div>
+      <div class="splash-subtitle">Browser-Based Development Environment</div>
+    </div>
+    <div class="splash-progress">
+      <div class="splash-progress-track"><div id="splash-progress-bar"></div></div>
+      <div id="splash-message">Initializing...</div>
+    </div>
+    <div class="splash-loading-dots">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="splash-footer">Powered by Pyodide (CPython 3.12 → WebAssembly)</div>
+  </div>
+
+  <!-- ================= APP CONTAINER ================= -->
+  <div id="app-container">
+
+    <!-- ---- TOOLBAR ---- -->
+    <div id="toolbar">
+      <div class="toolbar-title">
+        <i class="fab fa-python"></i> Python IDE
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- File operations -->
+      <div class="toolbar-group">
+        <button class="toolbar-btn" id="btn-new" title="New File"><i class="fa-solid fa-file-circle-plus"></i></button>
+        <button class="toolbar-btn" id="btn-templates" title="Templates"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+        <button class="toolbar-btn" id="btn-packages" title="Package Manager"><i class="fa-solid fa-cube"></i></button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Run controls -->
+      <div class="toolbar-group">
+        <button class="toolbar-btn btn-run" id="btn-run" title="Run (Ctrl+Enter)"><i class="fa-solid fa-play"></i></button>
+        <button class="toolbar-btn btn-stop" id="btn-stop" title="Stop" disabled><i class="fa-solid fa-stop"></i></button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Debug controls -->
+      <div class="toolbar-group" id="debug-toolbar">
+        <button class="toolbar-btn" id="btn-debug-start" title="Start Debug (F5)"><i class="fa-solid fa-bug"></i></button>
+        <button class="toolbar-btn" id="btn-debug-stop" title="Stop Debug" disabled><i class="fa-solid fa-circle-stop"></i></button>
+        <button class="toolbar-btn" id="btn-debug-continue" title="Continue" disabled><i class="fa-solid fa-forward"></i></button>
+        <button class="toolbar-btn" id="btn-debug-step-over" title="Step Over" disabled><i class="fa-solid fa-arrow-right"></i></button>
+        <button class="toolbar-btn" id="btn-debug-step-into" title="Step Into" disabled><i class="fa-solid fa-arrow-down"></i></button>
+        <button class="toolbar-btn" id="btn-debug-step-out" title="Step Out" disabled><i class="fa-solid fa-arrow-up"></i></button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- View toggles -->
+      <div class="toolbar-group">
+        <button class="toolbar-btn" id="btn-toggle-sidebar" title="Toggle Sidebar (Ctrl+B)"><i class="fa-solid fa-sidebar-flip"></i></button>
+        <button class="toolbar-btn" id="btn-toggle-inspector" title="Toggle Inspector"><i class="fa-solid fa-flask"></i></button>
+        <button class="toolbar-btn" id="btn-cell-mode" title="Toggle Cell Mode"><i class="fa-solid fa-table-cells"></i></button>
+      </div>
+
+      <div class="toolbar-spacer"></div>
+
+      <!-- Right side -->
+      <div class="toolbar-group">
+        <button class="toolbar-btn" id="btn-command-palette" title="Command Palette (Ctrl+Shift+P)"><i class="fa-solid fa-terminal"></i></button>
+        <button class="toolbar-btn" id="btn-settings" title="Settings (Ctrl+,)"><i class="fa-solid fa-gear"></i></button>
+      </div>
+    </div>
+
+    <!-- ---- MAIN AREA ---- -->
+    <div id="main-area">
+
+      <!-- SIDEBAR (File Explorer + Outline) -->
+      <div id="sidebar">
+        <div class="sidebar-tab-bar">
+          <button class="sidebar-tab-btn active" data-tab="files"><i class="fa-solid fa-folder-tree"></i> Files</button>
+          <button class="sidebar-tab-btn" data-tab="outline"><i class="fa-solid fa-list-tree"></i> Outline</button>
+        </div>
+
+        <!-- Files tab -->
+        <div class="sidebar-tab-content active" id="sidebar-files">
+          <div class="sidebar-header">
+            <h3>Explorer</h3>
+            <div class="sidebar-toolbar">
+              <button id="btn-new-file" title="New File"><i class="fa-solid fa-file-circle-plus"></i></button>
+              <button id="btn-new-folder" title="New Folder"><i class="fa-solid fa-folder-plus"></i></button>
+              <button id="btn-upload" title="Upload"><i class="fa-solid fa-upload"></i></button>
+              <button id="btn-refresh-tree" title="Refresh"><i class="fa-solid fa-arrows-rotate"></i></button>
+            </div>
+          </div>
+          <div id="file-tree"></div>
+        </div>
+
+        <!-- Outline tab -->
+        <div class="sidebar-tab-content" id="sidebar-outline">
+          <div class="sidebar-header">
+            <h3>Outline</h3>
+          </div>
+          <div id="outline-list"></div>
+        </div>
+      </div>
+
+      <!-- Sidebar splitter -->
+      <div class="splitter horizontal" id="sidebar-splitter"></div>
+
+      <!-- CENTER AREA (Editor + Output) -->
+      <div id="center-area">
+
+        <!-- Editor Tabs + Area -->
+        <div id="editor-tabs"></div>
+        <div id="editor-area">
+          <div class="editor-gutter"></div>
+          <div class="editor-code"></div>
+          <textarea class="editor-textarea" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+          <div id="cell-overlay"></div>
+        </div>
+
+        <!-- Output splitter -->
+        <div class="splitter vertical" id="output-splitter"></div>
+
+        <!-- OUTPUT PANEL -->
+        <div id="output-panel">
+          <div class="output-tab-bar">
+            <button class="output-tab-btn active" data-tab="console">
+              <i class="fa-solid fa-terminal"></i> Console
+            </button>
+            <button class="output-tab-btn" data-tab="plots">
+              <i class="fa-solid fa-chart-line"></i> Plots
+            </button>
+            <button class="output-tab-btn" data-tab="problems">
+              <i class="fa-solid fa-circle-exclamation"></i> Problems
+            </button>
+            <button class="output-tab-btn" data-tab="history">
+              <i class="fa-solid fa-clock-rotate-left"></i> History
+            </button>
+
+            <div class="output-tab-actions">
+              <button id="btn-clear-console" title="Clear Console"><i class="fa-solid fa-eraser"></i></button>
+              <button id="btn-copy-console" title="Copy Output"><i class="fa-solid fa-copy"></i></button>
+            </div>
+          </div>
+
+          <!-- Console -->
+          <div class="output-tab-content active" id="output-console">
+            <div id="console-output"></div>
+            <div class="repl-input-bar">
+              <span class="repl-prompt">&gt;&gt;&gt;</span>
+              <input type="text" id="repl-input" placeholder="Type Python expression and press Enter...">
+            </div>
+          </div>
+
+          <!-- Plots -->
+          <div class="output-tab-content" id="output-plots">
+            <div class="output-empty">
+              <i class="fa-solid fa-chart-line"></i>
+              <p>No plots yet. Use matplotlib to create visualizations.</p>
+            </div>
+          </div>
+
+          <!-- Problems -->
+          <div class="output-tab-content" id="output-problems">
+            <div class="output-empty">
+              <i class="fa-solid fa-circle-check"></i>
+              <p>No problems detected.</p>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="output-tab-content" id="output-history">
+            <div class="output-empty">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <p>No execution history yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inspector splitter -->
+      <div class="splitter horizontal" id="inspector-splitter"></div>
+
+      <!-- VARIABLE INSPECTOR (right panel) -->
+      <div id="inspector-panel">
+        <div class="inspector-header">
+          <h3><i class="fa-solid fa-flask"></i> Variables</h3>
+          <button class="toolbar-btn" id="btn-toggle-inspector-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="variable-list"></div>
+        <div id="debug-panel"></div>
+      </div>
+    </div>
+
+    <!-- ---- STATUS BAR ---- -->
+    <div id="status-bar">
+      <span class="status-item" id="status-ready"><i class="fa-solid fa-circle-check"></i> Ready</span>
+      <span class="status-item" id="status-running"></span>
+      <span class="status-item" id="status-debug"></span>
+      <span class="status-spacer"></span>
+      <span class="status-item" id="status-ln-col">Ln 1, Col 1</span>
+      <span class="status-item" id="status-python"><i class="fab fa-python"></i> Loading...</span>
+    </div>
+  </div>
+
+  <!-- ================= TOAST CONTAINER ================= -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <!-- Utilities & infrastructure (order matters) -->
+  <script src="js/utils.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/templates.js"></script>
+
+  <!-- Python engine -->
+  <script src="js/pythonEngine.js"></script>
+
+  <!-- UI modules -->
+  <script src="js/editor.js"></script>
+  <script src="js/outputPanel.js"></script>
+  <script src="js/fileSystem.js"></script>
+  <script src="js/fileExplorer.js"></script>
+  <script src="js/variableInspector.js"></script>
+  <script src="js/debugger.js"></script>
+  <script src="js/packageManager.js"></script>
+  <script src="js/cellMode.js"></script>
+  <script src="js/commandPalette.js"></script>
+  <script src="js/outline.js"></script>
+
+  <!-- App bootstrap (must be last) -->
+  <script src="js/app.js"></script>
+</body>
+</html>

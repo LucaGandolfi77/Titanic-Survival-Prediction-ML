@@ -1,0 +1,298 @@
+/* ========================================
+   EDITOR.CSS — Tabs, code editor area,
+   gutter, syntax highlighting, breakpoints
+   ======================================== */
+
+/* ---- Tab bar ---- */
+#editor-tabs {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  min-height: 36px;
+  background: var(--tab-bg);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#editor-tabs::-webkit-scrollbar { display: none; }
+
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 100%;
+  font-size: 12px;
+  color: var(--tab-text);
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+  min-width: 0;
+  user-select: none;
+}
+.editor-tab:hover {
+  background: var(--tab-hover);
+}
+.editor-tab.active {
+  background: var(--tab-active-bg);
+  color: var(--tab-active-text);
+  border-bottom: 2px solid var(--accent);
+}
+.editor-tab.dirty .tab-name {
+  font-style: italic;
+}
+.editor-tab i {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.editor-tab .fab.fa-python {
+  color: #3776ab;
+}
+
+.tab-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+}
+.editor-tab:hover .tab-close,
+.editor-tab.active .tab-close {
+  opacity: 0.6;
+}
+.tab-close:hover {
+  opacity: 1 !important;
+  background: var(--bg-hover);
+}
+
+.tab-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: color 0.15s, background 0.15s;
+}
+.tab-add:hover {
+  color: var(--text-primary);
+  background: var(--tab-hover);
+}
+
+/* ---- Editor area ---- */
+#editor-area {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  background: var(--editor-bg);
+}
+
+/* ---- Gutter ---- */
+.editor-gutter {
+  width: 60px;
+  min-width: 60px;
+  background: var(--editor-gutter-bg);
+  overflow: hidden;
+  user-select: none;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 22px;
+  padding-top: 4px;
+}
+
+.gutter-line {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 4px 0 2px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.gutter-line:hover {
+  background: var(--editor-line-active);
+}
+.gutter-line.active {
+  background: var(--editor-line-active);
+}
+
+.bp-dot {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.bp-dot::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: none;
+  transition: background 0.15s;
+}
+.gutter-line:hover .bp-dot::before {
+  display: block;
+  background: rgba(243, 139, 168, 0.3);
+}
+.bp-dot.visible::before {
+  display: block !important;
+  background: #f38ba8;
+  box-shadow: 0 0 4px rgba(243, 139, 168, 0.5);
+}
+
+.line-num {
+  flex: 1;
+  text-align: right;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding-right: 8px;
+}
+.gutter-line.active .line-num {
+  color: var(--text-secondary);
+}
+
+/* ---- Code display (highlighted, behind textarea) ---- */
+.editor-code {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 4px 0 4px 8px;
+  pointer-events: none;
+  white-space: pre;
+  tab-size: 4;
+}
+
+.code-line {
+  height: 22px;
+  white-space: pre;
+}
+.code-line.active {
+  background: var(--editor-line-active);
+}
+.code-line.cell-start {
+  border-top: 1px solid var(--accent);
+  margin-top: -1px;
+}
+
+.editor-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* ---- Textarea (actual editable surface) ---- */
+.editor-textarea {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  right: 0;
+  bottom: 0;
+  width: calc(100% - 60px);
+  height: 100%;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 4px 0 4px 8px;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--editor-cursor);
+  border: none;
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 4;
+  z-index: 10;
+}
+.editor-textarea::selection {
+  background: var(--editor-selection);
+}
+
+/* ---- Syntax highlighting colors ---- */
+.syn-keyword { color: var(--syn-keyword); font-weight: 600; }
+.syn-keyword-def { color: var(--syn-def); font-weight: 600; }
+.syn-string { color: var(--syn-string); }
+.syn-number { color: var(--syn-number); }
+.syn-comment { color: var(--syn-comment); font-style: italic; }
+.syn-function { color: var(--syn-function); }
+.syn-class { color: var(--syn-class); }
+.syn-builtin { color: var(--syn-builtin); }
+.syn-operator { color: var(--syn-operator); }
+.syn-decorator { color: var(--syn-decorator); }
+.syn-variable { color: var(--syn-variable); }
+.syn-bool { color: var(--syn-bool); }
+.syn-self { color: var(--syn-self); font-style: italic; }
+.syn-text { color: var(--text-primary); }
+.syn-space { color: inherit; }
+.syn-result { color: var(--accent); }
+.syn-repl-input { color: var(--syn-function); }
+
+/* ---- Cell overlay ---- */
+#cell-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 5;
+  display: none;
+}
+
+.cell-marker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: auto;
+}
+.cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 8px 2px 68px;
+  background: rgba(203, 166, 247, 0.05);
+  border-top: 1px solid var(--accent);
+}
+.cell-title {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+}
+.cell-actions {
+  display: flex;
+  gap: 2px;
+}
+.cell-actions button {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cell-actions button:hover {
+  background: var(--bg-hover);
+  color: #a6e3a1;
+}
+.cell-marker.cell-success .cell-header { background: rgba(166, 227, 161, 0.08); }
+.cell-marker.cell-error .cell-header { background: rgba(243, 139, 168, 0.08); }

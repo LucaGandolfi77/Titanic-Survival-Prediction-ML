@@ -1,0 +1,46 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "worker": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "script"
+  },
+  "globals": {
+    "IDE": "writable",
+    "loadPyodide": "readonly",
+    "importScripts": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^_" }],
+    "no-undef": "error",
+    "no-redeclare": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "no-empty": "warn",
+    "no-unreachable": "warn",
+    "no-constant-condition": "warn",
+    "no-extra-semi": "warn",
+    "no-func-assign": "error",
+    "no-inner-declarations": "error",
+    "no-irregular-whitespace": "warn",
+    "eqeqeq": ["warn", "smart"],
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-throw-literal": "warn",
+    "no-self-assign": "error",
+    "no-self-compare": "error",
+    "no-useless-escape": "warn",
+    "no-with": "error",
+    "semi": ["warn", "always"],
+    "no-extra-boolean-cast": "warn",
+    "valid-typeof": "error",
+    "no-sparse-arrays": "error",
+    "no-template-curly-in-string": "warn",
+    "no-unexpected-multiline": "error",
+    "no-cond-assign": "error",
+    "no-debugger": "warn"
+  }
+}

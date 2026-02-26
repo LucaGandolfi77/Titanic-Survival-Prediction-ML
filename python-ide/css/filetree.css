@@ -1,0 +1,200 @@
+/* ========================================
+   FILETREE.CSS — File explorer tree,
+   outline panel, context menu, icons
+   ======================================== */
+
+/* ---- File tree ---- */
+#file-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  height: 26px;
+  padding-right: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+  font-size: 12px;
+}
+.tree-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.tree-item.selected {
+  background: var(--menu-active-bg);
+  color: var(--text-primary);
+}
+.tree-item.drag-over {
+  background: rgba(203, 166, 247, 0.15);
+  outline: 1px dashed var(--accent);
+}
+
+.tree-arrow {
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.tree-arrow.expanded {
+  transform: rotate(90deg);
+}
+.tree-arrow-spacer {
+  width: 18px;
+  flex-shrink: 0;
+}
+
+.tree-icon {
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+.icon-folder { color: #89b4fa; }
+.icon-python { color: #3776ab; }
+.icon-js { color: #f7df1e; }
+.icon-json { color: #f9e2af; }
+.icon-csv { color: #a6e3a1; }
+.icon-txt { color: var(--text-secondary); }
+.icon-md { color: #89b4fa; }
+.icon-html { color: #f38ba8; }
+.icon-css { color: #89b4fa; }
+.icon-img { color: #cba6f7; }
+.icon-default { color: var(--text-muted); }
+
+.tree-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Context menu ---- */
+.context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: var(--menu-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  animation: menuFadeIn 0.1s ease-out;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-primary);
+  text-align: left;
+  transition: background 0.1s;
+}
+.context-menu-item:hover {
+  background: var(--menu-active-bg);
+}
+.context-menu-item i {
+  width: 16px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.context-menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 8px;
+}
+
+/* ---- Outline ---- */
+#outline-list {
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.outline-group {
+  margin-bottom: 4px;
+}
+.outline-group-header {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 6px 12px 2px;
+  font-weight: 600;
+}
+
+.outline-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding-right: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 12px;
+  transition: background 0.1s;
+}
+.outline-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.outline-item i {
+  font-size: 11px;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.outline-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+}
+.outline-line {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ---- Sidebar toolbar ---- */
+.sidebar-actions {
+  display: flex;
+  gap: 2px;
+}
+.sidebar-actions button {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-actions button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}

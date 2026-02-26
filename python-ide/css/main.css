@@ -1,0 +1,409 @@
+/* ========================================
+   MAIN.CSS — Layout, reset, sidebar,
+   splitters, theme variable consumers,
+   global typography, toasts
+   ======================================== */
+
+/* ---- Reset & Base ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--editor-selection);
+  color: var(--text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+input, textarea, select {
+  font: inherit;
+  color: inherit;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  outline: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(203, 166, 247, 0.15);
+}
+
+/* ---- App Layout ---- */
+#app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ---- Toolbar / Menu bar ---- */
+#toolbar {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  min-height: 40px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  gap: 4px;
+  z-index: 100;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 6px;
+}
+
+.toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: background 0.15s, color 0.15s;
+}
+.toolbar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.toolbar-btn:active {
+  background: var(--bg-active);
+}
+.toolbar-btn.active {
+  color: var(--accent);
+  background: var(--bg-hover);
+}
+.toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.toolbar-btn.btn-run {
+  color: #a6e3a1;
+}
+.toolbar-btn.btn-run:hover {
+  background: rgba(166, 227, 161, 0.15);
+}
+.toolbar-btn.btn-stop {
+  color: #f38ba8;
+}
+
+.toolbar-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.toolbar-title i {
+  color: var(--accent);
+}
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* ---- Main area (sidebar + editor + inspector) ---- */
+#main-area {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ---- Sidebar ---- */
+#sidebar {
+  width: 220px;
+  min-width: 150px;
+  max-width: 400px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.15s;
+}
+#sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  border: none;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--border);
+  gap: 4px;
+}
+.sidebar-header h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.sidebar-tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-tab-btn {
+  flex: 1;
+  padding: 6px 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  text-align: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+.sidebar-tab-btn:hover { color: var(--text-primary); }
+.sidebar-tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.sidebar-tab-content {
+  flex: 1;
+  overflow-y: auto;
+  display: none;
+}
+.sidebar-tab-content.active { display: block; }
+
+/* ---- Splitters ---- */
+.splitter {
+  flex-shrink: 0;
+  background: transparent;
+  transition: background 0.15s;
+  z-index: 50;
+}
+.splitter:hover, .splitter.active {
+  background: var(--accent);
+}
+.splitter.horizontal {
+  width: 4px;
+  cursor: col-resize;
+}
+.splitter.vertical {
+  height: 4px;
+  cursor: row-resize;
+}
+
+/* ---- Center area (editor + output) ---- */
+#center-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 200px;
+}
+
+/* ---- Inspector panel (right) ---- */
+#inspector-panel {
+  width: 260px;
+  min-width: 180px;
+  max-width: 450px;
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#inspector-panel.collapsed {
+  width: 0;
+  min-width: 0;
+  border: none;
+  overflow: hidden;
+}
+
+.inspector-header {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--border);
+}
+.inspector-header h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+/* ---- Status bar ---- */
+#status-bar {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  min-height: 24px;
+  background: var(--status-bg);
+  border-top: 1px solid var(--border);
+  padding: 0 10px;
+  font-size: 11px;
+  color: var(--status-text);
+  gap: 12px;
+  z-index: 100;
+}
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.status-item i { font-size: 10px; }
+.status-spacer { flex: 1; }
+#status-running {
+  color: #a6e3a1;
+  display: none;
+}
+#status-debug.active {
+  color: #f9e2af;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 8px rgba(203, 166, 247, 0.3);
+}
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* ---- Toast notifications ---- */
+.toast-container {
+  position: fixed;
+  bottom: 40px;
+  right: 16px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: toastIn 0.3s ease-out;
+  max-width: 360px;
+}
+.toast.toast-success { border-left: 3px solid #a6e3a1; }
+.toast.toast-error { border-left: 3px solid #f38ba8; }
+.toast.toast-warning { border-left: 3px solid #f9e2af; }
+.toast.toast-info { border-left: 3px solid #89b4fa; }
+.toast.fade-out { animation: toastOut 0.3s ease-in forwards; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateX(20px); }
+}
+
+/* ---- Debug toolbar ---- */
+#debug-toolbar {
+  display: none;
+  align-items: center;
+  gap: 2px;
+}
+#debug-toolbar.active {
+  display: flex;
+}
+
+/* ---- Loading/empty states ---- */
+.inspector-empty, .outline-empty, .output-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.inspector-empty i, .outline-empty i, .output-empty i {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+.loading-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: var(--text-secondary);
+}

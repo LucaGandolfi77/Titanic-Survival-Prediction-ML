@@ -1,0 +1,377 @@
+/* =====================================================
+   BENCHMARKS.CSS — Benchmark cards, progress, scores
+   ===================================================== */
+
+/* --- Benchmark Card --- */
+.bench-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.bench-card:hover {
+  border-color: var(--border-light);
+}
+
+/* Running state */
+.bench-card.running {
+  border-color: var(--accent);
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.1);
+}
+.bench-card.running::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius);
+  background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent2), transparent);
+  z-index: -1;
+  animation: spinBorder 2s linear infinite;
+}
+
+/* Completed state */
+.bench-card.completed {
+  border-color: var(--success);
+}
+
+/* Error state */
+.bench-card.error {
+  border-color: var(--danger);
+}
+
+/* Card header */
+.bench-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.bench-card-info {
+  flex: 1;
+}
+
+.bench-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.bench-card-title .bench-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+.bench-icon.cpu-icon { background: var(--accent3-alpha); color: var(--accent3); }
+.bench-icon.gpu-icon { background: var(--accent-alpha); color: var(--accent); }
+.bench-icon.mem-icon { background: var(--accent2-alpha); color: var(--accent2); }
+.bench-icon.render-icon { background: var(--success-alpha); color: var(--success); }
+.bench-icon.ml-icon { background: rgba(236, 72, 153, 0.15); color: #ec4899; }
+
+.bench-card-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  line-height: 1.5;
+}
+
+.bench-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+/* Progress */
+.bench-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.bench-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-input);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bench-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  transition: width 0.15s linear;
+}
+.bench-progress-fill.cpu { background: linear-gradient(90deg, var(--accent3), #ef4444); }
+.bench-progress-fill.gpu { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.bench-progress-fill.mem { background: linear-gradient(90deg, var(--accent2), #ec4899); }
+.bench-progress-fill.render { background: linear-gradient(90deg, var(--success), var(--accent)); }
+
+.bench-progress-pct {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Score display */
+.bench-score-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 52px;
+}
+
+.bench-score {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+.bench-score-number {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.bench-score-unit {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.bench-score-placeholder {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: var(--text-dim);
+}
+
+/* Tier badge */
+.bench-tier {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Comparison bar */
+.bench-comparison {
+  margin-top: 0.25rem;
+}
+.bench-comparison-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+.bench-comparison-bar {
+  position: relative;
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 4px;
+  overflow: visible;
+}
+.bench-comparison-avg {
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 12px;
+  background: var(--text-muted);
+  border-radius: 1px;
+  z-index: 2;
+}
+.bench-comparison-avg::after {
+  content: 'AVG';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.bench-comparison-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+.bench-comparison-fill.cpu { background: var(--accent3); }
+.bench-comparison-fill.gpu { background: var(--accent); }
+
+/* Error message */
+.bench-error {
+  font-size: 0.78rem;
+  color: var(--danger);
+  padding: 0.5rem 0.75rem;
+  background: var(--danger-alpha);
+  border-radius: var(--radius-xs);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Sub-results (for multi-thread, memory BW, etc.) */
+.bench-sub-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+.bench-sub-item {
+  text-align: center;
+  padding: 0.5rem;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+}
+.bench-sub-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.bench-sub-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+/* Worker chart inline (for multi-thread) */
+.worker-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+}
+.worker-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.worker-bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  min-width: 55px;
+}
+.worker-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-input);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.worker-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent3), var(--accent));
+  transition: width 0.5s ease;
+}
+.worker-bar-value {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  min-width: 50px;
+  text-align: right;
+}
+
+/* --- Card icon (app.js generated) --- */
+.bench-card-icon {
+  font-size: 1.3rem;
+  width: 32px;
+  text-align: center;
+}
+
+/* --- Run button --- */
+.bench-run-btn {
+  white-space: nowrap;
+}
+
+/* --- Result area  --- */
+.bench-result {
+  min-height: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.bench-result-placeholder {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+.bench-result-error {
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+/* --- Score row (app.js) --- */
+.bench-score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* --- Comparison bar (app.js) --- */
+.bench-compare {
+  margin-top: 0.25rem;
+}
+.compare-bar-bg {
+  position: relative;
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 4px;
+  overflow: visible;
+}
+.compare-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  transition: width 0.8s ease;
+}
+.compare-avg-marker {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 14px;
+  background: var(--text-muted);
+  border-radius: 1px;
+  z-index: 2;
+}
+.compare-avg-marker::after {
+  content: 'AVG';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+}
+.compare-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+/* --- Progress bar classes (app.js uses progress-<section>) --- */
+.progress-cpu {
+  background: linear-gradient(90deg, var(--accent3), #ef4444);
+}
+.progress-gpu {
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.progress-ml {
+  background: linear-gradient(90deg, #ec4899, #a855f7);
+}

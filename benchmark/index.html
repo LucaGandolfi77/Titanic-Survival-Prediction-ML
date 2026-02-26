@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ PC Benchmark Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/system-info.css">
+  <link rel="stylesheet" href="css/benchmarks.css">
+  <link rel="stylesheet" href="css/results.css">
+  <link rel="stylesheet" href="css/stress.css">
+  <link rel="stylesheet" href="css/capabilities.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- BACKGROUND GRID -->
+  <div class="bg-grid"></div>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <h1 class="app-title"><i class="fa-solid fa-bolt"></i> PC Benchmark Suite</h1>
+        <span class="header-badge">Browser-Based</span>
+      </div>
+      <div class="header-right">
+        <button id="btn-run-all" class="btn btn-accent btn-glow">
+          <i class="fa-solid fa-play"></i> Run All Benchmarks
+        </button>
+        <button id="btn-download" class="btn btn-outline" title="Download JSON">
+          <i class="fa-solid fa-download"></i>
+        </button>
+        <button id="btn-copy" class="btn btn-outline" title="Copy to clipboard">
+          <i class="fa-solid fa-clipboard"></i>
+        </button>
+        <button id="btn-share" class="btn btn-outline" title="Share via URL">
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+      </div>
+    </div>
+    <div id="overall-progress" class="overall-progress-wrap hidden">
+      <div class="overall-progress-bar-track"><div id="overall-progress-bar" class="overall-progress-fill"></div></div>
+      <span id="overall-progress-text" class="overall-progress-text">0 / 12</span>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- SYSTEM INFO SECTION -->
+    <section id="section-sysinfo" class="section">
+      <div class="section-header" data-toggle="sysinfo-body">
+        <h2><i class="fa-solid fa-microchip"></i> System Information</h2>
+        <i class="fa-solid fa-chevron-up toggle-icon"></i>
+      </div>
+      <div id="sysinfo-body" class="section-body">
+        <div class="sysinfo-grid" id="sysinfo-grid">
+          <!-- Populated by systemInfo.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- BENCHMARKS SECTION -->
+    <section id="section-benchmarks" class="section">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-gauge-high"></i> Benchmarks</h2>
+      </div>
+      <div class="bench-grid" id="bench-grid">
+        <!-- 8 benchmark cards populated by app.js -->
+      </div>
+    </section>
+
+    <!-- RESULTS SECTION -->
+    <section id="section-results" class="section hidden">
+      <div class="section-header" data-toggle="results-body">
+        <h2><i class="fa-solid fa-chart-line"></i> Results Dashboard</h2>
+        <i class="fa-solid fa-chevron-up toggle-icon"></i>
+      </div>
+      <div id="results-body" class="section-body">
+        <div id="results-content"></div>
+      </div>
+    </section>
+
+    <!-- STRESS TEST SECTION -->
+    <section id="section-stress" class="section">
+      <div class="section-header" data-toggle="stress-body">
+        <h2><i class="fa-solid fa-fire-flame-curved"></i> Live Stress Test</h2>
+        <i class="fa-solid fa-chevron-up toggle-icon"></i>
+      </div>
+      <div id="stress-body" class="section-body collapsed">
+        <div id="stress-content"></div>
+      </div>
+    </section>
+
+    <!-- CAPABILITIES SECTION -->
+    <section id="section-capabilities" class="section">
+      <div class="section-header" data-toggle="capabilities-body">
+        <h2><i class="fa-solid fa-list-check"></i> Browser Capabilities</h2>
+        <i class="fa-solid fa-chevron-up toggle-icon"></i>
+      </div>
+      <div id="capabilities-body" class="section-body collapsed">
+        <div id="capabilities-content"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/systemInfo.js"></script>
+  <script src="js/cpuBenchmarks.js"></script>
+  <script src="js/gpuBenchmarks.js"></script>
+  <script src="js/mlBenchmarks.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/stressTest.js"></script>
+  <script src="js/capabilities.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

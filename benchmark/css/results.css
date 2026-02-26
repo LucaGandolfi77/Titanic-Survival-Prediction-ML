@@ -1,0 +1,155 @@
+/* =====================================================
+   RESULTS.CSS — Results dashboard, score, radar chart
+   ===================================================== */
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+/* Overall Score Card */
+.result-score-card {
+  grid-column: 1 / -1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.result-score-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,212,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.result-overall-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.result-overall-score {
+  font-family: var(--font-mono);
+  font-size: 4.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 3s ease infinite;
+  line-height: 1.1;
+}
+
+.result-overall-max {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text-dim);
+  margin-top: 0.15rem;
+}
+
+.result-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.tier-gaming     { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(124,58,237,0.2)); color: var(--accent); border: 1px solid rgba(0,212,255,0.3); }
+.tier-workstation { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
+.tier-office     { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+.tier-budget     { background: rgba(100,116,139,0.15); color: var(--text-muted); border: 1px solid rgba(100,116,139,0.3); }
+.tier-mobile     { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+
+.result-breakdown {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.breakdown-item {
+  text-align: center;
+}
+.breakdown-value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.breakdown-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+.breakdown-pct {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* Chart cards */
+.result-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.result-chart-card h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.result-chart-card h3 i { color: var(--accent); font-size: 0.85rem; }
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  max-height: 300px;
+}
+
+/* History table */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.history-table th,
+.history-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.history-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.history-table td {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.delta-positive { color: var(--success); }
+.delta-negative { color: var(--danger); }
+
+@media (max-width: 900px) {
+  .results-grid { grid-template-columns: 1fr; }
+  .result-overall-score { font-size: 3rem; }
+}

@@ -1,0 +1,133 @@
+/* =====================================================
+   SYSTEM-INFO.CSS — System information cards
+   ===================================================== */
+
+.sysinfo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.sysinfo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: all var(--transition);
+}
+.sysinfo-card:hover {
+  border-color: var(--border-light);
+}
+.sysinfo-card.gpu-card {
+  border-color: rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.05);
+}
+
+.sysinfo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.sysinfo-card-header i {
+  font-size: 1.1rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+.sysinfo-card-header .icon-cpu {
+  background: var(--accent3-alpha);
+  color: var(--accent3);
+}
+.sysinfo-card-header .icon-gpu {
+  background: var(--accent-alpha);
+  color: var(--accent);
+}
+.sysinfo-card-header .icon-net {
+  background: var(--accent2-alpha);
+  color: var(--accent2);
+}
+.sysinfo-card-header .icon-feat {
+  background: var(--success-alpha);
+  color: var(--success);
+}
+.sysinfo-card-header h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.sysinfo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(42, 42, 61, 0.4);
+}
+.sysinfo-row:last-child { border-bottom: none; }
+
+.sysinfo-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.sysinfo-value {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+  word-break: break-word;
+  max-width: 60%;
+}
+
+/* Feature badges */
+.feature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.feature-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+.feature-badge.available {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--success);
+}
+.feature-badge.unavailable {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--danger);
+}
+
+/* GPU glow */
+.sysinfo-card.gpu-glow {
+  border-color: rgba(0, 212, 255, 0.25);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.08);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .sysinfo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .sysinfo-grid {
+    grid-template-columns: 1fr;
+  }
+}

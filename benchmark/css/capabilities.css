@@ -1,0 +1,95 @@
+/* =====================================================
+   CAPABILITIES.CSS — Browser capabilities table
+   ===================================================== */
+
+/* Summary bar */
+.cap-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.cap-summary-score {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.cap-summary-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.capabilities-table,
+.cap-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.capabilities-table th,
+.capabilities-table td,
+.cap-table th,
+.cap-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.capabilities-table tr:last-child td,
+.cap-table tr:last-child td { border-bottom: none; }
+
+.capabilities-table th,
+.cap-table th {
+  background: var(--bg-input);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.capabilities-table td,
+.cap-table td {
+  font-size: 0.8rem;
+}
+.capabilities-table td:first-child,
+.cap-table td:first-child {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cap-detail {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.cap-yes {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--success);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.cap-no {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--danger);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.capabilities-table tr:hover td,
+.cap-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}

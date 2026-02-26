@@ -1,0 +1,19 @@
+{
+  "name": "pc-benchmark-suite",
+  "version": "1.0.0",
+  "description": "Browser-based PC Benchmark Suite",
+  "private": true,
+  "scripts": {
+    "lint": "eslint js/",
+    "lint:fix": "eslint js/ --fix",
+    "test": "jest --verbose",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
+    "check": "npm run lint && npm test"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

@@ -1,0 +1,117 @@
+/* ================================================================
+   FOOTER
+   ================================================================ */
+
+.site-footer {
+  position: relative;
+  padding-top: var(--sp-16);
+  padding-bottom: var(--sp-8);
+  background: var(--bg-secondary);
+}
+
+/* Animated gradient border on top */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-hero);
+  background-size: 200% 100%;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
+  margin-bottom: var(--sp-12);
+}
+
+.footer-brand {
+  grid-column: 1 / -1;
+}
+
+.footer-brand .nav-logo {
+  font-size: var(--text-xl);
+  margin-bottom: var(--sp-3);
+  display: inline-block;
+}
+
+.footer-brand p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-col a {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  padding: var(--sp-1) 0;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.footer-col a:hover {
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+
+/* Social icons */
+.social-links {
+  display: flex;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  transition: background var(--transition-base), transform var(--transition-spring);
+}
+
+.social-links a:hover {
+  background: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.social-links svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--text-secondary);
+  transition: fill var(--transition-base);
+}
+
+.social-links a:hover svg {
+  fill: #fff;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--sp-6);
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin-inline: auto;
+}

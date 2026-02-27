@@ -1,0 +1,84 @@
+/* ================================================================
+   ML TOOLS & ECOSYSTEM — Marquee
+   ================================================================ */
+
+#tools {
+  overflow: hidden;
+}
+
+.marquee-wrapper {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--sp-4);
+}
+
+/* Fade edges */
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-primary), transparent);
+}
+
+.marquee-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-primary), transparent);
+}
+
+.marquee-track {
+  display: flex;
+  gap: var(--sp-4);
+  width: max-content;
+  padding-block: var(--sp-2);
+}
+
+.marquee-track.marquee-left {
+  animation: marquee-left 35s linear infinite;
+}
+
+.marquee-track.marquee-right {
+  animation: marquee-right 35s linear infinite;
+}
+
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Tool pill */
+.tool-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-6);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  flex-shrink: 0;
+}
+
+.tool-pill:hover {
+  transform: scale(1.08);
+  box-shadow: var(--glow-indigo);
+}
+
+.tool-pill svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}

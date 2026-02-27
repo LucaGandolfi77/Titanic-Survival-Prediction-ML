@@ -1,0 +1,78 @@
+/* ================================================================
+   LEARNING PATH TIMELINE
+   ================================================================ */
+
+.timeline-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-left: 48px;
+}
+
+#timeline-svg {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 4px;
+  height: 100%;
+  overflow: visible;
+}
+
+#timeline-svg path {
+  fill: none;
+  stroke: var(--accent-primary);
+  stroke-width: 2;
+}
+
+/* ── Step ────────────────────────────────────────────────────── */
+.timeline-step {
+  position: relative;
+  margin-bottom: var(--sp-12);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -38px;
+  top: var(--sp-8);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: var(--glow-indigo);
+  flex-shrink: 0;
+  z-index: 1;
+  border: 3px solid var(--bg-primary);
+}
+
+.timeline-card {
+  opacity: 0;
+  width: 100%;
+}
+
+.timeline-card h3 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--sp-2);
+}
+
+.timeline-card p {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-3);
+}
+
+.timeline-card .step-number {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--accent-primary);
+  margin-bottom: var(--sp-2);
+  display: block;
+}
+
+.timeline-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}

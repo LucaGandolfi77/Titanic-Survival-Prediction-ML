@@ -1,0 +1,104 @@
+/* ================================================================
+   ALGORITHM CATEGORIES — Horizontal Scroll Carousel
+   ================================================================ */
+
+#algorithms {
+  padding-bottom: var(--sp-12);
+}
+
+.swipe-hint {
+  display: inline-block;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-top: var(--sp-2);
+  animation: fade-up 1s ease-out;
+}
+
+.carousel-wrapper {
+  display: flex;
+  gap: var(--sp-6);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: var(--sp-4) var(--sp-4) var(--sp-8);
+  cursor: grab;
+}
+
+.carousel-wrapper:active {
+  cursor: grabbing;
+}
+
+.carousel-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Algorithm card ─────────────────────────────────────────── */
+.algo-card {
+  flex: 0 0 300px;
+  min-height: 400px;
+  scroll-snap-align: start;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  touch-action: pan-y;
+}
+
+.algo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--_accent, var(--accent-primary));
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.algo-card:hover::before {
+  opacity: 1;
+}
+
+.algo-card:hover {
+  transform: translateY(-6px);
+}
+
+.algo-card .card-icon {
+  background: color-mix(in srgb, var(--_accent, var(--accent-primary)) 15%, transparent);
+}
+
+.algo-card .card-icon svg {
+  stroke: var(--_accent, var(--accent-primary));
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.algo-card h3 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--sp-2);
+  color: var(--text-primary);
+}
+
+.algo-card .algo-desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-6);
+  flex: 1;
+}
+
+.algo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: auto;
+}
+
+.algo-tags .tag-pill {
+  color: color-mix(in srgb, var(--_accent, var(--accent-primary)) 80%, white);
+  border-color: color-mix(in srgb, var(--_accent, var(--accent-primary)) 25%, transparent);
+}

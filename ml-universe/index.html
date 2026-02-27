@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ML Universe — Il Mondo del Machine Learning</title>
+  <meta name="description" content="Esplora l'universo del Machine Learning: algoritmi, applicazioni, strumenti e timeline storica in un'esperienza visiva immersiva.">
+  <meta name="theme-color" content="#080B14">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ML Universe — Il Mondo del Machine Learning">
+  <meta property="og:description" content="Esplora l'universo del Machine Learning con animazioni 3D, visualizzazioni interattive e contenuti all'avanguardia.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/og-image.png">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Splitting.js CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css">
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css">
+
+  <!-- Stylesheets (cascade order) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/algorithms.css">
+  <link rel="stylesheet" href="css/featured.css">
+  <link rel="stylesheet" href="css/applications.css">
+  <link rel="stylesheet" href="css/stats.css">
+  <link rel="stylesheet" href="css/tools.css">
+  <link rel="stylesheet" href="css/timeline.css">
+  <link rel="stylesheet" href="css/cta.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="navbar-inner container">
+      <a href="#hero" class="nav-logo" aria-label="ML Universe Home">
+        <span class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <circle cx="14" cy="14" r="12" stroke="url(#logo-grad)" stroke-width="2"/>
+            <circle cx="14" cy="8" r="2.5" fill="#6366F1"/>
+            <circle cx="8" cy="18" r="2.5" fill="#8B5CF6"/>
+            <circle cx="20" cy="18" r="2.5" fill="#EC4899"/>
+            <line x1="14" y1="8" x2="8" y2="18" stroke="#6366F1" stroke-width="1.2"/>
+            <line x1="14" y1="8" x2="20" y2="18" stroke="#8B5CF6" stroke-width="1.2"/>
+            <line x1="8" y1="18" x2="20" y2="18" stroke="#EC4899" stroke-width="1.2"/>
+            <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
+          </svg>
+        </span>
+        ML Universe
+      </a>
+
+      <nav class="nav-links" id="nav-links" role="navigation" aria-label="Navigazione principale">
+        <a href="#about" class="nav-link" data-section="about">About</a>
+        <a href="#algorithms" class="nav-link" data-section="algorithms">Algoritmi</a>
+        <a href="#featured" class="nav-link" data-section="featured">In Evidenza</a>
+        <a href="#applications" class="nav-link" data-section="applications">Applicazioni</a>
+        <a href="#stats" class="nav-link" data-section="stats">Numeri</a>
+        <a href="#tools" class="nav-link" data-section="tools">Strumenti</a>
+        <a href="#timeline" class="nav-link" data-section="timeline">Timeline</a>
+      </nav>
+
+      <button class="hamburger" id="hamburger" aria-label="Apri menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
+  </header>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="nav-overlay" id="nav-overlay" aria-hidden="true">
+    <a href="#about" class="nav-overlay-link">About</a>
+    <a href="#algorithms" class="nav-overlay-link">Algoritmi</a>
+    <a href="#featured" class="nav-overlay-link">In Evidenza</a>
+    <a href="#applications" class="nav-overlay-link">Applicazioni</a>
+    <a href="#stats" class="nav-overlay-link">Numeri</a>
+    <a href="#tools" class="nav-overlay-link">Strumenti</a>
+    <a href="#timeline" class="nav-overlay-link">Timeline</a>
+    <a href="#cta" class="nav-overlay-link">Newsletter</a>
+  </div>
+
+  <main>
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section id="hero" class="hero" aria-label="Hero">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-content container">
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
+          Esplora il futuro dell'AI
+        </div>
+        <h1 class="hero-title" data-splitting>Machine Learning Universe</h1>
+        <p class="hero-subtitle">Dalle reti neurali al deep learning: scopri gli algoritmi che stanno ridefinendo il nostro mondo. Un viaggio interattivo nell'intelligenza artificiale.</p>
+        <div class="hero-ctas">
+          <a href="#algorithms" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Esplora gli Algoritmi
+          </a>
+          <a href="#about" class="btn btn-secondary">
+            Scopri di più
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="scroll-indicator" aria-hidden="true">
+          <span class="scroll-text">Scorri</span>
+          <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><rect x="1" y="1" width="18" height="22" rx="9" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="8" r="2" fill="currentColor" class="scroll-dot"/></svg>
+        </div>
+      </div>
+      <div class="stats-bar" aria-label="Statistiche rapide">
+        <div class="stat-item"><span class="stat-value">175B</span><span class="stat-label">Parametri GPT-4</span></div>
+        <div class="stat-item"><span class="stat-value">86%</span><span class="stat-label">Aziende con AI</span></div>
+        <div class="stat-item"><span class="stat-value">96.7%</span><span class="stat-label">Accuracy SOTA</span></div>
+        <div class="stat-item"><span class="stat-value">$200B</span><span class="stat-label">Mercato AI 2030</span></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ABOUT
+         ============================================================ -->
+    <section id="about" class="section" aria-labelledby="about-title">
+      <div class="container">
+        <span class="section-label">Introduzione</span>
+        <h2 class="section-title" id="about-title">Cos'è il Machine Learning?</h2>
+        <div class="about-grid">
+          <div class="about-text">
+            <p class="fade-in">Il <strong>Machine Learning</strong> è un ramo dell'intelligenza artificiale che permette ai computer di imparare dai dati senza essere esplicitamente programmati. Attraverso algoritmi sofisticati, i sistemi ML identificano pattern, fanno previsioni e prendono decisioni con precisione crescente.</p>
+            <p class="fade-in">Nato negli anni '50, il campo ha vissuto una rivoluzione grazie all'aumento della potenza di calcolo, alla disponibilità di grandi dataset e a breakthrough architetturali come i <strong>Transformer</strong>. Oggi il ML alimenta motori di ricerca, assistenti vocali, veicoli autonomi e molto altro.</p>
+            <p class="fade-in">Si suddivide in tre paradigmi fondamentali: <strong>Supervised Learning</strong> (apprendimento da esempi etichettati), <strong>Unsupervised Learning</strong> (scoperta di strutture nascoste nei dati) e <strong>Reinforcement Learning</strong> (apprendimento per tentativi ed errori).</p>
+          </div>
+          <div class="about-visual" aria-label="Diagramma del Training Loop">
+            <svg class="training-loop" viewBox="0 0 320 280" fill="none" aria-hidden="true">
+              <!-- Data -->
+              <rect class="node-card" x="10" y="110" width="90" height="50" rx="10"/>
+              <text x="55" y="140" text-anchor="middle" fill="#E2E8F0" font-size="13" font-weight="500">Dati</text>
+              <!-- Model -->
+              <rect class="node-card" x="115" y="20" width="90" height="50" rx="10"/>
+              <text x="160" y="50" text-anchor="middle" fill="#E2E8F0" font-size="13" font-weight="500">Modello</text>
+              <!-- Prediction -->
+              <rect class="node-card" x="220" y="110" width="90" height="50" rx="10"/>
+              <text x="265" y="140" text-anchor="middle" fill="#E2E8F0" font-size="13" font-weight="500">Predizione</text>
+              <!-- Loss -->
+              <rect class="node-card" x="115" y="210" width="90" height="50" rx="10"/>
+              <text x="160" y="240" text-anchor="middle" fill="#E2E8F0" font-size="13" font-weight="500">Loss</text>
+              <!-- Arrows -->
+              <path class="flow-arrow" d="M100 125 L120 70" stroke="#6366F1" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowhead)"/>
+              <path class="flow-arrow" d="M205 55 L225 115" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowhead)"/>
+              <path class="flow-arrow" d="M265 160 L205 215" stroke="#EC4899" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowhead)"/>
+              <path class="flow-arrow" d="M115 235 L55 165" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowhead)"/>
+              <defs>
+                <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                  <polygon points="0 0, 8 3, 0 6" fill="#6366F1"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ALGORITHMS CAROUSEL
+         ============================================================ -->
+    <section id="algorithms" class="section" aria-labelledby="algo-title">
+      <div class="container">
+        <span class="section-label">Esplora</span>
+        <h2 class="section-title" id="algo-title">Algoritmi Fondamentali</h2>
+      </div>
+      <div class="carousel-wrapper" role="region" aria-label="Carosello algoritmi" tabindex="0">
+
+        <!-- Card 1: Linear Regression -->
+        <article class="algo-card card card--glass" data-accent="indigo">
+          <div class="card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="10" cy="28" r="3" fill="#818CF8"/><circle cx="15" cy="22" r="3" fill="#818CF8"/>
+              <circle cx="22" cy="18" r="3" fill="#818CF8"/><circle cx="30" cy="10" r="3" fill="#818CF8"/>
+              <line x1="5" y1="33" x2="35" y2="7" stroke="#6366F1" stroke-width="2" stroke-dasharray="4 2"/>
+            </svg>
+          </div>
+          <h3>Regressione Lineare</h3>
+          <p>Modella la relazione tra variabili con una funzione lineare. Base di tutti i modelli predittivi, minimizza l'errore quadratico medio.</p>
+          <div class="tags">
+            <span class="tag-pill" data-accent="indigo">Supervised</span>
+            <span class="tag-pill" data-accent="indigo">Regressione</span>
+          </div>
+        </article>
+
+        <!-- Card 2: Decision Trees -->
+        <article class="algo-card card card--glass" data-accent="violet">
+          <div class="card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="20" cy="6" r="4" fill="#8B5CF6"/>
+              <circle cx="10" cy="20" r="3.5" fill="#A78BFA"/><circle cx="30" cy="20" r="3.5" fill="#A78BFA"/>
+              <circle cx="5" cy="34" r="3" fill="#C4B5FD"/><circle cx="15" cy="34" r="3" fill="#C4B5FD"/>
+              <circle cx="25" cy="34" r="3" fill="#C4B5FD"/><circle cx="35" cy="34" r="3" fill="#C4B5FD"/>
+              <line x1="20" y1="10" x2="10" y2="17" stroke="#8B5CF6" stroke-width="1.5"/>
+              <line x1="20" y1="10" x2="30" y2="17" stroke="#8B5CF6" stroke-width="1.5"/>
+              <line x1="10" y1="23" x2="5" y2="31" stroke="#A78BFA" stroke-width="1.2"/>
+              <line x1="10" y1="23" x2="15" y2="31" stroke="#A78BFA" stroke-width="1.2"/>
+              <line x1="30" y1="23" x2="25" y2="31" stroke="#A78BFA" stroke-width="1.2"/>
+              <line x1="30" y1="23" x2="35" y2="31" stroke="#A78BFA" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <h3>Alberi Decisionali</h3>
+          <p>Strutture gerarchiche che suddividono i dati in base a features discriminanti. Intuitivi e interpretabili, base di Random Forest e XGBoost.</p>
+          <div class="tags">
+            <span class="tag-pill" data-accent="violet">Supervised</span>
+            <span class="tag-pill" data-accent="violet">Classificazione</span>
+          </div>
+        </article>
+
+        <!-- Card 3: Neural Networks -->
+        <article class="algo-card card card--glass" data-accent="pink">
+          <div class="card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="8" cy="10" r="3" fill="#F472B6"/><circle cx="8" cy="20" r="3" fill="#F472B6"/><circle cx="8" cy="30" r="3" fill="#F472B6"/>
+              <circle cx="20" cy="12" r="3" fill="#EC4899"/><circle cx="20" cy="28" r="3" fill="#EC4899"/>
+              <circle cx="32" cy="20" r="3" fill="#DB2777"/>
+              <line x1="11" y1="10" x2="17" y2="12" stroke="#F472B6" stroke-width="0.8"/><line x1="11" y1="10" x2="17" y2="28" stroke="#F472B6" stroke-width="0.8"/>
+              <line x1="11" y1="20" x2="17" y2="12" stroke="#F472B6" stroke-width="0.8"/><line x1="11" y1="20" x2="17" y2="28" stroke="#F472B6" stroke-width="0.8"/>
+              <line x1="11" y1="30" x2="17" y2="12" stroke="#F472B6" stroke-width="0.8"/><line x1="11" y1="30" x2="17" y2="28" stroke="#F472B6" stroke-width="0.8"/>
+              <line x1="23" y1="12" x2="29" y2="20" stroke="#EC4899" stroke-width="0.8"/><line x1="23" y1="28" x2="29" y2="20" stroke="#EC4899" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <h3>Reti Neurali</h3>
+          <p>Ispirate al cervello umano, combinano neuroni artificiali in strati per apprendere rappresentazioni complesse. Backbone del deep learning moderno.</p>
+          <div class="tags">
+            <span class="tag-pill" data-accent="pink">Deep Learning</span>
+            <span class="tag-pill" data-accent="pink">Universale</span>
+          </div>
+        </article>
+
+        <!-- Card 4: SVM -->
+        <article class="algo-card card card--glass" data-accent="cyan">
+          <div class="card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="10" cy="12" r="3" fill="#22D3EE"/><circle cx="14" cy="20" r="3" fill="#22D3EE"/><circle cx="8" cy="26" r="3" fill="#22D3EE"/>
+              <circle cx="28" cy="14" r="3" fill="#06B6D4"/><circle cx="32" cy="22" r="3" fill="#06B6D4"/><circle cx="30" cy="30" r="3" fill="#06B6D4"/>
+              <line x1="5" y1="5" x2="35" y2="35" stroke="#67E8F9" stroke-width="2" stroke-dasharray="5 3"/>
+              <line x1="3" y1="8" x2="33" y2="38" stroke="#67E8F9" stroke-width="0.8" opacity="0.3"/>
+              <line x1="7" y1="2" x2="37" y2="32" stroke="#67E8F9" stroke-width="0.8" opacity="0.3"/>
+            </svg>
+          </div>
+          <h3>Support Vector Machine</h3>
+          <p>Trova l'iperpiano ottimale che massimizza il margine tra classi. Il kernel trick permette la separazione non-lineare in spazi ad alta dimensionalità.</p>
+          <div class="tags">
+            <span class="tag-pill" data-accent="cyan">Supervised</span>
+            <span class="tag-pill" data-accent="cyan">Classificazione</span>
+          </div>
+        </article>
+
+        <!-- Card 5: K-Means -->
+        <article class="algo-card card card--glass" data-accent="emerald">
+          <div class="card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="2.5" fill="#6EE7B7"/><circle cx="8" cy="16" r="2.5" fill="#6EE7B7"/><circle cx="14" cy="18" r="2.5" fill="#6EE7B7"/>
+              <circle cx="30" cy="10" r="2.5" fill="#34D399"/><circle cx="34" cy="14" r="2.5" fill="#34D399"/><circle cx="28" cy="16" r="2.5" fill="#34D399"/>
+              <circle cx="20" cy="30" r="2.5" fill="#10B981"/><circle cx="16" cy="34" r="2.5" fill="#10B981"/><circle cx="24" cy="34" r="2.5" fill="#10B981"/>
+              <circle cx="11" cy="15" r="5" stroke="#6EE7B7" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+              <circle cx="31" cy="13" r="5" stroke="#34D399" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+              <circle cx="20" cy="33" r="5" stroke="#10B981" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+            </svg>
+          </div>
+          <h3>K-Means Clustering</h3>
+          <p>Raggruppa dati non etichettati in K cluster minimizzando la varianza intra-cluster. Semplice, scalabile e ampiamente utilizzato nella segmentazione.</p>
+          <div class="tags">
+            <span class="tag-pill" data-accent="emerald">Unsupervised</span>
+            <span class="tag-pill" data-accent="emerald">Clustering</span>
+          </div>
+        </article>
+
+        <!-- Card 6: Reinforcement Learning -->
+        <article class="algo-card card card--glass" data-accent="amber">
+          <div class="card-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <rect x="4" y="4" width="32" height="32" rx="4" stroke="#F59E0B" stroke-width="1.5"/>
+              <rect x="8" y="8" width="8" height="8" rx="2" fill="#FCD34D" opacity="0.3"/>
+              <rect x="24" y="24" width="8" height="8" rx="2" fill="#F59E0B"/>
+              <circle cx="12" cy="12" r="3" fill="#FBBF24"/>
+              <path d="M15 12h6m0 0l-2-2m2 2l-2 2" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M28 18v6m0 0l-2-2m2 2l2-2" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Reinforcement Learning</h3>
+          <p>Un agente impara interagendo con l'ambiente, massimizzando una reward cumulativa. Dietro AlphaGo, robotica e trading algoritmico.</p>
+          <div class="tags">
+            <span class="tag-pill" data-accent="amber">RL</span>
+            <span class="tag-pill" data-accent="amber">Agente</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FEATURED ALGORITHMS
+         ============================================================ -->
+    <section id="featured" class="section" aria-labelledby="featured-title">
+      <div class="container">
+        <span class="section-label">Deep Dive</span>
+        <h2 class="section-title" id="featured-title">Algoritmi in Evidenza</h2>
+
+        <div class="featured-grid">
+
+          <!-- Featured 1: Transformer -->
+          <article class="featured-card card card--glass" data-accent="indigo">
+            <div class="featured-header">
+              <h3>Transformer</h3>
+              <div class="metric-badges">
+                <span class="metric-badge metric-badge--green">SOTA</span>
+                <span class="metric-badge metric-badge--purple">2017</span>
+              </div>
+            </div>
+            <p>L'architettura che ha rivoluzionato il NLP. Il meccanismo di <strong>Self-Attention</strong> permette di catturare dipendenze a lunga distanza senza ricorrenza, abilitando il parallelismo massiccio.</p>
+
+            <div class="attention-grid" aria-label="Visualizzazione Attention Matrix">
+              <div class="att-cell" style="opacity:0.9"></div><div class="att-cell" style="opacity:0.3"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.2"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.15"></div>
+              <div class="att-cell" style="opacity:0.3"></div><div class="att-cell" style="opacity:0.85"></div><div class="att-cell" style="opacity:0.6"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.2"></div>
+              <div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.5"></div><div class="att-cell" style="opacity:0.9"></div><div class="att-cell" style="opacity:0.4"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.1"></div>
+              <div class="att-cell" style="opacity:0.15"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.3"></div><div class="att-cell" style="opacity:0.85"></div><div class="att-cell" style="opacity:0.7"></div><div class="att-cell" style="opacity:0.2"></div>
+              <div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.15"></div><div class="att-cell" style="opacity:0.6"></div><div class="att-cell" style="opacity:0.9"></div><div class="att-cell" style="opacity:0.5"></div>
+              <div class="att-cell" style="opacity:0.2"></div><div class="att-cell" style="opacity:0.15"></div><div class="att-cell" style="opacity:0.1"></div><div class="att-cell" style="opacity:0.2"></div><div class="att-cell" style="opacity:0.55"></div><div class="att-cell" style="opacity:0.9"></div>
+            </div>
+
+            <div class="code-block">
+              <code><span class="cmt"># Multi-Head Attention</span>
+<span class="kw">def</span> <span class="fn">attention</span>(Q, K, V):
+    scores = Q @ K.T / <span class="fn">sqrt</span>(d_k)
+    weights = <span class="fn">softmax</span>(scores)
+    <span class="kw">return</span> weights @ V</code>
+            </div>
+            <a href="#" class="learn-more">Approfondisci →</a>
+          </article>
+
+          <!-- Featured 2: Random Forest -->
+          <article class="featured-card card card--glass" data-accent="emerald">
+            <div class="featured-header">
+              <h3>Random Forest</h3>
+              <div class="metric-badges">
+                <span class="metric-badge metric-badge--green">Robusto</span>
+                <span class="metric-badge metric-badge--amber">Ensemble</span>
+              </div>
+            </div>
+            <p>Ensemble di alberi decisionali allenati su subset casuali di dati e features. Il <strong>bagging</strong> riduce la varianza e migliora la generalizzazione rispetto a un singolo albero.</p>
+
+            <div class="tree-viz" aria-label="Visualizzazione importanza features">
+              <div class="tree-bar" style="--bar-width: 92%;" data-label="Feature A"><span>92%</span></div>
+              <div class="tree-bar" style="--bar-width: 78%;" data-label="Feature B"><span>78%</span></div>
+              <div class="tree-bar" style="--bar-width: 65%;" data-label="Feature C"><span>65%</span></div>
+              <div class="tree-bar" style="--bar-width: 45%;" data-label="Feature D"><span>45%</span></div>
+              <div class="tree-bar" style="--bar-width: 30%;" data-label="Feature E"><span>30%</span></div>
+            </div>
+
+            <div class="code-block">
+              <code><span class="cmt"># Random Forest Classifier</span>
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+
+model = <span class="fn">RandomForestClassifier</span>(
+    n_estimators=<span class="num">100</span>,
+    max_depth=<span class="num">10</span>,
+    random_state=<span class="num">42</span>
+)
+model.<span class="fn">fit</span>(X_train, y_train)</code>
+            </div>
+            <a href="#" class="learn-more">Approfondisci →</a>
+          </article>
+
+          <!-- Featured 3: Neural Network (MLP) -->
+          <article class="featured-card card card--glass" data-accent="pink">
+            <div class="featured-header">
+              <h3>Rete Neurale MLP</h3>
+              <div class="metric-badges">
+                <span class="metric-badge metric-badge--purple">Deep</span>
+                <span class="metric-badge metric-badge--green">96.7%</span>
+              </div>
+            </div>
+            <p>Il <strong>Multi-Layer Perceptron</strong> è la forma più classica di rete neurale. Strati densi con funzioni di attivazione non-lineari approssimano qualsiasi funzione continua (Universal Approximation Theorem).</p>
+
+            <div class="nn-diagram" aria-label="Diagramma rete neurale">
+              <div class="nn-layer">
+                <div class="neuron"></div><div class="neuron"></div><div class="neuron"></div><div class="neuron"></div>
+              </div>
+              <div class="nn-layer">
+                <div class="neuron"></div><div class="neuron"></div><div class="neuron"></div>
+              </div>
+              <div class="nn-layer">
+                <div class="neuron"></div><div class="neuron"></div><div class="neuron"></div>
+              </div>
+              <div class="nn-layer">
+                <div class="neuron"></div><div class="neuron"></div>
+              </div>
+            </div>
+
+            <div class="code-block">
+              <code><span class="cmt"># PyTorch MLP</span>
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        super().__init__()
+        self.layers = nn.<span class="fn">Sequential</span>(
+            nn.<span class="fn">Linear</span>(<span class="num">784</span>, <span class="num">256</span>),
+            nn.<span class="fn">ReLU</span>(),
+            nn.<span class="fn">Linear</span>(<span class="num">256</span>, <span class="num">10</span>)
+        )</code>
+            </div>
+            <a href="#" class="learn-more">Approfondisci →</a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         APPLICATIONS (Bento Grid)
+         ============================================================ -->
+    <section id="applications" class="section" aria-labelledby="apps-title">
+      <div class="container">
+        <span class="section-label">Impatto</span>
+        <h2 class="section-title" id="apps-title">Applicazioni nel Mondo Reale</h2>
+
+        <div class="bento-grid">
+
+          <article class="bento-card bento-card--large" data-accent="indigo">
+            <div class="bento-overlay"></div>
+            <div class="bento-content">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="6" width="28" height="20" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 14l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <h3>Computer Vision</h3>
+              <p>Riconoscimento immagini, object detection e segmentazione semantica alimentano veicoli autonomi, diagnostica medica e sorveglianza intelligente.</p>
+              <span class="stat-badge">+340% crescita annua</span>
+            </div>
+          </article>
+
+          <article class="bento-card" data-accent="violet">
+            <div class="bento-overlay"></div>
+            <div class="bento-content">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4 24l6-8 5 4 7-10 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <h3>NLP</h3>
+              <p>Traduzione automatica, chatbot e analisi del sentiment trasformano la comunicazione globale.</p>
+            </div>
+          </article>
+
+          <article class="bento-card" data-accent="pink">
+            <div class="bento-overlay"></div>
+            <div class="bento-content">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="2"/><path d="M16 8v8l6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <h3>Time Series</h3>
+              <p>Previsione finanziaria, monitoraggio IoT e forecast meteorologici con modelli sequenziali.</p>
+            </div>
+          </article>
+
+          <article class="bento-card" data-accent="emerald">
+            <div class="bento-overlay"></div>
+            <div class="bento-content">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 4l12 7v10l-12 7L4 21V11l12-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="16" cy="16" r="4" fill="currentColor" opacity="0.3"/></svg>
+              <h3>Robotica</h3>
+              <p>Manipolazione, navigazione autonoma e controllo motorio con reinforcement learning.</p>
+            </div>
+          </article>
+
+          <article class="bento-card bento-card--large bento-card--animated" data-accent="cyan">
+            <div class="bento-overlay"></div>
+            <div class="bento-content">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M10 28V18m6 10V12m6 16V8m6 20V4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+              <h3>Generative AI</h3>
+              <p>Da GPT-4 a Stable Diffusion, i modelli generativi creano testo, immagini, codice e musica con qualità senza precedenti, ridefinendo creatività e produttività.</p>
+              <span class="stat-badge">$200B mercato entro 2030</span>
+            </div>
+          </article>
+
+          <article class="bento-card" data-accent="amber">
+            <div class="bento-overlay"></div>
+            <div class="bento-content">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 4C9.4 4 4 9.4 4 16s5.4 12 12 12 12-5.4 12-12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="4" stroke="currentColor" stroke-width="2"/><path d="M20 12l8-8m0 0h-6m6 0v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <h3>Healthcare</h3>
+              <p>Diagnosi assistita, drug discovery e medicina personalizzata salvano vite ogni giorno.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         STATS
+         ============================================================ -->
+    <section id="stats" class="section" aria-labelledby="stats-title">
+      <div class="container">
+        <span class="section-label">Numeri</span>
+        <h2 class="section-title" id="stats-title">Il ML in Cifre</h2>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-number" id="stat-params">0</span>
+            <span class="stat-desc">Parametri nel più grande LLM</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="stat-perf">0%</span>
+            <span class="stat-desc">Aziende Fortune 500 con AI</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="stat-acc">0%</span>
+            <span class="stat-desc">Accuracy su ImageNet SOTA</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="stat-market">$0B</span>
+            <span class="stat-desc">Mercato AI stimato 2030</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TOOLS MARQUEE
+         ============================================================ -->
+    <section id="tools" class="section" aria-labelledby="tools-title">
+      <div class="container">
+        <span class="section-label">Ecosistema</span>
+        <h2 class="section-title" id="tools-title">Strumenti & Framework</h2>
+      </div>
+
+      <div class="marquee-wrapper" aria-label="Strumenti ML in scorrimento">
+        <!-- Row 1: left-to-right -->
+        <div class="marquee-track marquee-track--left">
+          <span class="tool-pill">🔥 PyTorch</span>
+          <span class="tool-pill">🧠 TensorFlow</span>
+          <span class="tool-pill">🐍 Scikit-learn</span>
+          <span class="tool-pill">🤗 Hugging Face</span>
+          <span class="tool-pill">⚡ JAX</span>
+          <span class="tool-pill">🐼 Pandas</span>
+          <span class="tool-pill">📊 NumPy</span>
+          <span class="tool-pill">📈 Matplotlib</span>
+          <span class="tool-pill">🔬 Keras</span>
+          <span class="tool-pill">🚀 ONNX</span>
+          <span class="tool-pill">☁️ AWS SageMaker</span>
+          <span class="tool-pill">🌊 MLflow</span>
+          <!-- Duplicated for seamless loop -->
+          <span class="tool-pill">🔥 PyTorch</span>
+          <span class="tool-pill">🧠 TensorFlow</span>
+          <span class="tool-pill">🐍 Scikit-learn</span>
+          <span class="tool-pill">🤗 Hugging Face</span>
+          <span class="tool-pill">⚡ JAX</span>
+          <span class="tool-pill">🐼 Pandas</span>
+          <span class="tool-pill">📊 NumPy</span>
+          <span class="tool-pill">📈 Matplotlib</span>
+          <span class="tool-pill">🔬 Keras</span>
+          <span class="tool-pill">🚀 ONNX</span>
+          <span class="tool-pill">☁️ AWS SageMaker</span>
+          <span class="tool-pill">🌊 MLflow</span>
+        </div>
+
+        <!-- Row 2: right-to-left -->
+        <div class="marquee-track marquee-track--right">
+          <span class="tool-pill">🗂️ DVC</span>
+          <span class="tool-pill">📦 Docker</span>
+          <span class="tool-pill">☸️ Kubernetes</span>
+          <span class="tool-pill">📓 Jupyter</span>
+          <span class="tool-pill">🔧 Weights & Biases</span>
+          <span class="tool-pill">⚙️ Ray</span>
+          <span class="tool-pill">🏗️ Apache Spark</span>
+          <span class="tool-pill">🎯 XGBoost</span>
+          <span class="tool-pill">🔮 LangChain</span>
+          <span class="tool-pill">📝 OpenAI API</span>
+          <span class="tool-pill">🗃️ Pinecone</span>
+          <span class="tool-pill">💡 LightGBM</span>
+          <!-- Duplicated for seamless loop -->
+          <span class="tool-pill">🗂️ DVC</span>
+          <span class="tool-pill">📦 Docker</span>
+          <span class="tool-pill">☸️ Kubernetes</span>
+          <span class="tool-pill">📓 Jupyter</span>
+          <span class="tool-pill">🔧 Weights & Biases</span>
+          <span class="tool-pill">⚙️ Ray</span>
+          <span class="tool-pill">🏗️ Apache Spark</span>
+          <span class="tool-pill">🎯 XGBoost</span>
+          <span class="tool-pill">🔮 LangChain</span>
+          <span class="tool-pill">📝 OpenAI API</span>
+          <span class="tool-pill">🗃️ Pinecone</span>
+          <span class="tool-pill">💡 LightGBM</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TIMELINE
+         ============================================================ -->
+    <section id="timeline" class="section" aria-labelledby="timeline-title">
+      <div class="container">
+        <span class="section-label">Storia</span>
+        <h2 class="section-title" id="timeline-title">L'Evoluzione del ML</h2>
+
+        <div class="timeline-container">
+          <svg id="timeline-svg" aria-hidden="true" preserveAspectRatio="none">
+            <path d="M20 0 L20 100%" stroke="#6366F1" stroke-width="2" fill="none"/>
+          </svg>
+
+          <!-- Step 1 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card card card--glass">
+              <span class="step-number">1950</span>
+              <h3>Il Test di Turing</h3>
+              <p>Alan Turing pubblica "Computing Machinery and Intelligence", proponendo il celebre test per misurare l'intelligenza delle macchine e ponendo le basi concettuali dell'AI.</p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card card card--glass">
+              <span class="step-number">1986</span>
+              <h3>Backpropagation</h3>
+              <p>Rumelhart, Hinton e Williams formalizzano l'algoritmo di backpropagation, rendendo possibile l'addestramento efficiente delle reti neurali multi-strato.</p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card card card--glass">
+              <span class="step-number">2012</span>
+              <h3>AlexNet & Deep Learning</h3>
+              <p>AlexNet vince ImageNet con un margine enorme, dimostrando la potenza delle CNN profonde con GPU. Inizia l'era del deep learning.</p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card card card--glass">
+              <span class="step-number">2017</span>
+              <h3>Attention Is All You Need</h3>
+              <p>Vaswani et al. introducono il Transformer, rivoluzionando NLP e poi vision, audio e multimodale. Nasce l'era dei foundation model.</p>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="timeline-step">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card card card--glass">
+              <span class="step-number">2023</span>
+              <h3>L'Era dei LLM</h3>
+              <p>GPT-4, Claude, Gemini e modelli open-source come LLaMA democratizzano l'AI generativa. Il ML diventa mainstream in ogni settore industriale.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CTA / NEWSLETTER
+         ============================================================ -->
+    <section id="cta" class="section" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta-content">
+          <span class="section-label">Resta Aggiornato</span>
+          <h2 class="section-title" id="cta-title">Unisciti alla Community</h2>
+          <p class="cta-desc">Ricevi ogni settimana i migliori articoli, paper e tutorial sul Machine Learning direttamente nella tua inbox.</p>
+
+          <form id="newsletter-form" aria-label="Iscrizione newsletter">
+            <input type="email" placeholder="la-tua@email.com" required aria-label="Indirizzo email">
+            <button type="submit" class="btn btn-primary">Iscriviti</button>
+          </form>
+          <p class="success-msg" aria-live="polite">Iscrizione completata! Controlla la tua email.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand">
+          <a href="#hero" class="nav-logo footer-logo" aria-label="ML Universe Home">
+            <span class="logo-icon">
+              <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                <circle cx="14" cy="14" r="12" stroke="url(#logo-grad-f)" stroke-width="2"/>
+                <circle cx="14" cy="8" r="2.5" fill="#6366F1"/>
+                <circle cx="8" cy="18" r="2.5" fill="#8B5CF6"/>
+                <circle cx="20" cy="18" r="2.5" fill="#EC4899"/>
+                <defs><linearGradient id="logo-grad-f" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#6366F1"/><stop offset="1" stop-color="#EC4899"/></linearGradient></defs>
+              </svg>
+            </span>
+            ML Universe
+          </a>
+          <p>Una esplorazione visiva e interattiva del mondo del Machine Learning.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sezioni</h4>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#algorithms">Algoritmi</a></li>
+            <li><a href="#featured">In Evidenza</a></li>
+            <li><a href="#applications">Applicazioni</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Risorse</h4>
+          <ul>
+            <li><a href="#stats">Numeri</a></li>
+            <li><a href="#tools">Strumenti</a></li>
+            <li><a href="#timeline">Timeline</a></li>
+            <li><a href="#cta">Newsletter</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Community</h4>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0112 6.8c.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.16.59.67.5A10.02 10.02 0 0022 12c0-5.52-4.48-10-10-10z" fill="currentColor"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter / X">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 ML Universe. Progetto educativo open-source.</p>
+        <p class="footer-tech">Built with Three.js · GSAP · Lenis · Splitting.js</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+
+  <!-- App Entry Point -->
+  <script type="module" src="js/main.js"></script>
+
+</body>
+</html>

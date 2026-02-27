@@ -1,0 +1,141 @@
+/* ================================================================
+   RESPONSIVE — Mobile-first media queries
+   ================================================================ */
+
+/* ── iPhone SE — 375px ──────────────────────────────────────── */
+@media (min-width: 375px) {
+  .stats-bar {
+    flex-wrap: nowrap;
+  }
+  .algo-card {
+    flex: 0 0 300px;
+  }
+}
+
+/* ── iPhone 14 Pro — 390px ──────────────────────────────────── */
+@media (min-width: 390px) {
+  .hero-subtitle {
+    font-size: var(--text-xl);
+  }
+}
+
+/* ── iPhone 14 Plus — 428px ─────────────────────────────────── */
+@media (min-width: 428px) {
+  .algo-card {
+    flex: 0 0 320px;
+  }
+}
+
+/* ── Tablet — 768px ─────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--sp-8);
+  }
+
+  /* Navbar */
+  .nav-links {
+    display: flex;
+  }
+  .hamburger {
+    display: none;
+  }
+
+  /* About grid */
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Bento grid  */
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .bento-card--large {
+    grid-column: span 2;
+  }
+
+  /* Stats */
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+  .footer-brand {
+    grid-column: auto;
+  }
+
+  /* Timeline — centered */
+  .timeline-container {
+    padding-left: 0;
+  }
+  #timeline-svg {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .timeline-step {
+    width: 50%;
+    margin-left: 0;
+  }
+  .timeline-step:nth-child(odd) {
+    margin-left: 0;
+    padding-right: var(--sp-8);
+    text-align: right;
+    justify-content: flex-end;
+  }
+  .timeline-step:nth-child(odd) .timeline-dot {
+    left: auto;
+    right: -40px;
+  }
+  .timeline-step:nth-child(odd) .timeline-tags {
+    justify-content: flex-end;
+  }
+  .timeline-step:nth-child(even) {
+    margin-left: 50%;
+    padding-left: var(--sp-8);
+  }
+  .timeline-step:nth-child(even) .timeline-dot {
+    left: -40px;
+  }
+
+  /* Swipe hint hidden on tablet+ */
+  .swipe-hint {
+    display: none;
+  }
+}
+
+/* ── Desktop — 1024px ───────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .featured-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .algo-card {
+    flex: 0 0 340px;
+  }
+
+  .stat-item {
+    font-size: var(--text-base);
+  }
+}
+
+/* ── Wide — 1440px ──────────────────────────────────────────── */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+/* ── Safe area for modern iPhones ───────────────────────────── */
+@supports (padding: env(safe-area-inset-top)) {
+  .site-header {
+    padding-top: env(safe-area-inset-top);
+  }
+  .site-footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .hero-content {
+    padding-top: env(safe-area-inset-top);
+  }
+}

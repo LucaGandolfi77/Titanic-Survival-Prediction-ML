@@ -1,0 +1,85 @@
+/* ================================================================
+   REAL-WORLD APPLICATIONS — Bento Grid
+   ================================================================ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+}
+
+.bento-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--sp-8);
+  opacity: 0;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--_card-gradient, linear-gradient(135deg, var(--bg-card), var(--bg-secondary)));
+  z-index: 0;
+}
+
+.bento-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
+  z-index: 1;
+}
+
+.bento-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.bento-card h3 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--sp-2);
+  transition: transform var(--transition-base);
+}
+
+.bento-card:hover h3 {
+  transform: translateY(-2px);
+}
+
+.bento-card .app-desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--accent-green);
+  margin-top: var(--sp-3);
+  width: fit-content;
+}
+
+/* Animated gradient variant */
+.bento-card--animated::before {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease-in-out infinite;
+}

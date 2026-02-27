@@ -1,0 +1,260 @@
+/* ═══════════════════════════════════════════════════════════════
+   cards.css — Card component styles and animations
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Base card ────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  background: var(--card-white, #FFF8E7);
+  border-radius: 8px;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.25),
+    inset 0 0 0 1px rgba(0,0,0,.08);
+  cursor: default;
+  user-select: none;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── Size variants ────────────────────────────────────────────── */
+.card.hand-card {
+  width: 72px;
+  height: 108px;
+  font-size: .75rem;
+}
+
+.card.table-card {
+  width: 100px;
+  height: 150px;
+  font-size: .9rem;
+}
+
+.card.briscola-card {
+  width: 70px;
+  height: 105px;
+  font-size: .72rem;
+  transform: rotate(90deg);
+}
+
+.card.mini-card {
+  width: 40px;
+  height: 60px;
+  font-size: .5rem;
+}
+
+/* ── Face-up layout ───────────────────────────────────────────── */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+.card-corner.top-left {
+  top: 4px;
+  left: 5px;
+}
+
+.card-corner.bottom-right {
+  bottom: 4px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.card-rank {
+  font-weight: 800;
+  font-size: 1.15em;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.card-suit-sym {
+  font-size: 1em;
+}
+
+.card-center-sym {
+  font-size: 2.8em;
+  line-height: 1;
+  opacity: .85;
+}
+
+.card.table-card .card-center-sym { font-size: 3.6em; }
+.card.briscola-card .card-center-sym { font-size: 2.4em; }
+.card.mini-card .card-center-sym { font-size: 1.6em; }
+
+/* ── Suit colours ─────────────────────────────────────────────── */
+.card.suit-coppe   { color: #B22222; }
+.card.suit-denari  { color: #B8860B; }
+.card.suit-bastoni { color: #1B6B1B; }
+.card.suit-spade   { color: #283593; }
+
+/* Suit-specific border accent */
+.card.suit-coppe   { border-top: 3px solid #B22222; }
+.card.suit-denari  { border-top: 3px solid #B8860B; }
+.card.suit-bastoni { border-top: 3px solid #1B6B1B; }
+.card.suit-spade   { border-top: 3px solid #283593; }
+
+/* ── Playable hand cards ──────────────────────────────────────── */
+.card.hand-card.playable {
+  cursor: pointer;
+}
+
+.card.hand-card.playable:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.35),
+    0 0 12px rgba(212,175,55,.3);
+}
+
+.card.hand-card.playable:active {
+  transform: translateY(-4px) scale(.96);
+}
+
+/* ── Face-down (opponent & deck) ──────────────────────────────── */
+.card.face-down {
+  cursor: default;
+}
+
+.card-back {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background:
+    repeating-conic-gradient(
+      #1a237e 0% 25%, #283593 0% 50%
+    ) 50% / 10px 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-back::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 2px solid rgba(255,255,255,.15);
+  border-radius: 4px;
+}
+
+.card-back::after {
+  content: '🃏';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.5));
+}
+
+.card.mini-card .card-back::after { font-size: .9em; }
+
+/* ── Animations ───────────────────────────────────────────────── */
+
+/* Card play: slide to table */
+@keyframes card-play-host {
+  from { transform: translateY(80px) scale(.8); opacity: .6; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes card-play-guest {
+  from { transform: translateY(-80px) scale(.8); opacity: .6; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.card.anim-play-host  { animation: card-play-host  .3s ease-out forwards; }
+.card.anim-play-guest { animation: card-play-guest .3s ease-out forwards; }
+
+/* Trick win: glow and slide to winner */
+@keyframes trick-win {
+  0%   { box-shadow: 0 0 0 rgba(212,175,55,0); }
+  50%  { box-shadow: 0 0 24px rgba(212,175,55,.6); transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(.8) translateY(30px); }
+}
+
+.card.anim-trick-win {
+  animation: trick-win .6s ease-out forwards;
+}
+
+/* Card draw: fade in from deck */
+@keyframes card-draw {
+  from { opacity: 0; transform: scale(.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.card.anim-draw {
+  animation: card-draw .35s ease-out;
+}
+
+/* Card enter hand */
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(-20px) scale(.7); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+.card.anim-enter {
+  animation: card-enter .3s ease-out;
+}
+
+/* Subtle idle float for briscola display */
+@keyframes briscola-float {
+  0%, 100% { transform: rotate(90deg) translateY(0); }
+  50%      { transform: rotate(90deg) translateY(-3px); }
+}
+
+.card.briscola-card {
+  animation: briscola-float 3s ease-in-out infinite;
+}
+
+/* Selected highlight */
+.card.hand-card.selected {
+  transform: translateY(-14px);
+  box-shadow:
+    0 0 0 3px var(--accent-gold, #D4AF37),
+    0 8px 20px rgba(0,0,0,.4);
+}
+
+/* ── Opponent hand (back of card in a row) ────────────────────── */
+.opponent-hand {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.opponent-hand .card {
+  width: 50px;
+  height: 75px;
+}
+
+.opponent-hand .card .card-back::after {
+  font-size: 1em;
+}
+
+/* ── Responsive adjustments ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .card.hand-card    { width: 60px; height: 90px; font-size: .65rem; }
+  .card.table-card   { width: 80px; height: 120px; font-size: .78rem; }
+  .card.briscola-card{ width: 55px; height: 82px; font-size: .6rem; }
+
+  .card-center-sym { font-size: 2.2em; }
+  .card.table-card .card-center-sym { font-size: 2.8em; }
+
+  .opponent-hand .card { width: 42px; height: 63px; }
+}
+
+@media (max-width: 480px) {
+  .card.hand-card    { width: 52px; height: 78px; font-size: .58rem; }
+  .card.table-card   { width: 65px; height: 100px; font-size: .68rem; }
+  .card.briscola-card{ width: 48px; height: 72px; }
+  .card-center-sym { font-size: 1.8em; }
+
+  .opponent-hand .card { width: 36px; height: 54px; }
+}

@@ -64,3 +64,13 @@ presets:
     next_page: "a.next, a.next-page, a[rel='next'], .pagination .next a"
     pagination_type: "query_param"
     page_param: "page"
+
+  toscrape:
+    product_container: "article.product_pod"
+    name: "h3 a"
+    price: "p.price_color"
+    description: "p.star-rating"
+    image: "div.image_container img"
+    next_page: "li.next a"
+    pagination_type: "path"
+    page_param: "page"

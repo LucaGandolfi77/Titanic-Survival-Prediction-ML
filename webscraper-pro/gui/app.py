@@ -75,6 +75,7 @@ class WebScraperApp:
         self._url_var = tk.StringVar()
         self._max_pages_var = tk.IntVar(value=50)
         self._download_images_var = tk.BooleanVar(value=True)
+        self._use_browser_var = tk.BooleanVar(value=False)
         self._excel_path: str = ""
 
         self._build_ui()
@@ -102,6 +103,12 @@ class WebScraperApp:
             frm_url, text="Download images", variable=self._download_images_var
         )
         self._img_check.grid(row=1, column=2, sticky=tk.W, padx=(12, 0), pady=(4, 0))
+
+        self._browser_check = ttk.Checkbutton(
+            frm_url, text="Use browser (for protected sites)",
+            variable=self._use_browser_var,
+        )
+        self._browser_check.grid(row=2, column=1, columnspan=2, sticky=tk.W, padx=(4, 0), pady=(4, 0))
 
         frm_url.columnconfigure(1, weight=1)
 
@@ -221,6 +228,7 @@ class WebScraperApp:
             scraper = ProductScraper(
                 config_path=str(config_path),
                 stop_event=self._stop_event,
+                use_browser=self._use_browser_var.get(),
             )
             # Override max_pages from GUI
             scraper._max_pages = max_pages

@@ -1,0 +1,17 @@
+{
+  "name": "briscola-signaling",
+  "version": "1.0.0",
+  "description": "Lightweight WebSocket signaling server for Briscola P2P",
+  "main": "signaling-server.js",
+  "scripts": {
+    "start": "node signaling-server.js",
+    "dev": "nodemon signaling-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "license": "MIT"
+}

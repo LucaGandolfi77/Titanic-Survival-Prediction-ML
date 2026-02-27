@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Briscola P2P — Gioca Online</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🃏</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+</head>
+<body>
+  <div class="landing-container">
+    <!--  Header  -->
+    <header class="landing-header">
+      <h1 class="logo">🃏 Briscola <span class="accent">P2P</span></h1>
+      <p class="subtitle">Gioca a Briscola direttamente nel browser, senza server di gioco!</p>
+    </header>
+
+    <!--  Lobby card  -->
+    <main class="lobby-card glass-panel">
+
+      <!--  ── Main section (create / join) ── -->
+      <section id="section-main" class="lobby-section">
+        <div class="input-group">
+          <label for="player-name" class="input-label">Il tuo nome</label>
+          <input type="text" id="player-name" class="input-field"
+                 placeholder="Giocatore" maxlength="20" autocomplete="off" />
+        </div>
+
+        <div class="actions-row">
+          <button id="btn-create" class="btn btn-primary btn-lg">
+            🎲 Crea Stanza
+          </button>
+
+          <div class="divider"><span>oppure</span></div>
+
+          <div class="input-group">
+            <label for="join-code" class="input-label">Codice stanza</label>
+            <input type="text" id="join-code" class="input-field code-input"
+                   placeholder="ABC123" maxlength="6" autocomplete="off"
+                   spellcheck="false" />
+          </div>
+
+          <button id="btn-join" class="btn btn-secondary btn-lg">
+            🚪 Entra
+          </button>
+        </div>
+      </section>
+
+      <!--  ── Join section (not used separately, kept for URL auto-fill) ── -->
+      <section id="section-join" class="lobby-section hidden">
+        <div class="input-group">
+          <label for="player-name" class="input-label">Il tuo nome</label>
+          <input type="text" class="input-field" placeholder="Giocatore"
+                 maxlength="20" autocomplete="off" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Codice stanza</label>
+          <input type="text" class="input-field code-input"
+                 placeholder="ABC123" maxlength="6" autocomplete="off" />
+        </div>
+        <button id="btn-join-alt" class="btn btn-primary btn-lg">🚪 Entra</button>
+        <button class="btn btn-secondary btn-sm" onclick="location.reload()">← Indietro</button>
+      </section>
+
+      <!--  ── Waiting section ── -->
+      <section id="section-waiting" class="lobby-section hidden">
+        <p class="waiting-label">Codice stanza:</p>
+        <p id="waiting-code" class="waiting-code">------</p>
+
+        <div class="share-actions">
+          <button id="btn-copy-link" class="btn btn-secondary btn-sm">🔗 Copia Link</button>
+          <button id="btn-copy-code" class="btn btn-secondary btn-sm">📋 Copia Codice</button>
+        </div>
+
+        <div id="qr-code" class="qr-container"></div>
+
+        <p class="waiting-hint">Condividi il codice o il link con un amico.<br />
+        La partita inizia appena si connette.</p>
+
+        <button id="btn-back" class="btn btn-secondary btn-sm">← Annulla</button>
+      </section>
+
+      <!--  Status message  -->
+      <p id="lobby-status" class="lobby-status"></p>
+    </main>
+
+    <!--  Footer  -->
+    <footer class="landing-footer">
+      <p>WebRTC peer-to-peer · Nessun dato salvato su server · <a href="https://it.wikipedia.org/wiki/Briscola" target="_blank" rel="noopener">Regole</a></p>
+    </footer>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

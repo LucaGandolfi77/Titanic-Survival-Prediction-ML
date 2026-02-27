@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Briscola P2P — Partita</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🃏</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/game.css" />
+  <link rel="stylesheet" href="css/cards.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Header
+       ═══════════════════════════════════════════════════════════ -->
+  <header class="game-header">
+    <span class="logo">🃏 Briscola</span>
+
+    <div class="header-info">
+      <span class="room-code-badge" id="room-code-display">------</span>
+      <span class="connection-badge connecting" id="connection-status">🟡 Connessione…</span>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Game Table
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="game-table">
+
+    <!-- Turn indicator & countdown -->
+    <div id="turn-indicator" class="turn-indicator opponent-turn">In attesa…</div>
+    <div id="countdown"></div>
+
+    <!-- ── Opponent area (top) ──────────────────────────────── -->
+    <div id="opponent-area" class="player-area">
+      <div class="player-info">
+        <span class="player-name" id="opponent-name-display">Avversario</span>
+        <span class="player-score-label">Punti</span>
+      </div>
+      <div id="opponent-hand" class="opponent-hand">
+        <!-- face-down cards rendered by ui.js -->
+      </div>
+      <div class="score-value" id="opponent-score">0</div>
+    </div>
+
+    <!-- ── Center table ────────────────────────────────────── -->
+    <div class="table-center">
+
+      <!-- Left side: briscola + deck -->
+      <div class="table-side">
+        <div id="briscola-card"></div>
+        <span id="briscola-label" class="briscola-label"></span>
+        <div id="deck-area"></div>
+      </div>
+
+      <!-- Played cards -->
+      <div id="table-cards" class="table-cards">
+        <div id="table-card-opponent" class="table-card-slot"></div>
+        <div id="table-card-mine" class="table-card-slot"></div>
+      </div>
+
+      <!-- Right side: trick history -->
+      <div class="trick-history">
+        <div id="trick-history-panel" class="collapsed">
+          <ul id="trick-history-list"></ul>
+        </div>
+        <button id="trick-history-toggle">📜 Ultime prese</button>
+      </div>
+    </div>
+
+    <!-- ── My area (bottom) ────────────────────────────────── -->
+    <div id="my-area" class="player-area">
+      <div class="player-info">
+        <span class="player-name" id="my-name-display">Tu</span>
+        <span class="player-score-label">Punti</span>
+      </div>
+      <div id="my-hand" class="hand-container">
+        <!-- cards rendered by ui.js -->
+      </div>
+      <div class="score-value" id="my-score">0</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       Chat & footer
+       ═══════════════════════════════════════════════════════════ -->
+  <ul id="chat-messages"></ul>
+
+  <form id="chat-form" class="game-footer" autocomplete="off">
+    <input type="text" id="chat-input" maxlength="200"
+           placeholder="Scrivi un messaggio…" />
+    <button type="submit" class="btn-send">Invia</button>
+  </form>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>

@@ -54,3 +54,506 @@
 2026-02-27 14:34:57 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
 2026-02-27 14:34:57 │ INFO     │ core.scraper │ scrape_all_pages:386 │ Scraping complete: 0 products across 1 pages
 2026-02-27 14:34:57 │ DEBUG    │ core.scraper │ close:407 │ HTTP session closed
+2026-02-27 14:42:02 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 14:42:02 │ INFO     │ core.scraper │ scrape_all_pages:368 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 14:59:45 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-1/test_creates_file0/test.xlsx (3 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-1/test_products_sheet_has_header0/test.xlsx (2 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-1/test_products_count_matches0/test.xlsx (4 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-1/test_summary_sheet_exists0/test.xlsx (1 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-1/test_summary_contains_source_u0/test.xlsx (1 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-1/test_empty_products0/empty.xlsx (0 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-1/test_creates_file1/test.csv (3 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-1/test_row_count0/test.csv (5 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-1/test_header_columns0/test.csv (1 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-1/test_values_correct0/test.csv (2 products)
+2026-02-27 14:59:46 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-1/test_empty_products1/empty.csv (0 products)
+2026-02-27 14:59:46 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'captcha'
+2026-02-27 14:59:46 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'access denied'
+2026-02-27 14:59:46 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: UA3
+2026-02-27 14:59:46 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 14:59:46 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 14:59:46 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://shop.com/page/2
+2026-02-27 14:59:46 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 14:59:46 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /tmp/pytest-of-codespace/pytest-1/test_extracts_two_products0/config.yaml
+2026-02-27 14:59:46 │ INFO     │ core.scraper │ parse_products:282 │ Parsed 2 products from page
+2026-02-27 14:59:46 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /tmp/pytest-of-codespace/pytest-1/test_first_product_fields0/config.yaml
+2026-02-27 14:59:46 │ INFO     │ core.scraper │ parse_products:282 │ Parsed 2 products from page
+2026-02-27 14:59:46 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /tmp/pytest-of-codespace/pytest-1/test_missing_fields_default_to0/config.yaml
+2026-02-27 14:59:46 │ INFO     │ core.scraper │ parse_products:282 │ Parsed 2 products from page
+2026-02-27 15:00:02 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:00:02 │ INFO     │ core.scraper │ scrape_all_pages:381 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:00:02 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, l
+2026-02-27 15:00:02 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:00:02 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 384
+2026-02-27 15:00:02 │ INFO     │ core.scraper │ _is_allowed:167 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:00:02 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:00:02 │ DEBUG    │ core.scraper │ fetch_page:211 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:00:02 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:00:02 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 419
+2026-02-27 15:00:02 │ ERROR    │ core.scraper │ fetch_page:221 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:00:02 │ WARNING  │ core.scraper │ scrape_all_pages:385 │ Failed to fetch page 1 – stopping
+2026-02-27 15:00:02 │ INFO     │ core.scraper │ scrape_all_pages:399 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:00:02 │ DEBUG    │ core.scraper │ close:420 │ HTTP session closed
+2026-02-27 15:03:20 │ DEBUG    │ core.browser_fetcher │ <module>:35 │ Playwright not installed — browser fetcher unavailable
+2026-02-27 15:03:20 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-2/test_creates_file0/test.xlsx (3 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-2/test_products_sheet_has_header0/test.xlsx (2 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-2/test_products_count_matches0/test.xlsx (4 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-2/test_summary_sheet_exists0/test.xlsx (1 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-2/test_summary_contains_source_u0/test.xlsx (1 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-2/test_empty_products0/empty.xlsx (0 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-2/test_creates_file1/test.csv (3 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-2/test_row_count0/test.csv (5 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-2/test_header_columns0/test.csv (1 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-2/test_values_correct0/test.csv (2 products)
+2026-02-27 15:03:20 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-2/test_empty_products1/empty.csv (0 products)
+2026-02-27 15:03:20 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'captcha'
+2026-02-27 15:03:20 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'access denied'
+2026-02-27 15:03:20 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: UA2
+2026-02-27 15:03:20 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:03:20 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:03:20 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://shop.com/page/2
+2026-02-27 15:03:20 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 15:03:20 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /tmp/pytest-of-codespace/pytest-2/test_extracts_two_products0/config.yaml
+2026-02-27 15:03:20 │ INFO     │ core.scraper │ parse_products:311 │ Parsed 2 products from page
+2026-02-27 15:03:20 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /tmp/pytest-of-codespace/pytest-2/test_first_product_fields0/config.yaml
+2026-02-27 15:03:20 │ INFO     │ core.scraper │ parse_products:311 │ Parsed 2 products from page
+2026-02-27 15:03:20 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /tmp/pytest-of-codespace/pytest-2/test_missing_fields_default_to0/config.yaml
+2026-02-27 15:03:20 │ INFO     │ core.scraper │ parse_products:311 │ Parsed 2 products from page
+2026-02-27 15:06:23 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:06:23 │ INFO     │ core.scraper │ __init__:112 │ Browser mode enabled (Playwright)
+2026-02-27 15:06:23 │ INFO     │ core.scraper │ scrape_all_pages:410 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:06:23 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+2026-02-27 15:06:23 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:06:23 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 384
+2026-02-27 15:06:23 │ INFO     │ core.scraper │ _is_allowed:183 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:06:23 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+2026-02-27 15:06:23 │ DEBUG    │ core.scraper │ fetch_page:227 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:06:23 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:06:23 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 419
+2026-02-27 15:06:23 │ WARNING  │ core.scraper │ fetch_page:237 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:06:23 │ INFO     │ core.scraper │ fetch_page:240 │ Retrying with headless browser …
+2026-02-27 15:06:23 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:06:24 │ ERROR    │ core.browser_fetcher │ fetch:113 │ Browser fetch failed for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts: BrowserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-z0vlzy --remote-debugging-pipe --no-startup-window
+<launched> pid=40920
+[pid=40920][err] /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libatk-1.0.so.0: cannot open shared object file: No such file or directory
+Call log:
+  - <launching> /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-z0vlzy --remote-debugging-pipe --no-startup-window
+  - <launched> pid=40920
+  - [pid=40920][err] /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libatk-1.0.so.0: cannot open shared object file: No such file or directory
+  - [pid=40920] <gracefully close start>
+  - [pid=40920] <kill>
+  - [pid=40920] <will force kill>
+  - [pid=40920] <process did exit: exitCode=127, signal=null>
+  - [pid=40920] starting temporary directories cleanup
+  - [pid=40920] finished temporary directories cleanup
+  - [pid=40920] <gracefully close end>
+
+2026-02-27 15:06:24 │ WARNING  │ core.scraper │ scrape_all_pages:414 │ Failed to fetch page 1 – stopping
+2026-02-27 15:06:24 │ INFO     │ core.scraper │ scrape_all_pages:428 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:06:24 │ DEBUG    │ core.browser_fetcher │ close:125 │ Playwright stopped
+2026-02-27 15:06:24 │ DEBUG    │ core.scraper │ close:472 │ HTTP session closed
+2026-02-27 15:07:09 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:07:09 │ INFO     │ core.scraper │ __init__:112 │ Browser mode enabled (Playwright)
+2026-02-27 15:07:09 │ INFO     │ core.scraper │ scrape_all_pages:410 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:07:09 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+2026-02-27 15:07:09 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:07:09 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 382
+2026-02-27 15:07:09 │ INFO     │ core.scraper │ _is_allowed:183 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:07:09 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:07:09 │ DEBUG    │ core.scraper │ fetch_page:227 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:07:09 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:07:09 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 417
+2026-02-27 15:07:09 │ WARNING  │ core.scraper │ fetch_page:237 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:07:09 │ INFO     │ core.scraper │ fetch_page:240 │ Retrying with headless browser …
+2026-02-27 15:07:09 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:07:10 │ ERROR    │ core.browser_fetcher │ fetch:113 │ Browser fetch failed for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts: BrowserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-AVxQYX --remote-debugging-pipe --no-startup-window
+<launched> pid=41928
+[pid=41928][err] /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libXcomposite.so.1: cannot open shared object file: No such file or directory
+Call log:
+  - <launching> /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-AVxQYX --remote-debugging-pipe --no-startup-window
+  - <launched> pid=41928
+  - [pid=41928][err] /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libXcomposite.so.1: cannot open shared object file: No such file or directory
+  - [pid=41928] <gracefully close start>
+  - [pid=41928] <kill>
+  - [pid=41928] <will force kill>
+  - [pid=41928] <process did exit: exitCode=127, signal=null>
+  - [pid=41928] starting temporary directories cleanup
+  - [pid=41928] finished temporary directories cleanup
+  - [pid=41928] <gracefully close end>
+
+2026-02-27 15:07:10 │ WARNING  │ core.scraper │ scrape_all_pages:414 │ Failed to fetch page 1 – stopping
+2026-02-27 15:07:10 │ INFO     │ core.scraper │ scrape_all_pages:428 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:07:10 │ DEBUG    │ core.browser_fetcher │ close:125 │ Playwright stopped
+2026-02-27 15:07:10 │ DEBUG    │ core.scraper │ close:472 │ HTTP session closed
+2026-02-27 15:07:46 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:07:46 │ INFO     │ core.scraper │ __init__:112 │ Browser mode enabled (Playwright)
+2026-02-27 15:07:46 │ INFO     │ core.scraper │ scrape_all_pages:410 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:07:46 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, l
+2026-02-27 15:07:46 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:07:46 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 382
+2026-02-27 15:07:46 │ INFO     │ core.scraper │ _is_allowed:183 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:07:46 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:07:46 │ DEBUG    │ core.scraper │ fetch_page:227 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:07:46 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:07:46 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 417
+2026-02-27 15:07:46 │ WARNING  │ core.scraper │ fetch_page:237 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:07:46 │ INFO     │ core.scraper │ fetch_page:240 │ Retrying with headless browser …
+2026-02-27 15:07:46 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:07:47 │ ERROR    │ core.browser_fetcher │ fetch:113 │ Browser fetch failed for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts: BrowserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-QCRR2B --remote-debugging-pipe --no-startup-window
+<launched> pid=42671
+[pid=42671][err] /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libXcomposite.so.1: cannot open shared object file: No such file or directory
+Call log:
+  - <launching> /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-QCRR2B --remote-debugging-pipe --no-startup-window
+  - <launched> pid=42671
+  - [pid=42671][err] /home/codespace/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libXcomposite.so.1: cannot open shared object file: No such file or directory
+  - [pid=42671] <gracefully close start>
+  - [pid=42671] <kill>
+  - [pid=42671] <will force kill>
+  - [pid=42671] exception while trying to kill process: Error: kill ESRCH
+  - [pid=42671] <process did exit: exitCode=127, signal=null>
+  - [pid=42671] starting temporary directories cleanup
+  - [pid=42671] finished temporary directories cleanup
+  - [pid=42671] <gracefully close end>
+
+2026-02-27 15:07:47 │ WARNING  │ core.scraper │ scrape_all_pages:414 │ Failed to fetch page 1 – stopping
+2026-02-27 15:07:47 │ INFO     │ core.scraper │ scrape_all_pages:428 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:07:47 │ DEBUG    │ core.browser_fetcher │ close:125 │ Playwright stopped
+2026-02-27 15:07:47 │ DEBUG    │ core.scraper │ close:472 │ HTTP session closed
+2026-02-27 15:08:12 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:08:12 │ INFO     │ core.scraper │ __init__:112 │ Browser mode enabled (Playwright)
+2026-02-27 15:08:12 │ INFO     │ core.scraper │ scrape_all_pages:410 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:08:12 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, l
+2026-02-27 15:08:12 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:08:12 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 384
+2026-02-27 15:08:12 │ INFO     │ core.scraper │ _is_allowed:183 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:08:12 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+2026-02-27 15:08:12 │ DEBUG    │ core.scraper │ fetch_page:227 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:08:12 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:08:12 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 419
+2026-02-27 15:08:12 │ WARNING  │ core.scraper │ fetch_page:237 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:08:12 │ INFO     │ core.scraper │ fetch_page:240 │ Retrying with headless browser …
+2026-02-27 15:08:12 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:08:15 │ INFO     │ core.browser_fetcher │ _ensure_browser:72 │ Playwright Chromium launched (headless=True)
+2026-02-27 15:08:15 │ DEBUG    │ core.browser_fetcher │ fetch:94 │ Browser navigating → https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:08:15 │ ERROR    │ core.browser_fetcher │ fetch:113 │ Browser fetch failed for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts: Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+Call log:
+  - navigating to "https://it.loropiana.com/it/c/uomo/polo-e-t-shirts", waiting until "networkidle"
+
+2026-02-27 15:08:15 │ WARNING  │ core.scraper │ scrape_all_pages:414 │ Failed to fetch page 1 – stopping
+2026-02-27 15:08:15 │ INFO     │ core.scraper │ scrape_all_pages:428 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:08:15 │ DEBUG    │ core.browser_fetcher │ close:125 │ Playwright stopped
+2026-02-27 15:08:15 │ DEBUG    │ core.scraper │ close:472 │ HTTP session closed
+2026-02-27 15:12:52 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:12:52 │ INFO     │ core.scraper │ __init__:112 │ Browser mode enabled (Playwright)
+2026-02-27 15:12:52 │ INFO     │ core.scraper │ scrape_all_pages:410 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:12:52 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Geck
+2026-02-27 15:12:52 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:12:52 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 382
+2026-02-27 15:12:52 │ INFO     │ core.scraper │ _is_allowed:183 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:12:52 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Geck
+2026-02-27 15:12:52 │ DEBUG    │ core.scraper │ fetch_page:227 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:12:52 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:12:53 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 417
+2026-02-27 15:12:53 │ WARNING  │ core.scraper │ fetch_page:237 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:12:53 │ INFO     │ core.scraper │ fetch_page:240 │ Retrying with headless browser …
+2026-02-27 15:12:53 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:12:56 │ INFO     │ core.browser_fetcher │ _try_launch_firefox:115 │ Launched Firefox (headless=True)
+2026-02-27 15:12:58 │ DEBUG    │ core.browser_fetcher │ fetch:183 │ Browser navigating → https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:13:02 │ WARNING  │ core.browser_fetcher │ fetch:200 │ Browser got HTTP 200 / 'Access Denied' for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (site uses aggressive bot protection)
+2026-02-27 15:13:02 │ WARNING  │ core.scraper │ scrape_all_pages:414 │ Failed to fetch page 1 – stopping
+2026-02-27 15:13:02 │ INFO     │ core.scraper │ scrape_all_pages:428 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:13:03 │ DEBUG    │ core.browser_fetcher │ close:223 │ Playwright stopped
+2026-02-27 15:13:03 │ DEBUG    │ core.scraper │ close:472 │ HTTP session closed
+2026-02-27 15:17:22 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-3/test_creates_file0/test.xlsx (3 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-3/test_products_sheet_has_header0/test.xlsx (2 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-3/test_products_count_matches0/test.xlsx (4 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-3/test_summary_sheet_exists0/test.xlsx (1 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-3/test_summary_contains_source_u0/test.xlsx (1 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-3/test_empty_products0/empty.xlsx (0 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-3/test_creates_file1/test.csv (3 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-3/test_row_count0/test.csv (5 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-3/test_header_columns0/test.csv (1 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-3/test_values_correct0/test.csv (2 products)
+2026-02-27 15:17:22 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-3/test_empty_products1/empty.csv (0 products)
+2026-02-27 15:17:22 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'captcha'
+2026-02-27 15:17:22 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'access denied'
+2026-02-27 15:17:22 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: UA3
+2026-02-27 15:17:22 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:17:22 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:17:22 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://shop.com/page/2
+2026-02-27 15:17:22 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 15:17:22 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /tmp/pytest-of-codespace/pytest-3/test_extracts_two_products0/config.yaml
+2026-02-27 15:17:22 │ INFO     │ core.scraper │ parse_products:311 │ Parsed 2 products from page
+2026-02-27 15:17:22 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /tmp/pytest-of-codespace/pytest-3/test_first_product_fields0/config.yaml
+2026-02-27 15:17:22 │ INFO     │ core.scraper │ parse_products:311 │ Parsed 2 products from page
+2026-02-27 15:17:22 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /tmp/pytest-of-codespace/pytest-3/test_missing_fields_default_to0/config.yaml
+2026-02-27 15:17:22 │ INFO     │ core.scraper │ parse_products:311 │ Parsed 2 products from page
+2026-02-27 15:17:33 │ INFO     │ core.scraper │ _load_config:142 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:17:33 │ INFO     │ core.scraper │ __init__:112 │ Browser mode enabled (Playwright)
+2026-02-27 15:17:33 │ INFO     │ core.scraper │ scrape_all_pages:410 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:17:33 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Geck
+2026-02-27 15:17:33 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:17:33 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 384
+2026-02-27 15:17:33 │ INFO     │ core.scraper │ _is_allowed:183 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:17:33 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Geck
+2026-02-27 15:17:33 │ DEBUG    │ core.scraper │ fetch_page:227 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:17:33 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:17:33 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 419
+2026-02-27 15:17:33 │ WARNING  │ core.scraper │ fetch_page:237 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:17:33 │ INFO     │ core.scraper │ fetch_page:240 │ Retrying with headless browser …
+2026-02-27 15:17:33 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:17:34 │ INFO     │ core.browser_fetcher │ _try_launch_firefox:115 │ Launched Firefox (headless=True)
+2026-02-27 15:17:35 │ DEBUG    │ core.browser_fetcher │ fetch:183 │ Browser navigating → https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:17:40 │ INFO     │ core.browser_fetcher │ fetch:202 │ Detected WAF challenge page — waiting for JS redirect …
+2026-02-27 15:17:43 │ DEBUG    │ core.browser_fetcher │ fetch:208 │ After challenge: title='Access Denied', 319 bytes
+2026-02-27 15:17:43 │ WARNING  │ core.browser_fetcher │ fetch:220 │ Browser still got 'Access Denied' for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts after challenge wait (site uses aggressive bot protection that blocks headless browsers)
+2026-02-27 15:17:43 │ WARNING  │ core.scraper │ scrape_all_pages:414 │ Failed to fetch page 1 – stopping
+2026-02-27 15:17:43 │ INFO     │ core.scraper │ scrape_all_pages:428 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:17:43 │ DEBUG    │ core.browser_fetcher │ close:264 │ Playwright stopped
+2026-02-27 15:17:43 │ DEBUG    │ core.scraper │ close:472 │ HTTP session closed
+2026-02-27 15:20:14 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:20:14 │ INFO     │ core.scraper │ scrape_all_pages:420 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:20:14 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+2026-02-27 15:20:14 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:20:14 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 382
+2026-02-27 15:20:14 │ INFO     │ core.scraper │ _is_allowed:184 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:20:14 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Geck
+2026-02-27 15:20:14 │ DEBUG    │ core.scraper │ fetch_page:228 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:20:14 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:20:14 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 417
+2026-02-27 15:20:14 │ WARNING  │ core.scraper │ fetch_page:238 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:20:14 │ INFO     │ core.scraper │ _fetch_with_tls:465 │ Retrying with TLS impersonation (curl_cffi) …
+2026-02-27 15:20:14 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=chrome)
+2026-02-27 15:20:14 │ INFO     │ core.tls_fetcher │ fetch:120 │ TLS fetch OK (chrome): HTTP 200, 2607 bytes
+2026-02-27 15:20:14 │ DEBUG    │ core.tls_fetcher │ close:151 │ TLS session closed
+2026-02-27 15:20:14 │ DEBUG    │ core.anti_bot │ random_delay:58 │ Sleeping 2.49 s …
+2026-02-27 15:20:17 │ WARNING  │ core.scraper │ parse_products:313 │ No product containers found with selector 'div.product-item'
+2026-02-27 15:20:17 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 15:20:17 │ INFO     │ core.scraper │ scrape_all_pages:438 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:20:17 │ DEBUG    │ core.scraper │ close:505 │ HTTP session closed
+2026-02-27 15:20:31 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=chrome)
+2026-02-27 15:20:31 │ INFO     │ core.tls_fetcher │ fetch:120 │ TLS fetch OK (chrome): HTTP 200, 2607 bytes
+2026-02-27 15:20:31 │ DEBUG    │ core.tls_fetcher │ close:151 │ TLS session closed
+2026-02-27 15:24:11 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-4/test_creates_file0/test.xlsx (3 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-4/test_products_sheet_has_header0/test.xlsx (2 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-4/test_products_count_matches0/test.xlsx (4 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-4/test_summary_sheet_exists0/test.xlsx (1 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-4/test_summary_contains_source_u0/test.xlsx (1 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-4/test_empty_products0/empty.xlsx (0 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-4/test_creates_file1/test.csv (3 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-4/test_row_count0/test.csv (5 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-4/test_header_columns0/test.csv (1 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-4/test_values_correct0/test.csv (2 products)
+2026-02-27 15:24:11 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-4/test_empty_products1/empty.csv (0 products)
+2026-02-27 15:24:11 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'captcha'
+2026-02-27 15:24:11 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'access denied'
+2026-02-27 15:24:11 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: UA2
+2026-02-27 15:24:11 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:24:11 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:24:11 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://shop.com/page/2
+2026-02-27 15:24:11 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 15:24:11 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /tmp/pytest-of-codespace/pytest-4/test_extracts_two_products0/config.yaml
+2026-02-27 15:24:11 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 2 products from page
+2026-02-27 15:24:11 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /tmp/pytest-of-codespace/pytest-4/test_first_product_fields0/config.yaml
+2026-02-27 15:24:11 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 2 products from page
+2026-02-27 15:24:11 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /tmp/pytest-of-codespace/pytest-4/test_missing_fields_default_to0/config.yaml
+2026-02-27 15:24:11 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 2 products from page
+2026-02-27 15:24:21 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:24:21 │ INFO     │ core.scraper │ __init__:113 │ Browser mode enabled (Playwright)
+2026-02-27 15:24:21 │ INFO     │ core.scraper │ scrape_all_pages:420 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:24:21 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+2026-02-27 15:24:21 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:24:21 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 382
+2026-02-27 15:24:21 │ INFO     │ core.scraper │ _is_allowed:184 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:24:21 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:24:21 │ DEBUG    │ core.scraper │ fetch_page:228 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:24:21 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:24:21 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 417
+2026-02-27 15:24:21 │ WARNING  │ core.scraper │ fetch_page:238 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:24:21 │ INFO     │ core.scraper │ _fetch_with_tls:465 │ Retrying with TLS impersonation (curl_cffi) …
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=chrome)
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/chrome → block page detected, trying next
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=chrome120)
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:106 │ TLS/chrome120 → 403, trying next target
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=firefox)
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/firefox → block page detected, trying next
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=safari)
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/safari → block page detected, trying next
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=edge)
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ fetch:106 │ TLS/edge → 403, trying next target
+2026-02-27 15:24:21 │ WARNING  │ core.tls_fetcher │ fetch:130 │ TLS fetch failed for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (all impersonation targets exhausted)
+2026-02-27 15:24:21 │ DEBUG    │ core.tls_fetcher │ close:156 │ TLS session closed
+2026-02-27 15:24:21 │ INFO     │ core.scraper │ fetch_page:249 │ Retrying with headless browser …
+2026-02-27 15:24:22 │ INFO     │ core.browser_fetcher │ _start_xvfb:145 │ Started Xvfb virtual display on :99
+2026-02-27 15:24:22 │ INFO     │ core.browser_fetcher │ _decide_headless:172 │ Auto-selected HEADED mode (Xvfb virtual display)
+2026-02-27 15:24:22 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:24:25 │ INFO     │ core.browser_fetcher │ _try_firefox:205 │ Launched Firefox (headless=False)
+2026-02-27 15:24:27 │ DEBUG    │ core.browser_fetcher │ fetch:267 │ Browser navigating → https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:24:31 │ INFO     │ core.browser_fetcher │ fetch:279 │ Detected WAF challenge page — waiting for auto-solve …
+2026-02-27 15:24:33 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:330 │ Manual reload (attempt 1)
+2026-02-27 15:24:38 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:330 │ Manual reload (attempt 2)
+2026-02-27 15:24:43 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:330 │ Manual reload (attempt 3)
+2026-02-27 15:24:47 │ WARNING  │ core.browser_fetcher │ fetch:285 │ Browser still blocked for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts after challenge wait (site uses aggressive bot protection)
+2026-02-27 15:24:47 │ WARNING  │ core.scraper │ scrape_all_pages:424 │ Failed to fetch page 1 – stopping
+2026-02-27 15:24:47 │ INFO     │ core.scraper │ scrape_all_pages:438 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:24:47 │ DEBUG    │ core.browser_fetcher │ close:370 │ Playwright stopped
+2026-02-27 15:24:47 │ DEBUG    │ core.browser_fetcher │ _stop_xvfb:156 │ Xvfb stopped
+2026-02-27 15:24:47 │ DEBUG    │ core.scraper │ close:505 │ HTTP session closed
+2026-02-27 15:25:28 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:25:28 │ INFO     │ core.scraper │ __init__:113 │ Browser mode enabled (Playwright)
+2026-02-27 15:25:28 │ INFO     │ core.scraper │ scrape_all_pages:420 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:25:28 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+2026-02-27 15:25:28 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:25:28 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 384
+2026-02-27 15:25:28 │ INFO     │ core.scraper │ _is_allowed:184 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:25:28 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:25:28 │ DEBUG    │ core.scraper │ fetch_page:228 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:25:28 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:25:28 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 419
+2026-02-27 15:25:28 │ WARNING  │ core.scraper │ fetch_page:238 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:25:28 │ INFO     │ core.scraper │ _fetch_with_tls:465 │ Retrying with TLS impersonation (curl_cffi) …
+2026-02-27 15:25:28 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=chrome)
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/chrome → block page detected, trying next
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=chrome120)
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:106 │ TLS/chrome120 → 403, trying next target
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=firefox)
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/firefox → block page detected, trying next
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=safari)
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/safari → block page detected, trying next
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (impersonate=edge)
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ fetch:106 │ TLS/edge → 403, trying next target
+2026-02-27 15:25:29 │ WARNING  │ core.tls_fetcher │ fetch:130 │ TLS fetch failed for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (all impersonation targets exhausted)
+2026-02-27 15:25:29 │ DEBUG    │ core.tls_fetcher │ close:156 │ TLS session closed
+2026-02-27 15:25:29 │ INFO     │ core.scraper │ fetch_page:249 │ Retrying with headless browser …
+2026-02-27 15:25:29 │ INFO     │ core.browser_fetcher │ _start_xvfb:145 │ Started Xvfb virtual display on :99
+2026-02-27 15:25:29 │ INFO     │ core.browser_fetcher │ _decide_headless:172 │ Auto-selected HEADED mode (Xvfb virtual display)
+2026-02-27 15:25:29 │ DEBUG    │ asyncio │ __init__:64 │ Using selector: EpollSelector
+2026-02-27 15:25:31 │ INFO     │ core.browser_fetcher │ _try_firefox:205 │ Launched Firefox (headless=False)
+2026-02-27 15:25:33 │ DEBUG    │ core.browser_fetcher │ fetch:267 │ Browser navigating → https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:25:37 │ INFO     │ core.browser_fetcher │ fetch:279 │ Detected WAF challenge page — waiting for auto-solve …
+2026-02-27 15:25:41 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:353 │ Manual reload (attempt 1)
+2026-02-27 15:25:48 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:353 │ Manual reload (attempt 2)
+2026-02-27 15:25:55 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:353 │ Manual reload (attempt 3)
+2026-02-27 15:26:02 │ DEBUG    │ core.browser_fetcher │ _wait_for_challenge:353 │ Manual reload (attempt 4)
+2026-02-27 15:26:05 │ WARNING  │ core.browser_fetcher │ fetch:285 │ Browser still blocked for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts after challenge wait (site uses aggressive bot protection)
+2026-02-27 15:26:05 │ WARNING  │ core.scraper │ scrape_all_pages:424 │ Failed to fetch page 1 – stopping
+2026-02-27 15:26:05 │ INFO     │ core.scraper │ scrape_all_pages:438 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:26:06 │ DEBUG    │ core.browser_fetcher │ close:393 │ Playwright stopped
+2026-02-27 15:26:06 │ DEBUG    │ core.browser_fetcher │ _stop_xvfb:156 │ Xvfb stopped
+2026-02-27 15:26:06 │ DEBUG    │ core.scraper │ close:505 │ HTTP session closed
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap.xml (impersonate=chrome)
+2026-02-27 15:26:40 │ INFO     │ core.tls_fetcher │ fetch:120 │ TLS fetch OK (chrome): HTTP 200, 1584 bytes
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap_index.xml (impersonate=chrome)
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/chrome → HTTP 404
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap_index.xml (impersonate=chrome120)
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/chrome120 → HTTP 404
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap_index.xml (impersonate=firefox)
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/firefox → HTTP 404
+2026-02-27 15:26:40 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap_index.xml (impersonate=safari)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/safari → HTTP 404
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap_index.xml (impersonate=edge)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/edge → HTTP 404
+2026-02-27 15:26:41 │ WARNING  │ core.tls_fetcher │ fetch:130 │ TLS fetch failed for https://it.loropiana.com/sitemap_index.xml (all impersonation targets exhausted)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/api/products (impersonate=chrome)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/chrome → HTTP 404
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/api/products (impersonate=chrome120)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/chrome120 → HTTP 404
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/api/products (impersonate=firefox)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/firefox → HTTP 404
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/api/products (impersonate=safari)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/safari → HTTP 404
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/api/products (impersonate=edge)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ fetch:110 │ TLS/edge → HTTP 404
+2026-02-27 15:26:41 │ WARNING  │ core.tls_fetcher │ fetch:130 │ TLS fetch failed for https://it.loropiana.com/api/products (all impersonation targets exhausted)
+2026-02-27 15:26:41 │ DEBUG    │ core.tls_fetcher │ close:156 │ TLS session closed
+2026-02-27 15:26:50 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap.xml (impersonate=chrome)
+2026-02-27 15:26:50 │ INFO     │ core.tls_fetcher │ fetch:120 │ TLS fetch OK (chrome): HTTP 200, 1584 bytes
+2026-02-27 15:26:50 │ DEBUG    │ core.tls_fetcher │ close:156 │ TLS session closed
+2026-02-27 15:27:01 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/sitemap-pages-it-PRODUCT-1.xml (impersonate=chrome)
+2026-02-27 15:27:01 │ INFO     │ core.tls_fetcher │ fetch:120 │ TLS fetch OK (chrome): HTTP 200, 1461060 bytes
+2026-02-27 15:27:01 │ DEBUG    │ core.tls_fetcher │ close:156 │ TLS session closed
+2026-02-27 15:28:14 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/ai19/uomo/maglieria/bomber-FAI8133_J01L.html (impersonate=chrome)
+2026-02-27 15:28:14 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/chrome → block page detected, trying next
+2026-02-27 15:28:14 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/ai19/uomo/maglieria/bomber-FAI8133_J01L.html (impersonate=chrome120)
+2026-02-27 15:28:14 │ DEBUG    │ core.tls_fetcher │ fetch:106 │ TLS/chrome120 → 403, trying next target
+2026-02-27 15:28:14 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/ai19/uomo/maglieria/bomber-FAI8133_J01L.html (impersonate=firefox)
+2026-02-27 15:28:15 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/firefox → block page detected, trying next
+2026-02-27 15:28:15 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/ai19/uomo/maglieria/bomber-FAI8133_J01L.html (impersonate=safari)
+2026-02-27 15:28:15 │ DEBUG    │ core.tls_fetcher │ fetch:117 │ TLS/safari → block page detected, trying next
+2026-02-27 15:28:15 │ DEBUG    │ core.tls_fetcher │ fetch:96 │ TLS fetch https://it.loropiana.com/it/ai19/uomo/maglieria/bomber-FAI8133_J01L.html (impersonate=edge)
+2026-02-27 15:28:15 │ DEBUG    │ core.tls_fetcher │ fetch:106 │ TLS/edge → 403, trying next target
+2026-02-27 15:28:15 │ WARNING  │ core.tls_fetcher │ fetch:130 │ TLS fetch failed for https://it.loropiana.com/it/ai19/uomo/maglieria/bomber-FAI8133_J01L.html (all impersonation targets exhausted)
+2026-02-27 15:28:15 │ DEBUG    │ core.tls_fetcher │ close:156 │ TLS session closed
+2026-02-27 15:29:16 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:29:16 │ INFO     │ core.scraper │ scrape_all_pages:420 │ ── Page 1: https://books.toscrape.com/
+2026-02-27 15:29:16 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:29:16 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): books.toscrape.com:443
+2026-02-27 15:29:16 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://books.toscrape.com:443 "GET /robots.txt HTTP/1.1" 404 None
+2026-02-27 15:29:16 │ INFO     │ core.scraper │ _is_allowed:184 │ Loaded robots.txt from https://books.toscrape.com/robots.txt (HTTP 404)
+2026-02-27 15:29:16 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 15:29:16 │ DEBUG    │ core.scraper │ fetch_page:228 │ GET https://books.toscrape.com/ (attempt 1/3)
+2026-02-27 15:29:17 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://books.toscrape.com:443 "GET / HTTP/1.1" 200 None
+2026-02-27 15:29:17 │ DEBUG    │ core.anti_bot │ random_delay:58 │ Sleeping 3.35 s …
+2026-02-27 15:29:20 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 20 products from page
+2026-02-27 15:29:20 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://books.toscrape.com/catalogue/page-2.html
+2026-02-27 15:29:20 │ INFO     │ core.scraper │ scrape_all_pages:420 │ ── Page 2: https://books.toscrape.com/catalogue/page-2.html
+2026-02-27 15:29:20 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+2026-02-27 15:29:20 │ DEBUG    │ core.scraper │ fetch_page:228 │ GET https://books.toscrape.com/catalogue/page-2.html (attempt 1/3)
+2026-02-27 15:29:20 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://books.toscrape.com:443 "GET /catalogue/page-2.html HTTP/1.1" 200 None
+2026-02-27 15:29:20 │ DEBUG    │ core.anti_bot │ random_delay:58 │ Sleeping 3.09 s …
+2026-02-27 15:29:23 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 20 products from page
+2026-02-27 15:29:23 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://books.toscrape.com/catalogue/page-3.html
+2026-02-27 15:29:23 │ INFO     │ core.scraper │ scrape_all_pages:438 │ Scraping complete: 40 products across 2 pages
+2026-02-27 15:29:23 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/output/products.xlsx (40 products)
+2026-02-27 15:29:23 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/output/products.csv (40 products)
+2026-02-27 15:29:23 │ DEBUG    │ core.scraper │ close:505 │ HTTP session closed
+2026-02-27 15:29:52 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-5/test_creates_file0/test.xlsx (3 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-5/test_products_sheet_has_header0/test.xlsx (2 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-5/test_products_count_matches0/test.xlsx (4 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-5/test_summary_sheet_exists0/test.xlsx (1 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-5/test_summary_contains_source_u0/test.xlsx (1 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-5/test_empty_products0/empty.xlsx (0 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-5/test_creates_file1/test.csv (3 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-5/test_row_count0/test.csv (5 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-5/test_header_columns0/test.csv (1 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-5/test_values_correct0/test.csv (2 products)
+2026-02-27 15:29:52 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-5/test_empty_products1/empty.csv (0 products)
+2026-02-27 15:29:52 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'captcha'
+2026-02-27 15:29:52 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'access denied'
+2026-02-27 15:29:52 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: UA3
+2026-02-27 15:29:52 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:29:52 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 15:29:52 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://shop.com/page/2
+2026-02-27 15:29:52 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 15:29:52 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /tmp/pytest-of-codespace/pytest-5/test_extracts_two_products0/config.yaml
+2026-02-27 15:29:52 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 2 products from page
+2026-02-27 15:29:52 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /tmp/pytest-of-codespace/pytest-5/test_first_product_fields0/config.yaml
+2026-02-27 15:29:52 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 2 products from page
+2026-02-27 15:29:52 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /tmp/pytest-of-codespace/pytest-5/test_missing_fields_default_to0/config.yaml
+2026-02-27 15:29:52 │ INFO     │ core.scraper │ parse_products:321 │ Parsed 2 products from page
+2026-02-27 15:31:39 │ DEBUG    │ core.browser_fetcher │ <module>:48 │ Playwright not installed — browser fetcher unavailable
+2026-02-27 15:31:39 │ DEBUG    │ core.tls_fetcher │ <module>:35 │ curl_cffi not installed — TLS-impersonation unavailable
+2026-02-27 15:31:39 │ INFO     │ core.scraper │ _load_config:143 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 15:31:39 │ INFO     │ core.scraper │ scrape_all_pages:420 │ ── Page 1: https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:31:39 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Geck
+2026-02-27 15:31:39 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): it.loropiana.com:443
+2026-02-27 15:31:39 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /robots.txt HTTP/1.1" 403 382
+2026-02-27 15:31:39 │ INFO     │ core.scraper │ _is_allowed:184 │ Loaded robots.txt from https://it.loropiana.com/robots.txt (HTTP 403)
+2026-02-27 15:31:39 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, l
+2026-02-27 15:31:39 │ DEBUG    │ core.scraper │ fetch_page:228 │ GET https://it.loropiana.com/it/c/uomo/polo-e-t-shirts (attempt 1/3)
+2026-02-27 15:31:39 │ DEBUG    │ urllib3.connectionpool │ _get_conn:289 │ Resetting dropped connection: it.loropiana.com
+2026-02-27 15:31:39 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://it.loropiana.com:443 "GET /it/c/uomo/polo-e-t-shirts HTTP/1.1" 403 417
+2026-02-27 15:31:39 │ WARNING  │ core.scraper │ fetch_page:238 │ 403 Forbidden for https://it.loropiana.com/it/c/uomo/polo-e-t-shirts
+2026-02-27 15:31:39 │ ERROR    │ core.scraper │ fetch_page:257 │ 403 Forbidden and no fallback backend available. Install curl_cffi or Playwright.
+2026-02-27 15:31:39 │ WARNING  │ core.scraper │ scrape_all_pages:424 │ Failed to fetch page 1 – stopping
+2026-02-27 15:31:39 │ INFO     │ core.scraper │ scrape_all_pages:438 │ Scraping complete: 0 products across 1 pages
+2026-02-27 15:31:39 │ DEBUG    │ core.scraper │ close:505 │ HTTP session closed

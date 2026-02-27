@@ -9,3 +9,7 @@ tqdm>=4.66.0
 lxml>=4.9.0
 fake-useragent>=1.4.0
 pytest>=7.4.0
+
+# Optional – WAF bypass (installed automatically if available)
+playwright>=1.40.0        # headless browser fallback
+curl_cffi>=0.7.0          # TLS-impersonation fallback

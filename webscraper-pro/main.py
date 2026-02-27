@@ -112,12 +112,18 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--selector-preset", type=str, default=None,
-        choices=["woocommerce", "shopify", "generic"],
+        choices=["woocommerce", "shopify", "generic", "toscrape"],
         help="Use a built-in CSS-selector preset instead of config.yaml selectors",
     )
     parser.add_argument(
         "--config", type=str, default="config/config.yaml",
         help="Path to YAML config file (default: config/config.yaml)",
+    )
+    parser.add_argument(
+        "--browser", action="store_true",
+        help="Use a headless browser (Playwright) to fetch pages. "
+             "Required for WAF-protected or JS-rendered sites. "
+             "Install: pip install playwright && python -m playwright install chromium",
     )
     return parser
 
@@ -161,6 +167,7 @@ def main(argv: list[str] | None = None) -> int:
         config_path=str(config_path),
         selector_overrides=selector_overrides,
         stop_event=stop_event,
+        use_browser=getattr(args, 'browser', False),
     )
     scraper._max_pages = args.max_pages
 

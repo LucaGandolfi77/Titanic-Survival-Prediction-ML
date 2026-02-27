@@ -43,7 +43,9 @@ import yaml
 from bs4 import BeautifulSoup, Tag
 
 from core.anti_bot import AntiBot
+from core.browser_fetcher import BrowserFetcher, is_playwright_available
 from core.paginator import Paginator
+from core.tls_fetcher import TLSFetcher, is_curl_cffi_available
 from utils.logger import get_logger
 from utils.validator import detect_captcha, sanitise_price, sanitise_text
 
@@ -66,6 +68,7 @@ class ProductScraper:
         config_path: str | Path = "config/config.yaml",
         selector_overrides: dict[str, str] | None = None,
         stop_event: threading.Event | None = None,
+        use_browser: bool = False,
     ) -> None:
         self._config = self._load_config(Path(config_path))
         self._stop_event = stop_event or threading.Event()
@@ -100,6 +103,20 @@ class ProductScraper:
         self._session = requests.Session()
         self._robots_cache: dict[str, RobotFileParser] = {}
         self._lock = threading.Lock()
+
+        # Browser-based fetching (for WAF-protected / JS-rendered sites)
+        self._use_browser = use_browser
+        self._browser_fetcher: BrowserFetcher | None = None
+        if use_browser:
+            if is_playwright_available():
+                self._browser_fetcher = BrowserFetcher()
+                log.info("Browser mode enabled (Playwright)")
+            else:
+                log.warning(
+                    "Browser mode requested but Playwright is not installed. "
+                    "Run: pip install playwright && python -m playwright install chromium"
+                )
+                self._use_browser = False
 
         # Statistics
         self.pages_visited: int = 0
@@ -151,8 +168,21 @@ class ProductScraper:
                 robots_url = f"{origin}/robots.txt"
                 rp.set_url(robots_url)
                 try:
-                    rp.read()
-                    log.info("Loaded robots.txt from %s", robots_url)
+                    # Fetch robots.txt manually with a timeout to avoid
+                    # hanging indefinitely (urllib.robotparser.read() has
+                    # no timeout parameter).
+                    resp = self._session.get(
+                        robots_url,
+                        timeout=self._timeout,
+                        headers=self._anti_bot.get_headers(),
+                    )
+                    if resp.status_code == 200:
+                        rp.parse(resp.text.splitlines())
+                    else:
+                        # No valid robots.txt → allow everything
+                        rp.allow_all = True  # type: ignore[attr-defined]
+                    log.info("Loaded robots.txt from %s (HTTP %d)",
+                             robots_url, resp.status_code)
                 except Exception:  # noqa: BLE001
                     log.warning("Could not fetch robots.txt for %s – allowing access", origin)
                     rp.allow_all = True  # type: ignore[attr-defined]
@@ -205,7 +235,29 @@ class ProductScraper:
                     continue
 
                 if resp.status_code == 403:
-                    log.error("403 Forbidden for %s", url)
+                    log.warning("403 Forbidden for %s", url)
+
+                    # ── Fallback chain: TLS impersonation → headless browser ──
+
+                    # 1) Try curl_cffi TLS impersonation (fast, no browser needed)
+                    result = self._fetch_with_tls(url)
+                    if result is not None:
+                        return result
+
+                    # 2) Headless browser fallback
+                    if self._browser_fetcher:
+                        log.info("Retrying with headless browser …")
+                        return self._fetch_with_browser(url)
+                    if is_playwright_available() and not self._browser_fetcher:
+                        log.info("Auto-enabling browser mode after 403")
+                        self._browser_fetcher = BrowserFetcher()
+                        self._use_browser = True
+                        return self._fetch_with_browser(url)
+
+                    log.error(
+                        "403 Forbidden and no fallback backend available. "
+                        "Install curl_cffi or Playwright."
+                    )
                     return None
 
                 if resp.status_code == 404:
@@ -401,7 +453,53 @@ class ProductScraper:
         el = parent.select_one(selector)
         return el.get_text() if el else None
 
+    def _fetch_with_tls(self, url: str) -> BeautifulSoup | None:
+        """Try fetching with TLS-impersonation (``curl_cffi``).
+
+        Returns parsed HTML on success, ``None`` on failure.
+        """
+        if not is_curl_cffi_available():
+            return None
+        try:
+            fetcher = TLSFetcher(timeout=self._timeout)
+            log.info("Retrying with TLS impersonation (curl_cffi) …")
+            html = fetcher.fetch(url)
+            fetcher.close()
+            if not html:
+                return None
+            if detect_captcha(html):
+                log.warning("CAPTCHA detected (TLS) on %s – skipping", url)
+                return None
+            self._anti_bot.random_delay()
+            return BeautifulSoup(html, "lxml")
+        except Exception as exc:  # noqa: BLE001
+            log.debug("TLS fallback failed: %s", exc)
+            return None
+
+    def _fetch_with_browser(self, url: str) -> BeautifulSoup | None:
+        """Fetch a page using the headless browser fallback.
+
+        Args:
+            url: Absolute URL to fetch.
+
+        Returns:
+            Parsed HTML or ``None``.
+        """
+        if not self._browser_fetcher:
+            return None
+        html = self._browser_fetcher.fetch(url)
+        if not html:
+            return None
+        if detect_captcha(html):
+            log.warning("CAPTCHA detected (browser) on %s – skipping", url)
+            return None
+        self._anti_bot.random_delay()
+        return BeautifulSoup(html, "lxml")
+
     def close(self) -> None:
-        """Close the underlying HTTP session."""
+        """Close the underlying HTTP session and browser."""
         self._session.close()
+        if self._browser_fetcher:
+            self._browser_fetcher.close()
+            self._browser_fetcher = None
         log.debug("HTTP session closed")

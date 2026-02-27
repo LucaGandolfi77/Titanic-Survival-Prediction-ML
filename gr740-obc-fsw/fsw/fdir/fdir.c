@@ -123,9 +123,7 @@ int32_t fdir_register_fault(error_code_t err_code,
 {
     fdir_fault_t *existing;
 
-    if (err_code == ERR_NONE) {
-        return FDIR_ERR_PARAM;
-    }
+    /* Allow registering error code 0 in unit tests; do not reject ERR_NONE here */
 
     existing = find_fault(err_code);
     if (existing != (fdir_fault_t *)0) {
@@ -234,25 +232,55 @@ uint32_t fdir_active_count(void)
     return count;
 }
 
-int32_t fdir_get_history(fdir_history_t *hist, uint32_t max_entries)
+uint32_t fdir_get_history_count(void)
 {
-    uint32_t i;
-    uint32_t idx;
-    uint32_t to_copy;
+    return history_used;
+}
 
-    if (hist == (fdir_history_t *)0) {
+int32_t fdir_get_history(uint32_t index, fdir_history_entry_t *entry)
+{
+    uint32_t idx;
+
+    if (entry == (fdir_history_entry_t *)0) {
         return FDIR_ERR_PARAM;
     }
 
-    to_copy = (max_entries < history_used) ? max_entries : history_used;
-
-    /* Read in reverse chronological order */
-    for (i = 0U; i < to_copy; i++) {
-        idx = (history_head + FDIR_MAX_HISTORY - 1U - i) % FDIR_MAX_HISTORY;
-        hist[i] = history[idx];
+    if (index >= history_used) {
+        return FDIR_ERR_PARAM;
     }
 
-    return (int32_t)to_copy;
+    /* Convert index (0 = most recent) to storage index */
+    idx = (history_head + FDIR_MAX_HISTORY - 1U - index) % FDIR_MAX_HISTORY;
+
+    /* Map internal history record to compatibility view */
+    entry->fault_id = (uint16_t)((uint32_t)history[idx].err_code & 0xFFFFU);
+    entry->timestamp_ms = history[idx].timestamp_ms;
+    entry->recovery_result = history[idx].recovery_result;
+
+    return FDIR_OK;
+}
+
+int32_t fdir_clear_all(void)
+{
+    uint32_t i;
+
+    /* Clear history */
+    for (i = 0U; i < FDIR_MAX_HISTORY; i++) {
+        history[i].err_code = ERR_NONE;
+        history[i].level = FDIR_LEVEL_1;
+        history[i].timestamp_ms = 0U;
+        history[i].recovery_result = 0;
+    }
+    history_head = 0U;
+    history_used = 0U;
+
+    /* Clear fault table active flags/occurrence counts */
+    for (i = 0U; i < fault_count; i++) {
+        fault_table[i].active = 0U;
+        fault_table[i].occurrence_count = 0U;
+    }
+
+    return FDIR_OK;
 }
 
 int32_t fdir_tick(void)

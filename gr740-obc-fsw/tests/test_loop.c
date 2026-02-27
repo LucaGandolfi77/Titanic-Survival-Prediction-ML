@@ -20,6 +20,12 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "middleware/ccsds/space_packet.h"
+#include "middleware/routing/packet_router.h"
+#include "middleware/pus/pus_st01.h"
+#include "middleware/pus/pus_st17.h"
+
+
 /* ── BSP stubs ─────────────────────────────────────────────────────────── */
 static uint32_t stub_uptime_ms = 0U;
 uint32_t bsp_get_uptime_ms(void) { return stub_uptime_ms; }
@@ -72,25 +78,19 @@ static uint16_t compute_crc16(const uint8_t *data, uint16_t len)
     return crc;
 }
 
-/* ── Packet router declarations ───────────────────────────────────────── */
-typedef int32_t (*router_dl_callback_t)(const uint8_t *data, uint16_t len);
+/* Use the packet router and CCSDS headers for proper prototypes */
 
-typedef int32_t (*router_service_handler_t)(const uint8_t *tc,
-                                             uint16_t tc_len);
+/* PUS service declarations provided by headers above */
 
-int32_t router_init(void);
-int32_t router_register_service(uint8_t service_type,
-                                 router_service_handler_t handler);
-int32_t router_set_downlink(uint8_t path_id,
-                             router_dl_callback_t callback);
-int32_t router_dispatch_tc(const uint8_t *frame, uint16_t frame_len);
-int32_t router_process_tm_queue(void);
-int32_t router_send_tm(const uint8_t *data, uint16_t len);
-
-/* ── PUS service declarations ─────────────────────────────────────────── */
-int32_t pus_st01_init(void);
-int32_t pus_st17_init(void);
-int32_t pus_st17_handle_tc(const uint8_t *tc, uint16_t tc_len);
+/* Adapter to register with the router: convert router callback to
+ * call the service's handler which takes no args. */
+static int32_t pus_st17_handle_tc(uint8_t svc_subtype,
+                                  const uint8_t *data,
+                                  uint16_t data_len)
+{
+    (void)svc_subtype; (void)data; (void)data_len;
+    return pus_st17_handle();
+}
 
 /* ── Test infrastructure ──────────────────────────────────────────────── */
 static int tests_run    = 0;
@@ -178,18 +178,20 @@ static void test_init_chain(void)
     ret = router_init();
     assert(ret == 0);
 
-    ret = pus_st01_init();
+        ret = pus_st01_init(0x010U);
     assert(ret == 0);
 
-    ret = pus_st17_init();
+        ret = pus_st17_init(0x020U);
     assert(ret == 0);
 
     /* Register ST17 handler with the router */
     ret = router_register_service(17U, pus_st17_handle_tc);
     assert(ret == 0);
 
-    /* Set SpW as downlink path 0 */
-    ret = router_set_downlink(0U, stub_spw_tx);
+    /* Register and enable SpaceWire as downlink */
+    ret = router_register_downlink(ROUTER_DL_SPW, stub_spw_tx);
+    assert(ret == 0);
+    ret = router_set_active_downlink(ROUTER_DL_SPW);
     assert(ret == 0);
 }
 
@@ -197,10 +199,11 @@ static void test_tc_dispatch_to_st17(void)
 {
     /* Full init */
     (void)router_init();
-    (void)pus_st01_init();
-    (void)pus_st17_init();
+        (void)pus_st01_init(0x010U);
+    (void)pus_st17_init(0x020U);
     (void)router_register_service(17U, pus_st17_handle_tc);
-    (void)router_set_downlink(0U, stub_spw_tx);
+    (void)router_register_downlink(ROUTER_DL_SPW, stub_spw_tx);
+    (void)router_set_active_downlink(ROUTER_DL_SPW);
 
     dl_capture_reset();
     stub_uptime_ms = 5000U;
@@ -225,10 +228,11 @@ static void test_tm_contains_valid_header(void)
 {
     /* Re-run the dispatch */
     (void)router_init();
-    (void)pus_st01_init();
-    (void)pus_st17_init();
+        (void)pus_st01_init(0x010U);
+    (void)pus_st17_init(0x020U);
     (void)router_register_service(17U, pus_st17_handle_tc);
-    (void)router_set_downlink(0U, stub_spw_tx);
+    (void)router_register_downlink(ROUTER_DL_SPW, stub_spw_tx);
+    (void)router_set_active_downlink(ROUTER_DL_SPW);
 
     dl_capture_reset();
     stub_uptime_ms = 6000U;
@@ -256,10 +260,11 @@ static void test_tm_contains_valid_header(void)
 static void test_multiple_tc_dispatch(void)
 {
     (void)router_init();
-    (void)pus_st01_init();
-    (void)pus_st17_init();
+        (void)pus_st01_init(0x010U);
+    (void)pus_st17_init(0x020U);
     (void)router_register_service(17U, pus_st17_handle_tc);
-    (void)router_set_downlink(0U, stub_spw_tx);
+    (void)router_register_downlink(ROUTER_DL_SPW, stub_spw_tx);
+    (void)router_set_active_downlink(ROUTER_DL_SPW);
 
     dl_capture_reset();
     stub_uptime_ms = 7000U;
@@ -283,7 +288,7 @@ static void test_multiple_tc_dispatch(void)
 static void test_unknown_service_rejected(void)
 {
     (void)router_init();
-    (void)pus_st01_init();
+    (void)pus_st01_init(0x010U);
     /* Do NOT register any service handler */
 
     dl_capture_reset();

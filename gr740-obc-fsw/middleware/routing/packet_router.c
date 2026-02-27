@@ -166,7 +166,7 @@ int32_t router_dispatch_tc(const uint8_t *raw, uint16_t len)
     }
 
     /* Deserialise CCSDS header */
-    ret = ccsds_deserialize(&pkt, raw, len);
+    ret = ccsds_deserialize(raw, len, &pkt);
     if (ret != CCSDS_OK) {
         stat_err++;
         return ROUTER_ERR_CRC;
@@ -200,14 +200,15 @@ int32_t router_dispatch_tc(const uint8_t *raw, uint16_t len)
         return ROUTER_ERR_PARAM;
     }
 
-    /* Byte 0: PUS version | Byte 1: svc_type | Byte 2: svc_subtype */
-    svc_type    = data_field[1];
-    svc_subtype = data_field[2];
+    /* Byte 0: PUS version | Byte 1: ack_flags | Byte 2: svc_type | Byte 3: svc_subtype */
+    svc_type    = data_field[2];
+    svc_subtype = data_field[3];
 
     /* TC application data follows the 9-byte PUS secondary header */
-    tc_data_len = (pkt.data_len > (PUS_SEC_HDR_MIN_LEN + 2U))
-                  ? (uint16_t)(pkt.data_len - PUS_SEC_HDR_MIN_LEN - 2U)
-                  : 0U;  /* subtract CRC (2) and PUS secondary header */
+    /* pkt.data_len excludes CRC already (handled by ccsds_deserialize) */
+    tc_data_len = (pkt.data_len > PUS_SEC_HDR_MIN_LEN)
+                  ? (uint16_t)(pkt.data_len - PUS_SEC_HDR_MIN_LEN)
+                  : 0U;
 
     /* Look up handler */
     for (i = 0U; i < svc_count; i++) {
@@ -228,7 +229,7 @@ int32_t router_dispatch_tc(const uint8_t *raw, uint16_t len)
 int32_t router_send_tm(const ccsds_packet_t *pkt)
 {
     uint8_t  buf[CCSDS_MAX_PKT_SIZE];
-    uint16_t ser_len;
+    uint32_t ser_len;
     int32_t  ret;
 
     if (pkt == (const ccsds_packet_t *)0) {

@@ -24,7 +24,7 @@ static uint16_t last_event_id       = 0U;
 static uint8_t  last_event_severity = 0U;
 static uint32_t event_count         = 0U;
 
-void pus_st05_raise_event(uint8_t severity, uint16_t event_id,
+int32_t pus_st05_raise_event(uint16_t event_id, uint8_t severity,
                           const uint8_t *aux, uint16_t aux_len)
 {
     (void)aux;
@@ -32,6 +32,7 @@ void pus_st05_raise_event(uint8_t severity, uint16_t event_id,
     last_event_severity = severity;
     last_event_id       = event_id;
     event_count++;
+    return 0;
 }
 
 /* ── Mode manager stub for safe mode ───────────────────────────────────── */

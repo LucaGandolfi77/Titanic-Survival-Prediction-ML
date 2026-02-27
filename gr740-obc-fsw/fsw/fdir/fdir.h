@@ -117,14 +117,26 @@ int32_t fdir_is_active(error_code_t err_code);
  */
 uint32_t fdir_active_count(void);
 
+/* ── Compatibility history view ───────────────────────────────────────── */
+typedef struct {
+    uint16_t        fault_id;        /**< Error code (16-bit view) */
+    uint32_t        timestamp_ms;    /**< Time of occurrence */
+    int32_t         recovery_result; /**< Recovery action result */
+} fdir_history_entry_t;
+
 /**
- * @brief Get fault history.
- *
- * @param[out] history  Array to fill (caller-allocated).
- * @param[in]  max_entries  Max entries to return.
- * @return Number of entries written.
+ * @brief Get the number of entries in the fault history.
+ * @return Number of entries recorded.
  */
-int32_t fdir_get_history(fdir_history_t *history, uint32_t max_entries);
+uint32_t fdir_get_history_count(void);
+
+/**
+ * @brief Get a single history entry by index (0 = most recent).
+ *
+ * Compatibility function used by the unit test harness. Returns 0 on
+ * success or a negative error code.
+ */
+int32_t fdir_get_history(uint32_t index, fdir_history_entry_t *entry);
 
 /**
  * @brief Periodic FDIR tick — check for persistent faults.

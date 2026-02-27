@@ -72,19 +72,24 @@ static inline uint16_t decode_u16(const uint8_t *buf)
 
 uint16_t ccsds_crc16(const uint8_t *data, uint32_t len)
 {
-    uint16_t crc = 0xFFFFU;
+    uint16_t crc;
     uint32_t i;
-    uint8_t  idx;
 
     if (data == (const uint8_t *)0) {
         return 0xFFFFU;
     }
 
+    crc = 0xFFFFU;
     for (i = 0U; i < len; i++) {
-        idx = (uint8_t)((crc >> 8U) ^ data[i]);
-        crc = (uint16_t)((crc << 8U) ^ crc16_table[idx]);
+        crc ^= (uint16_t)data[i] << 8U;
+        for (int bit = 0; bit < 8; bit++) {
+            if ((crc & 0x8000U) != 0U) {
+                crc = (uint16_t)((crc << 1) ^ 0x1021U);
+            } else {
+                crc <<= 1;
+            }
+        }
     }
-
     return crc;
 }
 

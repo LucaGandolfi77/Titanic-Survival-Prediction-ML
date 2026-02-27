@@ -44,6 +44,36 @@ python generate.py --config config/dcgan.yaml \
     --interpolate --method slerp --n-pairs 5
 ```
 
+## Troubleshooting
+
+### OpenMP runtime error
+
+On macOS you may encounter the following message when launching training (or other scripts):
+
+```
+OMP: Error #15: Initializing libomp.dylib, but found libomp.dylib already initialized.
+```
+
+This happens when multiple libraries bring their own copy of the OpenMP runtime. Two safe ways to work around it:
+
+1. **Set an environment variable** before running the command:
+   ```bash
+   export KMP_DUPLICATE_LIB_OK=TRUE
+   python train.py --config config/dcgan.yaml
+   ```
+   This tells the runtime to ignore the duplicate, but use at your own risk.
+
+2. **Apply it programmatically** at the top of `train.py` (or other entry point) so it is always set:
+   ```python
+   import os
+   os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+   ```
+
+The root cause is usually static linking of `libomp` in some third‑party wheel; the variable simply allows execution to continue. For production or high‑performance runs consider rebuilding problematic libraries without the static runtime.
+
+If you continue to see aborts or crashes, uninstall one of the conflicting packages (e.g. `pip uninstall -y mkl-service`) or install a single OpenMP runtime via `brew install libomp` and ensure only one copy is on your `DYLD_LIBRARY_PATH`.
+
+
 ## Project Structure
 
 ```

@@ -3,10 +3,10 @@
  * @brief Unit tests for CCSDS Space Packet, TM Framing, TC Framing.
  *
  * Simple assert-based tests for host-side verification.
- * Compile: gcc -I../../ -o test_ccsds test_ccsds.c \
- *          ../../middleware/ccsds/space_packet.c \
- *          ../../middleware/ccsds/tm_framing.c \
- *          ../../middleware/ccsds/tc_framing.c
+ * Compile: gcc -std=c99 -I. -o test_ccsds tests/test_ccsds.c \
+ *          middleware/ccsds/space_packet.c \
+ *          middleware/ccsds/tm_framing.c \
+ *          middleware/ccsds/tc_framing.c
  *
  * @author OBC Flight Software Team
  * @version 1.0.0
@@ -23,9 +23,9 @@
 /* Stubs for BSP dependencies */
 uint32_t bsp_get_uptime_ms(void) { return 12345U; }
 
-#include "../../middleware/ccsds/space_packet.h"
-#include "../../middleware/ccsds/tm_framing.h"
-#include "../../middleware/ccsds/tc_framing.h"
+#include "middleware/ccsds/space_packet.h"
+#include "middleware/ccsds/tm_framing.h"
+#include "middleware/ccsds/tc_framing.h"
 
 /* ── Helpers ───────────────────────────────────────────────────────────── */
 static int tests_run    = 0;
@@ -71,7 +71,7 @@ static void test_packet_serialize_deserialize(void)
     ccsds_packet_t pkt, pkt2;
     uint8_t data[4] = { 0xDE, 0xAD, 0xBE, 0xEF };
     uint8_t buf[256];
-    uint16_t ser_len;
+    uint32_t ser_len;
     int32_t ret;
 
     ret = ccsds_init_packet(&pkt, CCSDS_TYPE_TC, 0x020,
@@ -85,7 +85,7 @@ static void test_packet_serialize_deserialize(void)
     assert(ret == CCSDS_OK);
     assert(ser_len > 6U);
 
-    ret = ccsds_deserialize(&pkt2, buf, ser_len);
+    ret = ccsds_deserialize(buf, ser_len, &pkt2);
     assert(ret == CCSDS_OK);
     assert(pkt2.header.pkt_id == pkt.header.pkt_id);
     assert(pkt2.data_len == pkt.data_len);
@@ -104,8 +104,8 @@ static void test_seq_counter_increment(void)
 
 static void test_tm_frame_init(void)
 {
-    int32_t ret = tm_frame_init(0x1AU);  /* SCID */
-    assert(ret == TM_FRAME_OK);
+    int32_t ret = tm_framing_init(0x1AU);  /* SCID */
+    assert(ret == TM_OK);
 }
 
 static void test_tm_frame_assemble(void)
@@ -115,10 +115,10 @@ static void test_tm_frame_assemble(void)
     int32_t ret;
 
     memset(data, 0xAA, 128);
-    (void)tm_frame_init(0x1AU);
+    (void)tm_framing_init(0x1AU);
 
-    ret = tm_frame_assemble(0U, data, 128U, &frame);
-    assert(ret == TM_FRAME_OK);
+    ret = tm_build_frame(&frame, 0U, data, 128U, 0x7FFU);
+    assert(ret == TM_OK);
     assert(frame.data_len > 0U);
 }
 
@@ -127,9 +127,9 @@ static void test_tm_idle_frame(void)
     tm_frame_t frame;
     int32_t ret;
 
-    (void)tm_frame_init(0x1AU);
-    ret = tm_frame_idle(&frame);
-    assert(ret == TM_FRAME_OK);
+    (void)tm_framing_init(0x1AU);
+    ret = tm_build_idle_frame(&frame);
+    assert(ret == TM_OK);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -138,8 +138,8 @@ static void test_tm_idle_frame(void)
 
 static void test_tc_frame_init(void)
 {
-    int32_t ret = tc_frame_init(0x1AU);
-    assert(ret == TC_FRAME_OK);
+    int32_t ret = tc_framing_init(0x1AU);
+    assert(ret == TC_OK);
 }
 
 static void test_tc_frame_assemble(void)
@@ -149,39 +149,50 @@ static void test_tc_frame_assemble(void)
     int32_t ret;
 
     memset(data, 0x55, 32);
-    (void)tc_frame_init(0x1AU);
+    (void)tc_framing_init(0x1AU);
 
-    ret = tc_frame_assemble(0U, 0U, data, 32U, &frame);
-    assert(ret == TC_FRAME_OK);
-    assert(frame.frame_len > 0U);
+    ret = tc_build_frame(&frame, 0U, 0U, data, 32U);
+    assert(ret == TC_OK);
+    assert(frame.data_len > 0U);
 }
 
 static void test_cltu_encode_decode(void)
 {
     tc_frame_t frame;
     uint8_t data[16];
-    uint8_t cltu_buf[256];
-    uint16_t cltu_len;
-    uint8_t decoded[256];
-    uint16_t decoded_len;
+    uint8_t frame_buf[TC_FRAME_MAX_SIZE];
+    uint32_t frame_wire_len;
+    uint8_t cltu_buf[CLTU_MAX_SIZE];
+    uint32_t cltu_len;
+    uint8_t decoded[TC_FRAME_MAX_SIZE];
+    uint32_t decoded_len;
     int32_t ret;
 
     memset(data, 0x42, 16);
-    (void)tc_frame_init(0x1AU);
-    ret = tc_frame_assemble(0U, 0U, data, 16U, &frame);
-    assert(ret == TC_FRAME_OK);
+    (void)tc_framing_init(0x1AU);
+    ret = tc_build_frame(&frame, 0U, 0U, data, 16U);
+    assert(ret == TC_OK);
 
-    ret = tc_cltu_encode(&frame, cltu_buf, 256U, &cltu_len);
-    assert(ret == TC_FRAME_OK);
+    /* Serialize frame to wire bytes first */
+    ret = tc_serialize_frame(&frame, frame_buf, TC_FRAME_MAX_SIZE,
+                              &frame_wire_len);
+    assert(ret == TC_OK);
+
+    /* Encode wire bytes into CLTU */
+    ret = tc_encode_cltu(frame_buf, frame_wire_len, cltu_buf,
+                          CLTU_MAX_SIZE, &cltu_len);
+    assert(ret == TC_OK);
     assert(cltu_len > 0U);
 
     /* Verify start sequence */
     assert(cltu_buf[0] == 0xEBU);
     assert(cltu_buf[1] == 0x90U);
 
-    ret = tc_cltu_decode(cltu_buf, cltu_len, decoded, 256U, &decoded_len);
-    assert(ret == TC_FRAME_OK);
-    assert(decoded_len == frame.frame_len);
+    /* Decode CLTU back to TC frame bytes */
+    ret = tc_decode_cltu(cltu_buf, cltu_len, decoded,
+                          TC_FRAME_MAX_SIZE, &decoded_len);
+    assert(ret == TC_OK);
+    assert(decoded_len == frame_wire_len);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

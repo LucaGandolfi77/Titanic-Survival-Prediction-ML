@@ -20,7 +20,7 @@ extern uint32_t bsp_get_uptime_ms(void);
 /* ── GR740 watchdog register offsets (GPTIMER unit 0, channel 3) ───── */
 /* Reusing GPTIMER registers; WDT is configured as a one-shot
  * countdown timer that resets the system on underflow.               */
-#define WDG_TIMER_BASE   GPTIMER0_BASE_ADDR
+#define WDG_TIMER_BASE   GPTIMER0_BASE
 #define WDG_CHANNEL      3U
 #define WDG_CH_OFFSET    (0x10U + (WDG_CHANNEL * 0x10U))
 
@@ -33,6 +33,16 @@ extern uint32_t bsp_get_uptime_ms(void);
 #define WDG_CTRL_RS      (1U << 1U)   /* Restart (reload)     */
 #define WDG_CTRL_LD      (1U << 2U)   /* Load counter         */
 #define WDG_CTRL_IE      (1U << 3U)   /* Interrupt enable     */
+
+/* Direct register write via absolute address.
+ * On host builds (unit tests) the HW addresses are not valid;
+ * guard behind __sparc__ so host tests compile safely.               */
+#ifdef __sparc__
+#define WDG_WRITE(addr, val) \
+    (*(volatile uint32_t *)(uintptr_t)(addr) = (uint32_t)(val))
+#else
+#define WDG_WRITE(addr, val)  ((void)(addr), (void)(val))
+#endif
 
 /* ── Software heartbeat entry ──────────────────────────────────────── */
 typedef struct {
@@ -70,8 +80,8 @@ int32_t wdg_init(void)
     wdg_init_done = 1U;
 
     /* Configure HW watchdog timer — load but do NOT enable yet */
-    REG_WRITE(WDG_CH_RELOAD, WDG_HW_RELOAD_VAL);
-    REG_WRITE(WDG_CH_CTRL, WDG_CTRL_LD);  /* Load counter from reload */
+    WDG_WRITE(WDG_CH_RELOAD, WDG_HW_RELOAD_VAL);
+    WDG_WRITE(WDG_CH_CTRL, WDG_CTRL_LD);  /* Load counter from reload */
 
     return WDG_OK;
 }
@@ -80,21 +90,21 @@ void wdg_hw_kick(void)
 {
     if (hw_enabled != 0U) {
         /* Reload the counter to prevent underflow reset */
-        REG_WRITE(WDG_CH_CTRL, WDG_CTRL_EN | WDG_CTRL_RS | WDG_CTRL_LD);
+        WDG_WRITE(WDG_CH_CTRL, WDG_CTRL_EN | WDG_CTRL_RS | WDG_CTRL_LD);
     }
 }
 
 void wdg_hw_enable(void)
 {
     hw_enabled = 1U;
-    REG_WRITE(WDG_CH_RELOAD, WDG_HW_RELOAD_VAL);
-    REG_WRITE(WDG_CH_CTRL, WDG_CTRL_EN | WDG_CTRL_RS | WDG_CTRL_LD | WDG_CTRL_IE);
+    WDG_WRITE(WDG_CH_RELOAD, WDG_HW_RELOAD_VAL);
+    WDG_WRITE(WDG_CH_CTRL, WDG_CTRL_EN | WDG_CTRL_RS | WDG_CTRL_LD | WDG_CTRL_IE);
 }
 
 void wdg_hw_disable(void)
 {
     hw_enabled = 0U;
-    REG_WRITE(WDG_CH_CTRL, 0U);
+    WDG_WRITE(WDG_CH_CTRL, 0U);
 }
 
 int32_t wdg_register_task(uint32_t task_id, uint32_t timeout_ms,
@@ -160,7 +170,7 @@ int32_t wdg_check_all(uint32_t *expired_id)
         if (hb_table[i].active == 0U) {
             continue;
         }
-        if ((now - hb_table[i].last_beat_ms) > hb_table[i].timeout_ms) {
+        if ((now - hb_table[i].last_beat_ms) >= hb_table[i].timeout_ms) {
             timed_out++;
             if ((first_found == 0U) && (expired_id != (uint32_t *)0)) {
                 *expired_id = hb_table[i].task_id;

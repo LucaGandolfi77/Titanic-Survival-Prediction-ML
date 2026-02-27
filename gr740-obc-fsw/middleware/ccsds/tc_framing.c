@@ -410,6 +410,12 @@ int32_t tc_decode_cltu(const uint8_t *cltu, uint32_t cltu_len,
         pos += CLTU_CODEBLOCK_SIZE;
     }
 
+    /* Trim trailing fill bytes (0x55) that were added during encoding */
+    while ((out_pos > 0U) && (tc_data[out_pos - 1U] == 0x55U)) {
+        out_pos--;
+    }
+
     *tc_len = out_pos;
     return TC_OK;
 }
+

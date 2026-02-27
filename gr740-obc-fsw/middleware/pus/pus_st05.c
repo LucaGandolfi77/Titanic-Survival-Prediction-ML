@@ -99,9 +99,10 @@ int32_t pus_st05_raise(uint16_t event_id, uint8_t severity,
         return PUS_ST05_ERR_DISABLED;
     }
 
-    /* Rate limiting */
+    /* Rate limiting: allow first report even if last_time_ms == 0 */
     time_ms = bsp_get_uptime_ms();
-    if ((time_ms - evt_states[event_id].last_time_ms) < EVT_MIN_INTERVAL_MS) {
+    if ((evt_states[event_id].last_time_ms != 0U) &&
+        ((time_ms - evt_states[event_id].last_time_ms) < EVT_MIN_INTERVAL_MS)) {
         return PUS_ST05_ERR_RATE;
     }
 

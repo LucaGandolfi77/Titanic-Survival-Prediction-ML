@@ -1,0 +1,56 @@
+2026-02-27 14:11:09 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-0/test_creates_file0/test.xlsx (3 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-0/test_products_sheet_has_header0/test.xlsx (2 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-0/test_products_count_matches0/test.xlsx (4 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-0/test_summary_sheet_exists0/test.xlsx (1 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-0/test_summary_contains_source_u0/test.xlsx (1 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.excel_exporter │ export:101 │ Excel exported → /tmp/pytest-of-codespace/pytest-0/test_empty_products0/empty.xlsx (0 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-0/test_creates_file1/test.csv (3 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-0/test_row_count0/test.csv (5 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-0/test_header_columns0/test.csv (1 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-0/test_values_correct0/test.csv (2 products)
+2026-02-27 14:11:09 │ INFO     │ exporters.csv_exporter │ export:69 │ CSV exported → /tmp/pytest-of-codespace/pytest-0/test_empty_products1/empty.csv (0 products)
+2026-02-27 14:11:09 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'captcha'
+2026-02-27 14:11:09 │ WARNING  │ utils.validator │ detect_captcha:138 │ CAPTCHA indicator detected: 'access denied'
+2026-02-27 14:11:09 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: UA3
+2026-02-27 14:11:09 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 14:11:09 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: TestAgent
+2026-02-27 14:11:09 │ DEBUG    │ core.paginator │ find_next_url:134 │ Next-page URL: https://shop.com/page/2
+2026-02-27 14:11:09 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 14:11:09 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /tmp/pytest-of-codespace/pytest-0/test_extracts_two_products0/config.yaml
+2026-02-27 14:11:09 │ INFO     │ core.scraper │ parse_products:269 │ Parsed 2 products from page
+2026-02-27 14:11:09 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /tmp/pytest-of-codespace/pytest-0/test_first_product_fields0/config.yaml
+2026-02-27 14:11:09 │ INFO     │ core.scraper │ parse_products:269 │ Parsed 2 products from page
+2026-02-27 14:11:09 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /tmp/pytest-of-codespace/pytest-0/test_missing_fields_default_to0/config.yaml
+2026-02-27 14:11:09 │ INFO     │ core.scraper │ parse_products:269 │ Parsed 2 products from page
+2026-02-27 14:13:36 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 14:13:36 │ INFO     │ core.scraper │ scrape_all_pages:368 │ ── Page 1: https://ogforreal.com/collections/shirts
+2026-02-27 14:13:36 │ INFO     │ core.scraper │ _is_allowed:155 │ Loaded robots.txt from https://ogforreal.com/robots.txt
+2026-02-27 14:13:36 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20
+2026-02-27 14:13:36 │ DEBUG    │ core.scraper │ fetch_page:198 │ GET https://ogforreal.com/collections/shirts (attempt 1/3)
+2026-02-27 14:13:36 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): ogforreal.com:443
+2026-02-27 14:13:36 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://ogforreal.com:443 "GET /collections/shirts HTTP/1.1" 200 76706
+2026-02-27 14:13:36 │ DEBUG    │ core.anti_bot │ random_delay:58 │ Sleeping 2.84 s …
+2026-02-27 14:13:39 │ WARNING  │ core.scraper │ parse_products:261 │ No product containers found with selector 'div.product-item'
+2026-02-27 14:13:39 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 14:13:39 │ INFO     │ core.scraper │ scrape_all_pages:386 │ Scraping complete: 0 products across 1 pages
+2026-02-27 14:13:39 │ DEBUG    │ core.scraper │ close:407 │ HTTP session closed
+2026-02-27 14:17:48 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 14:17:48 │ INFO     │ core.scraper │ scrape_all_pages:368 │ ── Page 1: https://www.zalando.it/t-shirt-top-donna/
+2026-02-27 14:19:48 │ INFO     │ core.scraper │ _is_allowed:155 │ Loaded robots.txt from https://www.zalando.it/robots.txt
+2026-02-27 14:19:48 │ WARNING  │ core.scraper │ _is_allowed:169 │ robots.txt disallows: https://www.zalando.it/t-shirt-top-donna/
+2026-02-27 14:19:48 │ WARNING  │ core.scraper │ fetch_page:187 │ Skipping disallowed URL: https://www.zalando.it/t-shirt-top-donna/
+2026-02-27 14:19:48 │ WARNING  │ core.scraper │ scrape_all_pages:372 │ Failed to fetch page 1 – stopping
+2026-02-27 14:19:48 │ INFO     │ core.scraper │ scrape_all_pages:386 │ Scraping complete: 0 products across 1 pages
+2026-02-27 14:19:48 │ DEBUG    │ core.scraper │ close:407 │ HTTP session closed
+2026-02-27 14:34:54 │ INFO     │ core.scraper │ _load_config:126 │ Loaded config from /workspaces/Titanic-Survival-Prediction-ML/webscraper-pro/config/config.yaml
+2026-02-27 14:34:54 │ INFO     │ core.scraper │ scrape_all_pages:368 │ ── Page 1: https://www.dolcegabbana.com/it-it/fashion/men/dg-essentials-collection/
+2026-02-27 14:34:54 │ INFO     │ core.scraper │ _is_allowed:155 │ Loaded robots.txt from https://www.dolcegabbana.com/robots.txt
+2026-02-27 14:34:54 │ DEBUG    │ core.anti_bot │ random_user_agent:48 │ Selected User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+2026-02-27 14:34:54 │ DEBUG    │ core.scraper │ fetch_page:198 │ GET https://www.dolcegabbana.com/it-it/fashion/men/dg-essentials-collection/ (attempt 1/3)
+2026-02-27 14:34:54 │ DEBUG    │ urllib3.connectionpool │ _new_conn:1049 │ Starting new HTTPS connection (1): www.dolcegabbana.com:443
+2026-02-27 14:34:54 │ DEBUG    │ urllib3.connectionpool │ _make_request:544 │ https://www.dolcegabbana.com:443 "GET /it-it/fashion/men/dg-essentials-collection/ HTTP/1.1" 200 None
+2026-02-27 14:34:54 │ DEBUG    │ core.anti_bot │ random_delay:58 │ Sleeping 2.76 s …
+2026-02-27 14:34:57 │ WARNING  │ core.scraper │ parse_products:261 │ No product containers found with selector 'div.product-item'
+2026-02-27 14:34:57 │ DEBUG    │ core.paginator │ find_next_url:115 │ No next-page element found for selector 'a.next-page'
+2026-02-27 14:34:57 │ INFO     │ core.scraper │ scrape_all_pages:386 │ Scraping complete: 0 products across 1 pages
+2026-02-27 14:34:57 │ DEBUG    │ core.scraper │ close:407 │ HTTP session closed

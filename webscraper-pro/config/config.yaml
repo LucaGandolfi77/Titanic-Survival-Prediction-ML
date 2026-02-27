@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────
+# WebScraper Pro – Configuration
+# ─────────────────────────────────────────────
+
+output:
+  folder: "./output"
+  images_folder: "./output/images"
+  excel_filename: "products.xlsx"
+  csv_filename: "products.csv"
+
+scraper:
+  timeout: 15
+  max_retries: 3
+  delay_min: 1.5
+  delay_max: 3.5
+  max_pages: 50
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15"
+    - "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0"
+
+selectors:
+  product_container: "div.product-item"
+  name: "h2.product-title"
+  price: "span.price"
+  description: "p.product-description"
+  image: "img.product-image"
+  next_page: "a.next-page"
+  pagination_type: "query_param"   # query_param | path | button
+  page_param: "page"
+
+# ─────────────────────────────────────────────
+# Built-in selector presets
+# ─────────────────────────────────────────────
+presets:
+  woocommerce:
+    product_container: "li.product"
+    name: ".woocommerce-loop-product__title"
+    price: "span.price"
+    description: ".woocommerce-product-details__short-description"
+    image: "img.attachment-woocommerce_thumbnail"
+    next_page: "a.next"
+    pagination_type: "query_param"
+    page_param: "paged"
+
+  shopify:
+    product_container: "div.product-card"
+    name: ".product-card__title"
+    price: "span.price-item"
+    description: ".product-card__description"
+    image: "img.product-featured-media"
+    next_page: "a[rel='next']"
+    pagination_type: "query_param"
+    page_param: "page"
+
+  generic:
+    product_container: "div.product, li.product, div.product-item, article.product"
+    name: "h2.product-title, h3.product-title, .product-name, .product-title"
+    price: "span.price, div.price, .product-price, .amount"
+    description: "p.product-description, .product-desc, .short-description"
+    image: "img.product-image, img.product-img, .product-thumbnail img"
+    next_page: "a.next, a.next-page, a[rel='next'], .pagination .next a"
+    pagination_type: "query_param"
+    page_param: "page"

@@ -1,0 +1,205 @@
+/* ============================================================
+   BENCHMARK SUITE SECTION
+   ============================================================ */
+
+#benchmark {
+  --bench-amber: #F59E0B;
+  --bench-amber-dim: rgba(245, 158, 11, .12);
+  --bench-cyan:  #06B6D4;
+  --bench-cyan-dim: rgba(6, 182, 212, .12);
+  --bench-pink:  #EC4899;
+  --bench-pink-dim: rgba(236, 72, 153, .12);
+}
+
+/* ---------- layout ---------- */
+.bench-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+  margin-top: var(--space-lg);
+}
+
+.bench-info p {
+  font-size: var(--fs-body);
+  color: var(--clr-text-secondary);
+  line-height: 1.75;
+  margin-bottom: var(--space-md);
+  max-width: 54ch;
+}
+
+/* ---------- feature list ---------- */
+.bench-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+}
+
+.bench-features li {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: var(--fs-sm);
+  color: var(--clr-text-secondary);
+}
+
+.bench-features li svg {
+  flex-shrink: 0;
+}
+
+/* ---------- tech pills ---------- */
+.bench-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: var(--space-md);
+}
+
+/* ---------- CTA button ---------- */
+.bench-ctas {
+  margin-top: var(--space-sm);
+}
+
+.btn-primary--amber {
+  --_btn-from: #F59E0B;
+  --_btn-to:   #D97706;
+  background: linear-gradient(135deg, var(--_btn-from), var(--_btn-to));
+  color: #000;
+}
+
+.btn-primary--amber:hover {
+  box-shadow:
+    0 0 0 3px rgba(245, 158, 11, .25),
+    0 8px 24px rgba(245, 158, 11, .35);
+  transform: translateY(-2px);
+}
+
+/* ---------- preview card ---------- */
+.bench-preview {
+  padding: var(--space-md);
+  border: 1px solid rgba(245, 158, 11, .15);
+}
+
+.bench-results-mini {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* score header */
+.bench-score-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.bench-score-label {
+  font-family: var(--ff-heading);
+  font-size: var(--fs-sm);
+  color: var(--clr-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.bench-score-value {
+  font-family: var(--ff-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #F59E0B, #FBBF24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* bar rows */
+.bench-bars {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.bench-bar-row {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr 3.5rem;
+  align-items: center;
+  gap: .75rem;
+}
+
+.bench-bar-label {
+  font-size: .8125rem;
+  color: var(--clr-text-secondary);
+  font-family: var(--ff-mono);
+  white-space: nowrap;
+}
+
+.bench-bar-track {
+  height: .5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, .06);
+  overflow: hidden;
+}
+
+.bench-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1.2s cubic-bezier(.22, 1, .36, 1);
+}
+
+.bench-bar-fill--amber {
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
+}
+
+.bench-bar-fill--cyan {
+  background: linear-gradient(90deg, #06B6D4, #22D3EE);
+}
+
+.bench-bar-fill--pink {
+  background: linear-gradient(90deg, #EC4899, #F472B6);
+}
+
+.bench-bar-score {
+  font-size: .8125rem;
+  font-family: var(--ff-mono);
+  color: var(--clr-text);
+  text-align: right;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .bench-showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .bench-preview {
+    order: -1;
+  }
+
+  .bench-bar-row {
+    grid-template-columns: 7rem 1fr 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bench-bar-row {
+    grid-template-columns: 1fr;
+    gap: .25rem;
+  }
+
+  .bench-bar-label {
+    font-size: .75rem;
+  }
+
+  .bench-bar-score {
+    text-align: left;
+    font-size: .75rem;
+  }
+
+  .bench-score-value {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,189 @@
+/* ================================================================
+   SCRUMFLOW SECTION
+   ================================================================ */
+
+#scrumflow {
+  content-visibility: auto;
+}
+
+.scrum-showcase {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-8);
+  align-items: center;
+  margin-top: var(--sp-8);
+}
+
+@media (min-width: 768px) {
+  .scrum-showcase {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-12);
+  }
+}
+
+.scrum-info p {
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+  line-height: 1.8;
+  margin-bottom: var(--sp-6);
+}
+
+.scrum-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--sp-6) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.scrum-features li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.scrum-features li svg {
+  flex-shrink: 0;
+}
+
+.scrum-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-6);
+}
+
+.scrum-ctas {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+/* emerald variant button */
+.btn-primary--emerald {
+  background: linear-gradient(135deg, #10B981, #06B6D4);
+  box-shadow: 0 4px 24px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary--emerald:hover {
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.45);
+}
+
+/* ---- Preview Card ---- */
+.scrum-preview {
+  overflow: hidden;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 0;
+}
+
+/* ---- Mini Kanban Board ---- */
+.scrum-board-mini {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: var(--sp-4);
+  min-height: 240px;
+  background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+}
+
+.mini-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mini-col-header {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 2px;
+}
+
+.mini-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 3px solid transparent;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mini-card--indigo  { border-left-color: #6366F1; }
+.mini-card--violet  { border-left-color: #8B5CF6; }
+.mini-card--pink    { border-left-color: #EC4899; }
+.mini-card--amber   { border-left-color: #F59E0B; }
+.mini-card--emerald { border-left-color: #10B981; }
+
+.mini-card-title {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-card-points {
+  flex-shrink: 0;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+/* ---- Sprint Progress Bar ---- */
+.scrum-sprint-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 10px var(--sp-4);
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sprint-label {
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.sprint-progress {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.sprint-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, #10B981, #06B6D4);
+  transition: width 0.6s ease;
+}
+
+.sprint-pct {
+  font-family: var(--ff-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: #10B981;
+}

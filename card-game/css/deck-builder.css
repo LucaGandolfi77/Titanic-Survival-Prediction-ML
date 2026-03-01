@@ -1,0 +1,342 @@
+/* ═══════════════════════════════════════════════════════════
+   Deck Builder — CardForge
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Two‑column layout ─────────────────────────────────── */
+.deck-layout {
+  display: grid;
+  grid-template-columns: var(--filter-w) 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  min-height: calc(100vh - var(--header-h) - var(--deck-panel-h));
+}
+
+/* ── Filter sidebar ────────────────────────────────────── */
+#filter-panel {
+  position: sticky;
+  top: calc(var(--header-h) + var(--sp-4));
+  align-self: start;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  max-height: calc(100vh - var(--header-h) - var(--deck-panel-h) - var(--sp-8));
+  overflow-y: auto;
+}
+#filter-panel h2 {
+  font-size: var(--fs-md);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+#collection-count {
+  margin-left: auto;
+}
+
+/* Search */
+.search-wrapper {
+  position: relative;
+}
+.search-wrapper input {
+  width: 100%;
+  padding: var(--sp-2) var(--sp-4);
+  padding-right: var(--sp-8);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  min-height: 40px;
+}
+.search-wrapper input::placeholder {
+  color: var(--text-muted);
+}
+.search-wrapper input:focus {
+  border-color: var(--accent-secondary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+.search-clear {
+  position: absolute;
+  right: var(--sp-2);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  cursor: pointer;
+  min-width: 28px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.search-clear:hover {
+  color: var(--text-primary);
+}
+
+/* Filter groups (accordion) */
+.filter-group {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.filter-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-tertiary);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+  min-height: 40px;
+  border: none;
+  width: 100%;
+  text-align: left;
+  color: var(--text-secondary);
+}
+.filter-group__header:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+.filter-group__chevron {
+  transition: transform var(--duration-fast) ease;
+}
+.filter-group.collapsed .filter-group__chevron {
+  transform: rotate(-90deg);
+}
+.filter-group__body {
+  padding: var(--sp-2) var(--sp-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  overflow: hidden;
+  max-height: 500px;
+  transition: max-height var(--duration-normal) ease,
+              padding var(--duration-normal) ease;
+}
+.filter-group.collapsed .filter-group__body {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Filter chips / checkboxes */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-xs);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-input);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+  min-height: 30px;
+}
+.filter-chip:hover {
+  border-color: var(--accent-secondary);
+  color: var(--text-primary);
+}
+.filter-chip.active {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+.filter-chip input[type="checkbox"] {
+  display: none;
+}
+
+/* Range slider */
+.filter-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  width: 100%;
+}
+.filter-range__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.filter-range input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-tertiary);
+  outline: none;
+}
+.filter-range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+  cursor: pointer;
+  border: 2px solid var(--bg-secondary);
+}
+
+/* Reset button */
+#reset-filters {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* ── Card grid ─────────────────────────────────────────── */
+#card-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-4);
+  align-content: start;
+}
+#card-collection-grid:empty::after {
+  content: "No cards match your filters.";
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--sp-12);
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+}
+
+/* ── Deck panel (bottom bar) ───────────────────────────── */
+#deck-panel {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  height: var(--deck-panel-h);
+  padding: var(--sp-3) var(--sp-6);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+  z-index: var(--z-hand);
+}
+
+.deck-panel__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 120px;
+}
+#deck-name-input {
+  width: 120px;
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+}
+#deck-name-input:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+}
+#deck-size-label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  font-weight: var(--fw-semibold);
+}
+
+/* Mini card list */
+.deck-mini-cards {
+  flex: 1;
+  display: flex;
+  gap: var(--sp-1);
+  overflow-x: auto;
+  padding: var(--sp-1) 0;
+}
+.deck-mini-card {
+  position: relative;
+  width: var(--card-w-mini);
+  aspect-ratio: var(--card-ratio);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  transition: transform var(--duration-fast) ease;
+}
+.deck-mini-card:hover {
+  transform: scale(1.1);
+  z-index: 2;
+}
+.deck-mini-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.deck-mini-card__count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  font-size: 0.6rem;
+  font-weight: var(--fw-bold);
+}
+
+.deck-panel__actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+/* ═══════════ Assets gallery styling (thumbnails) ═══════════ */
+.assets-preview {
+  margin: var(--sp-4) 0;
+}
+.assets-gallery {
+  display: grid;
+  /* allow many small tiles to fill the row; adjust min width to show more per row */
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--sp-2);
+  align-items: start;
+}
+.assets-gallery__tile {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 0;
+  padding-bottom: calc(7 / 5 * 100%); /* preserve ~5:7 aspect ratio */
+  position: relative;
+}
+.assets-gallery__tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* smaller screens: reduce min width to fit more tiles */
+@media (max-width: 720px) {
+  .assets-gallery { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+}
+
+@media (min-width: 1400px) {
+  .assets-gallery { grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
+}

@@ -1,0 +1,139 @@
+/* ═══════════════════════════════════════════════════════════
+   Responsive — CardForge (mobile‑first breakpoints)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Small screens (≤ 768px) ───────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Header */
+  #app-header {
+    padding: 0 var(--sp-3);
+    gap: var(--sp-2);
+  }
+  .logo__text {
+    font-size: var(--fs-base);
+  }
+  .nav-link {
+    font-size: var(--fs-xs);
+    padding: var(--sp-2) var(--sp-3);
+  }
+  #deck-count-badge {
+    display: none;
+  }
+
+  /* Deck builder — single column */
+  .deck-layout {
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+  }
+  #filter-panel {
+    position: static;
+    max-height: none;
+  }
+
+  /* Card grid smaller cards */
+  #card-collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--sp-3);
+  }
+
+  /* Deck panel vertical */
+  #deck-panel {
+    flex-direction: column;
+    height: auto;
+    padding: var(--sp-3);
+    gap: var(--sp-3);
+  }
+  .deck-panel__header {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .deck-mini-cards {
+    width: 100%;
+  }
+  .deck-panel__actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .deck-panel__actions button {
+    flex: 1;
+  }
+
+  /* Game table */
+  #piles-row {
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+  }
+  #game-controls-panel {
+    max-width: 100%;
+  }
+
+  /* Hand */
+  #hand-cards .card {
+    margin-left: -40px;
+  }
+  #hand-cards .card {
+    width: 90px;
+  }
+
+  /* Modal */
+  .card-detail {
+    flex-direction: column;
+    padding: var(--sp-4);
+    padding-top: var(--sp-10);
+  }
+  .card-detail__image-wrap {
+    width: 100%;
+    max-width: 200px;
+    align-self: center;
+  }
+  .modal-content {
+    max-width: 95vw;
+  }
+}
+
+/* ── Medium screens (769px – 1024px) ───────────────────── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .deck-layout {
+    grid-template-columns: 220px 1fr;
+  }
+  #filter-panel {
+    --filter-w: 220px;
+  }
+  #card-collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+/* ── Large screens (≥ 1200px) ──────────────────────────── */
+@media (min-width: 1200px) {
+  #card-collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+/* ── Touch helpers ─────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* On touch devices always show card overlay */
+  .card__overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+  }
+  /* Bigger tap targets */
+  .filter-chip {
+    min-height: 44px;
+    padding: var(--sp-2) var(--sp-4);
+    font-size: var(--fs-sm);
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

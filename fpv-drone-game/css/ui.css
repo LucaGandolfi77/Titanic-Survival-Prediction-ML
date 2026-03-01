@@ -1,0 +1,143 @@
+/* ═══ UI Screens — DRONE STRIKE ═══ */
+
+#game-canvas {
+  position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0;
+}
+
+/* ── Generic screen overlay ── */
+.screen {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--bg-overlay);
+  gap: var(--sp-4);
+  padding: var(--sp-8);
+  text-align: center;
+}
+
+.game-title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 8vw, 4.5rem);
+  color: var(--accent-green);
+  text-shadow: 0 0 30px rgba(0,255,65,0.6), 0 0 60px rgba(0,255,65,0.3);
+  letter-spacing: 0.15em;
+  animation: titlePulse 3s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%,100% { text-shadow: 0 0 30px rgba(0,255,65,0.6), 0 0 60px rgba(0,255,65,0.3); }
+  50%     { text-shadow: 0 0 50px rgba(0,255,65,0.8), 0 0 100px rgba(0,255,65,0.5); }
+}
+
+.game-subtitle {
+  font-family: var(--font-hud);
+  font-size: 1rem;
+  color: rgba(0,255,65,0.6);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* ── Menu buttons ── */
+.menu-btn {
+  display: inline-block;
+  padding: var(--sp-3) var(--sp-8);
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-green);
+  border: 1px solid var(--joystick-border);
+  border-radius: 4px;
+  background: rgba(0,20,0,0.6);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  min-width: 220px;
+}
+.menu-btn:hover, .menu-btn:focus {
+  background: rgba(0,255,65,0.15);
+  box-shadow: 0 0 15px rgba(0,255,65,0.3);
+  transform: scale(1.03);
+}
+.menu-btn.primary {
+  background: rgba(0,255,65,0.2);
+  border-color: var(--accent-green);
+  font-size: 1.3rem;
+}
+.menu-btn.primary:hover {
+  background: rgba(0,255,65,0.35);
+}
+.menu-btn.small {
+  min-width: auto;
+  padding: var(--sp-2) var(--sp-4);
+  font-size: 0.9rem;
+}
+
+/* ── Controls info ── */
+.controls-table { max-width: 500px; width: 100%; }
+.controls-table table { width: 100%; border-collapse: collapse; }
+.controls-table th, .controls-table td {
+  padding: var(--sp-2) var(--sp-3);
+  text-align: left;
+  font-family: var(--font-hud);
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(0,255,65,0.15);
+}
+.controls-table th { color: var(--accent-green); font-weight: 600; }
+
+/* ── Pause screen ── */
+#pause-score, #wave-score-earned, #wave-total-score {
+  font-family: var(--font-hud);
+  font-size: 1.2rem;
+  color: var(--accent-green);
+}
+
+/* ── Wave complete ── */
+#wave-complete-screen h2 {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  color: var(--accent-yellow);
+  text-shadow: 0 0 20px rgba(255,204,0,0.5);
+}
+
+/* ── Game over ── */
+#game-over-screen h2 {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  color: var(--accent-red);
+  text-shadow: 0 0 20px rgba(255,51,51,0.5);
+}
+.final-stats {
+  font-family: var(--font-hud);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.8);
+}
+#high-score-form {
+  display: flex; align-items: center; gap: var(--sp-3);
+  font-family: var(--font-hud);
+}
+#high-score-input {
+  width: 120px; text-align: center;
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  color: var(--accent-green);
+  border-bottom: 2px solid var(--accent-green);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: var(--sp-1);
+}
+#high-score-list {
+  font-family: var(--font-hud);
+  font-size: 0.9rem;
+  color: rgba(0,255,65,0.7);
+  line-height: 1.6;
+  min-height: 80px;
+  list-style: none;
+}
+
+/* ── Screen h2 general ── */
+.screen h2 {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  color: var(--accent-green);
+  letter-spacing: 0.1em;
+}

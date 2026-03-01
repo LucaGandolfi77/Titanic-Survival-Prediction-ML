@@ -1,0 +1,248 @@
+/* ═══════════════════════════════════════════════════════════
+   Modals — CardForge
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Overlay ───────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: var(--sp-4);
+}
+.modal-overlay.hidden {
+  display: none;
+}
+
+/* ── Content box ───────────────────────────────────────── */
+.modal-content {
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: modalPop var(--duration-normal) var(--ease-spring) forwards;
+}
+
+/* ── Close button ──────────────────────────────────────── */
+.modal-close {
+  position: absolute;
+  top: var(--sp-3);
+  right: var(--sp-3);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-lg);
+  color: var(--text-muted);
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  z-index: 2;
+}
+.modal-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+/* ── Card detail modal ─────────────────────────────────── */
+.card-detail {
+  display: flex;
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+}
+.card-detail__image-wrap {
+  flex-shrink: 0;
+  width: 200px;
+  aspect-ratio: var(--card-ratio);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 2px solid var(--border-subtle);
+}
+.card-detail__image-wrap img,
+.card-detail__image-wrap .card__fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-detail__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.card-detail__name {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  color: var(--text-primary);
+}
+.card-detail__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.card-detail__badge {
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+.card-detail__badge--type    { background: rgba(59, 130, 246, 0.12); color: var(--accent-secondary); }
+.card-detail__badge--rarity  { }
+.card-detail__badge--element { }
+
+/* rarity colour variants */
+.card-detail__badge--rarity[data-val="Common"]    { color: var(--rarity-common); border-color: var(--rarity-common); }
+.card-detail__badge--rarity[data-val="Uncommon"]  { color: var(--rarity-uncommon); border-color: var(--rarity-uncommon); }
+.card-detail__badge--rarity[data-val="Rare"]      { color: var(--rarity-rare); border-color: var(--rarity-rare); }
+.card-detail__badge--rarity[data-val="Legendary"] { color: var(--rarity-legendary); border-color: var(--rarity-legendary); }
+
+/* element colour variants */
+.card-detail__badge--element[data-val="Fire"]    { color: var(--element-fire); border-color: var(--element-fire); }
+.card-detail__badge--element[data-val="Water"]   { color: var(--element-water); border-color: var(--element-water); }
+.card-detail__badge--element[data-val="Earth"]   { color: var(--element-earth); border-color: var(--element-earth); }
+.card-detail__badge--element[data-val="Air"]     { color: var(--element-air); border-color: var(--element-air); }
+.card-detail__badge--element[data-val="Light"]   { color: var(--element-light); border-color: var(--element-light); }
+.card-detail__badge--element[data-val="Dark"]    { color: var(--element-dark); border-color: var(--element-dark); }
+.card-detail__badge--element[data-val="Neutral"] { color: var(--element-neutral); border-color: var(--element-neutral); }
+
+.card-detail__stats {
+  display: flex;
+  gap: var(--sp-6);
+}
+.card-detail__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.card-detail__stat-value {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  font-family: var(--font-heading);
+  color: var(--accent-primary);
+}
+.card-detail__stat-label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.card-detail__desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.card-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+.card-detail__tag {
+  font-size: var(--fs-xs);
+  padding: 2px var(--sp-2);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+}
+
+.card-detail__actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+/* ── Game summary modal ────────────────────────────────── */
+.game-summary {
+  padding: var(--sp-8);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.game-summary__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-2xl);
+  color: var(--accent-primary);
+}
+.game-summary__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  width: 100%;
+  max-width: 320px;
+}
+.game-summary__stat {
+  padding: var(--sp-3);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+}
+.game-summary__stat-value {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+.game-summary__stat-label {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.game-summary__actions {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── Confirmation dialog ───────────────────────────────── */
+.confirm-dialog {
+  padding: var(--sp-8);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.confirm-dialog__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-lg);
+  color: var(--text-primary);
+}
+.confirm-dialog__text {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+.confirm-dialog__actions {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+/* ── Card zoom overlay ─────────────────────────────────── */
+.card-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-modal) + 10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  cursor: zoom-out;
+}
+.card-zoom-overlay .card {
+  width: min(80vw, 400px);
+  pointer-events: none;
+}

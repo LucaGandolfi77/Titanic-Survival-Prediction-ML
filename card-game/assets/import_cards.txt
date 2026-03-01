@@ -1,0 +1,5066 @@
+Szarekh, the Silent King
+{1}{B}{B}{B}
+Legendary Artifact Creature — Necron
+
+Flying
+
+My Will Be Done — Whenever Szarekh attacks, mill three cards. You may put an artifact creature card or Vehicle card from among the cards milled this way into your hand.
+
+3/4
+Abaddon the Despoiler
+{2}{U}{B}{R}
+Legendary Creature — Astartes Warrior
+
+Trample
+
+Mark of Chaos Ascendant — During your turn, spells you cast from your hand with mana value X or less have cascade, where X is the total amount of life your opponents have lost this turn.
+
+5/5
+Inquisitor Greyfax
+{1}{W}{U}{B}
+Legendary Creature — Human Inquisitor
+
+Vigilance
+
+Unquestionable Wisdom — Other creatures you control get +1/+0 and have vigilance.
+
+Hunt for Heresy — {1}, {T}: Tap target creature an opponent controls. Investigate. (Create a Clue token. It’s an artifact with “{2}, Sacrifice this token: Draw a card.”)
+
+3/3
+The Swarmlord
+{3}{G}{U}{R}
+Legendary Creature — Tyranid
+
+Rapid Regeneration — The Swarmlord enters with two +1/+1 counters on it for each time you’ve cast your commander from the command zone this game.
+
+Xenos Cunning — Whenever a creature you control with a counter on it dies, draw a card.
+
+5/5
+Imotekh the Stormlord
+{2}{B}{B}
+Legendary Artifact Creature — Necron
+
+Phaeron — Whenever one or more artifact cards leave your graveyard, create two 2/2 black Necron Warrior artifact creature tokens.
+
+Grand Strategist — At the beginning of combat on your turn, another target artifact creature you control gets +2/+2 and gains menace until end of turn.
+
+3/3
+Be'lakor, the Dark Master
+{3}{U}{B}{R}
+Legendary Creature — Demon Noble
+
+Flying
+
+Prince of Chaos — When Be'lakor enters, you draw X cards and you lose X life, where X is the number of Demons you control.
+
+Lord of Torment — Whenever another Demon you control enters, it deals damage equal to its power to any target.
+
+6/5
+Magus Lucea Kane
+{1}{G}{U}{R}
+Legendary Creature — Human Tyranid Wizard
+
+Spiritual Leader — At the beginning of combat on your turn, put a +1/+1 counter on target creature.
+
+Psychic Stimulus — {T}: Add {C}{C}. When you next cast a spell with {X} in its mana cost or activate an ability with {X} in its activation cost this turn, copy that spell or ability. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)
+
+1/1
+Marneus Calgar
+{2}{W}{U}{B}
+Legendary Creature — Astartes Warrior
+
+Double strike
+
+Master Tactician — Whenever one or more tokens you control enter, draw a card.
+
+Chapter Master — {6}: Create two 2/2 white Astartes Warrior creature tokens with vigilance.
+
+3/5
+And They Shall Know No Fear
+{1}{W}
+Instant
+
+Choose a creature type. Creatures you control of the chosen type get +1/+0 and gain indestructible until end of turn.
+
+And They Shall Know No Fear
+{1}{W}
+Instant
+
+Choose a creature type. Creatures you control of the chosen type get +1/+0 and gain indestructible until end of turn.
+
+Celestine, the Living Saint
+{4}{W}
+Legendary Creature — Human Warrior
+
+Flying, lifelink
+
+Healing Tears — At the beginning of your end step, return target creature card with mana value X or less from your graveyard to the battlefield, where X is the amount of life you gained this turn.
+
+3/4
+Celestine, the Living Saint
+{4}{W}
+Legendary Creature — Human Warrior
+
+Flying, lifelink
+
+Healing Tears — At the beginning of your end step, return target creature card with mana value X or less from your graveyard to the battlefield, where X is the amount of life you gained this turn.
+
+3/4
+Defenders of Humanity
+{X}{2}{W}
+Enchantment
+
+When this enchantment enters, create X 2/2 white Astartes Warrior creature tokens with vigilance.
+
+{X}{2}{W}, Exile this enchantment: Create X 2/2 white Astartes Warrior creature tokens with vigilance. Activate only if you control no creatures and only during your turn.
+
+Defenders of Humanity
+{X}{2}{W}
+Enchantment
+
+When this enchantment enters, create X 2/2 white Astartes Warrior creature tokens with vigilance.
+
+{X}{2}{W}, Exile this enchantment: Create X 2/2 white Astartes Warrior creature tokens with vigilance. Activate only if you control no creatures and only during your turn.
+
+For the Emperor!
+{3}{W}
+Sorcery
+
+Creatures you control get +2/+2 and gain vigilance and lifelink until end of turn.
+
+For the Emperor!
+{3}{W}
+Sorcery
+
+Creatures you control get +2/+2 and gain vigilance and lifelink until end of turn.
+
+Grey Knight Paragon
+{4}{W}
+Creature — Astartes Knight
+
+Flash
+
+Rites of Banishment — When this creature enters, destroy target attacking creature. If that creature is a Demon, exile it instead.
+
+4/4
+Grey Knight Paragon
+{4}{W}
+Creature — Astartes Knight
+
+Flash
+
+Rites of Banishment — When this creature enters, destroy target attacking creature. If that creature is a Demon, exile it instead.
+
+4/4
+Space Marine Devastator
+{3}{W}
+Creature — Astartes Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Grav-cannon — When this creature enters, destroy up to one target artifact or enchantment.
+
+3/3
+Space Marine Devastator
+{3}{W}
+Creature — Astartes Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Grav-cannon — When this creature enters, destroy up to one target artifact or enchantment.
+
+3/3
+Space Marine Scout
+{2}{W}
+Creature — Astartes Scout
+
+First strike, vigilance
+
+Concealed Position — When this creature enters, if an opponent controls more lands than you, you may search your library for a Plains card, put it onto the battlefield tapped, then shuffle.
+
+2/1
+Space Marine Scout
+{2}{W}
+Creature — Astartes Scout
+
+First strike, vigilance
+
+Concealed Position — When this creature enters, if an opponent controls more lands than you, you may search your library for a Plains card, put it onto the battlefield tapped, then shuffle.
+
+2/1
+Thunderwolf Cavalry
+{4}{W}
+Creature — Astartes Warrior
+
+First strike
+
+Crushing Teeth — Whenever this creature deals combat damage to a player, put a +1/+1 counter on each other creature you control.
+
+4/4
+Thunderwolf Cavalry
+{4}{W}
+Creature — Astartes Warrior
+
+First strike
+
+Crushing Teeth — Whenever this creature deals combat damage to a player, put a +1/+1 counter on each other creature you control.
+
+4/4
+Triumph of Saint Katherine
+{4}{W}
+Creature — Human Warrior
+
+Lifelink
+
+Praesidium Protectiva — When this creature is put into your graveyard from the battlefield, exile it and the top six cards of your library in a face-down pile. If you do, shuffle that pile and put it back on top of your library.
+
+Miracle {1}{W} (You may cast this card for its miracle cost when you draw it if it’s the first card you drew this turn.)
+
+5/5
+Triumph of Saint Katherine
+{4}{W}
+Creature — Human Warrior
+
+Lifelink
+
+Praesidium Protectiva — When this creature is put into your graveyard from the battlefield, exile it and the top six cards of your library in a face-down pile. If you do, shuffle that pile and put it back on top of your library.
+
+Miracle {1}{W} (You may cast this card for its miracle cost when you draw it if it’s the first card you drew this turn.)
+
+5/5
+Ultramarines Honour Guard
+{3}{W}
+Creature — Astartes Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Other creatures you control get +1/+1.
+
+2/2
+Ultramarines Honour Guard
+{3}{W}
+Creature — Astartes Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Other creatures you control get +1/+1.
+
+2/2
+Vexilus Praetor
+{3}{W}
+Creature — Custodes Warrior
+
+Flash
+
+Vigilance
+
+Aegis of the Emperor — Commanders you control have protection from everything.
+
+3/4
+Vexilus Praetor
+{3}{W}
+Creature — Custodes Warrior
+
+Flash
+
+Vigilance
+
+Aegis of the Emperor — Commanders you control have protection from everything.
+
+3/4
+Zephyrim
+{3}{W}
+Creature — Human Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Flying, vigilance
+
+Miracle {1}{W} (You may cast this card for its miracle cost when you draw it if it’s the first card you drew this turn.)
+
+3/3
+Zephyrim
+{3}{W}
+Creature — Human Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Flying, vigilance
+
+Miracle {1}{W} (You may cast this card for its miracle cost when you draw it if it’s the first card you drew this turn.)
+
+3/3
+Genestealer Locus
+{3}{U}
+Creature — Tyranid Human
+
+Neurotraumal Rod — Whenever a creature attacks you, it gets -1/-0 until end of turn.
+
+Whenever a creature attacks one of your opponents, it gets +0/+1 until end of turn.
+
+3/3
+Genestealer Locus
+{3}{U}
+Creature — Tyranid Human
+
+Neurotraumal Rod — Whenever a creature attacks you, it gets -1/-0 until end of turn.
+
+Whenever a creature attacks one of your opponents, it gets +0/+1 until end of turn.
+
+3/3
+Genestealer Patriarch
+{4}{U}
+Creature — Tyranid
+
+Genestealer’s Kiss — Whenever this creature attacks, put an infection counter on target creature defending player controls.
+
+Children of the Cult — Whenever a creature with an infection counter on it dies, you create a token that’s a copy of that creature, except it’s a Tyranid in addition to its other types.
+
+4/4
+Genestealer Patriarch
+{4}{U}
+Creature — Tyranid
+
+Genestealer’s Kiss — Whenever this creature attacks, put an infection counter on target creature defending player controls.
+
+Children of the Cult — Whenever a creature with an infection counter on it dies, you create a token that’s a copy of that creature, except it’s a Tyranid in addition to its other types.
+
+4/4
+Heralds of Tzeentch
+{4}{U}
+Creature — Demon
+
+Flying
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+3/3
+Heralds of Tzeentch
+{4}{U}
+Creature — Demon
+
+Flying
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+3/3
+Lord of Change
+{6}{U}
+Creature — Demon
+
+Flying, ward {3}
+
+Architect of Deception — When this creature enters, draw three cards.
+
+6/6
+Lord of Change
+{6}{U}
+Creature — Demon
+
+Flying, ward {3}
+
+Architect of Deception — When this creature enters, draw three cards.
+
+6/6
+Sicarian Infiltrator
+{2}{U}
+Artifact Creature — Human Soldier
+
+Flash
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Benediction of the Omnissiah — When this creature enters, draw a card.
+
+1/2
+Sicarian Infiltrator
+{2}{U}
+Artifact Creature — Human Soldier
+
+Flash
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Benediction of the Omnissiah — When this creature enters, draw a card.
+
+1/2
+Sister of Silence
+{4}{U}
+Creature — Human Knight
+
+Flash
+
+Psychic Abomination — When this creature enters, counter target instant spell, sorcery spell, activated ability, or triggered ability.
+
+3/3
+Sister of Silence
+{4}{U}
+Creature — Human Knight
+
+Flash
+
+Psychic Abomination — When this creature enters, counter target instant spell, sorcery spell, activated ability, or triggered ability.
+
+3/3
+Vanguard Suppressor
+{3}{U}
+Creature — Astartes Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Flying
+
+Suppressing Fire — Whenever this creature deals combat damage to a player, draw a card.
+
+3/2
+Vanguard Suppressor
+{3}{U}
+Creature — Astartes Warrior
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+Flying
+
+Suppressing Fire — Whenever this creature deals combat damage to a player, draw a card.
+
+3/2
+Anrakyr the Traveller
+{4}{B}
+Legendary Artifact Creature — Necron
+
+Lord of the Pyrrhian Legions — Whenever Anrakyr the Traveller attacks, you may cast an artifact spell from your hand or graveyard by paying life equal to its mana value rather than paying its mana cost.
+
+4/4
+Anrakyr the Traveller
+{4}{B}
+Legendary Artifact Creature — Necron
+
+Lord of the Pyrrhian Legions — Whenever Anrakyr the Traveller attacks, you may cast an artifact spell from your hand or graveyard by paying life equal to its mana value rather than paying its mana cost.
+
+4/4
+Arco-Flagellant
+{2}{B}
+Creature — Human
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+This creature can’t block.
+
+Endurant — Pay 3 life: This creature gains indestructible until end of turn.
+
+3/1
+Arco-Flagellant
+{2}{B}
+Creature — Human
+
+Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)
+
+This creature can’t block.
+
+Endurant — Pay 3 life: This creature gains indestructible until end of turn.
+
+3/1
+Biotransference
+{2}{B}{B}
+Enchantment
+
+Creatures you control are artifacts in addition to their other types. The same is true for creature spells you control and creature cards you own that aren’t on the battlefield.
+
+Whenever you cast an artifact spell, you lose 1 life and create a 2/2 black Necron Warrior artifact creature token.
+
+Biotransference
+{2}{B}{B}
+Enchantment
+
+Creatures you control are artifacts in addition to their other types. The same is true for creature spells you control and creature cards you own that aren’t on the battlefield.
+
+Whenever you cast an artifact spell, you lose 1 life and create a 2/2 black Necron Warrior artifact creature token.
+
+Blight Grenade
+{4}{B}
+Sorcery
+
+Destroy target creature.
+
+All creatures get -3/-3 until end of turn.
+
+Blight Grenade
+{4}{B}
+Sorcery
+
+Destroy target creature.
+
+All creatures get -3/-3 until end of turn.
+
+Chronomancer
+{1}{B}
+Artifact Creature — Necron Wizard
+
+Flying
+
+Atomic Transmutation — {1}, {T}, Sacrifice another artifact: Draw a card.
+
+Unearth {2}{B} ({2}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+1/1
+Chronomancer
+{1}{B}
+Artifact Creature — Necron Wizard
+
+Flying
+
+Atomic Transmutation — {1}, {T}, Sacrifice another artifact: Draw a card.
+
+Unearth {2}{B} ({2}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+1/1
+Cryptek
+{3}{B}
+Artifact Creature — Necron Wizard
+
+{1}{B}, {T}: Choose another target artifact creature you control. When that creature dies this turn, return it to the battlefield tapped under your control.
+
+3/3
+Cryptek
+{3}{B}
+Artifact Creature — Necron Wizard
+
+{1}{B}, {T}: Choose another target artifact creature you control. When that creature dies this turn, return it to the battlefield tapped under your control.
+
+3/3
+Flayed One
+{2}{B}
+Artifact Creature — Necron
+
+Lifelink
+
+Flesh Flayer — When this creature enters, mill three cards.
+
+4/1
+Flayed One
+{2}{B}
+Artifact Creature — Necron
+
+Lifelink
+
+Flesh Flayer — When this creature enters, mill three cards.
+
+4/1
+Great Unclean One
+{4}{B}
+Creature — Demon
+
+Reverberating Summons — At the beginning of your end step, each opponent loses 2 life. Then for each opponent who has less life than you, create a 1/3 black Demon creature token named Plaguebearer of Nurgle.
+
+4/5
+Great Unclean One
+{4}{B}
+Creature — Demon
+
+Reverberating Summons — At the beginning of your end step, each opponent loses 2 life. Then for each opponent who has less life than you, create a 1/3 black Demon creature token named Plaguebearer of Nurgle.
+
+4/5
+Hexmark Destroyer
+{4}{B}{B}
+Artifact Creature — Necron
+
+Multi-threat Eliminator — This creature can’t be blocked except by six or more creatures.
+
+Unearth {4}{B}{B} ({4}{B}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+6/6
+Hexmark Destroyer
+{4}{B}{B}
+Artifact Creature — Necron
+
+Multi-threat Eliminator — This creature can’t be blocked except by six or more creatures.
+
+Unearth {4}{B}{B} ({4}{B}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+6/6
+Illuminor Szeras
+{2}{B}
+Legendary Artifact Creature — Necron
+
+Secrets of the Soul — {T}, Sacrifice another creature: Add an amount of {B} equal to the sacrificed creature’s mana value.
+
+3/3
+Illuminor Szeras
+{2}{B}
+Legendary Artifact Creature — Necron
+
+Secrets of the Soul — {T}, Sacrifice another creature: Add an amount of {B} equal to the sacrificed creature’s mana value.
+
+3/3
+Lokhust Heavy Destroyer
+{1}{B}{B}{B}
+Artifact Creature — Necron
+
+Flying
+
+Enmitic Exterminator — When this creature enters, each player sacrifices a creature of their choice.
+
+Unearth {5}{B}{B}{B} ({5}{B}{B}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+3/2
+Lokhust Heavy Destroyer
+{1}{B}{B}{B}
+Artifact Creature — Necron
+
+Flying
+
+Enmitic Exterminator — When this creature enters, each player sacrifices a creature of their choice.
+
+Unearth {5}{B}{B}{B} ({5}{B}{B}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+3/2
+Lychguard
+{2}{B}
+Artifact Creature — Necron
+
+Guardian Protocols — {3}{B}, Sacrifice this creature: Return all legendary creature cards from your graveyard to your hand.
+
+2/3
+Lychguard
+{2}{B}
+Artifact Creature — Necron
+
+Guardian Protocols — {3}{B}, Sacrifice this creature: Return all legendary creature cards from your graveyard to your hand.
+
+2/3
+Mandate of Abaddon
+{3}{B}
+Sorcery
+
+Choose target creature you control. Destroy all creatures with power less than that creature’s power.
+
+Mandate of Abaddon
+{3}{B}
+Sorcery
+
+Choose target creature you control. Destroy all creatures with power less than that creature’s power.
+
+Mortarion, Daemon Primarch
+{5}{B}
+Legendary Creature — Demon Primarch
+
+Flying
+
+Primarch of the Death Guard — At the beginning of your end step, you may pay {X}. If you do, create X 2/2 black Astartes Warrior creature tokens with menace. X can’t be greater than the amount of life you lost this turn.
+
+5/6
+Mortarion, Daemon Primarch
+{5}{B}
+Legendary Creature — Demon Primarch
+
+Flying
+
+Primarch of the Death Guard — At the beginning of your end step, you may pay {X}. If you do, create X 2/2 black Astartes Warrior creature tokens with menace. X can’t be greater than the amount of life you lost this turn.
+
+5/6
+Necron Deathmark
+{3}{B}{B}
+Artifact Creature — Necron
+
+Flash
+
+Synaptic Disintegrator — When this creature enters, destroy up to one target creature and target player mills three cards.
+
+5/3
+Necron Deathmark
+{3}{B}{B}
+Artifact Creature — Necron
+
+Flash
+
+Synaptic Disintegrator — When this creature enters, destroy up to one target creature and target player mills three cards.
+
+5/3
+Necron Overlord
+{2}{B}{B}
+Artifact Creature — Necron Noble
+
+Relentless March — {X}, {T}, Tap X untapped artifacts you control: Target opponent loses X life.
+
+2/5
+Necron Overlord
+{2}{B}{B}
+Artifact Creature — Necron Noble
+
+Relentless March — {X}, {T}, Tap X untapped artifacts you control: Target opponent loses X life.
+
+2/5
+Nurgle's Conscription
+{4}{B}
+Instant
+
+Put target creature card from an opponent’s graveyard onto the battlefield tapped under your control, then exile that player’s graveyard.
+
+Nurgle's Conscription
+{4}{B}
+Instant
+
+Put target creature card from an opponent’s graveyard onto the battlefield tapped under your control, then exile that player’s graveyard.
+
+Nurgle's Rot
+{B}
+Enchantment — Aura
+
+Enchant creature an opponent controls
+
+When enchanted creature dies, return this card to its owner’s hand and you create a 1/3 black Demon creature token named Plaguebearer of Nurgle.
+
+Nurgle's Rot
+{B}
+Enchantment — Aura
+
+Enchant creature an opponent controls
+
+When enchanted creature dies, return this card to its owner’s hand and you create a 1/3 black Demon creature token named Plaguebearer of Nurgle.
+
+Out of the Tombs
+{2}{B}
+Enchantment
+
+At the beginning of your upkeep, put two eon counters on this enchantment, then mill cards equal to the number of eon counters on it.
+
+If you would draw a card while your library has no cards in it, instead return a creature card from your graveyard to the battlefield. If you can’t, you lose the game.
+
+Out of the Tombs
+{2}{B}
+Enchantment
+
+At the beginning of your upkeep, put two eon counters on this enchantment, then mill cards equal to the number of eon counters on it.
+
+If you would draw a card while your library has no cards in it, instead return a creature card from your graveyard to the battlefield. If you can’t, you lose the game.
+
+Plague Drone
+{3}{B}
+Creature — Demon
+
+Flying
+
+Rot Fly — If an opponent would gain life, that player loses that much life instead.
+
+3/3
+Plague Drone
+{3}{B}
+Creature — Demon
+
+Flying
+
+Rot Fly — If an opponent would gain life, that player loses that much life instead.
+
+3/3
+Plasmancer
+{2}{B}{B}
+Artifact Creature — Necron Wizard
+
+Flying
+
+Dynastic Advisor — When this creature enters, search your library for a basic Swamp card, reveal it, put it into your hand, then shuffle.
+
+3/3
+Plasmancer
+{2}{B}{B}
+Artifact Creature — Necron Wizard
+
+Flying
+
+Dynastic Advisor — When this creature enters, search your library for a basic Swamp card, reveal it, put it into your hand, then shuffle.
+
+3/3
+Poxwalkers
+{2}{B}
+Creature — Zombie
+
+Deathtouch
+
+Curse of the Walking Pox — Whenever you cast a spell from anywhere other than your hand, return this card from your graveyard to the battlefield tapped.
+
+3/1
+Poxwalkers
+{2}{B}
+Creature — Zombie
+
+Deathtouch
+
+Curse of the Walking Pox — Whenever you cast a spell from anywhere other than your hand, return this card from your graveyard to the battlefield tapped.
+
+3/1
+Primaris Eliminator
+{4}{B}
+Creature — Astartes Warrior
+
+When this creature enters, choose one —
+
+• Executioner Round — Destroy target creature.
+
+• Hyperfrag Round — Creatures target player controls get -2/-2 until end of turn.
+
+3/2
+Primaris Eliminator
+{4}{B}
+Creature — Astartes Warrior
+
+When this creature enters, choose one —
+
+• Executioner Round — Destroy target creature.
+
+• Hyperfrag Round — Creatures target player controls get -2/-2 until end of turn.
+
+3/2
+Psychomancer
+{1}{B}
+Artifact Creature — Necron Wizard
+
+Flying
+
+Harbinger of Despair — Whenever this creature or another nontoken artifact you control is put into a graveyard from the battlefield or is put into exile from the battlefield, target opponent loses 1 life and you gain 1 life.
+
+1/1
+Psychomancer
+{1}{B}
+Artifact Creature — Necron Wizard
+
+Flying
+
+Harbinger of Despair — Whenever this creature or another nontoken artifact you control is put into a graveyard from the battlefield or is put into exile from the battlefield, target opponent loses 1 life and you gain 1 life.
+
+1/1
+Royal Warden
+{3}{B}{B}
+Artifact Creature — Necron
+
+Phalanx Commander — When this creature enters, create two tapped 2/2 black Necron Warrior artifact creature tokens.
+
+Unearth {3}{B} ({3}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+3/2
+Royal Warden
+{3}{B}{B}
+Artifact Creature — Necron
+
+Phalanx Commander — When this creature enters, create two tapped 2/2 black Necron Warrior artifact creature tokens.
+
+Unearth {3}{B} ({3}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+3/2
+Sanguinary Priest
+{3}{B}
+Creature — Astartes Cleric
+
+Lifelink
+
+Blood Chalice — Whenever another creature you control dies, this creature deals 1 damage to any target.
+
+2/4
+Sanguinary Priest
+{3}{B}
+Creature — Astartes Cleric
+
+Lifelink
+
+Blood Chalice — Whenever another creature you control dies, this creature deals 1 damage to any target.
+
+2/4
+Sautekh Immortal
+{2}{B}
+Artifact Creature — Necron
+
+Flash
+
+Elite Troops — This creature enters with a +1/+1 counter on it for each creature that died this turn.
+
+2/2
+Sautekh Immortal
+{2}{B}
+Artifact Creature — Necron
+
+Flash
+
+Elite Troops — This creature enters with a +1/+1 counter on it for each creature that died this turn.
+
+2/2
+Shard of the Nightbringer
+{5}{B}{B}{B}
+Creature — C'tan
+
+Flying
+
+Drain Life — When this creature enters, if you cast it, target opponent loses half their life, rounded up. You gain life equal to the life lost this way.
+
+8/8
+Shard of the Nightbringer
+{5}{B}{B}{B}
+Creature — C'tan
+
+Flying
+
+Drain Life — When this creature enters, if you cast it, target opponent loses half their life, rounded up. You gain life equal to the life lost this way.
+
+8/8
+Shard of the Void Dragon
+{4}{B}{B}{B}
+Creature — C'tan
+
+Flying
+
+Spear of the Void Dragon — Whenever this creature attacks, each opponent sacrifices a nonland permanent of their choice.
+
+Matter Absorption — Whenever an artifact is put into a graveyard from the battlefield or is put into exile from the battlefield, put two +1/+1 counters on this creature.
+
+7/7
+Shard of the Void Dragon
+{4}{B}{B}{B}
+Creature — C'tan
+
+Flying
+
+Spear of the Void Dragon — Whenever this creature attacks, each opponent sacrifices a nonland permanent of their choice.
+
+Matter Absorption — Whenever an artifact is put into a graveyard from the battlefield or is put into exile from the battlefield, put two +1/+1 counters on this creature.
+
+7/7
+Skorpekh Destroyer
+{2}{B}{B}
+Artifact Creature — Necron
+
+Deathtouch
+
+Hyperphase Threshers — Whenever an artifact you control enters, this creature gains first strike until end of turn.
+
+4/2
+Skorpekh Destroyer
+{2}{B}{B}
+Artifact Creature — Necron
+
+Deathtouch
+
+Hyperphase Threshers — Whenever an artifact you control enters, this creature gains first strike until end of turn.
+
+4/2
+Skorpekh Lord
+{2}{B}
+Artifact Creature — Necron Noble
+
+Menace
+
+Command Protocols — Other artifact creatures you control get +1/+0 and have menace.
+
+Unearth {2}{B} ({2}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+3/2
+Skorpekh Lord
+{2}{B}
+Artifact Creature — Necron Noble
+
+Menace
+
+Command Protocols — Other artifact creatures you control get +1/+0 and have menace.
+
+Unearth {2}{B} ({2}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+3/2
+Sloppity Bilepiper
+{3}{B}
+Creature — Demon
+
+Jolly Gutpipes — {2}, {T}, Sacrifice a creature: The next creature spell you cast this turn has cascade. (When you next cast a creature spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+3/3
+Sloppity Bilepiper
+{3}{B}
+Creature — Demon
+
+Jolly Gutpipes — {2}, {T}, Sacrifice a creature: The next creature spell you cast this turn has cascade. (When you next cast a creature spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+3/3
+Tallyman of Nurgle
+{2}{B}
+Creature — Astartes Warrior
+
+Lifelink
+
+The Seven-fold Chant — At the beginning of your end step, if a creature died this turn, you draw a card and you lose 1 life. If seven or more creatures died this turn, instead you draw seven cards and you lose 7 life.
+
+2/3
+Tallyman of Nurgle
+{2}{B}
+Creature — Astartes Warrior
+
+Lifelink
+
+The Seven-fold Chant — At the beginning of your end step, if a creature died this turn, you draw a card and you lose 1 life. If seven or more creatures died this turn, instead you draw seven cards and you lose 7 life.
+
+2/3
+Technomancer
+{5}{B}{B}
+Artifact Creature — Necron Wizard
+
+When this creature enters, mill three cards, then return any number of artifact creature cards with total mana value 6 or less from your graveyard to the battlefield.
+
+5/1
+Technomancer
+{5}{B}{B}
+Artifact Creature — Necron Wizard
+
+When this creature enters, mill three cards, then return any number of artifact creature cards with total mana value 6 or less from your graveyard to the battlefield.
+
+5/1
+Their Name Is Death
+{3}{B}{B}{B}
+Sorcery
+
+Destroy all nonartifact creatures.
+
+Their Name Is Death
+{3}{B}{B}{B}
+Sorcery
+
+Destroy all nonartifact creatures.
+
+Their Number Is Legion
+{X}{B}{B}{B}{B}
+Sorcery
+
+Create X tapped 2/2 black Necron Warrior artifact creature tokens, then you gain life equal to the number of artifacts you control. Exile Their Number Is Legion.
+
+You may cast this card from your graveyard.
+
+Their Number Is Legion
+{X}{B}{B}{B}{B}
+Sorcery
+
+Create X tapped 2/2 black Necron Warrior artifact creature tokens, then you gain life equal to the number of artifacts you control. Exile Their Number Is Legion.
+
+You may cast this card from your graveyard.
+
+Tomb Blade
+{4}{B}{B}
+Artifact Creature — Necron
+
+Flying
+
+Whenever this creature deals combat damage to a player, that player loses life equal to the number of creatures they control unless they sacrifice a creature of their choice.
+
+Unearth {6}{B}{B}
+
+5/4
+Tomb Blade
+{4}{B}{B}
+Artifact Creature — Necron
+
+Flying
+
+Whenever this creature deals combat damage to a player, that player loses life equal to the number of creatures they control unless they sacrifice a creature of their choice.
+
+Unearth {6}{B}{B}
+
+5/4
+Trazyn the Infinite
+{4}{B}{B}
+Legendary Artifact Creature — Necron
+
+Deathtouch
+
+Prismatic Gallery — As long as Trazyn is on the battlefield, it has all activated abilities of all artifact cards in your graveyard.
+
+4/6
+Trazyn the Infinite
+{4}{B}{B}
+Legendary Artifact Creature — Necron
+
+Deathtouch
+
+Prismatic Gallery — As long as Trazyn is on the battlefield, it has all activated abilities of all artifact cards in your graveyard.
+
+4/6
+Triarch Praetorian
+{1}{B}
+Artifact Creature — Necron
+
+Flying
+
+Dynastic Codes — When this creature enters from a graveyard, you draw two cards and you lose 2 life.
+
+Unearth {4}{B} ({4}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+2/1
+Triarch Praetorian
+{1}{B}
+Artifact Creature — Necron
+
+Flying
+
+Dynastic Codes — When this creature enters from a graveyard, you draw two cards and you lose 2 life.
+
+Unearth {4}{B} ({4}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+2/1
+Triarch Stalker
+{3}{B}{B}
+Artifact Creature — Necron
+
+Targeting Relay — At the beginning of combat on your turn, choose an opponent.
+
+Creatures attacking the last chosen player have menace.
+
+4/5
+Triarch Stalker
+{3}{B}{B}
+Artifact Creature — Necron
+
+Targeting Relay — At the beginning of combat on your turn, choose an opponent.
+
+Creatures attacking the last chosen player have menace.
+
+4/5
+Venomcrawler
+{3}{B}
+Artifact Creature — Demon
+
+Lifelink
+
+Devourer of Souls — Whenever another creature dies, put a +1/+1 counter on this creature.
+
+2/2
+Venomcrawler
+{3}{B}
+Artifact Creature — Demon
+
+Lifelink
+
+Devourer of Souls — Whenever another creature dies, put a +1/+1 counter on this creature.
+
+2/2
+The War in Heaven
+{3}{B}{B}{B}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — You draw three cards and you lose 3 life.
+
+II — Mill three cards.
+
+III — Choose up to three target creature cards with total mana value 8 or less in your graveyard. Return each of them to the battlefield with a necrodermis counter on it. They’re artifacts in addition to their other types.
+
+The War in Heaven
+{3}{B}{B}{B}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — You draw three cards and you lose 3 life.
+
+II — Mill three cards.
+
+III — Choose up to three target creature cards with total mana value 8 or less in your graveyard. Return each of them to the battlefield with a necrodermis counter on it. They’re artifacts in addition to their other types.
+
+Acolyte Hybrid
+{2}{R}
+Creature — Tyranid Human
+
+Heavy Rock Cutter — Whenever this creature attacks, destroy up to one target artifact. If an artifact is destroyed this way, its controller draws a card.
+
+2/2
+Acolyte Hybrid
+{2}{R}
+Creature — Tyranid Human
+
+Heavy Rock Cutter — Whenever this creature attacks, destroy up to one target artifact. If an artifact is destroyed this way, its controller draws a card.
+
+2/2
+Aspiring Champion
+{3}{R}
+Creature — Astartes Warrior
+
+Menace
+
+Ruinous Ascension — When this creature deals combat damage to a player, sacrifice it. If you do, reveal cards from the top of your library until you reveal a creature card. Put that card onto the battlefield, then shuffle the rest into your library. If that creature is a Demon, it deals damage equal to its power to each opponent.
+
+3/3
+Aspiring Champion
+{3}{R}
+Creature — Astartes Warrior
+
+Menace
+
+Ruinous Ascension — When this creature deals combat damage to a player, sacrifice it. If you do, reveal cards from the top of your library until you reveal a creature card. Put that card onto the battlefield, then shuffle the rest into your library. If that creature is a Demon, it deals damage equal to its power to each opponent.
+
+3/3
+Bloodcrusher of Khorne
+{3}{R}
+Creature — Demon Knight
+
+Trample
+
+Devastating Charge — Other creatures you control have trample.
+
+3/3
+Bloodcrusher of Khorne
+{3}{R}
+Creature — Demon Knight
+
+Trample
+
+Devastating Charge — Other creatures you control have trample.
+
+3/3
+Bloodthirster
+{5}{R}
+Creature — Demon
+
+Flying, trample
+
+Whenever this creature deals combat damage to a player, untap it. After this phase, there is an additional combat phase.
+
+This creature can’t attack a player it has already attacked this turn.
+
+6/6
+Bloodthirster
+{5}{R}
+Creature — Demon
+
+Flying, trample
+
+Whenever this creature deals combat damage to a player, untap it. After this phase, there is an additional combat phase.
+
+This creature can’t attack a player it has already attacked this turn.
+
+6/6
+Chaos Terminator Lord
+{3}{R}
+Creature — Astartes Warrior
+
+Lord of Chaos — At the beginning of combat on your turn, another target creature you control gains double strike until end of turn.
+
+3/3
+Chaos Terminator Lord
+{3}{R}
+Creature — Astartes Warrior
+
+Lord of Chaos — At the beginning of combat on your turn, another target creature you control gains double strike until end of turn.
+
+3/3
+Dark Apostle
+{3}{R}
+Creature — Astartes Warlock
+
+Gift of Chaos — {3}, {T}: The next noncreature spell you cast this turn has cascade. (When you cast that spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+3/3
+Dark Apostle
+{3}{R}
+Creature — Astartes Warlock
+
+Gift of Chaos — {3}, {T}: The next noncreature spell you cast this turn has cascade. (When you cast that spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+3/3
+Exocrine
+{X}{2}{R}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Bio-plasmic Barrage — When this creature enters, it deals X damage to each player and each other creature.
+
+2/2
+Exocrine
+{X}{2}{R}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Bio-plasmic Barrage — When this creature enters, it deals X damage to each player and each other creature.
+
+2/2
+Herald of Slaanesh
+{2}{R}
+Creature — Demon
+
+Locus of Slaanesh — Demon spells you cast cost {2} less to cast.
+
+Other Demons you control have haste.
+
+2/2
+Herald of Slaanesh
+{2}{R}
+Creature — Demon
+
+Locus of Slaanesh — Demon spells you cast cost {2} less to cast.
+
+Other Demons you control have haste.
+
+2/2
+Keeper of Secrets
+{5}{R}
+Creature — Demon
+
+First strike, haste
+
+Symphony of Pain — Whenever you cast a spell from anywhere other than your hand, this creature deals damage equal to that spell’s mana value to target opponent.
+
+6/4
+Keeper of Secrets
+{5}{R}
+Creature — Demon
+
+First strike, haste
+
+Symphony of Pain — Whenever you cast a spell from anywhere other than your hand, this creature deals damage equal to that spell’s mana value to target opponent.
+
+6/4
+Khârn the Betrayer
+{3}{R}
+Legendary Creature — Astartes Berserker
+
+Berzerker — Khârn the Betrayer attacks or blocks each combat if able.
+
+Sigil of Corruption — When you lose control of Khârn the Betrayer, draw two cards.
+
+The Betrayer — If damage would be dealt to Khârn the Betrayer, prevent that damage and an opponent of your choice gains control of it.
+
+5/1
+Khârn the Betrayer
+{3}{R}
+Legendary Creature — Astartes Berserker
+
+Berzerker — Khârn the Betrayer attacks or blocks each combat if able.
+
+Sigil of Corruption — When you lose control of Khârn the Betrayer, draw two cards.
+
+The Betrayer — If damage would be dealt to Khârn the Betrayer, prevent that damage and an opponent of your choice gains control of it.
+
+5/1
+Knight Rampager
+{4}{R}
+Artifact Creature — Knight
+
+Trample
+
+Frenzied Rampage — At the beginning of combat on your turn, choose an opponent at random. This creature attacks that player this combat if able.
+
+When this creature dies, it deals 4 damage to target opponent chosen at random.
+
+6/5
+Knight Rampager
+{4}{R}
+Artifact Creature — Knight
+
+Trample
+
+Frenzied Rampage — At the beginning of combat on your turn, choose an opponent at random. This creature attacks that player this combat if able.
+
+When this creature dies, it deals 4 damage to target opponent chosen at random.
+
+6/5
+Let the Galaxy Burn
+{X}{5}{R}
+Sorcery
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Let the Galaxy Burn deals X plus 2 damage to each creature that didn’t enter this turn.
+
+Let the Galaxy Burn
+{X}{5}{R}
+Sorcery
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Let the Galaxy Burn deals X plus 2 damage to each creature that didn’t enter this turn.
+
+Noise Marine
+{4}{R}
+Creature — Astartes Warrior
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Sonic Blaster — When this creature enters, it deals damage equal to the number of spells you’ve cast this turn to any target.
+
+3/2
+Noise Marine
+{4}{R}
+Creature — Astartes Warrior
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Sonic Blaster — When this creature enters, it deals damage equal to the number of spells you’ve cast this turn to any target.
+
+3/2
+The Red Terror
+{3}{R}
+Legendary Creature — Tyranid
+
+Advanced Species — Whenever a red source you control deals damage to one or more permanents and/or players, put a +1/+1 counter on The Red Terror.
+
+4/3
+The Red Terror
+{3}{R}
+Legendary Creature — Tyranid
+
+Advanced Species — Whenever a red source you control deals damage to one or more permanents and/or players, put a +1/+1 counter on The Red Terror.
+
+4/3
+Screamer-Killer
+{4}{R}
+Creature — Tyranid
+
+Trample
+
+Bio-Plasmic Scream — Whenever you cast a creature spell with mana value 5 or greater, this creature deals 5 damage to any target.
+
+5/5
+Screamer-Killer
+{4}{R}
+Creature — Tyranid
+
+Trample
+
+Bio-Plasmic Scream — Whenever you cast a creature spell with mana value 5 or greater, this creature deals 5 damage to any target.
+
+5/5
+Seeker of Slaanesh
+{3}{R}
+Creature — Demon
+
+Haste
+
+Allure of Slaanesh — Each opponent must attack with at least one creature each combat if able.
+
+3/3
+Seeker of Slaanesh
+{3}{R}
+Creature — Demon
+
+Haste
+
+Allure of Slaanesh — Each opponent must attack with at least one creature each combat if able.
+
+3/3
+Aberrant
+{X}{1}{G}
+Creature — Tyranid Mutant
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Trample
+
+Heavy Power Hammer — Whenever this creature deals combat damage to a player, destroy target artifact or enchantment that player controls.
+
+0/0
+Aberrant
+{X}{1}{G}
+Creature — Tyranid Mutant
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Trample
+
+Heavy Power Hammer — Whenever this creature deals combat damage to a player, destroy target artifact or enchantment that player controls.
+
+0/0
+Biophagus
+{1}{G}
+Creature — Human Tyranid Wizard
+
+Genomic Enhancement — {T}: Add one mana of any color. If this mana is spent to cast a creature spell, that creature enters with an additional +1/+1 counter on it.
+
+1/3
+Biophagus
+{1}{G}
+Creature — Human Tyranid Wizard
+
+Genomic Enhancement — {T}: Add one mana of any color. If this mana is spent to cast a creature spell, that creature enters with an additional +1/+1 counter on it.
+
+1/3
+Bone Sabres
+{2}{G}
+Artifact — Equipment
+
+Whenever equipped creature attacks, put four +1/+1 counters on it.
+
+Equip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)
+
+Bone Sabres
+{2}{G}
+Artifact — Equipment
+
+Whenever equipped creature attacks, put four +1/+1 counters on it.
+
+Equip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)
+
+Broodlord
+{X}{3}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Brood Telepathy — When this creature enters, distribute X +1/+1 counters among any number of other target creatures you control.
+
+3/3
+Broodlord
+{X}{3}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Brood Telepathy — When this creature enters, distribute X +1/+1 counters among any number of other target creatures you control.
+
+3/3
+Clamavus
+{4}{G}
+Creature — Human Tyranid Artificer
+
+Proclamator Hailer — Each creature you control gets +1/+1 for each +1/+1 counter on it.
+
+3/3
+Clamavus
+{4}{G}
+Creature — Human Tyranid Artificer
+
+Proclamator Hailer — Each creature you control gets +1/+1 for each +1/+1 counter on it.
+
+3/3
+Haruspex
+{3}{G}
+Creature — Tyranid
+
+Rapacious Hunger — Whenever another creature dies, put a +1/+1 counter on this creature.
+
+Devouring Monster — {T}, Remove X +1/+1 counters from this creature: Add X mana of any one color.
+
+2/2
+Haruspex
+{3}{G}
+Creature — Tyranid
+
+Rapacious Hunger — Whenever another creature dies, put a +1/+1 counter on this creature.
+
+Devouring Monster — {T}, Remove X +1/+1 counters from this creature: Add X mana of any one color.
+
+2/2
+Hierophant Bio-Titan
+{10}{G}{G}
+Creature — Tyranid
+
+Frenzied Metabolism — As an additional cost to cast this spell, you may remove any number of +1/+1 counters from among creatures you control. This spell costs {2} less to cast for each counter removed this way.
+
+Vigilance, reach, ward {2}
+
+Titanic — This creature can’t be blocked by creatures with power 2 or less.
+
+12/12
+Hierophant Bio-Titan
+{10}{G}{G}
+Creature — Tyranid
+
+Frenzied Metabolism — As an additional cost to cast this spell, you may remove any number of +1/+1 counters from among creatures you control. This spell costs {2} less to cast for each counter removed this way.
+
+Vigilance, reach, ward {2}
+
+Titanic — This creature can’t be blocked by creatures with power 2 or less.
+
+12/12
+Hormagaunt Horde
+{X}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Endless Swarm — Whenever a land you control enters, you may pay {2}{G}. If you do, return this card from your graveyard to your hand.
+
+1/1
+Hormagaunt Horde
+{X}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Endless Swarm — Whenever a land you control enters, you may pay {2}{G}. If you do, return this card from your graveyard to your hand.
+
+1/1
+Lictor
+{3}{G}
+Creature — Tyranid
+
+Flash
+
+Pheromone Trail — When this creature enters, if a creature entered the battlefield under an opponent’s control this turn, create a 3/3 green Tyranid Warrior creature token with trample.
+
+3/3
+Lictor
+{3}{G}
+Creature — Tyranid
+
+Flash
+
+Pheromone Trail — When this creature enters, if a creature entered the battlefield under an opponent’s control this turn, create a 3/3 green Tyranid Warrior creature token with trample.
+
+3/3
+Nexos
+{1}{G}
+Creature — Human Tyranid Advisor
+
+Strategic Coordinator — Basic lands you control have “{T}: Add {C}{C}. Spend this mana only on costs that contain {X}.”
+
+2/2
+Nexos
+{1}{G}
+Creature — Human Tyranid Advisor
+
+Strategic Coordinator — Basic lands you control have “{T}: Add {C}{C}. Spend this mana only on costs that contain {X}.”
+
+2/2
+Old One Eye
+{5}{G}
+Legendary Creature — Tyranid
+
+Trample
+
+Other creatures you control have trample.
+
+When Old One Eye enters, create a 5/5 green Tyranid creature token.
+
+Fast Healing — At the beginning of your first main phase, you may discard two cards. If you do, return this card from your graveyard to your hand.
+
+6/6
+Old One Eye
+{5}{G}
+Legendary Creature — Tyranid
+
+Trample
+
+Other creatures you control have trample.
+
+When Old One Eye enters, create a 5/5 green Tyranid creature token.
+
+Fast Healing — At the beginning of your first main phase, you may discard two cards. If you do, return this card from your graveyard to your hand.
+
+6/6
+Purestrain Genestealer
+{2}{G}
+Creature — Tyranid
+
+This creature enters with two +1/+1 counters on it.
+
+Vanguard Species — Whenever this creature attacks, you may remove a +1/+1 counter from it. If you do, search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+1/1
+Purestrain Genestealer
+{2}{G}
+Creature — Tyranid
+
+This creature enters with two +1/+1 counters on it.
+
+Vanguard Species — Whenever this creature attacks, you may remove a +1/+1 counter from it. If you do, search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+1/1
+Sporocyst
+{X}{X}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Defender
+
+Spore Chimney — When this creature enters, search your library for up to X basic land cards, put them onto the battlefield tapped, then shuffle.
+
+0/0
+Sporocyst
+{X}{X}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Defender
+
+Spore Chimney — When this creature enters, search your library for up to X basic land cards, put them onto the battlefield tapped, then shuffle.
+
+0/0
+Termagant Swarm
+{X}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Death Frenzy — When this creature dies, create a number of 1/1 green Tyranid creature tokens equal to this creature’s power.
+
+0/0
+Termagant Swarm
+{X}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Death Frenzy — When this creature dies, create a number of 1/1 green Tyranid creature tokens equal to this creature’s power.
+
+0/0
+Tervigon
+{X}{1}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Trample
+
+Spawn Termagants — Whenever this creature deals combat damage to a player, create that many 1/1 green Tyranid creature tokens.
+
+0/0
+Tervigon
+{X}{1}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Trample
+
+Spawn Termagants — Whenever this creature deals combat damage to a player, create that many 1/1 green Tyranid creature tokens.
+
+0/0
+Toxicrene
+{3}{G}
+Creature — Tyranid
+
+Reach, deathtouch
+
+Hypertoxic Miasma — All lands have “{T}: Add one mana of any color” and lose all other abilities.
+
+2/4
+Toxicrene
+{3}{G}
+Creature — Tyranid
+
+Reach, deathtouch
+
+Hypertoxic Miasma — All lands have “{T}: Add one mana of any color” and lose all other abilities.
+
+2/4
+Tyranid Invasion
+{3}{G}
+Sorcery
+
+Create a number of 3/3 green Tyranid Warrior creature tokens with trample equal to the number of opponents you have.
+
+Tyranid Invasion
+{3}{G}
+Sorcery
+
+Create a number of 3/3 green Tyranid Warrior creature tokens with trample equal to the number of opponents you have.
+
+Tyrant Guard
+{X}{2}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Shieldwall — Sacrifice this creature: Creatures you control with counters on them gain hexproof and indestructible until end of turn.
+
+3/3
+Tyrant Guard
+{X}{2}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Shieldwall — Sacrifice this creature: Creatures you control with counters on them gain hexproof and indestructible until end of turn.
+
+3/3
+Assault Intercessor
+{1}{W}{B}
+Creature — Astartes Warrior
+
+First strike, menace
+
+Chainsword — Whenever a creature an opponent controls dies, that player loses 2 life.
+
+3/2
+Assault Intercessor
+{1}{W}{B}
+Creature — Astartes Warrior
+
+First strike, menace
+
+Chainsword — Whenever a creature an opponent controls dies, that player loses 2 life.
+
+3/2
+Atalan Jackal
+{1}{R}{G}
+Creature — Human Tyranid Scout
+
+Trample, haste
+
+Skilled Outrider — Whenever this creature deals combat damage to a player, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+2/2
+Atalan Jackal
+{1}{R}{G}
+Creature — Human Tyranid Scout
+
+Trample, haste
+
+Skilled Outrider — Whenever this creature deals combat damage to a player, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+2/2
+Belisarius Cawl
+{2}{W}{U}
+Legendary Artifact Creature — Human
+
+Ultima Founding — {T}, Tap two untapped artifacts you control: Create a 2/2 white Astartes Warrior creature token with vigilance.
+
+Master of Machines — {T}, Tap X untapped creatures you control: Look at the top X cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.
+
+2/4
+Belisarius Cawl
+{2}{W}{U}
+Legendary Artifact Creature — Human
+
+Ultima Founding — {T}, Tap two untapped artifacts you control: Create a 2/2 white Astartes Warrior creature token with vigilance.
+
+Master of Machines — {T}, Tap X untapped creatures you control: Look at the top X cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.
+
+2/4
+Birth of the Imperium
+{2}{W}{U}{B}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — Create a 2/2 white Astartes Warrior creature token with vigilance for each opponent you have.
+
+II — Each opponent sacrifices a creature of their choice.
+
+III — Draw two cards for each opponent who controls fewer creatures than you.
+
+Birth of the Imperium
+{2}{W}{U}{B}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — Create a 2/2 white Astartes Warrior creature token with vigilance for each opponent you have.
+
+II — Each opponent sacrifices a creature of their choice.
+
+III — Draw two cards for each opponent who controls fewer creatures than you.
+
+Blood for the Blood God!
+{8}{B}{B}{R}
+Instant
+
+This spell costs {1} less to cast for each creature that died this turn.
+
+Discard your hand, then draw eight cards. Blood for the Blood God! deals 8 damage to each opponent. Exile Blood for the Blood God!
+
+Blood for the Blood God!
+{8}{B}{B}{R}
+Instant
+
+This spell costs {1} less to cast for each creature that died this turn.
+
+Discard your hand, then draw eight cards. Blood for the Blood God! deals 8 damage to each opponent. Exile Blood for the Blood God!
+
+Callidus Assassin
+{4}{U}{B}
+Creature — Human Shapeshifter Assassin
+
+Flash
+
+Polymorphine — You may have this creature enter tapped as a copy of any creature on the battlefield, except it has “When this creature enters, destroy up to one other target creature with the same name as this creature.”
+
+3/3
+Callidus Assassin
+{4}{U}{B}
+Creature — Human Shapeshifter Assassin
+
+Flash
+
+Polymorphine — You may have this creature enter tapped as a copy of any creature on the battlefield, except it has “When this creature enters, destroy up to one other target creature with the same name as this creature.”
+
+3/3
+Chaos Defiler
+{3}{B}{R}
+Artifact Creature — Demon Construct
+
+Trample
+
+Battle Cannon — When this creature enters or dies, for each opponent, choose a nonland permanent that player controls. Destroy one of them chosen at random.
+
+5/4
+Chaos Defiler
+{3}{B}{R}
+Artifact Creature — Demon Construct
+
+Trample
+
+Battle Cannon — When this creature enters or dies, for each opponent, choose a nonland permanent that player controls. Destroy one of them chosen at random.
+
+5/4
+Chaos Mutation
+{3}{U}{R}
+Instant
+
+Exile any number of target creatures controlled by different players. For each creature exiled this way, its controller reveals cards from the top of their library until they reveal a creature card, puts that card onto the battlefield, then puts the rest on the bottom of their library in a random order.
+
+Chaos Mutation
+{3}{U}{R}
+Instant
+
+Exile any number of target creatures controlled by different players. For each creature exiled this way, its controller reveals cards from the top of their library until they reveal a creature card, puts that card onto the battlefield, then puts the rest on the bottom of their library in a random order.
+
+Commissar Severina Raine
+{1}{W}{B}
+Legendary Creature — Human Soldier
+
+Leading from the Front — Whenever Commissar Severina Raine attacks, each opponent loses X life, where X is the number of other attacking creatures.
+
+Summary Execution — {2}, Sacrifice another creature: You gain 2 life and draw a card.
+
+2/2
+Commissar Severina Raine
+{1}{W}{B}
+Legendary Creature — Human Soldier
+
+Leading from the Front — Whenever Commissar Severina Raine attacks, each opponent loses X life, where X is the number of other attacking creatures.
+
+Summary Execution — {2}, Sacrifice another creature: You gain 2 life and draw a card.
+
+2/2
+Company Commander
+{2}{W}{B}
+Creature — Human Soldier
+
+Command Section — When this creature enters, create a number of 1/1 white Soldier creature tokens equal to the number of opponents you have.
+
+Bring it Down! — Whenever this creature attacks, creatures you control gain deathtouch until end of turn.
+
+2/4
+Company Commander
+{2}{W}{B}
+Creature — Human Soldier
+
+Command Section — When this creature enters, create a number of 1/1 white Soldier creature tokens equal to the number of opponents you have.
+
+Bring it Down! — Whenever this creature attacks, creatures you control gain deathtouch until end of turn.
+
+2/4
+Cybernetica Datasmith
+{1}{U}{B}
+Artifact Creature — Human Artificer
+
+Protection from Robots
+
+Field Reprogramming — {U}, {T}: Target player draws a card. Another target player creates a 4/4 colorless Robot artifact creature token with “This token can’t block.”
+
+0/1
+Cybernetica Datasmith
+{1}{U}{B}
+Artifact Creature — Human Artificer
+
+Protection from Robots
+
+Field Reprogramming — {U}, {T}: Target player draws a card. Another target player creates a 4/4 colorless Robot artifact creature token with “This token can’t block.”
+
+0/1
+Deathleaper, Terror Weapon
+{2}{R}{G}
+Legendary Creature — Tyranid
+
+Flash
+
+Haste
+
+Flesh Hooks — Creatures you control that entered this turn have double strike.
+
+3/3
+Deathleaper, Terror Weapon
+{2}{R}{G}
+Legendary Creature — Tyranid
+
+Flash
+
+Haste
+
+Flesh Hooks — Creatures you control that entered this turn have double strike.
+
+3/3
+Deny the Witch
+{1}{W}{U}{B}
+Instant
+
+Counter target spell, activated ability, or triggered ability. Its controller loses life equal to the number of creatures you control.
+
+Deny the Witch
+{1}{W}{U}{B}
+Instant
+
+Counter target spell, activated ability, or triggered ability. Its controller loses life equal to the number of creatures you control.
+
+Drach'Nyen
+{4}{B}{R}
+Legendary Artifact — Equipment
+
+Echo of the First Murder — When Drach'Nyen enters, exile up to one target creature.
+
+Daemon Sword — Equipped creature has menace and gets +X/+0, where X is the exiled card’s power.
+
+Equip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)
+
+Drach'Nyen
+{4}{B}{R}
+Legendary Artifact — Equipment
+
+Echo of the First Murder — When Drach'Nyen enters, exile up to one target creature.
+
+Daemon Sword — Equipped creature has menace and gets +X/+0, where X is the exiled card’s power.
+
+Equip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)
+
+Epistolary Librarian
+{2}{W}{U}
+Creature — Astartes Wizard
+
+Veil of Time — Whenever this creature attacks, you may cast a spell with mana value X or less from your hand without paying its mana cost, where X is the number of attacking creatures.
+
+3/4
+Epistolary Librarian
+{2}{W}{U}
+Creature — Astartes Wizard
+
+Veil of Time — Whenever this creature attacks, you may cast a spell with mana value X or less from your hand without paying its mana cost, where X is the number of attacking creatures.
+
+3/4
+Exalted Flamer of Tzeentch
+{2}{U}{R}
+Creature — Demon
+
+Sorcerous Inspiration — At the beginning of your upkeep, return an instant or sorcery card at random from your graveyard to your hand.
+
+Fire of Tzeentch — Whenever you cast an instant or sorcery spell, this creature deals 1 damage to each opponent.
+
+2/4
+Exalted Flamer of Tzeentch
+{2}{U}{R}
+Creature — Demon
+
+Sorcerous Inspiration — At the beginning of your upkeep, return an instant or sorcery card at random from your graveyard to your hand.
+
+Fire of Tzeentch — Whenever you cast an instant or sorcery spell, this creature deals 1 damage to each opponent.
+
+2/4
+Exterminatus
+{5}{W}{B}
+Sorcery
+
+Nonland permanents your opponents control lose indestructible until end of turn.
+
+Destroy all nonland permanents.
+
+Exterminatus
+{5}{W}{B}
+Sorcery
+
+Nonland permanents your opponents control lose indestructible until end of turn.
+
+Destroy all nonland permanents.
+
+The First Tyrannic War
+{2}{G}{U}{R}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — You may put a creature card from your hand onto the battlefield. If its mana cost contains {X}, it enters with a number of +1/+1 counters on it equal to the number of lands you control.
+
+II, III — Double the number of each kind of counter on target creature you control.
+
+The First Tyrannic War
+{2}{G}{U}{R}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — You may put a creature card from your hand onto the battlefield. If its mana cost contains {X}, it enters with a number of +1/+1 counters on it equal to the number of lands you control.
+
+II, III — Double the number of each kind of counter on target creature you control.
+
+The Flesh Is Weak
+{2}{W}{U}{B}
+Enchantment
+
+When this enchantment enters, put a +1/+1 counter on each creature you control.
+
+Creatures you control with +1/+1 counters on them are artifacts in addition to their other types.
+
+Nonartifact creatures get -1/-1.
+
+The Flesh Is Weak
+{2}{W}{U}{B}
+Enchantment
+
+When this enchantment enters, put a +1/+1 counter on each creature you control.
+
+Creatures you control with +1/+1 counters on them are artifacts in addition to their other types.
+
+Nonartifact creatures get -1/-1.
+
+Gargoyle Flock
+{2}{G}{U}
+Creature — Tyranid Gargoyle
+
+Flying
+
+Skyswarm — At the beginning of your end step, if a creature entered the battlefield under your control this turn, create a 1/1 blue Tyranid Gargoyle creature token with flying.
+
+2/2
+Gargoyle Flock
+{2}{G}{U}
+Creature — Tyranid Gargoyle
+
+Flying
+
+Skyswarm — At the beginning of your end step, if a creature entered the battlefield under your control this turn, create a 1/1 blue Tyranid Gargoyle creature token with flying.
+
+2/2
+Ghyrson Starn, Kelermorph
+{1}{U}{R}
+Legendary Creature — Tyranid Human
+
+Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)
+
+Three Autostubs — Whenever another source you control deals exactly 1 damage to a permanent or player, Ghyrson Starn deals 2 damage to that permanent or player.
+
+3/2
+Ghyrson Starn, Kelermorph
+{1}{U}{R}
+Legendary Creature — Tyranid Human
+
+Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)
+
+Three Autostubs — Whenever another source you control deals exactly 1 damage to a permanent or player, Ghyrson Starn deals 2 damage to that permanent or player.
+
+3/2
+Helbrute
+{3}{B}{R}
+Artifact Creature — Astartes Dreadnought
+
+Haste
+
+Sarcophagus — You may cast this card from your graveyard by exiling another creature card from your graveyard in addition to paying its other costs.
+
+5/4
+Helbrute
+{3}{B}{R}
+Artifact Creature — Astartes Dreadnought
+
+Haste
+
+Sarcophagus — You may cast this card from your graveyard by exiling another creature card from your graveyard in addition to paying its other costs.
+
+5/4
+The Horus Heresy
+{3}{U}{B}{R}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — For each opponent, gain control of up to one target nonlegendary creature that player controls for as long as this Saga remains on the battlefield.
+
+II — Draw a card for each creature you control but don’t own.
+
+III — Starting with you, each player chooses a creature. Destroy each creature chosen this way.
+
+The Horus Heresy
+{3}{U}{B}{R}
+Enchantment — Saga
+
+(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)
+
+I — For each opponent, gain control of up to one target nonlegendary creature that player controls for as long as this Saga remains on the battlefield.
+
+II — Draw a card for each creature you control but don’t own.
+
+III — Starting with you, each player chooses a creature. Destroy each creature chosen this way.
+
+Inquisitor Eisenhorn
+{2}{U}{B}
+Legendary Creature — Human Inquisitor
+
+You may reveal the first card you draw each turn as you draw it. Whenever you reveal an instant or sorcery card this way, create Cherubael, a legendary 4/4 black Demon creature token with flying.
+
+Whenever Inquisitor Eisenhorn deals combat damage to a player, investigate that many times. (Create a Clue token. It’s an artifact with “{2}, Sacrifice this token: Draw a card.”)
+
+2/3
+Inquisitor Eisenhorn
+{2}{U}{B}
+Legendary Creature — Human Inquisitor
+
+You may reveal the first card you draw each turn as you draw it. Whenever you reveal an instant or sorcery card this way, create Cherubael, a legendary 4/4 black Demon creature token with flying.
+
+Whenever Inquisitor Eisenhorn deals combat damage to a player, investigate that many times. (Create a Clue token. It’s an artifact with “{2}, Sacrifice this token: Draw a card.”)
+
+2/3
+Kill! Maim! Burn!
+{3}{B}{R}
+Instant
+
+Choose one or more —
+
+• Destroy target artifact.
+
+• Destroy target creature.
+
+• Kill! Maim! Burn! deals 3 damage to target player.
+
+Kill! Maim! Burn!
+{3}{B}{R}
+Instant
+
+Choose one or more —
+
+• Destroy target artifact.
+
+• Destroy target creature.
+
+• Kill! Maim! Burn! deals 3 damage to target player.
+
+The Lost and the Damned
+{1}{U}{R}
+Enchantment
+
+Whenever a land you control enters from anywhere other than your hand or you cast a spell from anywhere other than your hand, create a 3/3 red Spawn creature token.
+
+The Lost and the Damned
+{1}{U}{R}
+Enchantment
+
+Whenever a land you control enters from anywhere other than your hand or you cast a spell from anywhere other than your hand, create a 3/3 red Spawn creature token.
+
+Lucius the Eternal
+{3}{B}{R}
+Legendary Creature — Astartes Warrior
+
+Haste
+
+Armour of Shrieking Souls — When Lucius the Eternal dies, exile it and choose target creature an opponent controls. When that creature leaves the battlefield, return this card from exile to the battlefield under its owner’s control.
+
+5/3
+Lucius the Eternal
+{3}{B}{R}
+Legendary Creature — Astartes Warrior
+
+Haste
+
+Armour of Shrieking Souls — When Lucius the Eternal dies, exile it and choose target creature an opponent controls. When that creature leaves the battlefield, return this card from exile to the battlefield under its owner’s control.
+
+5/3
+Magnus the Red
+{3}{U}{R}
+Legendary Creature — Demon Primarch
+
+Flying
+
+Unearthly Power — Instant and sorcery spells you cast cost {1} less to cast for each creature token you control.
+
+Blade of Magnus — Whenever Magnus the Red deals combat damage to a player, create a 3/3 red Spawn creature token.
+
+4/5
+Magnus the Red
+{3}{U}{R}
+Legendary Creature — Demon Primarch
+
+Flying
+
+Unearthly Power — Instant and sorcery spells you cast cost {1} less to cast for each creature token you control.
+
+Blade of Magnus — Whenever Magnus the Red deals combat damage to a player, create a 3/3 red Spawn creature token.
+
+4/5
+Malanthrope
+{1}{G}{U}
+Creature — Tyranid
+
+Flying
+
+Scavenge the Dead — When this creature enters, exile target player’s graveyard. Put a +1/+1 counter on this creature for each creature card exiled this way.
+
+2/2
+Malanthrope
+{1}{G}{U}
+Creature — Tyranid
+
+Flying
+
+Scavenge the Dead — When this creature enters, exile target player’s graveyard. Put a +1/+1 counter on this creature for each creature card exiled this way.
+
+2/2
+Mawloc
+{X}{R}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Terror from the Deep — When this creature enters, it fights up to one target creature an opponent controls. If that creature would die this turn, exile it instead.
+
+2/2
+Mawloc
+{X}{R}{G}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Terror from the Deep — When this creature enters, it fights up to one target creature an opponent controls. If that creature would die this turn, exile it instead.
+
+2/2
+Mutalith Vortex Beast
+{4}{U}{R}
+Creature — Mutant Beast
+
+Trample
+
+Warp Vortex — When this creature enters, flip a coin for each opponent you have. For each flip you win, draw a card. For each flip you lose, this creature deals 3 damage to that player.
+
+6/6
+Mutalith Vortex Beast
+{4}{U}{R}
+Creature — Mutant Beast
+
+Trample
+
+Warp Vortex — When this creature enters, flip a coin for each opponent you have. For each flip you win, draw a card. For each flip you lose, this creature deals 3 damage to that player.
+
+6/6
+Neyam Shai Murad
+{2}{W}{B}
+Legendary Creature — Human Rogue
+
+Rogue Trader — Whenever Neyam Shai Murad deals combat damage to a player, you may have that player return target permanent card from their graveyard to their hand. If you do, that player chooses a permanent card in your graveyard, then you put it onto the battlefield under your control.
+
+3/3
+Neyam Shai Murad
+{2}{W}{B}
+Legendary Creature — Human Rogue
+
+Rogue Trader — Whenever Neyam Shai Murad deals combat damage to a player, you may have that player return target permanent card from their graveyard to their hand. If you do, that player chooses a permanent card in your graveyard, then you put it onto the battlefield under your control.
+
+3/3
+Pink Horror
+{3}{U}{R}
+Creature — Demon Horror
+
+Coruscating Flames — Whenever you cast an instant or sorcery spell, this creature deals 2 damage to any target.
+
+Split — When this creature dies, create two 2/2 blue and red Demon Horror creature tokens named Blue Horror with “Whenever you cast an instant or sorcery spell, this token deals 1 damage to any target.”
+
+4/4
+Pink Horror
+{3}{U}{R}
+Creature — Demon Horror
+
+Coruscating Flames — Whenever you cast an instant or sorcery spell, this creature deals 2 damage to any target.
+
+Split — When this creature dies, create two 2/2 blue and red Demon Horror creature tokens named Blue Horror with “Whenever you cast an instant or sorcery spell, this token deals 1 damage to any target.”
+
+4/4
+Primaris Chaplain
+{2}{W}{B}
+Creature — Astartes Cleric
+
+Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)
+
+Rosarius — Whenever this creature attacks, it gains indestructible until end of turn.
+
+3/3
+Primaris Chaplain
+{2}{W}{B}
+Creature — Astartes Cleric
+
+Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)
+
+Rosarius — Whenever this creature attacks, it gains indestructible until end of turn.
+
+3/3
+Ravener
+{X}{G}{U}
+Creature — Tyranid
+
+Flash
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+When this creature enters, target creature attacks target opponent this turn if able.
+
+0/0
+Ravener
+{X}{G}{U}
+Creature — Tyranid
+
+Flash
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+When this creature enters, target creature attacks target opponent this turn if able.
+
+0/0
+The Ruinous Powers
+{2}{B}{R}
+Enchantment
+
+At the beginning of your upkeep, choose an opponent at random. Exile the top card of that player’s library. Until end of turn, you may play that card and you may spend mana as though it were mana of any color to cast it. When you cast a spell this way, its owner loses life equal to its mana value.
+
+The Ruinous Powers
+{2}{B}{R}
+Enchantment
+
+At the beginning of your upkeep, choose an opponent at random. Exile the top card of that player’s library. Until end of turn, you may play that card and you may spend mana as though it were mana of any color to cast it. When you cast a spell this way, its owner loses life equal to its mana value.
+
+Shadow in the Warp
+{1}{R}{G}
+Enchantment
+
+The first creature spell you cast each turn costs {2} less to cast.
+
+Whenever an opponent casts their first noncreature spell each turn, this enchantment deals 2 damage to that player.
+
+Shadow in the Warp
+{1}{R}{G}
+Enchantment
+
+The first creature spell you cast each turn costs {2} less to cast.
+
+Whenever an opponent casts their first noncreature spell each turn, this enchantment deals 2 damage to that player.
+
+Sister Hospitaller
+{4}{W}{B}
+Creature — Human Cleric
+
+Medicus Ministorum — When this creature enters, return target creature card from your graveyard to the battlefield. You gain life equal to its mana value.
+
+3/2
+Sister Hospitaller
+{4}{W}{B}
+Creature — Human Cleric
+
+Medicus Ministorum — When this creature enters, return target creature card from your graveyard to the battlefield. You gain life equal to its mana value.
+
+3/2
+Sister Repentia
+{3}{W}{B}
+Creature — Human Warrior
+
+Martyrdom — When this creature dies, you gain 2 life and draw two cards.
+
+Miracle {W}{B} (You may cast this card for its miracle cost when you draw it if it’s the first card you drew this turn.)
+
+5/1
+Sister Repentia
+{3}{W}{B}
+Creature — Human Warrior
+
+Martyrdom — When this creature dies, you gain 2 life and draw two cards.
+
+Miracle {W}{B} (You may cast this card for its miracle cost when you draw it if it’s the first card you drew this turn.)
+
+5/1
+Trygon Prime
+{2}{G}{U}
+Creature — Tyranid
+
+Subterranean Assault — Whenever this creature attacks, put a +1/+1 counter on it and a +1/+1 counter on up to one other target attacking creature. That creature can’t be blocked this turn.
+
+4/4
+Trygon Prime
+{2}{G}{U}
+Creature — Tyranid
+
+Subterranean Assault — Whenever this creature attacks, put a +1/+1 counter on it and a +1/+1 counter on up to one other target attacking creature. That creature can’t be blocked this turn.
+
+4/4
+Tyranid Harridan
+{4}{G}{U}
+Creature — Tyranid
+
+Flying, ward {4}
+
+Shrieking Gargoyles — Whenever this creature or another Tyranid you control deals combat damage to a player, create a 1/1 blue Tyranid Gargoyle creature token with flying.
+
+4/4
+Tyranid Harridan
+{4}{G}{U}
+Creature — Tyranid
+
+Flying, ward {4}
+
+Shrieking Gargoyles — Whenever this creature or another Tyranid you control deals combat damage to a player, create a 1/1 blue Tyranid Gargoyle creature token with flying.
+
+4/4
+Tyranid Prime
+{1}{G}{U}
+Creature — Tyranid
+
+Evolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)
+
+Synapse Creature — Other creatures you control have evolve.
+
+0/4
+Tyranid Prime
+{1}{G}{U}
+Creature — Tyranid
+
+Evolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)
+
+Synapse Creature — Other creatures you control have evolve.
+
+0/4
+Tzaangor Shaman
+{2}{U}{R}
+Creature — Mutant Shaman
+
+Flying
+
+Sorcerous Elixir — Whenever this creature deals combat damage to a player, copy the next instant or sorcery spell you cast this turn when you cast it. You may choose new targets for the copy.
+
+3/3
+Tzaangor Shaman
+{2}{U}{R}
+Creature — Mutant Shaman
+
+Flying
+
+Sorcerous Elixir — Whenever this creature deals combat damage to a player, copy the next instant or sorcery spell you cast this turn when you cast it. You may choose new targets for the copy.
+
+3/3
+Venomthrope
+{1}{G}{U}
+Creature — Tyranid
+
+Flying, deathtouch, hexproof
+
+2/2
+Venomthrope
+{1}{G}{U}
+Creature — Tyranid
+
+Flying, deathtouch, hexproof
+
+2/2
+Winged Hive Tyrant
+{3}{U}{R}
+Creature — Tyranid
+
+Flying, haste
+
+The Will of the Hive Mind — Other creatures you control with counters on them have flying and haste.
+
+4/4
+Winged Hive Tyrant
+{3}{U}{R}
+Creature — Tyranid
+
+Flying, haste
+
+The Will of the Hive Mind — Other creatures you control with counters on them have flying and haste.
+
+4/4
+Zoanthrope
+{X}{U}{R}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Flying, ward {2}
+
+Warp Blast — When this creature enters, it deals X damage to any target.
+
+0/0
+Zoanthrope
+{X}{U}{R}
+Creature — Tyranid
+
+Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+
+Flying, ward {2}
+
+Warp Blast — When this creature enters, it deals X damage to any target.
+
+0/0
+Canoptek Scarab Swarm
+{4}
+Artifact Creature — Insect
+
+Flying
+
+Feeder Mandibles — When this creature enters, exile target player’s graveyard. For each artifact or land card exiled this way, create a 1/1 colorless Insect artifact creature token with flying.
+
+1/1
+Canoptek Scarab Swarm
+{4}
+Artifact Creature — Insect
+
+Flying
+
+Feeder Mandibles — When this creature enters, exile target player’s graveyard. For each artifact or land card exiled this way, create a 1/1 colorless Insect artifact creature token with flying.
+
+1/1
+Canoptek Spyder
+{5}
+Artifact Creature — Spider
+
+Flying
+
+Fabricator Claw Array — Whenever another nontoken artifact creature or Vehicle you control enters, draw a card.
+
+4/4
+Canoptek Spyder
+{5}
+Artifact Creature — Spider
+
+Flying
+
+Fabricator Claw Array — Whenever another nontoken artifact creature or Vehicle you control enters, draw a card.
+
+4/4
+Canoptek Tomb Sentinel
+{4}
+Artifact Creature — Insect
+
+Vigilance
+
+Exile Cannon — When this creature enters from a graveyard, exile up to one target nonland permanent.
+
+Unearth {7} ({7}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+4/3
+Canoptek Tomb Sentinel
+{4}
+Artifact Creature — Insect
+
+Vigilance
+
+Exile Cannon — When this creature enters from a graveyard, exile up to one target nonland permanent.
+
+Unearth {7} ({7}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)
+
+4/3
+Canoptek Wraith
+{3}
+Artifact Creature — Wraith
+
+Wraith Form — This creature can’t be blocked.
+
+Transdimensional Scout — When this creature deals combat damage to a player, you may pay {3} and sacrifice it. If you do, choose a land you control. Then search your library for up to two basic land cards which have the same name as the chosen land, put them onto the battlefield tapped, then shuffle.
+
+2/1
+Canoptek Wraith
+{3}
+Artifact Creature — Wraith
+
+Wraith Form — This creature can’t be blocked.
+
+Transdimensional Scout — When this creature deals combat damage to a player, you may pay {3} and sacrifice it. If you do, choose a land you control. Then search your library for up to two basic land cards which have the same name as the chosen land, put them onto the battlefield tapped, then shuffle.
+
+2/1
+Convergence of Dominion
+{3}
+Artifact
+
+Dynastic Command Node — As long as you control your commander, activated abilities of cards in your graveyard cost {2} less to activate. This effect can’t reduce the mana in that ability’s activation cost to less than one mana.
+
+Translocation Protocols — {3}, {T}: Mill three cards.
+
+Convergence of Dominion
+{3}
+Artifact
+
+Dynastic Command Node — As long as you control your commander, activated abilities of cards in your graveyard cost {2} less to activate. This effect can’t reduce the mana in that ability’s activation cost to less than one mana.
+
+Translocation Protocols — {3}, {T}: Mill three cards.
+
+Cryptothrall
+{4}
+Artifact Creature — Construct
+
+Protector — Other artifact creatures you control have hexproof.
+
+3/3
+Cryptothrall
+{4}
+Artifact Creature — Construct
+
+Protector — Other artifact creatures you control have hexproof.
+
+3/3
+Ghost Ark
+{4}
+Artifact — Vehicle
+
+Flying
+
+Repair Barge — Whenever this Vehicle becomes crewed, each artifact creature card in your graveyard gains unearth {3} until end of turn.
+
+Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+3/3
+Ghost Ark
+{4}
+Artifact — Vehicle
+
+Flying
+
+Repair Barge — Whenever this Vehicle becomes crewed, each artifact creature card in your graveyard gains unearth {3} until end of turn.
+
+Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+3/3
+The Golden Throne
+{4}
+Legendary Artifact
+
+Arcane Life-support — If you would lose the game, instead exile The Golden Throne and your life total becomes 1.
+
+A Thousand Souls Die Every Day — {T}, Sacrifice a creature: Add three mana in any combination of colors.
+
+The Golden Throne
+{4}
+Legendary Artifact
+
+Arcane Life-support — If you would lose the game, instead exile The Golden Throne and your life total becomes 1.
+
+A Thousand Souls Die Every Day — {T}, Sacrifice a creature: Add three mana in any combination of colors.
+
+Goliath Truck
+{4}
+Artifact — Vehicle
+
+Stowage — Whenever this Vehicle attacks, put two +1/+1 counters on another target attacking creature.
+
+Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+4/4
+Goliath Truck
+{4}
+Artifact — Vehicle
+
+Stowage — Whenever this Vehicle attacks, put two +1/+1 counters on another target attacking creature.
+
+Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+4/4
+Inquisitorial Rosette
+{2}
+Artifact — Equipment
+
+Inquisition Agents — Whenever equipped creature attacks, create a 2/2 white Astartes Warrior creature token with vigilance that’s attacking. Then attacking creatures gain menace until end of turn.
+
+Equip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)
+
+Inquisitorial Rosette
+{2}
+Artifact — Equipment
+
+Inquisition Agents — Whenever equipped creature attacks, create a 2/2 white Astartes Warrior creature token with vigilance that’s attacking. Then attacking creatures gain menace until end of turn.
+
+Equip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)
+
+Knight Paladin
+{5}
+Artifact — Vehicle
+
+Trample
+
+Rapid-fire Battle Cannon — When this Vehicle enters, it deals 4 damage to each opponent.
+
+Crew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+6/6
+Knight Paladin
+{5}
+Artifact — Vehicle
+
+Trample
+
+Rapid-fire Battle Cannon — When this Vehicle enters, it deals 4 damage to each opponent.
+
+Crew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+6/6
+Necron Monolith
+{7}
+Artifact — Vehicle
+
+Flying, indestructible
+
+Eternity Gate — Whenever this Vehicle attacks, mill three cards. For each creature card milled this way, create a 2/2 black Necron Warrior artifact creature token.
+
+Crew 4 (Tap any number of creatures you control with total power 4 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+7/7
+Necron Monolith
+{7}
+Artifact — Vehicle
+
+Flying, indestructible
+
+Eternity Gate — Whenever this Vehicle attacks, mill three cards. For each creature card milled this way, create a 2/2 black Necron Warrior artifact creature token.
+
+Crew 4 (Tap any number of creatures you control with total power 4 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+7/7
+Night Scythe
+{3}
+Artifact — Vehicle
+
+Flying
+
+Invasion Beams — When this Vehicle enters, create a 2/2 black Necron Warrior artifact creature token.
+
+Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+3/1
+Night Scythe
+{3}
+Artifact — Vehicle
+
+Flying
+
+Invasion Beams — When this Vehicle enters, create a 2/2 black Necron Warrior artifact creature token.
+
+Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+3/1
+Reaver Titan
+{7}
+Artifact — Vehicle
+
+Void Shields — Protection from mana value 3 or less
+
+Gatling Blaster — Whenever this Vehicle attacks, it deals 5 damage to each opponent.
+
+Crew 4 (Tap any number of creatures you control with total power 4 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+10/10
+Reaver Titan
+{7}
+Artifact — Vehicle
+
+Void Shields — Protection from mana value 3 or less
+
+Gatling Blaster — Whenever this Vehicle attacks, it deals 5 damage to each opponent.
+
+Crew 4 (Tap any number of creatures you control with total power 4 or more: This Vehicle becomes an artifact creature until end of turn.)
+
+10/10
+Redemptor Dreadnought
+{5}
+Artifact Creature — Astartes Dreadnought
+
+Fallen Warrior — As an additional cost to cast this spell, you may exile a creature card from your graveyard.
+
+Trample
+
+Plasma Incinerator — Whenever this creature attacks, if a card is exiled with it, it gets +X/+X until end of turn, where X is the power of the exiled card.
+
+4/4
+Redemptor Dreadnought
+{5}
+Artifact Creature — Astartes Dreadnought
+
+Fallen Warrior — As an additional cost to cast this spell, you may exile a creature card from your graveyard.
+
+Trample
+
+Plasma Incinerator — Whenever this creature attacks, if a card is exiled with it, it gets +X/+X until end of turn, where X is the power of the exiled card.
+
+4/4
+Resurrection Orb
+{2}
+Artifact — Equipment
+
+Equipped creature has lifelink.
+
+Whenever equipped creature dies, return that card to the battlefield under its owner’s control at the beginning of the next end step.
+
+Equip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)
+
+Resurrection Orb
+{2}
+Artifact — Equipment
+
+Equipped creature has lifelink.
+
+Whenever equipped creature dies, return that card to the battlefield under its owner’s control at the beginning of the next end step.
+
+Equip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)
+
+Sceptre of Eternal Glory
+{4}
+Legendary Artifact
+
+{T}: Add one mana of any color.
+
+{T}: Add three mana of any one color. Activate only if you control three or more lands with the same name.
+
+Sceptre of Eternal Glory
+{4}
+Legendary Artifact
+
+{T}: Add one mana of any color.
+
+{T}: Add three mana of any one color. Activate only if you control three or more lands with the same name.
+
+Thunderhawk Gunship
+{6}
+Artifact — Vehicle
+
+Flying
+
+When this Vehicle enters, create two 2/2 white Astartes Warrior creature tokens with vigilance.
+
+Whenever this Vehicle attacks, attacking creatures you control gain flying until end of turn.
+
+Crew 2
+
+6/6
+Thunderhawk Gunship
+{6}
+Artifact — Vehicle
+
+Flying
+
+When this Vehicle enters, create two 2/2 white Astartes Warrior creature tokens with vigilance.
+
+Whenever this Vehicle attacks, attacking creatures you control gain flying until end of turn.
+
+Crew 2
+
+6/6
+Tomb Fortress
+Land
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+{2}{B}{B}{B}, {T}, Exile this land: Mill four cards, then return a creature card from your graveyard to the battlefield. Activate only as a sorcery.
+
+Tomb Fortress
+Land
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+{2}{B}{B}{B}, {T}, Exile this land: Mill four cards, then return a creature card from your graveyard to the battlefield. Activate only as a sorcery.
+
+Imotekh the Stormlord
+{2}{B}{B}
+Legendary Artifact Creature — Necron
+
+Phaeron — Whenever one or more artifact cards leave your graveyard, create two 2/2 black Necron Warrior artifact creature tokens.
+
+Grand Strategist — At the beginning of combat on your turn, another target artifact creature you control gets +2/+2 and gains menace until end of turn.
+
+3/3
+Szarekh, the Silent King
+{1}{B}{B}{B}
+Legendary Artifact Creature — Necron
+
+Flying
+
+My Will Be Done — Whenever Szarekh attacks, mill three cards. You may put an artifact creature card or Vehicle card from among the cards milled this way into your hand.
+
+3/4
+Abaddon the Despoiler
+{2}{U}{B}{R}
+Legendary Creature — Astartes Warrior
+
+Trample
+
+Mark of Chaos Ascendant — During your turn, spells you cast from your hand with mana value X or less have cascade, where X is the total amount of life your opponents have lost this turn.
+
+5/5
+Be'lakor, the Dark Master
+{3}{U}{B}{R}
+Legendary Creature — Demon Noble
+
+Flying
+
+Prince of Chaos — When Be'lakor enters, you draw X cards and you lose X life, where X is the number of Demons you control.
+
+Lord of Torment — Whenever another Demon you control enters, it deals damage equal to its power to any target.
+
+6/5
+Inquisitor Greyfax
+{1}{W}{U}{B}
+Legendary Creature — Human Inquisitor
+
+Vigilance
+
+Unquestionable Wisdom — Other creatures you control get +1/+0 and have vigilance.
+
+Hunt for Heresy — {1}, {T}: Tap target creature an opponent controls. Investigate. (Create a Clue token. It’s an artifact with “{2}, Sacrifice this token: Draw a card.”)
+
+3/3
+Magus Lucea Kane
+{1}{G}{U}{R}
+Legendary Creature — Human Tyranid Wizard
+
+Spiritual Leader — At the beginning of combat on your turn, put a +1/+1 counter on target creature.
+
+Psychic Stimulus — {T}: Add {C}{C}. When you next cast a spell with {X} in its mana cost or activate an ability with {X} in its activation cost this turn, copy that spell or ability. You may choose new targets for the copy. (A copy of a permanent spell becomes a token.)
+
+1/1
+Marneus Calgar
+{2}{W}{U}{B}
+Legendary Creature — Astartes Warrior
+
+Double strike
+
+Master Tactician — Whenever one or more tokens you control enter, draw a card.
+
+Chapter Master — {6}: Create two 2/2 white Astartes Warrior creature tokens with vigilance.
+
+3/5
+The Swarmlord
+{3}{G}{U}{R}
+Legendary Creature — Tyranid
+
+Rapid Regeneration — The Swarmlord enters with two +1/+1 counters on it for each time you’ve cast your commander from the command zone this game.
+
+Xenos Cunning — Whenever a creature you control with a counter on it dies, draw a card.
+
+5/5
+Szarekh, the Silent King
+{1}{B}{B}{B}
+Legendary Artifact Creature — Necron
+
+Flying
+
+My Will Be Done — Whenever Szarekh attacks, mill three cards. You may put an artifact creature card or Vehicle card from among the cards milled this way into your hand.
+
+3/4
+Abaddon the Despoiler
+{2}{U}{B}{R}
+Legendary Creature — Astartes Warrior
+
+Trample
+
+Mark of Chaos Ascendant — During your turn, spells you cast from your hand with mana value X or less have cascade, where X is the total amount of life your opponents have lost this turn.
+
+5/5
+Inquisitor Greyfax
+{1}{W}{U}{B}
+Legendary Creature — Human Inquisitor
+
+Vigilance
+
+Unquestionable Wisdom — Other creatures you control get +1/+0 and have vigilance.
+
+Hunt for Heresy — {1}, {T}: Tap target creature an opponent controls. Investigate. (Create a Clue token. It’s an artifact with “{2}, Sacrifice this token: Draw a card.”)
+
+3/3
+The Swarmlord
+{3}{G}{U}{R}
+Legendary Creature — Tyranid
+
+Rapid Regeneration — The Swarmlord enters with two +1/+1 counters on it for each time you’ve cast your commander from the command zone this game.
+
+Xenos Cunning — Whenever a creature you control with a counter on it dies, draw a card.
+
+5/5
+Fabricate
+{2}{U}
+Sorcery
+
+Search your library for an artifact card, reveal it, put it into your hand, then shuffle.
+
+Bastion Protector
+{2}{W}
+Creature — Human Soldier
+
+Commander creatures you control get +2/+2 and have indestructible.
+
+3/3
+Bastion Protector
+{2}{W}
+Creature — Human Soldier
+
+Commander creatures you control get +2/+2 and have indestructible.
+
+3/3
+Collective Effort
+{1}{W}{W}
+Sorcery
+
+Escalate—Tap an untapped creature you control. (Pay this cost for each mode chosen beyond the first.)
+
+Choose one or more —
+
+• Destroy target creature with power 4 or greater.
+
+• Destroy target enchantment.
+
+• Put a +1/+1 counter on each creature target player controls.
+
+Collective Effort
+{1}{W}{W}
+Sorcery
+
+Escalate—Tap an untapped creature you control. (Pay this cost for each mode chosen beyond the first.)
+
+Choose one or more —
+
+• Destroy target creature with power 4 or greater.
+
+• Destroy target enchantment.
+
+• Put a +1/+1 counter on each creature target player controls.
+
+Deploy to the Front
+{5}{W}{W}
+Sorcery
+
+Create X 1/1 white Soldier creature tokens, where X is the number of creatures on the battlefield.
+
+Deploy to the Front
+{5}{W}{W}
+Sorcery
+
+Create X 1/1 white Soldier creature tokens, where X is the number of creatures on the battlefield.
+
+Entrapment Maneuver
+{3}{W}
+Instant
+
+Target player sacrifices an attacking creature of their choice. You create X 1/1 white Soldier creature tokens, where X is that creature’s toughness.
+
+Entrapment Maneuver
+{3}{W}
+Instant
+
+Target player sacrifices an attacking creature of their choice. You create X 1/1 white Soldier creature tokens, where X is that creature’s toughness.
+
+Fell the Mighty
+{4}{W}
+Sorcery
+
+Destroy all creatures with power greater than target creature’s power.
+
+Fell the Mighty
+{4}{W}
+Sorcery
+
+Destroy all creatures with power greater than target creature’s power.
+
+Hour of Reckoning
+{4}{W}{W}{W}
+Sorcery
+
+Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature’s color.)
+
+Destroy all nontoken creatures.
+
+Hour of Reckoning
+{4}{W}{W}{W}
+Sorcery
+
+Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature’s color.)
+
+Destroy all nontoken creatures.
+
+Launch the Fleet
+{W}
+Sorcery
+
+Strive — This spell costs {1} more to cast for each target beyond the first.
+
+Until end of turn, any number of target creatures each gain “Whenever this creature attacks, create a 1/1 white Soldier creature token that’s tapped and attacking.”
+
+Launch the Fleet
+{W}
+Sorcery
+
+Strive — This spell costs {1} more to cast for each target beyond the first.
+
+Until end of turn, any number of target creatures each gain “Whenever this creature attacks, create a 1/1 white Soldier creature token that’s tapped and attacking.”
+
+Martial Coup
+{X}{W}{W}
+Sorcery
+
+Create X 1/1 white Soldier creature tokens. If X is 5 or more, destroy all other creatures.
+
+Martial Coup
+{X}{W}{W}
+Sorcery
+
+Create X 1/1 white Soldier creature tokens. If X is 5 or more, destroy all other creatures.
+
+Swords to Plowshares
+{W}
+Instant
+
+Exile target creature. Its controller gains life equal to its power.
+
+Swords to Plowshares
+{W}
+Instant
+
+Exile target creature. Its controller gains life equal to its power.
+
+Aetherize
+{3}{U}
+Instant
+
+Return all attacking creatures to their owner’s hand.
+
+Aetherize
+{3}{U}
+Instant
+
+Return all attacking creatures to their owner’s hand.
+
+Brainstorm
+{U}
+Instant
+
+Draw three cards, then put two cards from your hand on top of your library in any order.
+
+Brainstorm
+{U}
+Instant
+
+Draw three cards, then put two cards from your hand on top of your library in any order.
+
+Reconnaissance Mission
+{2}{U}{U}
+Enchantment
+
+Whenever a creature you control deals combat damage to a player, you may draw a card.
+
+Cycling {2} ({2}, Discard this card: Draw a card.)
+
+Reconnaissance Mission
+{2}{U}{U}
+Enchantment
+
+Whenever a creature you control deals combat damage to a player, you may draw a card.
+
+Cycling {2} ({2}, Discard this card: Draw a card.)
+
+Beacon of Unrest
+{3}{B}{B}
+Sorcery
+
+Put target artifact or creature card from a graveyard onto the battlefield under your control. Shuffle Beacon of Unrest into its owner’s library.
+
+Beacon of Unrest
+{3}{B}{B}
+Sorcery
+
+Put target artifact or creature card from a graveyard onto the battlefield under your control. Shuffle Beacon of Unrest into its owner’s library.
+
+Bile Blight
+{B}{B}
+Instant
+
+Target creature and all other creatures with the same name as that creature get -3/-3 until end of turn.
+
+Bile Blight
+{B}{B}
+Instant
+
+Target creature and all other creatures with the same name as that creature get -3/-3 until end of turn.
+
+Dark Ritual
+{B}
+Instant
+
+Add {B}{B}{B}.
+
+Dark Ritual
+{B}
+Instant
+
+Add {B}{B}{B}.
+
+Darkness
+{B}
+Instant
+
+Prevent all combat damage that would be dealt this turn.
+
+Darkness
+{B}
+Instant
+
+Prevent all combat damage that would be dealt this turn.
+
+Decree of Pain
+{6}{B}{B}
+Sorcery
+
+Destroy all creatures. They can’t be regenerated. Draw a card for each creature destroyed this way.
+
+Cycling {3}{B}{B} ({3}{B}{B}, Discard this card: Draw a card.)
+
+When you cycle this card, all creatures get -2/-2 until end of turn.
+
+Decree of Pain
+{6}{B}{B}
+Sorcery
+
+Destroy all creatures. They can’t be regenerated. Draw a card for each creature destroyed this way.
+
+Cycling {3}{B}{B} ({3}{B}{B}, Discard this card: Draw a card.)
+
+When you cycle this card, all creatures get -2/-2 until end of turn.
+
+Defile
+{B}
+Instant
+
+Target creature gets -1/-1 until end of turn for each Swamp you control.
+
+Defile
+{B}
+Instant
+
+Target creature gets -1/-1 until end of turn for each Swamp you control.
+
+Dread Return
+{2}{B}{B}
+Sorcery
+
+Return target creature card from your graveyard to the battlefield.
+
+Flashback—Sacrifice three creatures. (You may cast this card from your graveyard for its flashback cost. Then exile it.)
+
+Dread Return
+{2}{B}{B}
+Sorcery
+
+Return target creature card from your graveyard to the battlefield.
+
+Flashback—Sacrifice three creatures. (You may cast this card from your graveyard for its flashback cost. Then exile it.)
+
+Go for the Throat
+{1}{B}
+Instant
+
+Destroy target nonartifact creature.
+
+Go for the Throat
+{1}{B}
+Instant
+
+Destroy target nonartifact creature.
+
+Living Death
+{3}{B}{B}
+Sorcery
+
+Each player exiles all creature cards from their graveyard, then sacrifices all creatures they control, then puts all cards they exiled this way onto the battlefield.
+
+Living Death
+{3}{B}{B}
+Sorcery
+
+Each player exiles all creature cards from their graveyard, then sacrifices all creatures they control, then puts all cards they exiled this way onto the battlefield.
+
+Mutilate
+{2}{B}{B}
+Sorcery
+
+All creatures get -1/-1 until end of turn for each Swamp you control.
+
+Mutilate
+{2}{B}{B}
+Sorcery
+
+All creatures get -1/-1 until end of turn for each Swamp you control.
+
+Blasphemous Act
+{8}{R}
+Sorcery
+
+This spell costs {1} less to cast for each creature on the battlefield.
+
+Blasphemous Act deals 13 damage to each creature.
+
+Blasphemous Act
+{8}{R}
+Sorcery
+
+This spell costs {1} less to cast for each creature on the battlefield.
+
+Blasphemous Act deals 13 damage to each creature.
+
+Chaos Warp
+{2}{R}
+Instant
+
+The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it’s a permanent card, they put it onto the battlefield.
+
+Chaos Warp
+{2}{R}
+Instant
+
+The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it’s a permanent card, they put it onto the battlefield.
+
+Past in Flames
+{3}{R}
+Sorcery
+
+Each instant and sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.
+
+Flashback {4}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)
+
+Past in Flames
+{3}{R}
+Sorcery
+
+Each instant and sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.
+
+Flashback {4}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)
+
+Reverberate
+{R}{R}
+Instant
+
+Copy target instant or sorcery spell. You may choose new targets for the copy.
+
+Reverberate
+{R}{R}
+Instant
+
+Copy target instant or sorcery spell. You may choose new targets for the copy.
+
+Starstorm
+{X}{R}{R}
+Instant
+
+Starstorm deals X damage to each creature.
+
+Cycling {3} ({3}, Discard this card: Draw a card.)
+
+Starstorm
+{X}{R}{R}
+Instant
+
+Starstorm deals X damage to each creature.
+
+Cycling {3} ({3}, Discard this card: Draw a card.)
+
+Warstorm Surge
+{5}{R}
+Enchantment
+
+Whenever a creature you control enters, it deals damage equal to its power to any target.
+
+Warstorm Surge
+{5}{R}
+Enchantment
+
+Whenever a creature you control enters, it deals damage equal to its power to any target.
+
+Abundance
+{2}{G}{G}
+Enchantment
+
+If you would draw a card, you may instead choose land or nonland and reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and put all other cards revealed this way on the bottom of your library in any order.
+
+Abundance
+{2}{G}{G}
+Enchantment
+
+If you would draw a card, you may instead choose land or nonland and reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and put all other cards revealed this way on the bottom of your library in any order.
+
+Cultivate
+{2}{G}
+Sorcery
+
+Search your library for up to two basic land cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.
+
+Cultivate
+{2}{G}
+Sorcery
+
+Search your library for up to two basic land cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.
+
+Death's Presence
+{5}{G}
+Enchantment
+
+Whenever a creature you control dies, put X +1/+1 counters on target creature you control, where X is the power of the creature that died.
+
+Death's Presence
+{5}{G}
+Enchantment
+
+Whenever a creature you control dies, put X +1/+1 counters on target creature you control, where X is the power of the creature that died.
+
+Explore
+{1}{G}
+Sorcery
+
+You may play an additional land this turn.
+
+Draw a card.
+
+Explore
+{1}{G}
+Sorcery
+
+You may play an additional land this turn.
+
+Draw a card.
+
+Farseek
+{1}{G}
+Sorcery
+
+Search your library for a Plains, Island, Swamp, or Mountain card, put it onto the battlefield tapped, then shuffle.
+
+Farseek
+{1}{G}
+Sorcery
+
+Search your library for a Plains, Island, Swamp, or Mountain card, put it onto the battlefield tapped, then shuffle.
+
+Hardened Scales
+{G}
+Enchantment
+
+If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on it instead.
+
+Hardened Scales
+{G}
+Enchantment
+
+If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on it instead.
+
+Harrow
+{2}{G}
+Instant
+
+As an additional cost to cast this spell, sacrifice a land.
+
+Search your library for up to two basic land cards, put them onto the battlefield, then shuffle.
+
+Harrow
+{2}{G}
+Instant
+
+As an additional cost to cast this spell, sacrifice a land.
+
+Search your library for up to two basic land cards, put them onto the battlefield, then shuffle.
+
+Inspiring Call
+{2}{G}
+Instant
+
+Draw a card for each creature you control with a +1/+1 counter on it. Those creatures gain indestructible until end of turn. (Damage and effects that say “destroy” don’t destroy them.)
+
+Inspiring Call
+{2}{G}
+Instant
+
+Draw a card for each creature you control with a +1/+1 counter on it. Those creatures gain indestructible until end of turn. (Damage and effects that say “destroy” don’t destroy them.)
+
+New Horizons
+{2}{G}
+Enchantment — Aura
+
+Enchant land
+
+When this Aura enters, put a +1/+1 counter on target creature you control.
+
+Enchanted land has “{T}: Add two mana of any one color.”
+
+New Horizons
+{2}{G}
+Enchantment — Aura
+
+Enchant land
+
+When this Aura enters, put a +1/+1 counter on target creature you control.
+
+Enchanted land has “{T}: Add two mana of any one color.”
+
+Overgrowth
+{2}{G}
+Enchantment — Aura
+
+Enchant land
+
+Whenever enchanted land is tapped for mana, its controller adds an additional {G}{G}.
+
+Overgrowth
+{2}{G}
+Enchantment — Aura
+
+Enchant land
+
+Whenever enchanted land is tapped for mana, its controller adds an additional {G}{G}.
+
+Rampant Growth
+{1}{G}
+Sorcery
+
+Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+Rampant Growth
+{1}{G}
+Sorcery
+
+Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+Bituminous Blast
+{3}{B}{R}
+Instant
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Bituminous Blast deals 4 damage to target creature.
+
+Bituminous Blast
+{3}{B}{R}
+Instant
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Bituminous Blast deals 4 damage to target creature.
+
+Bred for the Hunt
+{1}{G}{U}
+Enchantment
+
+Whenever a creature you control with a +1/+1 counter on it deals combat damage to a player, you may draw a card.
+
+Bred for the Hunt
+{1}{G}{U}
+Enchantment
+
+Whenever a creature you control with a +1/+1 counter on it deals combat damage to a player, you may draw a card.
+
+Deny Reality
+{3}{U}{B}
+Sorcery
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Return target permanent to its owner’s hand.
+
+Deny Reality
+{3}{U}{B}
+Sorcery
+
+Cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)
+
+Return target permanent to its owner’s hand.
+
+Hull Breach
+{R}{G}
+Sorcery
+
+Choose one —
+
+• Destroy target artifact.
+
+• Destroy target enchantment.
+
+• Destroy target artifact and target enchantment.
+
+Hull Breach
+{R}{G}
+Sorcery
+
+Choose one —
+
+• Destroy target artifact.
+
+• Destroy target enchantment.
+
+• Destroy target artifact and target enchantment.
+
+Mortify
+{1}{W}{B}
+Instant
+
+Destroy target creature or enchantment.
+
+Mortify
+{1}{W}{B}
+Instant
+
+Destroy target creature or enchantment.
+
+Utter End
+{2}{W}{B}
+Instant
+
+Exile target nonland permanent.
+
+Utter End
+{2}{W}{B}
+Instant
+
+Exile target nonland permanent.
+
+Arcane Signet
+{2}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Arcane Signet
+{2}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Arcane Signet
+{2}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Arcane Signet
+{2}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Arcane Signet
+{2}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Arcane Signet
+{2}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Assault Suit
+{4}
+Artifact — Equipment
+
+Equipped creature gets +2/+2, has haste, can’t attack you or planeswalkers you control, and can’t be sacrificed.
+
+At the beginning of each opponent’s upkeep, you may have that player gain control of equipped creature until end of turn. If you do, untap it.
+
+Equip {3}
+
+Assault Suit
+{4}
+Artifact — Equipment
+
+Equipped creature gets +2/+2, has haste, can’t attack you or planeswalkers you control, and can’t be sacrificed.
+
+At the beginning of each opponent’s upkeep, you may have that player gain control of equipped creature until end of turn. If you do, untap it.
+
+Equip {3}
+
+Caged Sun
+{6}
+Artifact
+
+As this artifact enters, choose a color.
+
+Creatures you control of the chosen color get +1/+1.
+
+Whenever a land’s ability causes you to add one or more mana of the chosen color, add an additional one mana of that color.
+
+Caged Sun
+{6}
+Artifact
+
+As this artifact enters, choose a color.
+
+Creatures you control of the chosen color get +1/+1.
+
+Whenever a land’s ability causes you to add one or more mana of the chosen color, add an additional one mana of that color.
+
+Chromatic Lantern
+{3}
+Artifact
+
+Lands you control have “{T}: Add one mana of any color.”
+
+{T}: Add one mana of any color.
+
+Chromatic Lantern
+{3}
+Artifact
+
+Lands you control have “{T}: Add one mana of any color.”
+
+{T}: Add one mana of any color.
+
+Commander's Sphere
+{3}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Sacrifice this artifact: Draw a card.
+
+Commander's Sphere
+{3}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Sacrifice this artifact: Draw a card.
+
+Commander's Sphere
+{3}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Sacrifice this artifact: Draw a card.
+
+Commander's Sphere
+{3}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Sacrifice this artifact: Draw a card.
+
+Commander's Sphere
+{3}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Sacrifice this artifact: Draw a card.
+
+Commander's Sphere
+{3}
+Artifact
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Sacrifice this artifact: Draw a card.
+
+Cranial Plating
+{2}
+Artifact — Equipment
+
+Equipped creature gets +1/+0 for each artifact you control.
+
+{B}{B}: Attach this Equipment to target creature you control.
+
+Equip {1}
+
+Cranial Plating
+{2}
+Artifact — Equipment
+
+Equipped creature gets +1/+0 for each artifact you control.
+
+{B}{B}: Attach this Equipment to target creature you control.
+
+Equip {1}
+
+Endless Atlas
+{2}
+Artifact
+
+{2}, {T}: Draw a card. Activate only if you control three or more lands with the same name.
+
+Endless Atlas
+{2}
+Artifact
+
+{2}, {T}: Draw a card. Activate only if you control three or more lands with the same name.
+
+Everflowing Chalice
+{0}
+Artifact
+
+Multikicker {2} (You may pay an additional {2} any number of times as you cast this spell.)
+
+This artifact enters with a charge counter on it for each time it was kicked.
+
+{T}: Add {C} for each charge counter on this artifact.
+
+Everflowing Chalice
+{0}
+Artifact
+
+Multikicker {2} (You may pay an additional {2} any number of times as you cast this spell.)
+
+This artifact enters with a charge counter on it for each time it was kicked.
+
+{T}: Add {C} for each charge counter on this artifact.
+
+Gilded Lotus
+{5}
+Artifact
+
+{T}: Add three mana of any one color.
+
+Gilded Lotus
+{5}
+Artifact
+
+{T}: Add three mana of any one color.
+
+Hedron Archive
+{4}
+Artifact
+
+{T}: Add {C}{C}.
+
+{2}, {T}, Sacrifice this artifact: Draw two cards.
+
+Hedron Archive
+{4}
+Artifact
+
+{T}: Add {C}{C}.
+
+{2}, {T}, Sacrifice this artifact: Draw two cards.
+
+Herald's Horn
+{3}
+Artifact
+
+As this artifact enters, choose a creature type.
+
+Creature spells you cast of the chosen type cost {1} less to cast.
+
+At the beginning of your upkeep, look at the top card of your library. If it’s a creature card of the chosen type, you may reveal it and put it into your hand.
+
+Herald's Horn
+{3}
+Artifact
+
+As this artifact enters, choose a creature type.
+
+Creature spells you cast of the chosen type cost {1} less to cast.
+
+At the beginning of your upkeep, look at the top card of your library. If it’s a creature card of the chosen type, you may reveal it and put it into your hand.
+
+Icon of Ancestry
+{3}
+Artifact
+
+As this artifact enters, choose a creature type.
+
+Creatures you control of the chosen type get +1/+1.
+
+{3}, {T}: Look at the top three cards of your library. You may reveal a creature card of the chosen type from among them and put it into your hand. Put the rest on the bottom of your library in a random order.
+
+Icon of Ancestry
+{3}
+Artifact
+
+As this artifact enters, choose a creature type.
+
+Creatures you control of the chosen type get +1/+1.
+
+{3}, {T}: Look at the top three cards of your library. You may reveal a creature card of the chosen type from among them and put it into your hand. Put the rest on the bottom of your library in a random order.
+
+Mask of Memory
+{2}
+Artifact — Equipment
+
+Whenever equipped creature deals combat damage to a player, you may draw two cards. If you do, discard a card.
+
+Equip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)
+
+Mask of Memory
+{2}
+Artifact — Equipment
+
+Whenever equipped creature deals combat damage to a player, you may draw two cards. If you do, discard a card.
+
+Equip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)
+
+Mind Stone
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{1}, {T}, Sacrifice this artifact: Draw a card.
+
+Mind Stone
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{1}, {T}, Sacrifice this artifact: Draw a card.
+
+Mind Stone
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{1}, {T}, Sacrifice this artifact: Draw a card.
+
+Mind Stone
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{1}, {T}, Sacrifice this artifact: Draw a card.
+
+Mystic Forge
+{4}
+Artifact
+
+You may look at the top card of your library any time.
+
+You may cast artifact spells and colorless spells from the top of your library.
+
+{T}, Pay 1 life: Exile the top card of your library.
+
+Mystic Forge
+{4}
+Artifact
+
+You may look at the top card of your library any time.
+
+You may cast artifact spells and colorless spells from the top of your library.
+
+{T}, Pay 1 life: Exile the top card of your library.
+
+Sculpting Steel
+{3}
+Artifact
+
+You may have this artifact enter as a copy of any artifact on the battlefield.
+
+Sculpting Steel
+{3}
+Artifact
+
+You may have this artifact enter as a copy of any artifact on the battlefield.
+
+Skullclamp
+{1}
+Artifact — Equipment
+
+Equipped creature gets +1/-1.
+
+Whenever equipped creature dies, draw two cards.
+
+Equip {1}
+
+Skullclamp
+{1}
+Artifact — Equipment
+
+Equipped creature gets +1/-1.
+
+Whenever equipped creature dies, draw two cards.
+
+Equip {1}
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Sol Ring
+{1}
+Artifact
+
+{T}: Add {C}{C}.
+
+Talisman of Creativity
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {U} or {R}. This artifact deals 1 damage to you.
+
+Talisman of Creativity
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {U} or {R}. This artifact deals 1 damage to you.
+
+Talisman of Dominance
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {U} or {B}. This artifact deals 1 damage to you.
+
+Talisman of Dominance
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {U} or {B}. This artifact deals 1 damage to you.
+
+Talisman of Dominance
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {U} or {B}. This artifact deals 1 damage to you.
+
+Talisman of Dominance
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {U} or {B}. This artifact deals 1 damage to you.
+
+Talisman of Hierarchy
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {W} or {B}. This artifact deals 1 damage to you.
+
+Talisman of Hierarchy
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {W} or {B}. This artifact deals 1 damage to you.
+
+Talisman of Indulgence
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {B} or {R}. This artifact deals 1 damage to you.
+
+Talisman of Indulgence
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {B} or {R}. This artifact deals 1 damage to you.
+
+Talisman of Progress
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {W} or {U}. This artifact deals 1 damage to you.
+
+Talisman of Progress
+{2}
+Artifact
+
+{T}: Add {C}.
+
+{T}: Add {W} or {U}. This artifact deals 1 damage to you.
+
+Thought Vessel
+{2}
+Artifact
+
+You have no maximum hand size.
+
+{T}: Add {C}.
+
+Thought Vessel
+{2}
+Artifact
+
+You have no maximum hand size.
+
+{T}: Add {C}.
+
+Unstable Obelisk
+{3}
+Artifact
+
+{T}: Add {C}.
+
+{7}, {T}, Sacrifice this artifact: Destroy target permanent.
+
+Unstable Obelisk
+{3}
+Artifact
+
+{T}: Add {C}.
+
+{7}, {T}, Sacrifice this artifact: Destroy target permanent.
+
+Wayfarer's Bauble
+{1}
+Artifact
+
+{2}, {T}, Sacrifice this artifact: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+Wayfarer's Bauble
+{1}
+Artifact
+
+{2}, {T}, Sacrifice this artifact: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+Wayfarer's Bauble
+{1}
+Artifact
+
+{2}, {T}, Sacrifice this artifact: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+Wayfarer's Bauble
+{1}
+Artifact
+
+{2}, {T}, Sacrifice this artifact: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+Worn Powerstone
+{3}
+Artifact
+
+This artifact enters tapped.
+
+{T}: Add {C}{C}.
+
+Worn Powerstone
+{3}
+Artifact
+
+This artifact enters tapped.
+
+{T}: Add {C}{C}.
+
+Arcane Sanctum
+Land
+
+This land enters tapped.
+
+{T}: Add {W}, {U}, or {B}.
+
+Arcane Sanctum
+Land
+
+This land enters tapped.
+
+{T}: Add {W}, {U}, or {B}.
+
+Ash Barrens
+Land
+
+{T}: Add {C}.
+
+Basic landcycling {1} ({1}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)
+
+Ash Barrens
+Land
+
+{T}: Add {C}.
+
+Basic landcycling {1} ({1}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)
+
+Barren Moor
+Land
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+Cycling {B} ({B}, Discard this card: Draw a card.)
+
+Barren Moor
+Land
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+Cycling {B} ({B}, Discard this card: Draw a card.)
+
+Cave of Temptation
+Land
+
+{T}: Add {C}.
+
+{1}, {T}: Add one mana of any color.
+
+{4}, {T}, Sacrifice this land: Put two +1/+1 counters on target creature. Activate only as a sorcery.
+
+Cave of Temptation
+Land
+
+{T}: Add {C}.
+
+{1}, {T}: Add one mana of any color.
+
+{4}, {T}, Sacrifice this land: Put two +1/+1 counters on target creature. Activate only as a sorcery.
+
+Choked Estuary
+Land
+
+As this land enters, you may reveal an Island or Swamp card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {U} or {B}.
+
+Choked Estuary
+Land
+
+As this land enters, you may reveal an Island or Swamp card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {U} or {B}.
+
+Cinder Glade
+Land — Mountain Forest
+
+({T}: Add {R} or {G}.)
+
+This land enters tapped unless you control two or more basic lands.
+
+Cinder Glade
+Land — Mountain Forest
+
+({T}: Add {R} or {G}.)
+
+This land enters tapped unless you control two or more basic lands.
+
+Command Tower
+Land
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Command Tower
+Land
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Command Tower
+Land
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Command Tower
+Land
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Command Tower
+Land
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Command Tower
+Land
+
+{T}: Add one mana of any color in your commander’s color identity.
+
+Crumbling Necropolis
+Land
+
+This land enters tapped.
+
+{T}: Add {U}, {B}, or {R}.
+
+Crumbling Necropolis
+Land
+
+This land enters tapped.
+
+{T}: Add {U}, {B}, or {R}.
+
+Darkwater Catacombs
+Land
+
+{1}, {T}: Add {U}{B}.
+
+Darkwater Catacombs
+Land
+
+{1}, {T}: Add {U}{B}.
+
+Desert of the Glorified
+Land — Desert
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+Cycling {1}{B} ({1}{B}, Discard this card: Draw a card.)
+
+Desert of the Glorified
+Land — Desert
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+Cycling {1}{B} ({1}{B}, Discard this card: Draw a card.)
+
+Dismal Backwater
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {U} or {B}.
+
+Dismal Backwater
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {U} or {B}.
+
+Evolving Wilds
+Land
+
+{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+Evolving Wilds
+Land
+
+{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+Exotic Orchard
+Land
+
+{T}: Add one mana of any color that a land an opponent controls could produce.
+
+Exotic Orchard
+Land
+
+{T}: Add one mana of any color that a land an opponent controls could produce.
+
+Foreboding Ruins
+Land
+
+As this land enters, you may reveal a Swamp or Mountain card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {B} or {R}.
+
+Foreboding Ruins
+Land
+
+As this land enters, you may reveal a Swamp or Mountain card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {B} or {R}.
+
+Forgotten Cave
+Land
+
+This land enters tapped.
+
+{T}: Add {R}.
+
+Cycling {R} ({R}, Discard this card: Draw a card.)
+
+Forgotten Cave
+Land
+
+This land enters tapped.
+
+{T}: Add {R}.
+
+Cycling {R} ({R}, Discard this card: Draw a card.)
+
+Frontier Bivouac
+Land
+
+This land enters tapped.
+
+{T}: Add {G}, {U}, or {R}.
+
+Frontier Bivouac
+Land
+
+This land enters tapped.
+
+{T}: Add {G}, {U}, or {R}.
+
+Game Trail
+Land
+
+As this land enters, you may reveal a Mountain or Forest card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {R} or {G}.
+
+Game Trail
+Land
+
+As this land enters, you may reveal a Mountain or Forest card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {R} or {G}.
+
+Memorial to Glory
+Land
+
+This land enters tapped.
+
+{T}: Add {W}.
+
+{3}{W}, {T}, Sacrifice this land: Create two 1/1 white Soldier creature tokens.
+
+Memorial to Glory
+Land
+
+This land enters tapped.
+
+{T}: Add {W}.
+
+{3}{W}, {T}, Sacrifice this land: Create two 1/1 white Soldier creature tokens.
+
+Molten Slagheap
+Land
+
+{T}: Add {C}.
+
+{1}, {T}: Put a storage counter on this land.
+
+{1}, Remove X storage counters from this land: Add X mana in any combination of {B} and/or {R}.
+
+Molten Slagheap
+Land
+
+{T}: Add {C}.
+
+{1}, {T}: Put a storage counter on this land.
+
+{1}, Remove X storage counters from this land: Add X mana in any combination of {B} and/or {R}.
+
+Myriad Landscape
+Land
+
+This land enters tapped.
+
+{T}: Add {C}.
+
+{2}, {T}, Sacrifice this land: Search your library for up to two basic land cards that share a land type, put them onto the battlefield tapped, then shuffle.
+
+Myriad Landscape
+Land
+
+This land enters tapped.
+
+{T}: Add {C}.
+
+{2}, {T}, Sacrifice this land: Search your library for up to two basic land cards that share a land type, put them onto the battlefield tapped, then shuffle.
+
+Opal Palace
+Land
+
+{T}: Add {C}.
+
+{1}, {T}: Add one mana of any color in your commander’s color identity. If you spend this mana to cast your commander, it enters with a number of additional +1/+1 counters on it equal to the number of times it’s been cast from the command zone this game.
+
+Opal Palace
+Land
+
+{T}: Add {C}.
+
+{1}, {T}: Add one mana of any color in your commander’s color identity. If you spend this mana to cast your commander, it enters with a number of additional +1/+1 counters on it equal to the number of times it’s been cast from the command zone this game.
+
+Path of Ancestry
+Land
+
+This land enters tapped.
+
+{T}: Add one mana of any color in your commander’s color identity. When that mana is spent to cast a creature spell that shares a creature type with your commander, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+Path of Ancestry
+Land
+
+This land enters tapped.
+
+{T}: Add one mana of any color in your commander’s color identity. When that mana is spent to cast a creature spell that shares a creature type with your commander, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+Polluted Mire
+Land
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+Cycling {2} ({2}, Discard this card: Draw a card.)
+
+Polluted Mire
+Land
+
+This land enters tapped.
+
+{T}: Add {B}.
+
+Cycling {2} ({2}, Discard this card: Draw a card.)
+
+Port Town
+Land
+
+As this land enters, you may reveal a Plains or Island card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {W} or {U}.
+
+Port Town
+Land
+
+As this land enters, you may reveal a Plains or Island card from your hand. If you don’t, this land enters tapped.
+
+{T}: Add {W} or {U}.
+
+Prairie Stream
+Land — Plains Island
+
+({T}: Add {W} or {U}.)
+
+This land enters tapped unless you control two or more basic lands.
+
+Prairie Stream
+Land — Plains Island
+
+({T}: Add {W} or {U}.)
+
+This land enters tapped unless you control two or more basic lands.
+
+Reliquary Tower
+Land
+
+You have no maximum hand size.
+
+{T}: Add {C}.
+
+Reliquary Tower
+Land
+
+You have no maximum hand size.
+
+{T}: Add {C}.
+
+Rugged Highlands
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {R} or {G}.
+
+Rugged Highlands
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {R} or {G}.
+
+Scoured Barrens
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {W} or {B}.
+
+Scoured Barrens
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {W} or {B}.
+
+Skycloud Expanse
+Land
+
+{1}, {T}: Add {W}{U}.
+
+Skycloud Expanse
+Land
+
+{1}, {T}: Add {W}{U}.
+
+Sunken Hollow
+Land — Island Swamp
+
+({T}: Add {U} or {B}.)
+
+This land enters tapped unless you control two or more basic lands.
+
+Sunken Hollow
+Land — Island Swamp
+
+({T}: Add {U} or {B}.)
+
+This land enters tapped unless you control two or more basic lands.
+
+Swiftwater Cliffs
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {U} or {R}.
+
+Swiftwater Cliffs
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {U} or {R}.
+
+Temple of Abandon
+Land
+
+This land enters tapped.
+
+When this land enters, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+{T}: Add {R} or {G}.
+
+Temple of Abandon
+Land
+
+This land enters tapped.
+
+When this land enters, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+{T}: Add {R} or {G}.
+
+Temple of Epiphany
+Land
+
+This land enters tapped.
+
+When this land enters, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+{T}: Add {U} or {R}.
+
+Temple of Epiphany
+Land
+
+This land enters tapped.
+
+When this land enters, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+{T}: Add {U} or {R}.
+
+Temple of Mystery
+Land
+
+This land enters tapped.
+
+When this land enters, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+{T}: Add {G} or {U}.
+
+Temple of Mystery
+Land
+
+This land enters tapped.
+
+When this land enters, scry 1. (Look at the top card of your library. You may put that card on the bottom.)
+
+{T}: Add {G} or {U}.
+
+Temple of the False God
+Land
+
+{T}: Add {C}{C}. Activate only if you control five or more lands.
+
+Temple of the False God
+Land
+
+{T}: Add {C}{C}. Activate only if you control five or more lands.
+
+Terramorphic Expanse
+Land
+
+{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+Terramorphic Expanse
+Land
+
+{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+Thornwood Falls
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {G} or {U}.
+
+Thornwood Falls
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {G} or {U}.
+
+Tranquil Cove
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {W} or {U}.
+
+Tranquil Cove
+Land
+
+This land enters tapped.
+
+When this land enters, you gain 1 life.
+
+{T}: Add {W} or {U}.
+
+Unclaimed Territory
+Land
+
+As this land enters, choose a creature type.
+
+{T}: Add {C}.
+
+{T}: Add one mana of any color. Spend this mana only to cast a creature spell of the chosen type.
+
+Unclaimed Territory
+Land
+
+As this land enters, choose a creature type.
+
+{T}: Add {C}.
+
+{T}: Add one mana of any color. Spend this mana only to cast a creature spell of the chosen type.
+
+Vault of Whispers
+Artifact Land
+
+{T}: Add {B}.
+
+Vault of Whispers
+Artifact Land
+
+{T}: Add {B}.
+
+Plains
+Basic Land — Plains
+
+({T}: Add {W}.)
+
+Plains
+Basic Land — Plains
+
+({T}: Add {W}.)
+
+Island
+Basic Land — Island
+
+({T}: Add {U}.)
+
+Island
+Basic Land — Island
+
+({T}: Add {U}.)
+
+Island
+Basic Land — Island
+
+({T}: Add {U}.)
+
+Island
+Basic Land — Island
+
+({T}: Add {U}.)
+
+Island
+Basic Land — Island
+
+({T}: Add {U}.)
+
+Island
+Basic Land — Island
+
+({T}: Add {U}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Swamp
+Basic Land — Swamp
+
+({T}: Add {B}.)
+
+Mountain
+Basic Land — Mountain
+
+({T}: Add {R}.)
+
+Mountain
+Basic Land — Mountain
+
+({T}: Add {R}.)
+
+Mountain
+Basic Land — Mountain
+
+({T}: Add {R}.)
+
+Mountain
+Basic Land — Mountain
+
+({T}: Add {R}.)
+
+Forest
+Basic Land — Forest
+
+({T}: Add {G}.)
+
+Forest
+Basic Land — Forest
+
+({T}: Add {G}.)
+
+Szarekh, the Silent King
+{1}{B}{B}{B}
+Legendary Artifact Creature — Necron
+
+Flying
+
+My Will Be Done — Whenever Szarekh attacks, mill three cards. You may put an artifact creature card or Vehicle card from among the cards milled this way into your hand.
+
+3/4
+Abaddon the Despoiler
+{2}{U}{B}{R}
+Legendary Creature — Astartes Warrior
+
+Trample
+
+Mark of Chaos Ascendant — During your turn, spells you cast from your hand with mana value X or less have cascade, where X is the total amount of life your opponents have lost this turn.
+
+5/5
+Inquisitor Greyfax
+{1}{W}{U}{B}
+Legendary Creature — Human Inquisitor
+
+Vigilance
+
+Unquestionable Wisdom — Other creatures you control get +1/+0 and have vigilance.
+
+Hunt for Heresy — {1}, {T}: Tap target creature an opponent controls. Investigate. (Create a Clue token. It’s an artifact with “{2}, Sacrifice this token: Draw a card.”)
+
+3/3
+The Swarmlord
+{3}{G}{U}{R}
+Legendary Creature — Tyranid
+
+Rapid Regeneration — The Swarmlord enters with two +1/+1 counters on it for each time you’ve cast your commander from the command zone this game.
+
+Xenos Cunning — Whenever a creature you control with a counter on it dies, draw a card.
+
+5/5

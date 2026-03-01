@@ -1,0 +1,311 @@
+/* ═══════════════════════════════════════════════════════════
+   Card Component — CardForge
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Base ──────────────────────────────────────────────── */
+.card {
+  position: relative;
+  width: var(--card-w-md);
+  aspect-ratio: var(--card-ratio);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+  box-shadow: var(--shadow-card);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Sizes */
+.card--small  { width: var(--card-w-sm); }
+.card--medium { width: var(--card-w-md); }
+.card--large  { width: var(--card-w-lg); }
+.card--mini   { width: var(--card-w-mini); border-radius: var(--radius-sm); }
+
+/* ── Front & back faces ───────────────────────────────── */
+.card__front,
+.card__back {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  backface-visibility: hidden;
+}
+
+.card__front {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+}
+
+/* ── Card image ────────────────────────────────────────── */
+.card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* ── CSS‑only fallback face ────────────────────────────── */
+.card__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-3);
+  border-radius: inherit;
+  text-align: center;
+  gap: var(--sp-2);
+}
+.card__fallback-icon {
+  font-size: 2.5em;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.card__fallback-name {
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+  word-break: break-word;
+  line-height: var(--lh-tight);
+}
+.card__fallback-stats {
+  display: flex;
+  gap: var(--sp-3);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: rgba(255,255,255,0.9);
+}
+.card__fallback-stats span {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Size‑specific fallback adjustments */
+.card--small .card__fallback-icon { font-size: 1.5em; }
+.card--small .card__fallback-name { font-size: var(--fs-xs); }
+.card--large .card__fallback-icon { font-size: 4em; }
+.card--large .card__fallback-name { font-size: var(--fs-lg); }
+
+/* ── Cost badge (top‑left) ─────────────────────────────── */
+.card__cost {
+  position: absolute;
+  top: var(--sp-2);
+  left: var(--sp-2);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.card--small .card__cost {
+  width: 22px; height: 22px; font-size: 0.65rem;
+  top: var(--sp-1); left: var(--sp-1);
+}
+
+/* ── Count badge (top‑right) ───────────────────────────── */
+.card__count {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  padding: 0 var(--sp-1);
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* ── Hover overlay (deck‑builder grid) ─────────────────── */
+.card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--sp-3);
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+  border-radius: inherit;
+  z-index: 1;
+}
+.card:hover .card__overlay {
+  opacity: 1;
+}
+.card__overlay-name {
+  font-family: var(--font-heading);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  margin-bottom: var(--sp-1);
+  text-align: center;
+}
+.card__overlay-btn {
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-xs);
+  border-radius: var(--radius-full);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  font-weight: var(--fw-bold);
+  border: none;
+  min-height: 28px;
+}
+.card__overlay-btn:hover {
+  background: #d4b03e;
+}
+
+/* ── Name label (bottom) ───────────────────────────────── */
+.card__name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--sp-2) var(--sp-2) var(--sp-3);
+  font-family: var(--font-heading);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  pointer-events: none;
+}
+
+/* ── Stats bar ─────────────────────────────────────────── */
+.card__stats {
+  position: absolute;
+  bottom: var(--sp-1);
+  left: var(--sp-2);
+  right: var(--sp-2);
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: rgba(255,255,255,0.85);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Rarity bar (coloured bottom border) ───────────────── */
+.card__rarity-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2;
+}
+.card[data-rarity="Common"]    .card__rarity-bar { background: var(--rarity-common); }
+.card[data-rarity="Uncommon"]  .card__rarity-bar { background: var(--rarity-uncommon); }
+.card[data-rarity="Rare"]      .card__rarity-bar { background: var(--rarity-rare); }
+.card[data-rarity="Legendary"] .card__rarity-bar { background: var(--rarity-legendary); }
+
+/* ── Rarity border on whole card ───────────────────────── */
+.card[data-rarity="Common"]    { border: 2px solid var(--rarity-common); }
+.card[data-rarity="Uncommon"]  { border: 2px solid var(--rarity-uncommon); }
+.card[data-rarity="Rare"]      { border: 2px solid var(--rarity-rare); }
+.card[data-rarity="Legendary"] {
+  border: 2px solid var(--rarity-legendary);
+  animation: cardGlow 2s ease-in-out infinite;
+}
+
+/* ── Card back (pure CSS) ──────────────────────────────── */
+.card__back,
+.card-back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 215, 0, 0.06) 10px,
+      rgba(255, 215, 0, 0.06) 20px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 215, 0, 0.06) 10px,
+      rgba(255, 215, 0, 0.06) 20px
+    ),
+    linear-gradient(135deg, #121a4e 0%, #1a237e 50%, #0d1642 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+}
+.card__back::after,
+.card-back::after {
+  content: "⬡";
+  font-size: 2.4rem;
+  color: var(--accent-primary);
+  text-shadow: 0 0 16px rgba(232, 197, 71, 0.6);
+  transform: rotate(30deg);
+}
+.card--small .card__back::after,
+.card--small .card-back::after {
+  font-size: 1.4rem;
+}
+
+/* ── Max copies reached ────────────────────────────────── */
+.card--maxed {
+  filter: brightness(0.5) grayscale(0.3);
+}
+.card--maxed .card__overlay-btn {
+  background: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* ── Selected in hand ──────────────────────────────────── */
+.card--selected {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+  transform: translateY(-8px);
+}
+
+/* ── Hover lift ────────────────────────────────────────── */
+.card--in-hand:hover {
+  transform: translateY(-28px) scale(1.08);
+  z-index: calc(var(--z-hand) + 5);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+}
+
+/* ── On table (slight tilt + shadow) ───────────────────── */
+.card--on-table {
+  position: absolute;
+  box-shadow: 4px 6px 18px rgba(0,0,0,0.5);
+  cursor: grab;
+}
+.card--on-table:active {
+  cursor: grabbing;
+}
+
+/* ── Face‑down on table ────────────────────────────────── */
+.card--face-down .card__front { visibility: hidden; }
+.card--face-down .card__back  { transform: rotateY(0deg); }
+
+/* ── Dragging ghost ────────────────────────────────────── */
+.card--dragging {
+  opacity: 0.6;
+  transform: scale(1.05) rotate(3deg);
+}

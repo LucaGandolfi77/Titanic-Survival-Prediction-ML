@@ -1,0 +1,93 @@
+/* ═══ On-Screen Controls — DRONE STRIKE ═══ */
+
+#controls-overlay {
+  position: fixed; inset: 0; z-index: 20;
+  pointer-events: none;
+}
+
+/* ── Joystick zones ── */
+#left-joystick-zone {
+  position: absolute; bottom: 30px; left: 30px;
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+  pointer-events: auto;
+}
+#right-joystick-zone {
+  position: absolute; bottom: 30px; right: 30px;
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+  pointer-events: auto;
+}
+
+/* ── Joystick outer ring ── */
+.joystick-outer {
+  position: relative;
+  width: var(--joystick-size);
+  height: var(--joystick-size);
+  border-radius: 50%;
+  background: var(--joystick-outer);
+  border: 2px solid var(--joystick-border);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Joystick inner knob ── */
+.joystick-knob {
+  position: absolute;
+  width: var(--joystick-knob);
+  height: var(--joystick-knob);
+  border-radius: 50%;
+  background: var(--joystick-knob-bg);
+  border: 2px solid var(--accent-green);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: none;
+  box-shadow: 0 0 10px rgba(0,255,65,0.4);
+}
+
+/* ── Fire buttons ── */
+#fire-buttons {
+  display: flex; gap: var(--sp-2);
+  pointer-events: auto;
+}
+
+.fire-btn, .missile-btn {
+  padding: var(--sp-2) var(--sp-4);
+  font-family: var(--font-hud);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  min-width: 80px;
+  text-align: center;
+}
+
+.fire-btn {
+  background: rgba(255,102,0,0.3);
+  border: 1px solid var(--accent-orange);
+  color: var(--accent-orange);
+}
+.fire-btn:active {
+  background: rgba(255,102,0,0.6);
+}
+
+.missile-btn {
+  background: rgba(255,51,51,0.25);
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+}
+.missile-btn:active {
+  background: rgba(255,51,51,0.5);
+}
+.missile-btn.cooldown {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ── Desktop: hide joysticks, show small fire indicators ── */
+@media (hover: hover) and (pointer: fine) {
+  #controls-overlay { display: none !important; }
+}

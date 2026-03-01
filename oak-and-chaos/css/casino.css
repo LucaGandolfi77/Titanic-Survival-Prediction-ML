@@ -1,0 +1,307 @@
+/* ── css/casino.css ── Slot Machine Cards + NPC Avatars ── */
+
+.casino-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: .95rem;
+  color: var(--casino-gold);
+  padding: var(--gap-xs) 0;
+}
+
+.machines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--gap-md);
+}
+
+/* ── Single Slot Machine Card ── */
+.slot-card {
+  background: linear-gradient(145deg, #232b3a, var(--bg-card));
+  border: 2px solid #333;
+  border-radius: var(--radius-lg);
+  padding: var(--gap-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  transition: border-color .3s, box-shadow .3s;
+  position: relative;
+  overflow: hidden;
+}
+.slot-card.active-win {
+  border-color: var(--casino-gold);
+  box-shadow: var(--shadow-glow-gold);
+}
+.slot-card.active-jackpot {
+  animation: jackpotCelebration .4s ease infinite;
+  border-color: var(--coin-yellow);
+  box-shadow: 0 0 30px rgba(251,191,36,.6);
+}
+.slot-card.broken {
+  opacity: .55;
+  border-color: var(--danger-red);
+}
+.slot-card.locked {
+  opacity: .3;
+  pointer-events: none;
+}
+
+.slot-header {
+  font-family: var(--font-pixel);
+  font-size: .5rem;
+  color: var(--casino-gold);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Reel Display ── */
+.slot-screen {
+  background: #000;
+  border: 2px inset #555;
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  height: 60px;
+  overflow: hidden;
+  position: relative;
+}
+.reel-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+}
+.reel-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: transform .3s ease-out;
+}
+.reel-strip.spinning {
+  animation: reelSpin .6s linear infinite;
+}
+.reel-symbol {
+  font-size: 1.6rem;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Center highlight line */
+.slot-screen::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--casino-gold);
+  opacity: .3;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* ── Machine Info ── */
+.slot-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: .7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.slot-rev {
+  color: var(--coin-yellow);
+  font-weight: 600;
+}
+.slot-status {
+  font-size: .65rem;
+  text-transform: uppercase;
+}
+.slot-status.status-ok      { color: var(--success-green); }
+.slot-status.status-broken   { color: var(--danger-red); }
+.slot-status.status-locked   { color: var(--text-muted); }
+
+.slot-repair-btn {
+  padding: 3px 8px;
+  background: var(--casino-red);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  margin-top: var(--gap-xs);
+  transition: background .2s;
+}
+.slot-repair-btn:hover { background: #b91c1c; }
+
+/* ── NPC Avatar below machine ── */
+.npc-avatar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: var(--gap-xs) 0;
+  border-top: 1px solid #333;
+  margin-top: auto;
+}
+.npc-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  position: relative;
+  flex-shrink: 0;
+}
+/* Turban (CSS) */
+.npc-icon::before {
+  content: '';
+  position: absolute;
+  top: -4px; left: 2px;
+  width: 32px;
+  height: 14px;
+  background: var(--taliban-beige);
+  border-radius: 50% 50% 30% 30%;
+  z-index: 1;
+}
+.npc-details {
+  flex: 1;
+  min-width: 0;
+}
+.npc-name {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.npc-mood-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-dark);
+  border-radius: 2px;
+  margin-top: 2px;
+  overflow: hidden;
+}
+.npc-mood-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width .5s, background .5s;
+}
+.npc-quote {
+  font-size: .6rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Coin Burst Particles ── */
+.coin-particle {
+  position: absolute;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 10;
+  animation: coinBurst 1.5s ease-out forwards;
+}
+
+/* ── Revenue Bars ── */
+.revenue-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gap-sm);
+  height: 120px;
+  padding: var(--gap-sm);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+}
+.rev-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+  justify-content: flex-end;
+}
+.rev-bar {
+  width: 100%;
+  max-width: 40px;
+  background: linear-gradient(0deg, var(--casino-gold), #fde68a);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  min-height: 4px;
+  transition: height .5s;
+}
+.rev-bar-label {
+  font-size: .55rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-align: center;
+}
+.rev-bar-value {
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  color: var(--coin-yellow);
+}
+
+.daily-bars .rev-bar {
+  background: linear-gradient(0deg, var(--accent-cyan), #a5f3fc);
+}
+
+/* ── Spend Section ── */
+.spend-section { margin-top: var(--gap-md); }
+.spend-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+}
+.spend-btn {
+  padding: var(--gap-sm) var(--gap-md);
+  background: var(--bg-card);
+  border: 1px solid #444;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  transition: border-color .2s, background .2s;
+}
+.spend-btn:hover { border-color: var(--coin-yellow); background: var(--bg-card-hover); }
+.spend-btn .cost { color: var(--text-muted); font-size: .7rem; }
+.spend-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── Staff list ── */
+.staff-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  margin-bottom: var(--gap-md);
+}
+.staff-card {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  background: var(--bg-card);
+  padding: var(--gap-sm) var(--gap-md);
+  border-radius: var(--radius-md);
+}
+.staff-card .npc-icon { width: 32px; height: 32px; font-size: 1.2rem; }
+.staff-name { font-family: var(--font-mono); font-size: .8rem; }
+.staff-role { font-size: .65rem; color: var(--text-muted); }
+.staff-mood {
+  margin-left: auto;
+  width: 50px;
+  height: 6px;
+  background: var(--bg-dark);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.staff-mood-fill { height: 100%; border-radius: 3px; transition: width .5s, background .5s; }

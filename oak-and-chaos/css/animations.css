@@ -1,0 +1,110 @@
+/* ── css/animations.css ── All @keyframes ── */
+
+@keyframes leafRustle {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25%      { transform: translate(1px, -1px) rotate(1deg); }
+  50%      { transform: translate(-1px, 1px) rotate(-1deg); }
+  75%      { transform: translate(1px, 0) rotate(.5deg); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: .6; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;  transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes reelSpin {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-168px); }
+}
+
+@keyframes coinBurst {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+  80%  { opacity: .8; }
+  100% { opacity: 0; transform: translate(var(--coin-dx, 30px), var(--coin-dy, -60px)) scale(.3); }
+}
+
+@keyframes jackpotCelebration {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(3px); }
+}
+
+@keyframes npcPray {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(15deg) translateY(3px); }
+}
+
+@keyframes npcSleep {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(10deg); }
+}
+
+@keyframes zzzFloat {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-20px) scale(.5); }
+}
+
+@keyframes eventSlideIn {
+  0%   { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastIn {
+  0%   { opacity: 0; transform: translateX(100%); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes toastOut {
+  0%   { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes offspringBorn {
+  0%   { opacity: 0; transform: scale(.3); }
+  60%  { transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes energyPulse {
+  0%, 100% { box-shadow: none; }
+  50%      { box-shadow: 0 0 8px var(--oak-green); }
+}
+
+@keyframes oakTalk {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes oakGrow {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes achievementSlide {
+  0%   { opacity: 0; transform: translateY(-20px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+@keyframes winPulse {
+  0%, 100% { transform: scale(1); text-shadow: 0 0 20px var(--coin-yellow); }
+  50%      { transform: scale(1.05); text-shadow: 0 0 40px var(--coin-yellow); }
+}
+
+@keyframes winOakGrow {
+  0%   { font-size: 4rem; }
+  100% { font-size: 12rem; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes meditateGlow {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-purple); }
+  50%      { box-shadow: 0 0 30px var(--accent-purple), 0 0 60px rgba(168,85,247,.3); }
+}

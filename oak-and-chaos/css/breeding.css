@@ -1,0 +1,225 @@
+/* ── css/breeding.css ── Breeding Lab & Partner Cards ── */
+
+.breed-filters {
+  display: flex;
+  gap: var(--gap-xs);
+}
+.filter-btn {
+  padding: 4px 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  transition: background .2s, color .2s;
+}
+.filter-btn:hover { background: var(--bg-card-hover); }
+.filter-btn.active { background: var(--oak-green); color: var(--bg-dark); }
+
+.breed-status {
+  display: flex;
+  gap: var(--gap-lg);
+  font-family: var(--font-mono);
+  font-size: .85rem;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--gap-sm);
+}
+
+/* ── Partner Card ── */
+.partner-card {
+  background: var(--bg-card);
+  border: 1px solid #333;
+  border-radius: var(--radius-md);
+  padding: var(--gap-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-xs);
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+  cursor: pointer;
+}
+.partner-card:hover {
+  border-color: var(--oak-green);
+  box-shadow: var(--shadow-glow-green);
+  transform: translateY(-2px);
+}
+.partner-card.type-plant  { border-left: 3px solid var(--oak-green); }
+.partner-card.type-animal { border-left: 3px solid var(--casino-gold); }
+.partner-card.type-taliban { border-left: 3px solid var(--taliban-beige); }
+.partner-card.locked {
+  opacity: .35;
+  pointer-events: none;
+}
+
+.partner-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+.partner-name {
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  text-align: center;
+}
+.partner-type {
+  font-size: .6rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.partner-compat {
+  font-size: .7rem;
+  font-family: var(--font-mono);
+}
+.compat-high   { color: var(--success-green); }
+.compat-medium { color: var(--warning-orange); }
+.compat-low    { color: var(--danger-red); }
+
+.breed-btn {
+  width: 100%;
+  padding: 4px;
+  background: var(--oak-dark);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  margin-top: var(--gap-xs);
+  transition: background .2s;
+}
+.breed-btn:hover { background: var(--oak-green); color: var(--bg-dark); }
+.breed-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
+
+/* ── Family List ── */
+.family-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.family-header h3 { font-family: var(--font-pixel); font-size: .6rem; color: var(--oak-green); }
+#family-count { font-family: var(--font-mono); font-size: .8rem; color: var(--text-muted); }
+
+.family-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* ── Offspring Card ── */
+.offspring-card {
+  background: var(--bg-card);
+  border: 1px solid #333;
+  border-radius: var(--radius-md);
+  padding: var(--gap-md);
+  display: flex;
+  gap: var(--gap-md);
+  animation: offspringBorn .5s ease;
+}
+.offspring-avatar {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: var(--bg-dark);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+.offspring-info {
+  flex: 1;
+  min-width: 0;
+}
+.offspring-name {
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  color: var(--oak-green);
+}
+.offspring-type {
+  font-size: .65rem;
+  color: var(--text-muted);
+}
+.offspring-stats {
+  display: flex;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.offspring-stat {
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  background: var(--bg-dark);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+.offspring-traits {
+  font-size: .6rem;
+  color: var(--accent-purple);
+  margin-top: 2px;
+}
+.offspring-role {
+  font-size: .65rem;
+  color: var(--casino-gold);
+  margin-top: 2px;
+}
+.offspring-desc {
+  font-size: .6rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+.offspring-actions {
+  display: flex;
+  gap: var(--gap-xs);
+  margin-top: var(--gap-xs);
+}
+.offspring-actions button {
+  padding: 2px 8px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-sm);
+  font-size: .6rem;
+  font-family: var(--font-mono);
+  transition: background .2s;
+}
+.offspring-actions button:hover { background: var(--oak-green); color: var(--bg-dark); }
+
+/* ── Breeding Result Modal ── */
+.breed-result {
+  text-align: center;
+  padding: var(--gap-lg);
+}
+.breed-result .result-emoji {
+  font-size: 4rem;
+  margin-bottom: var(--gap-md);
+  animation: offspringBorn .6s ease;
+}
+.breed-result .result-name {
+  font-family: var(--font-pixel);
+  font-size: .8rem;
+  color: var(--oak-green);
+  margin-bottom: var(--gap-sm);
+}
+.breed-result .result-type {
+  font-size: .85rem;
+  color: var(--text-muted);
+  margin-bottom: var(--gap-sm);
+}
+.breed-result .result-desc {
+  font-size: .8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: var(--gap-md);
+}
+.breed-result .result-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--gap-md);
+}
+.breed-fail {
+  text-align: center;
+  padding: var(--gap-lg);
+  color: var(--danger-red);
+}
+.breed-fail .fail-emoji { font-size: 3rem; margin-bottom: var(--gap-md); }

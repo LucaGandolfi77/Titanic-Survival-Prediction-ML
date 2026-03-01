@@ -1,0 +1,30 @@
+/* ═══ Design Tokens — DRONE STRIKE ═══ */
+:root {
+  --bg-dark:       #0a0a0f;
+  --bg-overlay:    rgba(0, 0, 0, 0.75);
+  --accent-green:  #00ff41;
+  --accent-red:    #ff3333;
+  --accent-orange: #ff6600;
+  --accent-yellow: #ffcc00;
+  --hud-color:     rgba(0, 255, 65, 0.85);
+  --hud-bg:        rgba(0, 20, 0, 0.5);
+  --danger-color:  #ff3333;
+  --font-hud:      'Share Tech Mono', 'Courier New', monospace;
+  --font-ui:       'Rajdhani', 'Orbitron', sans-serif;
+  --font-title:    'Orbitron', sans-serif;
+
+  /* Joystick */
+  --joystick-size:   100px;
+  --joystick-knob:   40px;
+  --joystick-outer:  rgba(255,255,255,0.12);
+  --joystick-knob-bg:rgba(0, 255, 65, 0.6);
+  --joystick-border: rgba(0, 255, 65, 0.4);
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OAK & CHAOS — Idle Casino Simulator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/oak.css">
+  <link rel="stylesheet" href="css/casino.css">
+  <link rel="stylesheet" href="css/breeding.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+
+  <!-- ══════════ TOP BAR ══════════ -->
+  <header id="top-bar">
+    <div class="top-left">
+      <span class="game-logo">🌳 OAK &amp; CHAOS</span>
+      <span id="oak-name-display" class="oak-name">Zarghun — Sapling</span>
+    </div>
+    <div class="top-stats">
+      <div class="stat-pill" id="stat-age"><span class="stat-icon">📅</span> Age: <span id="hud-age">0</span>y</div>
+      <div class="stat-pill" id="stat-height"><span class="stat-icon">📏</span> Height: <span id="hud-height">1.0</span>m</div>
+      <div class="stat-pill energy-pill">
+        <span class="stat-icon">⚡</span>
+        <div class="bar-outer"><div class="bar-fill energy-fill" id="energy-fill"></div></div>
+        <span id="hud-energy">100</span>/<span id="hud-max-energy">100</span>
+      </div>
+      <div class="stat-pill coin-pill"><span class="stat-icon">💰</span> <span id="hud-coins">0</span></div>
+      <div class="stat-pill dna-pill"><span class="stat-icon">🧬</span> <span id="hud-dna">0</span> pts</div>
+      <div class="stat-pill time-pill"><span id="hud-day-icon">☀️</span> Day <span id="hud-day">1</span></div>
+    </div>
+    <div class="top-right">
+      <button id="btn-speed-1" class="speed-btn active" data-speed="1">1×</button>
+      <button id="btn-speed-2" class="speed-btn" data-speed="2">2×</button>
+      <button id="btn-speed-5" class="speed-btn" data-speed="5">5×</button>
+      <button id="btn-pause" class="speed-btn">⏸</button>
+    </div>
+  </header>
+
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <main id="game-main">
+
+    <!-- ───── LEFT PANEL: OAK GROVE ───── -->
+    <section id="left-panel">
+      <div class="panel-tabs" id="left-tabs">
+        <button class="tab active" data-tab="tab-tree">🌳 Tree</button>
+        <button class="tab" data-tab="tab-breed">🧬 Breed</button>
+        <button class="tab" data-tab="tab-family">👨‍👩‍👧 Family</button>
+      </div>
+
+      <!-- TREE TAB -->
+      <div class="tab-content active" id="tab-tree">
+        <div id="oak-visual-container">
+          <div id="oak-visual" class="stage-sapling">
+            <div class="oak-glow"></div>
+            <div class="oak-crown">
+              <div class="leaf-cluster lc-1"></div>
+              <div class="leaf-cluster lc-2"></div>
+              <div class="leaf-cluster lc-3"></div>
+              <div class="leaf-cluster lc-4"></div>
+              <div class="leaf-cluster lc-5"></div>
+              <div class="leaf-cluster lc-6"></div>
+              <div class="leaf-cluster lc-7"></div>
+              <div class="leaf-cluster lc-8"></div>
+              <div class="leaf-cluster lc-9"></div>
+              <div class="leaf-cluster lc-10"></div>
+              <div class="leaf-cluster lc-11"></div>
+              <div class="leaf-cluster lc-12"></div>
+            </div>
+            <div class="oak-trunk"></div>
+            <div class="oak-roots"></div>
+            <div id="oak-speech" class="hidden"></div>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="oak-stats-grid">
+          <div class="mini-stat"><span class="ms-label">Height</span><span class="ms-val" id="stat-ht">1.0m</span></div>
+          <div class="mini-stat"><span class="ms-label">Girth</span><span class="ms-val" id="stat-gi">0.1</span></div>
+          <div class="mini-stat"><span class="ms-label">Leaves</span><span class="ms-val" id="stat-lv">10</span></div>
+          <div class="mini-stat"><span class="ms-label">Fertility</span><span class="ms-val" id="stat-fe">10</span></div>
+          <div class="mini-stat"><span class="ms-label">Charisma</span><span class="ms-val" id="stat-ch">5</span></div>
+          <div class="mini-stat"><span class="ms-label">Acorns</span><span class="ms-val" id="stat-ac">0</span></div>
+        </div>
+
+        <div class="action-bar">
+          <button class="action-btn grow-btn" id="btn-grow">🌱 Grow <span class="cost">50⚡</span></button>
+          <button class="action-btn acorn-btn" id="btn-acorn">🌰 Acorn <span class="cost">30⚡</span></button>
+          <button class="action-btn meditate-btn" id="btn-meditate">🧘 Meditate</button>
+        </div>
+
+        <div class="upgrades-section">
+          <h3 class="section-title">🧬 DNA Upgrades</h3>
+          <div id="upgrades-list" class="upgrades-list"></div>
+        </div>
+      </div>
+
+      <!-- BREED TAB -->
+      <div class="tab-content" id="tab-breed">
+        <div class="breed-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="plant">🌿 Plants</button>
+          <button class="filter-btn" data-filter="animal">🐾 Animals</button>
+          <button class="filter-btn" data-filter="taliban">👳 Taliban</button>
+        </div>
+        <div class="breed-status">
+          <span>🌰 Acorns: <strong id="breed-acorns">0</strong></span>
+          <span>👶 Children: <strong id="breed-children">0</strong></span>
+        </div>
+        <div id="partners-grid" class="partners-grid"></div>
+      </div>
+
+      <!-- FAMILY TAB -->
+      <div class="tab-content" id="tab-family">
+        <div class="family-header">
+          <h3>🌳 The Zarghun Dynasty</h3>
+          <span id="family-count">0 offspring</span>
+        </div>
+        <div id="family-list" class="family-list"></div>
+      </div>
+    </section>
+
+    <!-- ───── RIGHT PANEL: CASINO FLOOR ───── -->
+    <section id="right-panel">
+      <div class="panel-tabs" id="right-tabs">
+        <button class="tab active" data-tab="tab-floor">🎰 Floor</button>
+        <button class="tab" data-tab="tab-revenue">📊 Revenue</button>
+        <button class="tab" data-tab="tab-staff">👤 Staff</button>
+      </div>
+
+      <!-- FLOOR TAB -->
+      <div class="tab-content active" id="tab-floor">
+        <div class="casino-header">
+          <span>💰 Rev/min: <strong id="casino-rpm">0</strong></span>
+          <span>📈 Today: <strong id="casino-today">0</strong></span>
+        </div>
+        <div id="machines-grid" class="machines-grid"></div>
+      </div>
+
+      <!-- REVENUE TAB -->
+      <div class="tab-content" id="tab-revenue">
+        <div class="revenue-chart-section">
+          <h3>📊 Revenue Per Machine</h3>
+          <div id="revenue-bars" class="revenue-bars"></div>
+        </div>
+        <div class="revenue-history">
+          <h3>📈 Daily Earnings (last 7 days)</h3>
+          <div id="daily-bars" class="revenue-bars daily-bars"></div>
+        </div>
+        <div class="spend-section">
+          <h3>💸 Spend Coins</h3>
+          <div class="spend-buttons">
+            <button class="spend-btn" id="btn-nutrients">🧪 Nutrients <span class="cost">50🪙</span></button>
+            <button class="spend-btn" id="btn-fertilizer">🌿 Fertilizer <span class="cost">200🪙</span></button>
+            <button class="spend-btn" id="btn-bribe">🤫 Bribe Inspector <span class="cost">300🪙</span></button>
+            <button class="spend-btn" id="btn-unlock-m5">🔓 Machine 5 <span class="cost">500🪙</span></button>
+            <button class="spend-btn" id="btn-unlock-m6">🔓 Machine 6 <span class="cost">500🪙</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAFF TAB -->
+      <div class="tab-content" id="tab-staff">
+        <h3>👳 Taliban Operators</h3>
+        <div id="staff-operators" class="staff-list"></div>
+        <h3>🌳 Oak Offspring Dealers</h3>
+        <div id="staff-dealers" class="staff-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════ EVENT LOG ══════════ -->
+  <footer id="event-log">
+    <div class="log-title">📜 Event Log</div>
+    <div id="event-list" class="event-list"></div>
+  </footer>
+
+  <!-- ══════════ TOAST AREA ══════════ -->
+  <div id="toast-area"></div>
+
+  <!-- ══════════ MODALS ══════════ -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal-content">
+      <button id="modal-close" class="modal-close-btn">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ WIN SCREEN ══════════ -->
+  <div id="win-screen" class="hidden">
+    <div class="win-content">
+      <div class="win-oak">🌳</div>
+      <h1 class="win-title">ZARGHUN HAS ASCENDED</h1>
+      <div id="win-stats"></div>
+      <button id="btn-play-again" class="menu-btn primary">🔄 Play Again</button>
+    </div>
+  </div>
+
+  <!-- ══════════ ACHIEVEMENT POPUP ══════════ -->
+  <div id="achievement-popup" class="hidden">
+    <div class="achievement-icon">🏆</div>
+    <div class="achievement-text">
+      <div class="achievement-label">ACHIEVEMENT UNLOCKED</div>
+      <div id="achievement-name"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

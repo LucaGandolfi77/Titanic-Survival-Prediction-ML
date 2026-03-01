@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>DRONE STRIKE</title>
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/controls.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+</head>
+<body>
+
+  <!-- WebGL Canvas -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD Layer -->
+  <div id="hud" class="hidden">
+    <div id="hud-health">
+      <span class="hud-label">HP</span>
+      <div id="health-bar-outer"><div id="health-fill"></div></div>
+      <span id="health-text">100</span>
+    </div>
+
+    <div id="hud-score">
+      <div id="score-value">0</div>
+      <div id="wave-label">WAVE <span id="wave-value">1</span></div>
+      <div id="enemies-remaining">ENEMIES: <span id="enemy-count">0</span></div>
+    </div>
+
+    <div id="crosshair">
+      <div class="crosshair-line top"></div>
+      <div class="crosshair-line bottom"></div>
+      <div class="crosshair-line left"></div>
+      <div class="crosshair-line right"></div>
+    </div>
+
+    <div id="hud-ammo">
+      <span>&#x1F52B; <span id="ammo-value">&infin;</span></span>
+      <span>&#x1F680; <span id="missile-value">8</span>/8</span>
+    </div>
+
+    <div id="altitude-meter">
+      <div id="altitude-fill"></div>
+      <span id="altitude-value">0m</span>
+    </div>
+
+    <div id="speed-meter">
+      <div id="speed-fill"></div>
+      <span id="speed-value">0</span>
+    </div>
+
+    <div id="compass">
+      <div id="compass-strip">N &middot; &middot; &middot; E &middot; &middot; &middot; S &middot; &middot; &middot; W &middot; &middot; &middot; N</div>
+    </div>
+
+    <div id="damage-vignette" class="hidden"></div>
+    <div id="wave-banner" class="hidden"></div>
+  </div>
+
+  <!-- On-Screen Controls (hidden on desktop via CSS media query) -->
+  <div id="controls-overlay">
+    <div id="left-joystick-zone">
+      <div id="joystick-left" class="joystick-outer">
+        <div id="joystick-left-knob" class="joystick-knob"></div>
+      </div>
+    </div>
+    <div id="right-joystick-zone">
+      <div id="joystick-right" class="joystick-outer">
+        <div id="joystick-right-knob" class="joystick-knob"></div>
+      </div>
+    </div>
+    <div id="fire-buttons">
+      <button id="btn-fire" class="fire-btn">&#x1F525; FIRE</button>
+      <button id="btn-missile" class="missile-btn">&#x1F680; MISSILE</button>
+    </div>
+  </div>
+
+  <!-- Menu Screen -->
+  <div id="menu-screen" class="screen">
+    <h1 class="game-title">DRONE STRIKE</h1>
+    <p class="game-subtitle">FPV Combat Simulator</p>
+    <button id="btn-start" class="menu-btn primary">&#x25B6; START GAME</button>
+    <button id="btn-controls" class="menu-btn">&#x1F3AE; CONTROLS</button>
+  </div>
+
+  <!-- Controls Info -->
+  <div id="controls-info" class="screen hidden">
+    <h2>CONTROLS</h2>
+    <div class="controls-table">
+      <table>
+        <tr><th>Action</th><th>Keyboard / Mouse</th><th>Touch</th></tr>
+        <tr><td>Throttle</td><td>W / S</td><td>Left Stick Y</td></tr>
+        <tr><td>Yaw</td><td>A / D</td><td>Left Stick X</td></tr>
+        <tr><td>Pitch</td><td>Mouse Y / Up-Down Arrows</td><td>Right Stick Y</td></tr>
+        <tr><td>Roll</td><td>Mouse X / Left-Right Arrows</td><td>Right Stick X</td></tr>
+        <tr><td>Fire Cannon</td><td>Left Click / Space</td><td>&#x1F525; Button</td></tr>
+        <tr><td>Fire Missile</td><td>Right Click / E</td><td>&#x1F680; Button</td></tr>
+        <tr><td>Boost</td><td>Shift</td><td>&mdash;</td></tr>
+        <tr><td>Pause</td><td>Escape</td><td>&mdash;</td></tr>
+      </table>
+    </div>
+    <button id="btn-back-menu" class="menu-btn">&larr; BACK</button>
+  </div>
+
+  <!-- Pause Screen -->
+  <div id="pause-screen" class="screen hidden">
+    <h2>PAUSED</h2>
+    <button id="btn-resume" class="menu-btn primary">&#x25B6; RESUME</button>
+    <button id="btn-restart-pause" class="menu-btn">&#x1F504; RESTART</button>
+  </div>
+
+  <!-- Wave Complete Screen -->
+  <div id="wave-complete-screen" class="screen hidden">
+    <h2>WAVE <span id="wave-num-display">1</span> COMPLETE!</h2>
+    <div class="wave-bonus">BONUS: <span id="wave-bonus-display">+100</span></div>
+    <button id="btn-next-wave" class="menu-btn primary">NEXT WAVE &#x25B6;</button>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over-screen" class="screen hidden">
+    <h2>DRONE DESTROYED</h2>
+    <div class="final-stats">
+      <div>SCORE: <span id="final-score">0</span></div>
+      <div>WAVE: <span id="final-wave">0</span></div>
+    </div>
+    <form id="high-score-form">
+      <p>NEW HIGH SCORE! ENTER NAME:</p>
+      <input id="high-score-input" maxlength="10" placeholder="PILOT">
+      <button type="submit" class="menu-btn small">SAVE</button>
+    </form>
+    <ul id="high-score-list"></ul>
+    <button id="btn-restart-over" class="menu-btn primary">&#x25B6; PLAY AGAIN</button>
+    <button id="btn-menu-over" class="menu-btn">&#x1F3E0; MAIN MENU</button>
+  </div>
+
+  <script type="module">
+    // Ensure a global THREE is available for legacy modules that expect it.
+    // This imports the module build and exposes it as `globalThis.THREE`.
+    import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
+    globalThis.THREE = THREE;
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

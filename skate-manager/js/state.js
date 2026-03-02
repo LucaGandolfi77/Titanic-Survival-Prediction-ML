@@ -10,7 +10,7 @@ export const GameState = {
   maxWeeks: 12,
 
   // Resources
-  money: 50000,
+  money: 5000000,
   fame: 0,
   points: 0,
 
@@ -83,7 +83,7 @@ export function hasSave() {
 export function resetState() {
   GameState.season = 1;
   GameState.week = 1;
-  GameState.money = 50000;
+  GameState.money = 5000000;
   GameState.fame = 0;
   GameState.points = 0;
   GameState.activeSquad = [];

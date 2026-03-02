@@ -1,0 +1,20 @@
+:root {
+  --grass-primary:   #4a8f3f;
+  --grass-secondary: #3f7a35;
+  --team-blue:       #3b82f6;
+  --team-red:        #ef4444;
+  --ball-white:      #f8fafc;
+  --hud-bg:          rgba(0,0,0,0.6);
+  --hud-border:      rgba(255,255,255,0.15);
+  --btn-pass:        #22c55e;
+  --btn-shoot:       #f59e0b;
+  --btn-tackle:      #ef4444;
+  --btn-switch:      #8b5cf6;
+  --text-primary:    #ffffff;
+  --text-muted:      #94a3b8;
+  --goal-yellow:     #fde047;
+  --font-display:    'Boogaloo', cursive;
+  --font-body:       'Inter', sans-serif;
+  --font-mono:       'Share Tech Mono', monospace;
+  --bg-color:        #1a1a2e;
+}

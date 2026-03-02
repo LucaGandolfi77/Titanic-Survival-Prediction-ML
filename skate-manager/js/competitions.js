@@ -130,7 +130,7 @@ export function calculatePlacements(playerScore, weekIndex) {
     if (!entry.isPlayer) {
       const rival = GameState.rivals.find(r => r.name === entry.team);
       if (rival) {
-        rival.points += comp.pointsPool[entry.placement] || 5;
+        rival.points += comp.pointsPool[entry.placement] || 5 * comp.tier;
         rival.fame += comp.fameReward[entry.placement] || 0;
         if (entry.placement === 1) rival.wins++;
       }
@@ -174,7 +174,7 @@ export function generateRivals() {
       points: 0,
       fame: randInt(5, 25),
       wins: 0,
-      money: 50000
+      money: 5000000
     });
   }
   return rivals;

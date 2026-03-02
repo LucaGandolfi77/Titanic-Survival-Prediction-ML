@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,
+    initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a472a">
+  <title>Pocket Football</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/controls.css">
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Game Canvas -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD (overlaid on canvas) -->
+  <div id="hud" class="hidden">
+    <div id="hud-top">
+      <div id="hud-home">
+        <span id="home-name">YOU</span>
+        <span id="home-score">0</span>
+      </div>
+      <div id="hud-center">
+        <span id="match-timer">03:00</span>
+        <span id="match-half">1ST</span>
+      </div>
+      <div id="hud-away">
+        <span id="away-score">0</span>
+        <span id="away-name">AI</span>
+      </div>
+    </div>
+    <div id="match-event-overlay" class="hidden">
+      <span id="event-text">GOAL!</span>
+    </div>
+  </div>
+
+  <!-- On-screen Controls -->
+  <div id="controls-overlay" class="hidden">
+    <!-- Left: joystick -->
+    <div id="joystick-zone">
+      <div id="joystick-outer">
+        <div id="joystick-knob"></div>
+      </div>
+    </div>
+    <!-- Right: action buttons -->
+    <div id="action-zone">
+      <div id="buttons-grid">
+        <button id="btn-pass"   class="action-btn pass">⚽<br>PASS</button>
+        <button id="btn-shoot"  class="action-btn shoot">🎯<br>SHOOT</button>
+        <button id="btn-tackle" class="action-btn tackle">🦵<br>TACKLE</button>
+        <button id="btn-switch" class="action-btn switch">🔄<br>SWITCH</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div id="screen-menu" class="screen active">
+    <div id="menu-ball-anim">⚽</div>
+    <h1>POCKET FOOTBALL</h1>
+    <p>5-a-side. Top-down. On your phone.</p>
+    <button id="btn-play" class="menu-btn primary">▶ KICK OFF</button>
+    <button id="btn-settings-menu" class="menu-btn">⚙️ SETTINGS</button>
+    <button id="btn-records" class="menu-btn">📊 RECORDS</button>
+  </div>
+
+  <div id="screen-difficulty" class="screen hidden">
+    <h2>SELECT DIFFICULTY</h2>
+    <div id="difficulty-cards">
+      <div class="diff-card" data-diff="easy">
+        <div class="diff-emoji">😴</div>
+        <div class="diff-name">EASY</div>
+        <p>Perfect for beginners</p>
+        <div class="diff-stats">
+          <span>Speed ██░░░</span>
+          <span>Accuracy ███░░</span>
+        </div>
+        <button class="menu-btn">SELECT</button>
+      </div>
+      <div class="diff-card" data-diff="medium">
+        <div class="diff-emoji">⚽</div>
+        <div class="diff-name">MEDIUM</div>
+        <p>Balanced challenge</p>
+        <div class="diff-stats">
+          <span>Speed ███░░</span>
+          <span>Accuracy ████░</span>
+        </div>
+        <button class="menu-btn">SELECT</button>
+      </div>
+      <div class="diff-card" data-diff="hard">
+        <div class="diff-emoji">🔥</div>
+        <div class="diff-name">HARD</div>
+        <p>Pro AI, no mercy</p>
+        <div class="diff-stats">
+          <span>Speed █████</span>
+          <span>Accuracy █████</span>
+        </div>
+        <button class="menu-btn">SELECT</button>
+      </div>
+    </div>
+    <button id="btn-diff-back" class="menu-btn small">← BACK</button>
+  </div>
+
+  <div id="screen-team-setup" class="screen hidden">
+    <h2>YOUR TEAM</h2>
+    <div class="setting-row" style="flex-direction: column; align-items: center;">
+      <label>Team Name:
+        <input id="team-name-input" maxlength="12" value="HOME TEAM">
+      </label>
+    </div>
+    <div class="setting-row" style="flex-direction: column; align-items: center;">
+      <label>Team Color:</label>
+      <div id="color-picker-row">
+        <div class="color-swatch active" data-color="#3b82f6" style="background:#3b82f6"></div>
+        <div class="color-swatch" data-color="#22c55e" style="background:#22c55e"></div>
+        <div class="color-swatch" data-color="#f59e0b" style="background:#f59e0b"></div>
+        <div class="color-swatch" data-color="#e879f9" style="background:#e879f9"></div>
+        <div class="color-swatch" data-color="#ffffff" style="background:#ffffff"></div>
+      </div>
+    </div>
+    <button id="btn-start-match" class="menu-btn primary">▶ START MATCH</button>
+    <button id="btn-setup-back" class="menu-btn small">← BACK</button>
+  </div>
+
+  <div id="screen-pause" class="screen hidden">
+    <h2>⏸ PAUSED</h2>
+    <div id="pause-score" class="score-display"></div>
+    <button id="btn-resume" class="menu-btn primary">▶ RESUME</button>
+    <button id="btn-restart" class="menu-btn">🔄 RESTART</button>
+    <button id="btn-pause-settings" class="menu-btn">⚙️ SETTINGS</button>
+    <button id="btn-pause-menu" class="menu-btn">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-halftime" class="screen hidden">
+    <h2>⏱ HALF TIME</h2>
+    <div id="halftime-score" class="score-display"></div>
+    <div id="halftime-stats" class="stats-display"></div>
+    <button id="btn-second-half" class="menu-btn primary">▶ 2ND HALF</button>
+  </div>
+
+  <div id="screen-fulltime" class="screen hidden">
+    <h2>FULL TIME</h2>
+    <div id="fulltime-result"></div>
+    <div id="fulltime-score" class="score-display"></div>
+    <div id="fulltime-stats" class="stats-display"></div>
+    <button id="btn-rematch" class="menu-btn primary">🔄 REMATCH</button>
+    <button id="btn-penalties" class="menu-btn">🎯 PENALTIES</button>
+    <button id="btn-ft-menu" class="menu-btn">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-settings" class="screen hidden">
+    <h2>⚙️ SETTINGS</h2>
+    <div class="setting-row">
+      <label>Match Duration</label>
+      <div class="btn-group duration-group">
+        <button class="opt-btn" data-min="1">1 min</button>
+        <button class="opt-btn active" data-min="3">3 min</button>
+        <button class="opt-btn" data-min="5">5 min</button>
+      </div>
+    </div>
+    <div class="setting-row">
+      <label>Sound</label>
+      <button id="btn-sound" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Vibration</label>
+      <button id="btn-vibration" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Auto-Switch</label>
+      <button id="btn-autoswitch" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Minimap</label>
+      <button id="btn-minimap" class="toggle-btn">OFF</button>
+    </div>
+    <button id="btn-set-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="screen-records" class="screen hidden">
+    <h2>📊 RECORDS</h2>
+    <div id="records-content"></div>
+    <button id="btn-rec-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

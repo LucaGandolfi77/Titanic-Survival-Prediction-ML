@@ -1,0 +1,160 @@
+/* ===== TASK CARDS ===== */
+.task-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.task-card:hover {
+  border-color: var(--ocean-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-blue);
+}
+.task-card .card-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.task-card .card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.task-card .card-reward { font-family: var(--font-mono); font-size: 0.8rem; color: var(--fame-gold); }
+.task-card .card-money { font-family: var(--font-mono); font-size: 0.8rem; color: var(--grass-green); }
+.task-card.locked { opacity: 0.4; pointer-events: none; }
+.task-card.locked::after { content: '🔒 Locked'; display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+
+/* ===== CHARACTER CARDS ===== */
+.character-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+.character-card:hover {
+  border-color: var(--love-pink);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow-pink);
+}
+.char-avatar {
+  width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.4rem; border: 3px solid var(--border-subtle);
+  position: relative;
+}
+.char-avatar.carmen { border-color: #b45309; background: linear-gradient(135deg, #92400e, #b45309); }
+.char-avatar.baptiste { border-color: var(--fame-gold); background: linear-gradient(135deg, #92400e, #b45309); }
+.char-avatar.marina { border-color: var(--ocean-blue); background: linear-gradient(135deg, #0369a1, #0ea5e9); }
+.char-avatar.theo { border-color: var(--fame-purple); background: linear-gradient(135deg, #1a0a2e, #2d1b69); }
+.char-avatar.isabel { border-color: #22c55e; background: linear-gradient(135deg, #ecfdf5, #d1fae5); }
+.char-avatar.james { border-color: #1e3a5f; background: linear-gradient(135deg, #0f1923, #1e3a5f); }
+.char-avatar.luna { border-color: var(--sunset-gold); background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.char-avatar.captain { border-color: var(--fame-gold); background: linear-gradient(135deg, #92400e, #fbbf24); }
+.char-mood {
+  position: absolute; top: -2px; right: -2px; font-size: 0.9rem;
+  background: var(--bg-dark); border-radius: 50%; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+}
+.char-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+.char-role { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; }
+.char-flag { font-size: 0.9rem; }
+.love-hearts { margin: 8px 0; font-size: 1.1rem; letter-spacing: 2px; }
+.love-hearts .filled { color: var(--love-red); }
+.love-hearts .empty { color: var(--text-muted); opacity: 0.3; }
+.char-status-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.char-status-badge.stranger { background: rgba(100,116,139,0.2); color: var(--text-muted); }
+.char-status-badge.acquaintance { background: rgba(14,165,233,0.2); color: var(--ocean-blue); }
+.char-status-badge.friend { background: rgba(34,197,94,0.2); color: var(--grass-green); }
+.char-status-badge.close { background: rgba(244,114,182,0.2); color: var(--love-pink); }
+.char-status-badge.romance { background: rgba(225,29,72,0.2); color: var(--love-red); }
+.char-actions { display: flex; gap: 6px; margin-top: 10px; justify-content: center; }
+.char-btn {
+  padding: 5px 10px; border-radius: var(--radius-sm); font-size: 0.75rem;
+  background: var(--bg-panel); color: var(--text-primary);
+  border: 1px solid var(--border-subtle); transition: all var(--transition-fast);
+}
+.char-btn:hover { border-color: var(--ocean-blue); background: var(--ocean-deep); }
+.char-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ===== TEAM FULL CARDS ===== */
+.team-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+.team-card .tc-avatar { font-size: 2.4rem; }
+.team-card .tc-info { }
+.team-card .tc-name { font-weight: 600; font-size: 1rem; }
+.team-card .tc-title { font-size: 0.8rem; color: var(--text-muted); }
+.team-card .tc-catch { font-style: italic; font-size: 0.8rem; color: var(--ocean-blue); margin-top: 4px; }
+.tc-stats { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.tc-stat {
+  font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
+  background: var(--glass); color: var(--text-muted);
+}
+.tc-stat .stat-val { color: var(--text-primary); font-weight: 600; }
+.team-card .tc-happiness {
+  width: 60px; text-align: center;
+}
+.tc-happiness-bar { width: 100%; height: 6px; background: var(--bg-dark); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+.tc-happiness-fill { height: 100%; border-radius: 3px; transition: width var(--transition-normal); }
+.tc-wage { font-family: var(--font-mono); font-size: 0.75rem; color: var(--sunset-gold); margin-top: 4px; }
+
+/* ===== SHOP CARDS ===== */
+.shop-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+  transition: all var(--transition-fast);
+}
+.shop-item:hover { border-color: var(--fame-gold); }
+.shop-item .shop-icon { font-size: 2rem; }
+.shop-item .shop-info { flex: 1; }
+.shop-item .shop-name { font-weight: 600; font-size: 0.9rem; }
+.shop-item .shop-desc { font-size: 0.75rem; color: var(--text-muted); }
+.shop-item .shop-effect { font-size: 0.75rem; color: var(--grass-green); }
+.shop-buy-btn {
+  padding: 6px 14px; border-radius: var(--radius-sm);
+  background: var(--fame-gold); color: var(--bg-dark); font-weight: 600;
+  font-size: 0.85rem; transition: all var(--transition-fast);
+}
+.shop-buy-btn:hover { background: var(--text-gold); transform: scale(1.05); }
+.shop-buy-btn:disabled { background: var(--text-muted); cursor: default; transform: none; }
+.shop-item.purchased { opacity: 0.5; }
+.shop-item.purchased .shop-buy-btn { display: none; }
+.shop-item.purchased::after { content: '✓ Owned'; color: var(--grass-green); font-size: 0.8rem; font-weight: 600; }
+
+/* ===== LUNCH MENU CARDS ===== */
+.lunch-item {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); padding: 14px;
+  cursor: pointer; transition: all var(--transition-fast);
+  display: flex; gap: 10px; align-items: center;
+}
+.lunch-item:hover { border-color: var(--sunset-orange); transform: translateY(-1px); }
+.lunch-item.selected { border-color: var(--grass-green); background: rgba(34,197,94,0.1); }
+.lunch-item .food-emoji { font-size: 1.6rem; }
+.lunch-item .food-info { flex: 1; }
+.lunch-item .food-name { font-weight: 600; font-size: 0.9rem; }
+.lunch-item .food-effects { font-size: 0.75rem; color: var(--text-muted); }
+.lunch-item .food-price { font-family: var(--font-mono); font-size: 0.85rem; color: var(--fame-gold); }
+.lunch-item .food-bonus { font-size: 0.7rem; color: var(--love-pink); font-style: italic; }
+
+/* ===== TASK SELECTION GRID ===== */
+.task-select-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px; padding: 8px 0;
+}

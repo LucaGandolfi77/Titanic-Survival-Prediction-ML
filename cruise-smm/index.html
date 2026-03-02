@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cruise Ship Social Media Manager</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/minigames.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- MAIN MENU -->
+  <div id="screen-menu" class="screen active">
+    <div id="ship-animation"></div>
+    <div class="menu-panel">
+      <h1>CRUISE SHIP<br>SOCIAL MEDIA MANAGER</h1>
+      <p class="menu-subtitle">From 0 to 1 Million Followers in 7 Days</p>
+      <button id="btn-new-game" class="menu-btn primary">🚢 START CRUISE</button>
+      <button id="btn-continue" class="menu-btn">📂 CONTINUE</button>
+      <button id="btn-records" class="menu-btn">🏆 RECORDS</button>
+      <button id="btn-how-to-play" class="menu-btn">ℹ️ HOW TO PLAY</button>
+    </div>
+    <div class="wave-decoration"></div>
+  </div>
+
+  <!-- NAME INPUT -->
+  <div id="screen-setup" class="screen hidden">
+    <h2>⚓ Welcome Aboard MS Aurora Infinita</h2>
+    <div class="setup-form">
+      <label>Your Name:
+        <input id="player-name" value="Alex Morgan" maxlength="20">
+      </label>
+      <label>Team Name:
+        <input id="team-name" value="Aurora Creative" maxlength="25">
+      </label>
+      <label>Difficulty:
+        <select id="setup-difficulty">
+          <option>Easy</option>
+          <option selected>Normal</option>
+          <option>Hard</option>
+        </select>
+      </label>
+    </div>
+    <button id="btn-start" class="menu-btn primary">BOARD THE SHIP →</button>
+    <button id="btn-back-setup" class="menu-btn">← BACK</button>
+  </div>
+
+  <!-- MAIN GAME INTERFACE -->
+  <div id="screen-game" class="screen hidden">
+
+    <!-- Top HUD -->
+    <header id="game-hud">
+      <div id="hud-resources">
+        <span id="hud-money">💰 €3,000</span>
+        <span id="hud-fame">⭐ 0</span>
+        <span id="hud-happiness">😊 Team: 60%</span>
+      </div>
+      <div id="hud-time">
+        <span id="hud-day">Day 1 — Monday</span>
+        <span id="hud-clock">09:00</span>
+      </div>
+      <nav id="hud-nav">
+        <button class="nav-btn" id="btn-open-team">👥 Team</button>
+        <button class="nav-btn" id="btn-open-chars">💕 Characters</button>
+        <button class="nav-btn" id="btn-open-shop">🛒 Shop</button>
+        <button class="nav-btn" id="btn-open-settings">⚙️</button>
+      </nav>
+    </header>
+
+    <!-- Fame Progress Bar -->
+    <div id="fame-progress-bar">
+      <div id="fame-bar-fill"></div>
+      <div id="fame-milestones"></div>
+      <span id="fame-label">0 / 1,000,000</span>
+    </div>
+
+    <!-- Main Content Area -->
+    <main id="game-main">
+
+      <!-- Left: Day Planner -->
+      <aside id="day-planner">
+        <h3>📅 Today's Schedule</h3>
+        <div id="time-slots-list"></div>
+      </aside>
+
+      <!-- Center: Active Task -->
+      <section id="task-area">
+        <div id="task-location-bg"></div>
+        <div id="active-task-card">
+          <div id="task-header">
+            <span id="task-icon">📸</span>
+            <h2 id="task-name">Morning Briefing</h2>
+          </div>
+          <p id="task-description"></p>
+          <div id="task-stats">
+            <span id="task-fame-reward">⭐ +0 fame</span>
+            <span id="task-money-reward">💰 +€0</span>
+            <span id="task-duration">⏱ 1.5 hrs</span>
+          </div>
+          <div id="task-team-assign"></div>
+          <div id="task-actions">
+            <button id="btn-assign-team" class="task-btn secondary">👥 ASSIGN TEAM</button>
+            <button id="btn-start-task" class="task-btn primary">▶ START TASK</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Team Status -->
+      <aside id="team-status-panel">
+        <h3>👥 Your Team</h3>
+        <div id="team-mini-cards"></div>
+        <div id="team-cohesion">
+          <span>Team Morale:</span>
+          <div id="morale-bar"><div id="morale-bar-fill"></div></div>
+        </div>
+      </aside>
+
+    </main>
+
+  </div>
+
+  <!-- LUNCH BREAK MODAL -->
+  <div id="modal-lunch" class="modal-overlay hidden">
+    <div class="modal-box lunch-modal">
+      <h2>🍽️ Lunch Break!</h2>
+      <div id="lunch-tabs">
+        <button class="lunch-tab active" data-tab="food">🍝 Food</button>
+        <button class="lunch-tab" data-tab="drinks">🥂 Drinks</button>
+        <button class="lunch-tab" data-tab="team">🎉 Treat Team</button>
+        <button class="lunch-tab" data-tab="invite">💕 Invite Someone</button>
+      </div>
+      <div id="lunch-menu-grid"></div>
+      <div id="lunch-cart">
+        <span id="lunch-total">Total: €0</span>
+        <span id="lunch-energy">Energy: 100</span>
+        <button id="btn-lunch-confirm" class="task-btn primary">🍴 EAT & CONTINUE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATE MODAL -->
+  <div id="modal-date" class="modal-overlay hidden">
+    <div class="modal-box date-modal">
+      <div id="date-scene-bg"></div>
+      <div id="date-character-avatar"></div>
+      <div id="date-dialogue-box">
+        <div id="date-char-name"></div>
+        <p id="date-dialogue-text"></p>
+      </div>
+      <div id="date-choices"></div>
+      <div id="date-love-meter">
+        <span>💕 Love:</span>
+        <div id="love-bar"><div id="love-bar-fill"></div></div>
+        <span id="love-value">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINI-GAME OVERLAY -->
+  <div id="minigame-overlay" class="screen hidden">
+    <div id="minigame-container">
+      <div id="minigame-header">
+        <span id="mg-title">FRAME PERFECT</span>
+        <span id="mg-timer">30</span>
+        <span id="mg-score">Score: 0</span>
+      </div>
+      <div id="minigame-canvas-area"></div>
+      <div id="minigame-instructions"></div>
+    </div>
+  </div>
+
+  <!-- TEAM PANEL -->
+  <div id="panel-team" class="side-panel hidden">
+    <h2>👥 Your Creative Team</h2>
+    <div id="team-full-cards"></div>
+    <button id="btn-team-bonus" class="task-btn primary">🎉 TEAM BONUS (+€100)</button>
+    <button id="btn-close-team" class="close-btn">✕</button>
+  </div>
+
+  <!-- CHARACTERS PANEL -->
+  <div id="panel-characters" class="side-panel hidden">
+    <h2>💕 Ship's Crew</h2>
+    <div id="characters-grid"></div>
+    <button id="btn-close-chars" class="close-btn">✕</button>
+  </div>
+
+  <!-- SHOP PANEL -->
+  <div id="panel-shop" class="side-panel hidden">
+    <h2>🛒 Equipment Shop</h2>
+    <div id="shop-items-grid"></div>
+    <button id="btn-close-shop" class="close-btn">✕</button>
+  </div>
+
+  <!-- DAY START SCREEN -->
+  <div id="screen-day-start" class="screen hidden">
+    <div id="day-start-bg"></div>
+    <div class="day-start-content">
+      <h2 id="day-start-title">Day 1 — Monday</h2>
+      <p id="day-start-subtitle"></p>
+      <div id="day-start-tip"></div>
+      <div id="day-start-tasks"></div>
+      <button id="btn-begin-day" class="menu-btn primary">☀️ START THE DAY</button>
+    </div>
+  </div>
+
+  <!-- EVENING SUMMARY -->
+  <div id="screen-evening" class="screen hidden">
+    <h2>🌅 Day Summary</h2>
+    <div id="evening-stats"></div>
+    <div id="evening-events"></div>
+    <button id="btn-end-day" class="menu-btn primary">🌙 END DAY</button>
+  </div>
+
+  <!-- FINAL ENDING -->
+  <div id="screen-ending" class="screen hidden">
+    <div id="ending-bg"></div>
+    <div id="ending-content">
+      <h1 id="ending-title"></h1>
+      <p id="ending-text"></p>
+      <div id="ending-romance"></div>
+      <div id="ending-stats"></div>
+      <button id="btn-play-again" class="menu-btn primary">🚢 SAIL AGAIN</button>
+      <button id="btn-end-menu" class="menu-btn">🏠 MAIN MENU</button>
+    </div>
+  </div>
+
+  <!-- RECORDS -->
+  <div id="screen-records" class="screen hidden">
+    <h2>🏆 Hall of Fame</h2>
+    <div id="records-list"></div>
+    <button id="btn-records-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <!-- HOW TO PLAY -->
+  <div id="screen-howto" class="screen hidden">
+    <h2>ℹ️ How to Play</h2>
+    <div id="howto-steps"></div>
+    <button id="btn-howto-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="screen-settings" class="screen hidden">
+    <h2>⚙️ Settings</h2>
+    <div class="setting-row">
+      <label>Music Volume</label>
+      <input type="range" id="music-vol" min="0" max="100" value="50">
+    </div>
+    <div class="setting-row">
+      <label>Sound Effects</label>
+      <button id="btn-sfx" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Auto-Advance Dialogue</label>
+      <button id="btn-auto-dialogue" class="toggle-btn">OFF</button>
+    </div>
+    <div class="setting-row">
+      <label>Difficulty</label>
+      <select id="difficulty-select">
+        <option>Easy</option>
+        <option selected>Normal</option>
+        <option>Hard</option>
+      </select>
+    </div>
+    <button id="btn-settings-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <!-- TASK ASSIGNMENT MODAL -->
+  <div id="modal-assign" class="modal-overlay hidden">
+    <div class="modal-box assign-modal">
+      <h2>👥 Assign Team Members</h2>
+      <div id="assign-roles"></div>
+      <button id="btn-confirm-assign" class="task-btn primary">✓ CONFIRM</button>
+      <button id="btn-cancel-assign" class="task-btn secondary">✕ CANCEL</button>
+    </div>
+  </div>
+
+  <!-- Shared overlays -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal-content" class="modal-box"></div>
+  </div>
+  <div id="toast-container" aria-live="polite"></div>
+  <div id="fame-popup-container"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

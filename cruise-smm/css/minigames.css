@@ -1,7 +1,9 @@
 /* ===== MINI-GAME OVERLAY ===== */
 #minigame-overlay {
-  background: rgba(15,25,35,0.95);
+  /* softer overlay so the game background/location is still visible */
+  background: rgba(15,25,35,0.6);
   z-index: 100;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 #minigame-container {
@@ -44,8 +46,9 @@
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--bg-dark);
-  border: 1px solid var(--border-subtle);
+  /* make the canvas transparent so the game scene shows through */
+  background: transparent;
+  border: 1px solid transparent;
 }
 #minigame-instructions {
   text-align: center;
@@ -192,22 +195,40 @@
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 300px;
   overflow: hidden;
 }
 .flying-word {
   position: absolute;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
   white-space: nowrap;
-  transition: transform 0.1s;
+  transition: transform 0.12s, opacity 0.3s;
   animation: flyWord linear forwards;
+  /* strong default contrast for varied backgrounds */
+  background: rgba(0,0,0,0.6);
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  z-index: 220;
 }
-.flying-word.trending { background: linear-gradient(135deg, var(--fame-gold), var(--sunset-orange)); color: var(--bg-dark); }
-.flying-word.relevant { background: rgba(14,165,233,0.3); color: var(--ocean-blue); border: 1px solid var(--ocean-blue); }
-.flying-word.banned { background: rgba(239,68,68,0.3); color: var(--danger-red); border: 1px solid var(--danger-red); }
+.flying-word.trending {
+  background: linear-gradient(135deg, var(--fame-gold), var(--sunset-orange));
+  color: #111111;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.flying-word.relevant {
+  background: rgba(14,165,233,0.95);
+  color: #ffffff;
+  border: none;
+}
+.flying-word.banned {
+  background: rgba(239,68,68,0.95);
+  color: #ffffff;
+  border: none;
+}
 .flying-word.clicked { transform: scale(1.3); opacity: 0; transition: all 0.3s; }
 .combo-indicator {
   position: absolute;
@@ -251,13 +272,15 @@
   left: 0;
   right: 0;
   height: 50px;
-  background: rgba(14,165,233,0.2);
-  border-top: 2px solid var(--ocean-blue);
+  background: rgba(14,165,233,0.12);
+  border-top: 2px solid rgba(14,165,233,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  color: var(--ocean-blue);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  z-index: 1;
 }
 .dance-arrow {
   position: absolute;
@@ -270,8 +293,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  color: white;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  z-index: 50;
   animation: arrowFall linear forwards;
 }
 .dance-arrow.perfect { background: var(--fame-gold); }
@@ -283,6 +308,8 @@
   font-family: var(--font-display);
   font-size: 1.4rem;
   animation: feedbackPop 0.5s ease forwards;
+  z-index: 60;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
 .dance-feedback.perfect { color: var(--fame-gold); }
 .dance-feedback.good { color: var(--grass-green); }
@@ -366,7 +393,8 @@
 .mg-results {
   position: absolute;
   inset: 0;
-  background: rgba(15,25,35,0.9);
+  /* match overlay opacity so results feel like part of the scene */
+  background: rgba(15,25,35,0.6);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -402,3 +430,7 @@
   transition: all var(--transition-fast);
 }
 .mg-continue-btn:hover { background: var(--ocean-deep); transform: scale(1.05); }
+
+@media (prefers-reduced-motion: reduce) {
+  #minigame-overlay { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}

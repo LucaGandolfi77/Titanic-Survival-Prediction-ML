@@ -212,17 +212,22 @@ function showTaskSelection(onSelectTask) {
   });
 
   // Add interview option
+  // Allow interviews during work slots. Show interviews even for characters not yet met
+  // (this schedules a meet+interview in one slot). Exclude already-interviewed characters.
   const interviewable = Object.entries(CHARACTERS).filter(([id, c]) => {
     const cs = s.characters[id];
-    if (!cs || !cs.met || cs.interviewed) return false;
+    if (cs && cs.interviewed) return false;
+    // keep captain special unlock requirement
     if (id === 'captain') return s.day >= 5 && s.captainTrust >= 80;
     return true;
   });
 
   interviewable.forEach(([id, c]) => {
+    const cs = s.characters[id];
+    const nameLabel = cs && cs.met ? `Interview: ${c.name}` : `Meet & Interview: ${c.name}`;
     const card = el('div', { class: 'task-choice-card', onclick: () => onSelectTask(`interview_${id}`) }, [
       el('div', { class: 'tcc-icon', text: '🎤' }),
-      el('div', { class: 'tcc-name', text: `Interview: ${c.name}` }),
+      el('div', { class: 'tcc-name', text: nameLabel }),
       el('div', { class: 'tcc-reward', text: `⭐ ${formatFame(c.interviewFame)}` }),
       el('div', { class: 'tcc-money', text: `+❤️ Love +8` }),
     ]);
@@ -429,7 +434,8 @@ export function showDateModal(scene, onComplete) {
   if (scene.dialogue.choices) {
     scene.dialogue.choices.forEach(choice => {
       const btn = el('div', { class: 'date-choice', text: choice.text, onclick: () => {
-        btn.classList.add(choice.effect === 'best' ? 'best' : choice.effect === 'bad' ? 'wrong' : '');
+        const cls = choice.effect === 'best' ? 'best' : choice.effect === 'bad' ? 'wrong' : '';
+        if (cls) btn.classList.add(cls);
         choicesDiv.querySelectorAll('.date-choice').forEach(c => c.style.pointerEvents = 'none');
 
         setTimeout(() => {
@@ -722,7 +728,7 @@ export function showToast(message, type = 'info') {
   const container = $('#toast-container');
   const toast = el('div', { class: `toast ${type}`, text: message });
   container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(() => toast.remove(), 10000);
 }
 
 /* ===== FAME POPUP ===== */

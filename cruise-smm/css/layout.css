@@ -1,5 +1,10 @@
 /* ===== SCREENS ===== */
-.screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity var(--transition-normal); z-index: 1; }
+.screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity var(--transition-normal); z-index: 1;
+  /* allow native scrolling on mobile (iOS momentum) */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
 .screen.hidden { display: none; opacity: 0; pointer-events: none; }
 .screen.active { opacity: 1; }
 
@@ -119,9 +124,11 @@
 #task-area { position: relative; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: hidden; }
 #task-location-bg {
   position: absolute; inset: 0; z-index: 0; opacity: 0.25;
-  transition: background var(--transition-slow);
+  transition: background-color var(--transition-slow);
 }
 #active-task-card {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   position: relative; z-index: 1; background: var(--bg-card); border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg); padding: 28px; max-width: 520px; width: 100%;
   box-shadow: var(--shadow-lg); backdrop-filter: blur(10px);

@@ -176,7 +176,7 @@ function runQuickEdit(context) {
   area.innerHTML = '';
   instructions.textContent = 'Click BLUE clips to include, skip RED clips! Gray is optional.';
 
-  let timeLeft = 45;
+  let timeLeft = 10;
   let correctIncl = 0;
   let wrongIncl = 0;
   let totalGood = 0;
@@ -388,6 +388,14 @@ function runHashtagRush(context) {
         if (wordEl.classList.contains('clicked')) return;
         wordEl.classList.add('clicked');
 
+        // Log click with bounding rect
+        try {
+          requestAnimationFrame(() => {
+            const r = wordEl.getBoundingClientRect();
+            console.log(`[hashtagRush] click: #${word} (type=${type}) rect=${Math.round(r.left)},${Math.round(r.top)} ${Math.round(r.width)}x${Math.round(r.height)}`);
+          });
+        } catch (err) {}
+
         if (type === 'trending') {
           score += Math.round(15 * comboMulti);
           combo++;
@@ -405,12 +413,29 @@ function runHashtagRush(context) {
         }
         $('#mg-score').textContent = `Fame: ${Math.max(0, score)}`;
 
-        setTimeout(() => wordEl.remove(), 300);
+        setTimeout(() => {
+          try { console.log(`[hashtagRush] clickedRemove: #${word} (type=${type})`); } catch (err) {}
+          wordEl.remove();
+        }, 300);
       }
     });
 
     hashArea.appendChild(wordEl);
-    setTimeout(() => { if (wordEl.parentNode) wordEl.remove(); }, speed * 1000);
+
+    // Log spawned word details including DOM bounding rect (x,y,width,height)
+    requestAnimationFrame(() => {
+      try {
+        const rect = wordEl.getBoundingClientRect();
+        console.log(`[hashtagRush] spawnWord: #${word} (type=${type}, top=${y}px, speed=${speed}s) rect=${Math.round(rect.left)},${Math.round(rect.top)} ${Math.round(rect.width)}x${Math.round(rect.height)}`);
+      } catch (err) {}
+    });
+
+    setTimeout(() => {
+      if (wordEl.parentNode) {
+        try { console.log(`[hashtagRush] autoRemove: #${word} (type=${type})`); } catch (err) {}
+        wordEl.remove();
+      }
+    }, speed * 1000);
   }
 
   wordInterval = setInterval(spawnWord, 800);

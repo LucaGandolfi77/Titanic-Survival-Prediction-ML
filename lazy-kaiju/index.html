@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Lazy Kaiju City Cleaner</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+</head>
+<body>
+
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-top">
+      <div id="hud-trash">
+        <span id="trash-icon">🗑️ TRASH CLEARED:</span>
+        <span id="trash-count">0 / 0</span>
+        <div id="trash-bar-outer">
+          <div id="trash-bar-inner"></div>
+        </div>
+      </div>
+      
+      <div id="level-label">
+        <span id="level-name">LEVEL 1</span>
+      </div>
+
+      <div id="hud-score-karma">
+        <div id="hud-score">
+          <span>⭐ SCORE: </span>
+          <span id="score-value">0</span>
+        </div>
+        <div id="hud-karma">
+          <span>🌿 KARMA</span>
+          <div id="karma-bar-outer">
+            <div id="karma-bar-inner"></div>
+          </div>
+          <span id="karma-value">100/100</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="hud-bottom">
+      <div id="hud-grogg-status">
+        <span id="grogg-emoji">😴</span>
+        <span id="grogg-status-text">DOZING</span>
+      </div>
+
+      <div id="hud-tailslam">
+        <button id="btn-tail-slam">🦎 TAIL SLAM</button>
+        <div id="tailslam-cooldown-arc"></div>
+      </div>
+    </div>
+
+    <div id="hud-timer" class="hidden">
+      ⏱ <span id="timer-value">3:00</span>
+    </div>
+
+    <div id="event-popups"></div>
+    <div id="screen-vignette"></div>
+    <div id="karma-flash" class="hidden"></div>
+  </div>
+
+  <!-- Mobile Controls -->
+  <div id="mobile-controls" class="hidden">
+    <div id="joystick-zone">
+      <div id="joystick-outer">
+        <div id="joystick-knob"></div>
+      </div>
+    </div>
+    <div id="action-buttons">
+      <button id="btn-slam-mobile">🦎<br>SLAM</button>
+      <button id="btn-yawn-mobile">😴<br>YAWN</button>
+    </div>
+  </div>
+
+  <!-- UI Screens -->
+  <div id="screen-menu" class="screen active">
+    <!-- background canvas for attract mode -->
+    <div id="menu-canvas-container" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1;"></div>
+    <div class="menu-panel">
+      <h1>LAZY KAIJU<br>CITY CLEANER</h1>
+      <p class="subtitle">🦎 Grogg just wants a nap.<br>The city had other plans.</p>
+      <button id="btn-play" class="menu-btn primary">▶ PLAY</button>
+      <button id="btn-howto" class="menu-btn">📖 HOW TO PLAY</button>
+      <button id="btn-hiscores" class="menu-btn">🏆 HIGH SCORES</button>
+      <button id="btn-settings" class="menu-btn">⚙️ SETTINGS</button>
+    </div>
+  </div>
+
+  <div id="screen-level-select" class="screen hidden">
+    <h2>SELECT LEVEL</h2>
+    <div id="level-cards-grid"></div>
+    <button id="btn-ls-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="screen-howto" class="screen hidden">
+    <h2>HOW TO PLAY</h2>
+    <div id="howto-steps">
+        <p>1. 🦎 Walk with WASD — Grogg waddles lazily.</p>
+        <p>2. 🐍 Your tail sweeps automatically — aim your turns.</p>
+        <p>3. 🗑️ Hit trash to sweep it away — earn points!</p>
+        <p>4. 🌿 AVOID eco buildings — karma penalty!</p>
+        <p>5. 💥 SPACE = Tail Slam — big sweep, 5s cooldown.</p>
+        <p>6. 😴 Stay karma-positive or activists will slow you down.</p>
+    </div>
+    <button id="btn-howto-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="screen-pause" class="screen hidden">
+    <h2>PAUSED 😴</h2>
+    <div id="pause-stats"></div>
+    <button id="btn-resume" class="menu-btn primary">▶ RESUME</button>
+    <button id="btn-restart" class="menu-btn">🔄 RESTART LEVEL</button>
+    <button id="btn-level-sel" class="menu-btn">📋 LEVELS</button>
+    <button id="btn-pause-menu" class="menu-btn">🏠 MENU</button>
+  </div>
+
+  <div id="screen-level-complete" class="screen hidden">
+    <h2 id="lc-title">LEVEL COMPLETE!</h2>
+    <div id="stars-display"></div>
+    <div id="lc-stats"></div>
+    <button id="btn-next-level" class="menu-btn primary">NEXT LEVEL →</button>
+    <button id="btn-replay" class="menu-btn">REPLAY ↺</button>
+    <button id="btn-lc-menu" class="menu-btn">🏠 MENU</button>
+  </div>
+
+  <div id="screen-gameover" class="screen hidden">
+    <h2>KARMA COLLAPSE 😔</h2>
+    <p>The activists win this time...</p>
+    <div id="go-stats"></div>
+    <button id="btn-tryagain" class="menu-btn primary">TRY AGAIN</button>
+    <button id="btn-go-levels" class="menu-btn">📋 LEVELS</button>
+    <button id="btn-go-menu" class="menu-btn">🏠 MENU</button>
+  </div>
+
+  <div id="screen-hiscores" class="screen hidden">
+    <h2>🏆 HIGH SCORES</h2>
+    <div id="hiscore-tabs"></div>
+    <table id="hiscore-table"></table>
+    <button id="btn-hs-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="screen-settings" class="screen hidden">
+    <h2>⚙️ SETTINGS</h2>
+    <div class="setting-row">
+      <label>Camera Sensitivity</label>
+      <input id="cam-sens" type="range" min="1" max="10" value="5">
+    </div>
+    <div class="setting-row">
+      <label>Screen Shake</label>
+      <select id="shake-level">
+        <option>Off</option>
+        <option selected>Normal</option>
+        <option>EXTREME</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <label>Sound</label>
+      <button id="btn-sound" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Show Hitboxes</label>
+      <button id="btn-debug" class="toggle-btn">OFF</button>
+    </div>
+    <button id="btn-set-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

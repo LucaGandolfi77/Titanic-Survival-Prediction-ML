@@ -1,0 +1,105 @@
+.screen {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(5px);
+}
+.screen.active { display: flex; }
+.menu-panel {
+    background: var(--bg-card);
+    border: 2px solid var(--kaiju-green);
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    max-width: 500px;
+    z-index: 2;
+}
+h1, h2 {
+    font-family: var(--font-display);
+    color: var(--kaiju-green);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+h1 { font-size: 3rem; line-height: 1.1; text-shadow: 0 0 10px var(--kaiju-green); }
+h2 { font-size: 2.5rem; }
+.subtitle {
+    font-family: var(--font-hud);
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 1.2rem;
+}
+.menu-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    background: var(--bg-medium);
+    border: 1px solid var(--text-muted);
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.menu-btn:hover {
+    border-color: var(--kaiju-green);
+    background: rgba(74, 124, 89, 0.2);
+    transform: translateY(-2px);
+}
+.menu-btn.primary {
+    background: var(--kaiju-green);
+    color: #fff;
+    border: none;
+    font-size: 1.5rem;
+    padding: 20px;
+}
+.menu-btn.primary:hover {
+    background: #5c9a6f;
+    box-shadow: 0 0 15px var(--kaiju-green);
+}
+#howto-steps p {
+    text-align: left;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    line-height: 1.5;
+}
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    margin: 15px 0;
+    font-family: var(--font-hud);
+    font-size: 1.2rem;
+}
+.setting-row input, .setting-row select, .setting-row button {
+    background: var(--bg-medium);
+    color: white;
+    border: 1px solid var(--text-muted);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+#level-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.level-card {
+    background: var(--bg-medium);
+    border: 1px solid var(--text-muted);
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.level-card:hover { border-color: var(--kaiju-green); }
+.level-card.locked { opacity: 0.5; pointer-events: none; }
+.level-card h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 5px; }

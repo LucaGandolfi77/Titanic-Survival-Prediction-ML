@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skate Manager</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/roster.css">
+  <link rel="stylesheet" href="css/rink.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- MAIN MENU -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-logo">⛸️</div>
+    <h1 class="menu-title">SKATE MANAGER</h1>
+    <p class="menu-subtitle">Build the ultimate synchronized skating team</p>
+    <button id="btn-new-game" class="menu-btn primary">▶ NEW GAME</button>
+    <button id="btn-load-game" class="menu-btn">📂 CONTINUE</button>
+    <button id="btn-settings" class="menu-btn">⚙️ SETTINGS</button>
+  </div>
+
+  <!-- NEW GAME SETUP -->
+  <div id="screen-setup" class="screen hidden">
+    <h2 class="setup-heading">Create Your Team</h2>
+    <div class="setup-form">
+      <label>Team Name:
+        <input id="team-name" type="text" value="Ice Stars" maxlength="20" />
+      </label>
+      <label>Team Color:
+        <input id="team-color" type="color" value="#7dd3fc" />
+      </label>
+      <label>Starting Difficulty:
+        <select id="difficulty">
+          <option value="amateur">Amateur</option>
+          <option value="semi-pro" selected>Semi-Pro</option>
+          <option value="elite">Elite</option>
+        </select>
+      </label>
+    </div>
+    <button id="btn-start-game" class="menu-btn primary">⛸️ START SEASON</button>
+    <button id="btn-setup-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+  <div id="screen-settings" class="screen hidden">
+    <h2 class="setup-heading">Settings</h2>
+    <div class="setup-form">
+      <label>Master Volume:
+        <input id="setting-volume" type="range" min="0" max="100" value="30" />
+      </label>
+      <label>SFX:
+        <input id="setting-sfx" type="checkbox" checked />
+      </label>
+      <label>Auto-Save:
+        <input id="setting-autosave" type="checkbox" checked />
+      </label>
+    </div>
+    <button id="btn-settings-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <!-- MAIN GAME INTERFACE -->
+  <div id="screen-game" class="screen hidden">
+
+    <!-- Top navigation -->
+    <header id="game-header">
+      <div id="team-branding">
+        <span id="header-team-name">Ice Stars</span>
+        <span id="header-week">Week 1 / 12</span>
+      </div>
+      <nav id="main-tabs">
+        <button class="tab-btn active" data-tab="overview">🏠 Overview</button>
+        <button class="tab-btn" data-tab="squad">👥 Squad</button>
+        <button class="tab-btn" data-tab="market">🛒 Market</button>
+        <button class="tab-btn" data-tab="calendar">📅 Calendar</button>
+        <button class="tab-btn" data-tab="sponsors">💼 Sponsors</button>
+        <button class="tab-btn" data-tab="standings">🏆 Standings</button>
+      </nav>
+      <div id="header-resources">
+        <span id="res-money">💰 €50,000</span>
+        <span id="res-fame">⭐ 0</span>
+        <span id="res-points">🏆 0</span>
+      </div>
+    </header>
+
+    <!-- Tab panels -->
+    <main id="game-content">
+
+      <div id="tab-overview" class="tab-panel active">
+        <div id="overview-stats-grid"></div>
+        <div id="overview-next-comp"></div>
+        <div id="overview-sponsors-summary"></div>
+        <div id="overview-event-log"></div>
+        <div id="overview-actions">
+          <button id="btn-advance-week" class="action-btn primary">ADVANCE WEEK ▶</button>
+          <button id="btn-compete" class="action-btn gold" style="display:none">COMPETE NOW 🏆</button>
+        </div>
+      </div>
+
+      <div id="tab-squad" class="tab-panel hidden">
+        <div id="squad-header">
+          <div id="cohesion-bar-wrapper">
+            COHESION: <div id="cohesion-bar"><div id="cohesion-fill"></div></div>
+            <span id="cohesion-value">--</span>
+          </div>
+          <span id="weekly-wages">Wages: €0/week</span>
+          <button id="btn-train-team" class="action-btn">🎯 TRAIN TEAM €5,000</button>
+        </div>
+        <h3 class="section-title">Active Squad (16)</h3>
+        <div id="active-squad-grid"></div>
+        <h3 class="section-title">Reserve Bench (8)</h3>
+        <div id="reserve-grid"></div>
+      </div>
+
+      <div id="tab-market" class="tab-panel hidden">
+        <div id="market-header">
+          <button id="btn-scout" class="action-btn">🔍 SCOUT €2,000</button>
+          <span id="market-refresh-info">Refreshes in: -- weeks</span>
+        </div>
+        <h3 class="section-title">Available Skaters</h3>
+        <div id="market-available-grid"></div>
+        <h3 class="section-title">Your Listed Skaters</h3>
+        <div id="market-listed-grid"></div>
+      </div>
+
+      <div id="tab-calendar" class="tab-panel hidden">
+        <h3 class="section-title">Season Calendar</h3>
+        <div id="competition-calendar-grid"></div>
+      </div>
+
+      <div id="tab-sponsors" class="tab-panel hidden">
+        <h3 class="section-title">Active Deals</h3>
+        <div id="sponsors-active"></div>
+        <h3 class="section-title">Available Sponsors</h3>
+        <div id="sponsors-available"></div>
+        <div id="fame-indicator"></div>
+      </div>
+
+      <div id="tab-standings" class="tab-panel hidden">
+        <h3 class="section-title">Season Leaderboard</h3>
+        <table id="standings-table">
+          <thead>
+            <tr>
+              <th>Rank</th><th>Team</th><th>Points</th><th>Fame</th><th>Wins</th>
+            </tr>
+          </thead>
+          <tbody id="standings-body"></tbody>
+        </table>
+        <h3 class="section-title">Season History</h3>
+        <div id="season-history"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MINI-GAME SCREEN -->
+  <div id="screen-minigame" class="screen hidden">
+    <div id="minigame-header">
+      <div id="mg-comp-name">Regional Cup</div>
+      <div id="mg-timer">⏱ 01:00</div>
+      <div id="mg-score">🏆 0</div>
+      <div id="mg-tempo-display">🎵 SLOW ×1.0</div>
+    </div>
+    <div id="minigame-layout">
+
+      <!-- Left: wobble alerts + judges -->
+      <div id="mg-alerts-panel">
+        <div class="panel-title">⚠️ ALERTS</div>
+        <div id="wobble-alert-list"></div>
+        <div class="panel-title" style="margin-top:16px">👩‍⚖️ JUDGES</div>
+        <div id="judge-reactions">
+          <span class="judge">😐</span>
+          <span class="judge">😐</span>
+          <span class="judge">😐</span>
+          <span class="judge">😐</span>
+          <span class="judge">😐</span>
+        </div>
+      </div>
+
+      <!-- Center: rink canvas -->
+      <div id="rink-wrapper">
+        <canvas id="rink-canvas" width="600" height="400"></canvas>
+      </div>
+
+      <!-- Right: controls -->
+      <div id="mg-controls-panel">
+        <div class="panel-title">🎵 TEMPO</div>
+        <div id="tempo-buttons">
+          <button class="tempo-btn active" data-tempo="slow">🎵 SLOW</button>
+          <button class="tempo-btn" data-tempo="medium">🎶 MED ×1.5</button>
+          <button class="tempo-btn" data-tempo="fast">🎸 FAST ×2.0</button>
+          <button class="tempo-btn" data-tempo="max">🔥 MAX ×2.5</button>
+        </div>
+        <div class="panel-title" style="margin-top:16px">💃 FORMATIONS</div>
+        <div id="formation-buttons"></div>
+      </div>
+    </div>
+    <div id="minigame-morale-bar">
+      TEAM MORALE: <div id="morale-display"><div id="morale-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="screen-results" class="screen hidden">
+    <h2 id="results-title">Competition Results</h2>
+    <div id="results-leaderboard"></div>
+    <div id="results-score-breakdown"></div>
+    <div id="results-prize"></div>
+    <button id="btn-results-continue" class="menu-btn primary">CONTINUE ▶</button>
+  </div>
+
+  <!-- SEASON END -->
+  <div id="screen-season-end" class="screen hidden">
+    <h2 class="season-end-title">🏁 SEASON COMPLETE</h2>
+    <div id="season-summary"></div>
+    <div id="championship-result"></div>
+    <button id="btn-new-season" class="menu-btn primary">▶ START NEW SEASON</button>
+    <button id="btn-season-menu" class="menu-btn">🏠 MAIN MENU</button>
+  </div>
+
+  <!-- Shared overlays -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal-content" class="modal-box"></div>
+  </div>
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

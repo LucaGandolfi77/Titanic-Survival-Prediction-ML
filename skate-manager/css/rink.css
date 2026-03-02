@@ -1,0 +1,231 @@
+/* ===== Mini-game layout ===== */
+#screen-minigame {
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0;
+}
+
+/* ===== Mini-game header ===== */
+#minigame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--bg-medium);
+  border-bottom: 1px solid var(--border-subtle);
+}
+#mg-comp-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--accent-gold);
+}
+#mg-timer {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  color: var(--accent-ice);
+  letter-spacing: 0.1em;
+}
+#mg-score {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--accent-gold);
+}
+#mg-tempo-display {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent-pink);
+}
+
+/* ===== Mini-game 3-column layout ===== */
+#minigame-layout {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* ===== Left panel: alerts ===== */
+#mg-alerts-panel {
+  width: 180px;
+  background: var(--bg-medium);
+  padding: 12px;
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.wobble-alert {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: rgba(248,113,113,0.15);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--accent-red);
+  font-weight: 600;
+  animation: pulse-alert 0.6s ease-in-out infinite alternate;
+}
+#judge-reactions {
+  display: flex;
+  gap: 6px;
+  font-size: 24px;
+}
+.judge {
+  transition: transform 0.3s ease;
+}
+.judge.happy { animation: judge-bounce 0.4s ease; }
+
+/* ===== Center: rink ===== */
+#rink-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  padding: 12px;
+  position: relative;
+}
+#rink-canvas {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 30px rgba(125,211,252,0.15),
+              inset 0 0 60px rgba(219,234,254,0.05);
+  cursor: pointer;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* ===== Right panel: controls ===== */
+#mg-controls-panel {
+  width: 180px;
+  background: var(--bg-medium);
+  padding: 12px;
+  border-left: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+/* ===== Tempo buttons ===== */
+#tempo-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.tempo-btn {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-family: var(--font-display);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+  transition: all var(--transition);
+}
+.tempo-btn:hover {
+  border-color: var(--accent-pink);
+  color: var(--text-primary);
+}
+.tempo-btn.active {
+  background: var(--accent-pink);
+  color: #0f172a;
+  font-weight: 700;
+  border-color: var(--accent-pink);
+}
+
+/* ===== Formation buttons ===== */
+#formation-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.formation-btn {
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-family: var(--font-display);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+  transition: all var(--transition);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.formation-btn:hover:not(:disabled) {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(245,158,11,0.2);
+}
+.formation-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.formation-btn.active {
+  border-color: var(--accent-gold);
+  background: rgba(245,158,11,0.15);
+  color: var(--accent-gold);
+}
+.formation-btn.locked {
+  opacity: 0.3;
+}
+.formation-btn .diff-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--bg-dark);
+  color: var(--accent-gold);
+}
+.formation-btn .cooldown-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--accent-red);
+}
+
+/* ===== Morale bar ===== */
+#minigame-morale-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  background: var(--bg-medium);
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+#morale-display {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 300px;
+}
+#morale-fill {
+  height: 100%;
+  width: 70%;
+  background: var(--accent-green);
+  border-radius: 4px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+/* ===== Finale sparkle overlay ===== */
+.finale-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
+  animation: sparkle-pulse 1s ease-in-out infinite;
+}

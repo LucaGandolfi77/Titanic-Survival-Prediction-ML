@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Bureau of Misplaced Portals</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+</head>
+<body>
+
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-sanity">
+      <div class="hud-label">SANITY LEVEL (Form S-1)</div>
+      <div id="sanity-bar-outer">
+        <div id="sanity-bar-inner"></div>
+      </div>
+      <span id="sanity-value">100 / 100</span>
+      <span id="sanity-status">ACCEPTABLE</span>
+    </div>
+
+    <div id="hud-inventory">
+      <div class="hud-label">INVENTORY</div>
+      <div id="inventory-slots"></div>
+    </div>
+
+    <div id="hud-portal-map">
+      <div class="hud-label">BUILDING SCHEMATIC</div>
+      <canvas id="map-canvas" width="140" height="140"></canvas>
+      <div id="current-room-label">ROOM: LOBBY</div>
+    </div>
+
+    <div id="hud-objective">
+      <div class="hud-label">CURRENT TASK:</div>
+      <div id="objective-text">Report to Records Department</div>
+      <div id="objective-stamps"></div>
+    </div>
+
+    <div id="hud-flashlight">
+      <span>🔦</span>
+      <div id="battery-bar-outer">
+        <div id="battery-bar-inner"></div>
+      </div>
+      <span id="battery-value">100%</span>
+    </div>
+
+    <div id="crosshair">
+      <div id="crosshair-dot"></div>
+    </div>
+
+    <div id="interaction-hint" class="hidden">
+      <span id="hint-key">[E]</span>
+      <span id="hint-text">Examine</span>
+    </div>
+
+    <div id="event-notifications"></div>
+    <div id="screen-distortion"></div>
+    <div id="void-vignette" class="hidden"></div>
+
+    <div id="void-warning" class="hidden">
+      ⚠ VOID PROXIMITY — DO NOT ENTER PORTAL #13
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-letterhead">
+      <div class="letterhead-top">
+        BUREAU OF ADMINISTRATIVE CONTINUITY
+      </div>
+      <div class="letterhead-sub">
+        DEPARTMENT OF PORTAL MANAGEMENT (MISPLACED DIVISION)
+      </div>
+    </div>
+    <div class="menu-stamp-decoration">OFFICIAL</div>
+    <h1>BUREAU OF<br>MISPLACED PORTALS</h1>
+    <p class="menu-subtitle">
+      "All portals installed by certified professionals.*"<br>
+      <small>*Greg is not a certified professional.</small>
+    </p>
+    <button id="btn-play" class="menu-btn primary">▶ BEGIN EMPLOYMENT</button>
+    <button id="btn-howto" class="menu-btn">📋 EMPLOYEE HANDBOOK</button>
+    <button id="btn-scores" class="menu-btn">🏆 PERSONNEL FILES</button>
+    <button id="btn-settings" class="menu-btn">⚙️ REGULATIONS</button>
+    <div class="menu-footer-note">
+      Form 27-Γ required for exit. You do not have Form 27-Γ.
+    </div>
+  </div>
+
+  <div id="screen-howto" class="screen hidden">
+    <div class="memo-header">
+      MEMORANDUM — RE: Portal Navigation Policy Update
+    </div>
+    <div id="howto-content"></div>
+    <button id="btn-howto-back" class="menu-btn">← DISCARD MEMO</button>
+  </div>
+
+  <div id="screen-pause" class="screen hidden">
+    <div class="memo-header">⏸ WORK SUSPENDED</div>
+    <div id="pause-room-info"></div>
+    <button id="btn-resume" class="menu-btn primary">▶ RESUME DUTIES</button>
+    <button id="btn-restart" class="menu-btn">🔄 RESTART SHIFT</button>
+    <button id="btn-pause-menu" class="menu-btn">🏠 ABANDON POST</button>
+  </div>
+
+  <div id="screen-note" class="screen hidden">
+    <div id="note-paper">
+      <div id="note-title"></div>
+      <div id="note-body"></div>
+      <button id="btn-close-note" class="menu-btn">[E] CLOSE NOTE</button>
+    </div>
+  </div>
+
+  <div id="screen-win" class="screen hidden">
+    <div class="memo-header">
+      ✅ FORM 27-Γ APPROVED — EXIT GRANTED
+    </div>
+    <div id="win-stats"></div>
+    <div id="win-message"></div>
+    <button id="btn-play-again" class="menu-btn primary">
+      ▶ NEW EMPLOYMENT
+    </button>
+    <button id="btn-win-menu" class="menu-btn">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-gameover" class="screen hidden">
+    <div class="memo-header">RE: EMPLOYEE STATUS CHANGE</div>
+    <div id="gameover-content"></div>
+    <button id="btn-tryagain" class="menu-btn primary">
+      ▶ APPEAL DECISION
+    </button>
+    <button id="btn-go-menu" class="menu-btn">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-settings" class="screen hidden">
+    <div class="memo-header">⚙️ OPERATIONAL PARAMETERS</div>
+    <div class="setting-row">
+      <label>Mouse Sensitivity</label>
+      <input id="sens-slider" type="range" min="1" max="10" value="5">
+    </div>
+    <div class="setting-row">
+      <label>Sanity Effects Intensity</label>
+      <select id="sanity-fx">
+        <option>Mild</option><option selected>Standard</option>
+        <option>Maximum Suffering</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <label>Flashlight</label>
+      <select id="flashlight-mode">
+        <option selected>Battery Drain</option>
+        <option>Infinite</option><option>Off</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <label>Sound</label>
+      <button id="btn-sound" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Hitbox Debug</label>
+      <button id="btn-debug" class="toggle-btn">OFF</button>
+    </div>
+    <button id="btn-set-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="toast-container" aria-live="polite"></div>
+  <div id="item-examine-overlay" class="hidden">
+    <div id="item-examine-content"></div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+:root {
+  --bg-dark:         #1a1a1f;
+  --bg-office:       #d4cfc8;
+  --wall-gray:       #8a8a90;
+  --ceiling-off:     #e8e4de;
+  --floor-concrete:  #6a6a6a;
+  --accent-govt:     #1a3a6e;
+  --accent-stamp:    #c41e3a;
+  --accent-void:     #000000;
+  --portal-blue:     #4488ff;
+  --portal-orange:   #ff8800;
+  --portal-red:      #ff2244;
+  --portal-green:    #22ff88;
+  --portal-purple:   #aa44ff;
+  --sanity-good:     #22c55e;
+  --sanity-warn:     #f59e0b;
+  --sanity-bad:      #ef4444;
+  --text-primary:    #f0f0f0;
+  --text-govt:       #1a1a1f;
+  --hud-bg:          rgba(10,10,20,0.7);
+  --hud-border:      rgba(26,58,110,0.5);
+  --font-display:    'Special Elite', cursive;
+  --font-hud:        'Share Tech Mono', monospace;
+  --font-body:       'Rajdhani', sans-serif;
+  --font-bureaucrat: 'Courier New', monospace;
+}

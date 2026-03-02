@@ -1,0 +1,39 @@
+:root {
+  /* Dark space theme */
+  --bg-deep:       #030308;
+  --bg-medium:     #0d0d1a;
+  --bg-card:       #111128;
+  --accent-cyan:   #00e5ff;
+  --accent-purple: #e040fb;
+  --accent-green:  #00e676;
+  --accent-amber:  #ffab00;
+  --accent-red:    #ff1744;
+  --text-primary:  #e0e0ff;
+  --text-muted:    #5c5c8a;
+  --portal-glow:   rgba(0, 229, 255, 0.4);
+
+  /* Cell accent colors */
+  --cell-0: #4fc3f7;
+  --cell-1: #ff8f00;
+  --cell-2: #e040fb;
+  --cell-3: #00e676;
+  --cell-4: #ffeb3b;
+  --cell-5: #81c784;
+  --cell-6: #ff5252;
+  --cell-7: #ffffff;
+
+  /* Typography */
+  --font-display: 'Orbitron', sans-serif;
+  --font-hud:     'Share Tech Mono', monospace;
+  --font-body:    'Rajdhani', sans-serif;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+}

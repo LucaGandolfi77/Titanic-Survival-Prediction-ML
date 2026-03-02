@@ -1,0 +1,15 @@
+:root {
+  --bg-deep: #02020d;
+  --bg-bar: #0a0812;
+  --accent-amber: #ff8c00;
+  --accent-cyan: #00e5ff;
+  --accent-green: #39ff14;
+  --accent-red: #ff1744;
+  --text-primary: #ffe0a0;
+  --text-muted: #5a4a2a;
+  --hud-bg: rgba(0, 0, 0, 0.55);
+  --hud-border: rgba(255, 140, 0, 0.3);
+  --font-display: 'Orbitron', sans-serif;
+  --font-hud: 'Share Tech Mono', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+}

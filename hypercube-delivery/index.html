@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Hypercube Delivery Service</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Game canvas (Three.js renders here) -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD Layer (above canvas) -->
+  <div id="hud" class="hidden">
+    <div id="hud-deliveries"></div>
+    <div id="hud-score">
+      <span id="score-value">0</span>
+      <span id="level-label">LEVEL 1</span>
+    </div>
+    <div id="hud-speedometer">
+      <svg id="speed-gauge" viewBox="0 0 100 60">
+        <path id="speed-path" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--text-muted)" stroke-width="10" stroke-linecap="round" />
+        <path id="speed-value-path" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--accent-green)" stroke-width="10" stroke-linecap="round" stroke-dasharray="125" stroke-dashoffset="125" />
+      </svg>
+      <span id="speed-value">0</span>
+    </div>
+    <div id="hud-minimap">
+      <canvas id="minimap-canvas" width="140" height="140"></canvas>
+      <div id="cell-name-label"></div>
+    </div>
+    <div id="gravity-indicator">
+      <div id="gravity-arrow">↓</div>
+    </div>
+    <div id="damage-vignette"></div>
+    <div id="low-time-vignette"></div>
+  </div>
+
+  <!-- On-screen Controls -->
+  <div id="onscreen-controls" class="hidden">
+    <div id="left-joystick-area">
+      <div id="left-stick-outer">
+        <div id="left-stick-knob"></div>
+      </div>
+    </div>
+    <div id="right-buttons">
+      <button id="btn-brake">BRAKE</button>
+      <button id="btn-horn">📯</button>
+    </div>
+    <button id="btn-cam">🎥</button>
+  </div>
+
+  <!-- UI Screens -->
+  <div id="screen-menu" class="screen active">
+    <!-- Menu background canvas -->
+    <canvas id="menu-canvas"></canvas>
+    <div class="menu-content">
+      <h1>HYPERCUBE<br>DELIVERY SERVICE</h1>
+      <p class="subtitle">4D Logistics Has Never Been This Confusing™</p>
+      <button id="btn-play" class="menu-btn primary">▶ PLAY</button>
+      <button id="btn-howto" class="menu-btn">📖 HOW TO PLAY</button>
+      <button id="btn-leaderboard" class="menu-btn">🏆 LEADERBOARD</button>
+      <button id="btn-settings" class="menu-btn">⚙️ SETTINGS</button>
+    </div>
+  </div>
+
+  <div id="screen-howto" class="screen hidden">
+    <h2>HOW TO PLAY</h2>
+    <div id="howto-slides">
+      <div class="slide">
+        <h3>1. 4D Topological Delivery</h3>
+        <p>Drive through portals to enter new rooms. The world flips — stay calm, deliver anyway.</p>
+      </div>
+      <div class="slide">
+        <h3>2. Navigating the Tesseract</h3>
+        <p>Follow the 4D map (bottom right) to reach your destination cell. Use portals on the correct walls.</p>
+      </div>
+      <div class="slide">
+        <h3>3. Controls</h3>
+        <p>W/A/S/D or Arrows to drive. SPACE to brake. C changes camera. H to honk.</p>
+      </div>
+    </div>
+    <button id="btn-howto-back" class="menu-btn mt-auto">← BACK</button>
+  </div>
+
+  <div id="screen-pause" class="screen hidden">
+    <h2>PAUSED</h2>
+    <div id="pause-info"></div>
+    <button id="btn-resume" class="menu-btn primary">▶ RESUME</button>
+    <button id="btn-restart" class="menu-btn">🔄 RESTART</button>
+    <button id="btn-to-menu" class="menu-btn">🏠 MENU</button>
+  </div>
+
+  <div id="screen-level-complete" class="screen hidden">
+    <h2 id="level-complete-title">LEVEL COMPLETE!</h2>
+    <div id="stars-display"></div>
+    <div id="score-breakdown"></div>
+    <button id="btn-next-level" class="menu-btn primary">NEXT LEVEL →</button>
+    <button id="btn-replay" class="menu-btn">REPLAY ↺</button>
+  </div>
+
+  <div id="screen-gameover" class="screen hidden">
+    <h2>PACKAGE UNDELIVERED</h2>
+    <div id="gameover-stats"></div>
+    <div id="initials-section">
+      <p>Enter initials for leaderboard:</p>
+      <input id="initials-input" maxlength="3" placeholder="AAA">
+      <button id="btn-save-score" class="menu-btn">SAVE</button>
+    </div>
+    <button id="btn-tryagain" class="menu-btn primary">TRY AGAIN</button>
+    <button id="btn-gameover-menu" class="menu-btn">🏠 MENU</button>
+  </div>
+
+  <div id="screen-leaderboard" class="screen hidden">
+    <h2>🏆 LEADERBOARD</h2>
+    <table id="scores-table"></table>
+    <button id="btn-lb-back" class="menu-btn mt-auto">← BACK</button>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Game script -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

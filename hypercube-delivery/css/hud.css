@@ -1,0 +1,240 @@
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#hud-deliveries {
+  position: absolute;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.delivery-card {
+  background: rgba(17, 17, 40, 0.8);
+  border: 1px solid var(--accent-cyan);
+  padding: var(--sp-2);
+  border-radius: 4px;
+  font-family: var(--font-hud);
+  min-width: 200px;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+.delivery-card.urgent {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+  animation: pulse-red 1s infinite alternate;
+}
+
+.time-bar {
+  height: 4px;
+  background: var(--accent-green);
+  margin-top: var(--sp-1);
+  transition: width 0.1s linear, background-color 0.3s;
+}
+
+.delivery-card.urgent .time-bar {
+  background: var(--accent-red);
+}
+
+#hud-score {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  text-align: right;
+  font-family: var(--font-display);
+}
+
+#score-value {
+  display: block;
+  font-size: 2rem;
+  color: var(--accent-amber);
+  text-shadow: 0 0 5px var(--accent-amber);
+}
+
+#level-label {
+  display: block;
+  font-family: var(--font-hud);
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+
+#hud-speedometer {
+  position: absolute;
+  bottom: var(--sp-4);
+  left: var(--sp-4);
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#speed-gauge {
+  width: 100%;
+  height: auto;
+}
+
+#speed-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  margin-top: -20px;
+}
+
+#hud-minimap {
+  position: absolute;
+  bottom: var(--sp-4);
+  right: var(--sp-4);
+  width: 180px;
+  height: 200px;
+  background: rgba(17, 17, 40, 0.6);
+  border: 1px solid var(--text-muted);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--sp-2);
+}
+
+#minimap-canvas {
+  width: 140px;
+  height: 140px;
+}
+
+#cell-name-label {
+  font-family: var(--font-hud);
+  margin-top: var(--sp-2);
+  text-align: center;
+  color: var(--accent-cyan);
+}
+
+#gravity-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  opacity: 0.5;
+}
+
+#gravity-arrow {
+  text-align: center;
+  line-height: 40px;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  color: var(--accent-amber);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#damage-vignette, #low-time-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+#damage-vignette {
+  box-shadow: inset 0 0 100px var(--accent-red);
+}
+
+#low-time-vignette {
+  box-shadow: inset 0 0 50px var(--accent-red);
+  animation: pulse-red-vignette 1s infinite alternate;
+}
+
+/* Controls */
+#onscreen-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#onscreen-controls > * {
+  pointer-events: auto;
+}
+
+#left-joystick-area {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 150px;
+  height: 150px;
+}
+
+#left-stick-outer {
+  width: 120px;
+  height: 120px;
+  margin: 15px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  position: relative;
+  background: rgba(0,0,0,0.2);
+}
+
+#left-stick-knob {
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  position: absolute;
+  top: 35px;
+  left: 35px;
+  transform: translate(0, 0);
+}
+
+#right-buttons {
+  position: absolute;
+  bottom: 20px;
+  right: 200px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+#right-buttons button {
+  background: rgba(255,171,0,0.3);
+  border: 2px solid var(--accent-amber);
+  color: var(--accent-amber);
+  height: 60px;
+  min-width: 60px;
+  border-radius: 30px;
+  font-family: var(--font-hud);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+#btn-cam {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+/* Hidden by default on desktop, optionally revealed via js sniffing */
+@media (hover: hover) and (pointer: fine) {
+  #onscreen-controls {
+    display: none !important;
+  }
+}

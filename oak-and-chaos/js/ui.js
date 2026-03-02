@@ -22,6 +22,7 @@ export class UiManager {
     this._bindSpend();
     this._bindModal();
     this._delegateClicks();
+    this._initDebugPanel();
   }
 
   /* ═══════════ Tab switching ═══════════ */
@@ -274,8 +275,11 @@ export class UiManager {
   /* ═══════════ breed handler ═══════════ */
   _handleBreed(partnerId) {
     const partner = this.gameRef.population.getPartner(partnerId);
+    console.log('[ui] _handleBreed called', { partnerId });
     if (!partner) return;
+    console.log('[ui] partner info', { name: partner.name, category: partner.category, compatibility: partner.compatibility });
     const result = this.gameRef.breeding.attemptBreed(this.gameRef.oak, partner);
+    console.log('[ui] breeding result', result);
     if (result.success) {
       this.gameRef.population.addOffspring(result.offspring);
       this.showToast('success', '🎉 New Offspring!', `${result.offspring.name} was born!`);
@@ -284,6 +288,59 @@ export class UiManager {
       this.showToast('error', '❌ Breed Failed', result.reason || 'Incompatible or insufficient resources.');
     }
     this.gameRef.requestRender();
+  }
+
+  /* ═══════════ Debug panel for testing (grant resources) ═══════════ */
+  _initDebugPanel() {
+    try {
+      const panel = document.createElement('div');
+      panel.id = 'debug-panel';
+      panel.style.position = 'fixed';
+      panel.style.right = '12px';
+      panel.style.bottom = '12px';
+      panel.style.zIndex = '9999';
+      panel.style.background = 'rgba(0,0,0,0.6)';
+      panel.style.color = '#fff';
+      panel.style.padding = '8px';
+      panel.style.borderRadius = '8px';
+      panel.style.fontSize = '12px';
+      panel.style.display = 'flex';
+      panel.style.gap = '6px';
+      panel.innerHTML = `
+        <button id="dbg-acorn" style="padding:6px">+5 🌰</button>
+        <button id="dbg-dna" style="padding:6px">+5 🧬</button>
+        <button id="dbg-energy" style="padding:6px">Fill ⚡</button>
+        <button id="dbg-coins" style="padding:6px">+1000 🪙</button>
+      `;
+      document.body.appendChild(panel);
+
+      document.getElementById('dbg-acorn').addEventListener('click', () => {
+        this.gameRef.oak.acorns = (this.gameRef.oak.acorns || 0) + 5;
+        console.log('[debug] granted 5 acorns', { acorns: this.gameRef.oak.acorns });
+        this.showToast('success', 'Debug', 'Granted 5 acorns');
+        this.gameRef.requestRender();
+      });
+      document.getElementById('dbg-dna').addEventListener('click', () => {
+        this.gameRef.oak.dnaPoints = (this.gameRef.oak.dnaPoints || 0) + 5;
+        console.log('[debug] granted 5 dna', { dna: this.gameRef.oak.dnaPoints });
+        this.showToast('success', 'Debug', 'Granted 5 DNA');
+        this.gameRef.requestRender();
+      });
+      document.getElementById('dbg-energy').addEventListener('click', () => {
+        this.gameRef.oak.energy = this.gameRef.oak.maxEnergy;
+        console.log('[debug] filled energy', { energy: this.gameRef.oak.energy });
+        this.showToast('success', 'Debug', 'Energy filled');
+        this.gameRef.requestRender();
+      });
+      document.getElementById('dbg-coins').addEventListener('click', () => {
+        this.gameRef.casino.totalCoins = (this.gameRef.casino.totalCoins || 0) + 1000;
+        console.log('[debug] granted coins', { coins: this.gameRef.casino.totalCoins });
+        this.showToast('success', 'Debug', 'Granted 1000 coins');
+        this.gameRef.requestRender();
+      });
+    } catch (e) {
+      console.warn('Debug panel init failed:', e);
+    }
   }
 
   _showBreedResult(offspring) {

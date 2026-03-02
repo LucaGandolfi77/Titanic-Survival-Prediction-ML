@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lazy Kaiju City Cleaner</title>
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/reset.css">
@@ -82,7 +82,7 @@
   <!-- UI Screens -->
   <div id="screen-menu" class="screen active">
     <!-- background canvas for attract mode -->
-    <div id="menu-canvas-container" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1;"></div>
+    <div id="menu-canvas-container"></div>
     <div class="menu-panel">
       <h1>LAZY KAIJU<br>CITY CLEANER</h1>
       <p class="subtitle">🦎 Grogg just wants a nap.<br>The city had other plans.</p>
@@ -153,8 +153,8 @@
       <input id="cam-sens" type="range" min="1" max="10" value="5">
     </div>
     <div class="setting-row">
-      <label>Screen Shake</label>
-      <select id="shake-level">
+      <label for="shake-level">Screen Shake</label>
+      <select id="shake-level" aria-label="Screen Shake">
         <option>Off</option>
         <option selected>Normal</option>
         <option>EXTREME</option>

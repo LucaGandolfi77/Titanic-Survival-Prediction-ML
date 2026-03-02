@@ -42,29 +42,44 @@ export class BreedingLab {
 
   /* ── Attempt to breed oak with a partner ── */
   attemptBreed(oak, partner) {
+    console.log('[breeding] attemptBreed start', { partner: partner && partner.name, partnerId: partner && partner.id, category: partner && partner.category, compatibility: partner && partner.compatibility, oakEnergy: oak.energy, oakAcorns: oak.acorns, oakHeight: oak.height });
     // Cost check
-    if (oak.energy < 40) return { success: false, reason: 'Not enough energy (need 40⚡)' };
-    if (oak.acorns < 1) return { success: false, reason: 'Need at least 1 acorn 🌰' };
+    if (oak.energy < 40) {
+      console.log('[breeding] failed - not enough energy', { need: 40, have: oak.energy });
+      return { success: false, reason: 'Not enough energy (need 40⚡)' };
+    }
+    if (oak.acorns < 1) {
+      console.log('[breeding] failed - no acorns', { have: oak.acorns });
+      return { success: false, reason: 'Need at least 1 acorn 🌰' };
+    }
 
     // Height lock check
     if (partner.category === 'animal' && !oak.canBreedAnimals()) {
+      console.log('[breeding] failed - animal height lock', { oakHeight: oak.height });
       return { success: false, reason: 'Need height ≥ 5m to breed with animals' };
     }
     if (partner.category === 'taliban' && !oak.canBreedTaliban()) {
+      console.log('[breeding] failed - taliban height lock', { oakHeight: oak.height });
       return { success: false, reason: 'Need height ≥ 20m to breed with Taliban' };
     }
 
     // Spend
     oak.energy -= 40;
     oak.acorns -= 1;
+    console.log('[breeding] resources spent', { oakEnergy: oak.energy, oakAcorns: oak.acorns });
 
     // Success roll
     const successRate = this.calculateSuccess(oak, partner);
+    console.log('[breeding] successRate', { successRate });
+    const roll = Math.random() * 100;
+    console.log('[breeding] roll', { roll });
     if (randomChance(successRate)) {
       const offspring = this.generateOffspring(oak, partner);
+      console.log('[breeding] success', { offspringId: offspring.id, offspringName: offspring.name });
       return { success: true, offspring };
     }
 
+    console.log('[breeding] failure - germination failed');
     return { success: false, reason: 'Breeding failed! The acorn refused to germinate.' };
   }
 

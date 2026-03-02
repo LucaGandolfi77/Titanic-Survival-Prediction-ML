@@ -9,7 +9,12 @@ Usage:
 Requires: Pillow
 """
 from pathlib import Path
-from PIL import Image, ImageOps
+
+try:
+    from PIL import Image, ImageOps
+except ImportError:
+    print("Error: Pillow is not installed. Install it with: pip install Pillow")
+    exit(1)
 
 BASE = Path(__file__).parent / "cards"
 OUT_THUMBS = BASE / "thumbs"

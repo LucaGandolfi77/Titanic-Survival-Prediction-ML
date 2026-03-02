@@ -13,7 +13,7 @@ import { getCardById } from "./database.js";
 
 /* ── Bootstrap ─────────────────────────────────────────── */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   loadFromLocalStorage();
 
   /* Modules */

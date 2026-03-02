@@ -109,9 +109,6 @@
   transition: border-color var(--duration-fast) ease,
               box-shadow var(--duration-fast) ease;
 }
-#draw-top {
-  /* uses the .card-back class for its styling from card.css */
-}
 #discard-top {
   background: var(--bg-card);
   overflow: hidden;

@@ -46,6 +46,9 @@ export class OakTree {
     this.charisma     = 5;
     this.dnaPoints    = 0;
     this.acorns       = 0;
+    // Starter resources for testing: one acorn and a few DNA points
+    this.dnaPoints    = 5;
+    this.acorns       = 1;
     this.generation   = 1;
 
     this.maxHeight    = 100;

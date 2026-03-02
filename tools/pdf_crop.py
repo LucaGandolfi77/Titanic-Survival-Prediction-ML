@@ -33,7 +33,7 @@ except Exception:
     pass
 
 try:
-    import fitz  # PyMuPDF
+    import fitz  # type: ignore[import-not-found] # PyMuPDF
     # the PyMuPDF distribution defines Document/Rect/etc.; the bogus
     # ``fitz`` package from PyPI does not.  Help the user by detecting the
     # wrong library early.
@@ -55,7 +55,16 @@ except Exception as exc:  # could be RuntimeError or ImportError
     )
     raise ImportError(msg) from exc
 
-from PIL import Image, ImageTk
+try:
+    from PIL import Image, ImageTk
+except ImportError as exc:
+    msg = (
+        "Unable to import PIL (Pillow).\n"
+        "Please install it with:\n"
+        "    pip install --upgrade Pillow\n"
+    )
+    raise ImportError(msg) from exc
+
 import io
 import threading
 

@@ -54,12 +54,64 @@ class GameController {
             if(e.code === 'Space') this.keys.SPACE = false;
         });
         
-        // UI Start
-        document.getElementById('start-btn').addEventListener('click', () => {
-             document.getElementById('start-screen').classList.add('hidden');
-             window.gameAudio.resume(); // Must unlock on user gesture
+        // UI Start (legacy id) and compatibility bindings for menu buttons in HTML
+        const startBtn = document.getElementById('start-btn');
+        if (startBtn) startBtn.addEventListener('click', () => {
+             const ss = document.getElementById('start-screen'); if (ss) ss.classList.add('hidden');
+             if (window.gameAudio && typeof window.gameAudio.resume === 'function') window.gameAudio.resume();
              this.gameState = 'playing';
              this.resetStats();
+        });
+
+        // New menu IDs present in index.html: wire them up if present
+        const btnPlay = document.getElementById('btn-play');
+        if (btnPlay) btnPlay.addEventListener('click', () => {
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.add('hidden');
+            const hud = document.getElementById('hud'); if (hud) hud.classList.remove('hidden');
+            const mobile = document.getElementById('mobile-controls'); if (mobile) mobile.classList.remove('hidden');
+            if (window.gameAudio && typeof window.gameAudio.resume === 'function') window.gameAudio.resume();
+            this.gameState = 'playing';
+            this.resetStats();
+            if (this.trashMgr && typeof this.trashMgr.initialSpawn === 'function') this.trashMgr.initialSpawn(50);
+        });
+
+        const btnHowTo = document.getElementById('btn-howto');
+        if (btnHowTo) btnHowTo.addEventListener('click', () => {
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.add('hidden');
+            const how = document.getElementById('screen-howto'); if (how) how.classList.remove('hidden');
+        });
+        const btnHowToBack = document.getElementById('btn-howto-back');
+        if (btnHowToBack) btnHowToBack.addEventListener('click', () => {
+            const how = document.getElementById('screen-howto'); if (how) how.classList.add('hidden');
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.remove('hidden');
+        });
+
+        const btnHiscores = document.getElementById('btn-hiscores');
+        if (btnHiscores) btnHiscores.addEventListener('click', () => {
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.add('hidden');
+            const hs = document.getElementById('screen-hiscores'); if (hs) hs.classList.remove('hidden');
+        });
+        const btnHsBack = document.getElementById('btn-hs-back');
+        if (btnHsBack) btnHsBack.addEventListener('click', () => {
+            const hs = document.getElementById('screen-hiscores'); if (hs) hs.classList.add('hidden');
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.remove('hidden');
+        });
+
+        const btnSettings = document.getElementById('btn-settings');
+        if (btnSettings) btnSettings.addEventListener('click', () => {
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.add('hidden');
+            const s = document.getElementById('screen-settings'); if (s) s.classList.remove('hidden');
+        });
+        const btnSetBack = document.getElementById('btn-set-back');
+        if (btnSetBack) btnSetBack.addEventListener('click', () => {
+            const s = document.getElementById('screen-settings'); if (s) s.classList.add('hidden');
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.remove('hidden');
+        });
+
+        const btnLsBack = document.getElementById('btn-ls-back');
+        if (btnLsBack) btnLsBack.addEventListener('click', () => {
+            const ls = document.getElementById('screen-level-select'); if (ls) ls.classList.add('hidden');
+            const menu = document.getElementById('screen-menu'); if (menu) menu.classList.remove('hidden');
         });
         
         // UI Restart
@@ -111,7 +163,7 @@ class GameController {
     updateKarmaUI() {
         // Bar update
         const barFill = document.querySelector('.bar-fill');
-        barFill.style.width = \`\${this.karma}%\`;
+        barFill.style.width = `${this.karma}%`;
         
         // Color transition
         if(this.karma > 60) barFill.style.background = 'var(--eco-green)';

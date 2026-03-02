@@ -2,7 +2,6 @@
 .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity var(--transition-normal); z-index: 1;
   /* allow native scrolling on mobile (iOS momentum) */
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
 }
 .screen.hidden { display: none; opacity: 0; pointer-events: none; }

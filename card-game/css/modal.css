@@ -100,8 +100,6 @@
   color: var(--text-secondary);
 }
 .card-detail__badge--type    { background: rgba(59, 130, 246, 0.12); color: var(--accent-secondary); }
-.card-detail__badge--rarity  { }
-.card-detail__badge--element { }
 
 /* rarity colour variants */
 .card-detail__badge--rarity[data-val="Common"]    { color: var(--rarity-common); border-color: var(--rarity-common); }

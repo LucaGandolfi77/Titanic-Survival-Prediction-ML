@@ -1,0 +1,24 @@
+{
+  "name": "titanic-survival-prediction-ml",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucaGandolfi77/Titanic-Survival-Prediction-ML.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LucaGandolfi77/Titanic-Survival-Prediction-ML/issues"
+  },
+  "homepage": "https://github.com/LucaGandolfi77/Titanic-Survival-Prediction-ML#readme",
+  "dependencies": {
+    "puppeteer": "^24.37.5"
+  }
+}

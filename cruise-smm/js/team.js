@@ -3,57 +3,57 @@ import { getState } from './state.js';
 import { clamp } from './utils.js';
 
 export const TEAM_MEMBERS = {
-  marco: {
-    id: 'marco',
-    name: 'Marco Ferrari',
-    role: 'Senior Videographer',
-    emoji: '🎥',
-    age: 34,
-    nationality: 'Italian 🇮🇹',
-    stats: { video: 95, photo: 60, editing: 80 },
-    wage: 120,
-    specialSkill: 'Golden Hour Mode',
-    specialDesc: '+50% fame on sunset shootings',
-    catchphrase: '"This lighting is magnifico, but let me fix the angle."',
-  },
-  yuki: {
-    id: 'yuki',
-    name: 'Yuki Tanaka',
+  jessica: {
+    id: 'jessica',
+    name: 'JB',
     role: 'Lead Photographer',
     emoji: '📷',
-    age: 28,
-    nationality: 'Japanese 🇯🇵',
-    stats: { video: 55, photo: 97, editing: 70 },
+    age: 27,
+    nationality: 'Italian 🇮🇹',
+    stats: { video: 60, photo: 98, editing: 75 },
+    wage: 120,
+    specialSkill: 'Photographer Eye',
+    specialDesc: '+45% fame on photo tasks',
+    catchphrase: '"Just one more angle — this will be perfect."',
+  },
+  marta: {
+    id: 'marta',
+    name: 'MDA',
+    role: 'Food & Lifestyle Creator',
+    emoji: '🥗',
+    age: 26,
+    nationality: 'Italian 🇮🇹',
+    stats: { video: 60, photo: 70, editing: 65 },
     wage: 110,
-    specialSkill: 'Macro Vision',
-    specialDesc: '+40% fame on close-up shots',
-    catchphrase: '"Wait... the shadow is 2mm off. Perfect now."',
+    specialSkill: 'Vegan Guru',
+    specialDesc: '+30% fame on plant-based / food content',
+    catchphrase: '"Plants on my plate, heart on my sleeve."',
   },
-  sofia: {
-    id: 'sofia',
-    name: 'Sofia Andersen',
-    role: 'Content Creator / Editor',
-    emoji: '✏️',
-    age: 25,
-    nationality: 'Danish 🇩🇰',
-    stats: { video: 65, photo: 70, editing: 92 },
-    wage: 90,
-    specialSkill: 'Viral Brain',
-    specialDesc: '+60% fame on social media tasks',
-    catchphrase: '"This is SO going to blow up. Trust me, I know trends."',
+  valentina: {
+    id: 'valentina',
+    name: 'VG',
+    role: 'Videographer / Skater',
+    emoji: '🛹',
+    age: 24,
+    nationality: 'Italian 🇮🇹',
+    stats: { video: 90, photo: 65, editing: 70 },
+    wage: 100,
+    specialSkill: 'Skate Tricks',
+    specialDesc: '+40% fame on dynamic action shots',
+    catchphrase: '"Ready for a trick? Hold the camera steady!"',
   },
-  diego: {
-    id: 'diego',
-    name: 'Diego Morales',
-    role: 'Junior Assistant / Sound',
-    emoji: '🎙️',
-    age: 22,
-    nationality: 'Spanish 🇪🇸',
-    stats: { video: 50, photo: 50, editing: 45 },
-    wage: 70,
-    specialSkill: 'Hype Man',
-    specialDesc: 'When assigned, team happiness +5',
-    catchphrase: '"I will carry ALL the equipment. All of it. I\'m ready."',
+  chiara: {
+    id: 'chiara',
+    name: 'CB',
+    role: 'Content Assistant / Botanist',
+    emoji: '🌿',
+    age: 23,
+    nationality: 'Italian 🇮🇹',
+    stats: { video: 50, photo: 55, editing: 60 },
+    wage: 80,
+    specialSkill: 'Plant Whisperer',
+    specialDesc: 'When present, team mood +5 (green energy)',
+    catchphrase: '"These plants give the best vibes for content."',
   },
 };
 
@@ -148,10 +148,17 @@ export function payTeamBonus(state, amount = 100) {
   return true;
 }
 
-export function checkDiegoHypeMan(state) {
-  const diego = state.teamMembers.diego;
-  if (diego.assignedTo) {
-    boostTeamHappiness(state, 5);
+export function checkHypeMember(state) {
+  // If any team member with a 'Hype' specialSkill is assigned, boost team
+  for (const [id, info] of Object.entries(TEAM_MEMBERS)) {
+    if (!info.specialSkill) continue;
+    if (info.specialSkill.toLowerCase().includes('hype')) {
+      const member = state.teamMembers[id];
+      if (member && member.assignedTo) {
+        boostTeamHappiness(state, 5);
+        return;
+      }
+    }
   }
 }
 

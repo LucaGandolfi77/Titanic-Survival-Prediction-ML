@@ -54,7 +54,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "An interview? Me? *laughs* I'm just the cleaning lady... but okay, let me tell you about the real heart of this ship." },
+        { text: "An interview? Me? *laughs* I'm just the cleaning lady... but okay, let me tell you about the real heart of this ship.", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "Under the Mediterranean stars, Carmen takes your hand. 'I've cleaned a thousand cabins,' she whispers, 'but you're the first person who made this ship feel like home.' She pulls you into a slow salsa, the sound of waves keeping time."
     }
@@ -71,7 +75,7 @@ export const CHARACTERS = {
     avatarClass: 'baptiste',
     personality: 'Dramatic, perfectionist, cries when food is wasted',
     startingLove: 5,
-    unlockDay: 2,
+    unlockDay: 1,
     tier: 2,
     interviewFame: 350,
     preferredTopics: ['passion', 'proud', 'port'],
@@ -113,7 +117,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "Finally! Someone who wants to capture the TRUTH of cuisine! Let me show you my kitchen — my kingdom!" },
+        { text: "Finally! Someone who wants to capture the TRUTH of cuisine! Let me show you my kitchen — my kingdom!", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "Baptiste presents his final dish of the cruise — a dessert shaped like a heart, with your initials in spun sugar. 'In French, we say \"l'amour est dans l'assiette\" — love is on the plate. And you, mon cher, are my greatest creation.'"
     }
@@ -172,7 +180,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "An interview? Radical! Let me take you to the reef — that's where the real stories are, under the waves." },
+        { text: "An interview? Radical! Let me take you to the reef — that's where the real stories are, under the waves.", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "At the ship's bow, with the Mediterranean sunset painting the sky in gold and pink, Marina wraps her arms around you. 'You know what they say about the ocean,' she whispers. 'Once it captures your heart, there's no going back.' She kisses you as the waves applaud."
     }
@@ -231,7 +243,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "An interview? DARLING! *strikes a pose* I was BORN for the camera. Let's make this legendary!" },
+        { text: "An interview? DARLING! *strikes a pose* I was BORN for the camera. Let's make this legendary!", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "In the empty theater, under a single spotlight, Theo takes your hand. 'In my career, I've played a thousand roles,' he says softly. 'But falling for you? That's the one performance I never rehearsed.' He kisses you as the curtain falls."
     }
@@ -248,7 +264,7 @@ export const CHARACTERS = {
     avatarClass: 'isabel',
     personality: 'Calm, intelligent, secretly reads romance novels',
     startingLove: 0,
-    unlockDay: 3,
+    unlockDay: 1,
     tier: 3,
     interviewFame: 550,
     preferredTopics: ['passion', 'family', 'advice'],
@@ -290,7 +306,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "An interview? I'm not sure... I'm just a doctor. But if you promise to make me look professional, not like some reality TV show..." },
+        { text: "An interview? I'm not sure... I'm just a doctor. But if you promise to make me look professional, not like some reality TV show...", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "In the quiet of the medical bay, surrounded by the soft hum of equipment, Isabel takes off her white coat. 'I've read hundreds of romance novels,' she confesses, 'and none of them compare to this.' She places her stethoscope on your chest. 'Just as I suspected — your heart is racing.'"
     }
@@ -307,7 +327,7 @@ export const CHARACTERS = {
     avatarClass: 'james',
     personality: 'Serious on duty, surprisingly funny off duty',
     startingLove: 0,
-    unlockDay: 3,
+    unlockDay: 1,
     tier: 3,
     interviewFame: 550,
     preferredTopics: ['ocean', 'proud', 'advice'],
@@ -349,7 +369,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "An interview? *adjusts collar* Alright, but only about navigation. And maybe ONE joke. Maximum." },
+        { text: "An interview? *adjusts collar* Alright, but only about navigation. And maybe ONE joke. Maximum.", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "On the bridge at midnight, with only the compass lights glowing, James turns to you. 'I've charted courses across every ocean,' he says, his humor gone, replaced by raw honesty. 'But you're the only destination I never want to leave.' He points to a star. 'That one. That's ours now.'"
     }
@@ -408,7 +432,11 @@ export const CHARACTERS = {
         ]},
       ],
       interview: [
-        { text: "An interview? How about I answer with a song? *laughs* Just kidding. Mostly. Okay, partly a song." },
+        { text: "An interview? How about I answer with a song? *laughs* Just kidding. Mostly. Okay, partly a song.", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
       ending: "In the music lounge, Luna plays one final song — the one she's been writing all week. It's called 'Infinita,' and every note carries the memory of your time together. As the last chord fades, she sets down her guitar and whispers, 'That song is yours. It always was.'"
     }
@@ -416,11 +444,11 @@ export const CHARACTERS = {
 
   captain: {
     id: 'captain',
-    name: 'Captain Elena Vasquez',
+    name: 'Captain Dino',
     role: 'Ship Captain',
     age: 50,
-    nationality: 'Spanish',
-    flag: '🇪🇸',
+    nationality: 'Neapolitan',
+    flag: '🇮🇹',
     emoji: '⚓',
     avatarClass: 'captain',
     personality: 'Authoritative, fair, deeply passionate about the sea',
@@ -432,8 +460,8 @@ export const CHARACTERS = {
     dislikedTopics: ['funny', 'secret'],
     dateLocations: ["Captain's Private Deck", 'Bridge (off hours)', 'Formal Dinner'],
     dateBg: 'linear-gradient(135deg, #92400e, #fbbf24)',
-    catchphrase: '"The sea does not care about your plans. She demands respect — and rewards it."',
-    meetEvent: 'The Captain addresses the crew at the morning briefing. Her presence is commanding.',
+    catchphrase: '"The sea does not care about your plans. He demands respect — and rewards it."',
+    meetEvent: 'The Captain addresses the crew at the morning briefing. His presence is commanding.',
     giftDescription: 'Full ship access — ALL locations unlocked + exclusive interview = +2,500 fame',
     giftFameBonus: 2500,
     schedule: { morning: 'Bridge', afternoon: "Captain's Quarters", evening: 'Formal Dinner (Day 5+)' },
@@ -453,23 +481,90 @@ export const CHARACTERS = {
         ]},
       ],
       date_mid: [
-        { text: "*removes her captain's hat* When we're alone... please, call me Elena. The title gets heavy sometimes.", choices: [
-          { text: "Elena. I'm honored that you trust me with that.", effect: 'best', love: 15 },
-          { text: "Elena it is. You deserve moments of peace.", effect: 'good', love: 8 },
-          { text: "Sure thing, Lena!", effect: 'bad', love: -5 },
+        { text: "*removes her captain's hat* When we're alone... please, call me Dino. The title gets heavy sometimes.", choices: [
+          { text: "Dino. I'm honored that you trust me with that.", effect: 'best', love: 15 },
+          { text: "Dino it is. You deserve moments of peace.", effect: 'good', love: 8 },
+          { text: "Sure thing, Dino!", effect: 'bad', love: -5 },
         ]},
       ],
       date_high: [
         { text: "*on the private deck at sunset* In 30 years of sailing, I've never anchored my heart. Until this cruise.", choices: [
-          { text: "Then let me be your harbor, Elena.", effect: 'best', love: 15 },
+          { text: "Then let me be your harbor, Dino.", effect: 'best', love: 15 },
           { text: "You deserve love as vast as the sea you command.", effect: 'good', love: 8 },
           { text: "Is this appropriate for a captain?", effect: 'bad', love: -5 },
         ]},
       ],
       interview: [
-        { text: "*sits with perfect posture* Very well. If you've earned this interview, then you've earned my trust. Ask your questions." },
+        { text: "*sits with perfect posture* Very well. If you've earned this interview, then you've earned my trust. Ask your questions.", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
       ],
-      ending: "On the final evening, Captain Elena invites you to the bridge. The Mediterranean stretches endlessly before you. 'I've commanded this ship through storms and calm,' she says, her voice soft for the first time. 'But you — you're the one who showed me that the greatest voyage is the one where you let someone in.' She takes your hand, and together you watch the last sunset of the cruise."
+      ending: "On the final evening, Captain Dino invites you to the bridge. The Mediterranean stretches endlessly before you. 'I've commanded this ship through storms and calm,' he says, his voice soft for the first time. 'But you — you're the one who showed me that the greatest voyage is the one where you let someone in.' He takes your hand, and together you watch the last sunset of the cruise."
+    }
+  },
+
+  koen: {
+    id: 'koen',
+    name: 'Koen van Dijk',
+    role: 'Ship Architect',
+    age: 34,
+    nationality: 'Dutch',
+    flag: '🇳🇱',
+    emoji: '🪢',
+    avatarClass: 'koen',
+    personality: 'Funny, flirtatious, enjoys a drink — often falls asleep after one too many.',
+    startingLove: 5,
+    unlockDay: 1,
+    tier: 2,
+    interviewFame: 350,
+    preferredTopics: ['design', 'funny', 'passion'],
+    dislikedTopics: ['serious'],
+    dateLocations: ["Promenade Swing", "Ship's Mast", 'Rooftop Bar'],
+    dateBg: 'linear-gradient(135deg, #0ea5e9, #f97316)',
+    catchphrase: "\"I built that swing. Please don't tell Safety... or maybe bring another drink.\"",
+    meetEvent: "You discover him asleep in the new swing, a half-empty bottle tucked at his side.",
+    giftDescription: 'Handcrafted swing design — unlocks swing photoshoot +300 fame',
+    giftFameBonus: 300,
+    schedule: { morning: 'Design Studio', afternoon: 'Promenade', evening: 'Rooftop Bar' },
+    dialogues: {
+      first_meet: [
+        { text: "*murmurs, half-asleep* Huh? Oh—hello. Did you try the swing? It's my best work. Redheads love it.", choices: [
+          { text: "You designed this? It's brilliant.", effect: 'best', love: 15 },
+          { text: "It's a nice swing... if you stay awake.", effect: 'good', love: 8 },
+          { text: "Why does it smell like gin?", effect: 'bad', love: -5 },
+        ]},
+      ],
+      date_low: [
+        { text: "Want to test the swing at sunset? I'll push you — responsibly.", choices: [
+          { text: "Push away!", effect: 'best', love: 15 },
+          { text: "Sure, let's try it.", effect: 'good', love: 8 },
+          { text: "I prefer solid ground.", effect: 'bad', love: -5 },
+        ]},
+      ],
+      date_mid: [
+        { text: "*laughs* I may drink, but I pour my soul into wood and rope. Also—do you know any redheads?", choices: [
+          { text: "Maybe I do... is that a requirement?", effect: 'best', love: 15 },
+          { text: "What's wrong with brown hair?", effect: 'good', love: 8 },
+          { text: "That's oddly specific.", effect: 'bad', love: -5 },
+        ]},
+      ],
+      date_high: [
+        { text: "*quietly* I fell asleep once on this very swing after a few drinks. Woke up to applause—and a redhead on my shoulder.", choices: [
+          { text: "Then make more memories with me.", effect: 'best', love: 15 },
+          { text: "That's a charming disaster.", effect: 'good', love: 8 },
+          { text: "You should drink less.", effect: 'bad', love: -5 },
+        ]},
+      ],
+      interview: [
+        { text: "An interview? Sure — ask about load-bearing calculations, the aesthetic arc, and maybe my favorite bar.", choices: [
+          { text: "What is your favorite memory on this ship?", effect: 'best', love: 15 },
+          { text: "How do you handle the busy days?", effect: 'good', love: 8 },
+          { text: "Let's just take some quick photos.", effect: 'bad', love: -5 }
+        ] },
+      ],
+      ending: "Koen rigs a private swing on the promenade. As you sway under the stars, he humbly admits, 'I build things to make people smile. And you—you're the best design I've ever made.'"
     }
   }
 };
@@ -499,8 +594,9 @@ export function getInterviewableCharacters(state) {
   return Object.entries(CHARACTERS)
     .filter(([id, c]) => {
       const cs = state.characters[id];
-      if (!cs || !cs.met || cs.interviewed) return false;
-      if (id === 'captain') return state.day >= 5 && state.captainTrust >= 80;
+      if (!cs || !cs.met) return false;
+      if (cs.lastInterviewDay === state.day) return false; // Once per day
+      if (id === 'captain') return state.day >= 2;
       return true;
     })
     .map(([id, c]) => c);

@@ -5,13 +5,13 @@ import { boostTeamHappiness, boostMemberHappiness } from './team.js';
 
 export const FOOD_MENU = [
   { id: 'salad',     emoji: '🥗', name: 'Caesar Salad',      price: 8,  energy: 10, happiness: 5,  bonusMember: null, bonusAmount: 0 },
-  { id: 'carbonara', emoji: '🍝', name: 'Pasta Carbonara',   price: 12, energy: 20, happiness: 15, bonusMember: 'marco', bonusAmount: 5 },
-  { id: 'sushi',     emoji: '🍣', name: 'Sushi Platter',     price: 18, energy: 25, happiness: 20, bonusMember: 'yuki', bonusAmount: 8 },
+  { id: 'carbonara', emoji: '🍝', name: 'Pasta Carbonara',   price: 12, energy: 20, happiness: 15, bonusMember: 'marta', bonusAmount: 5 },
+  { id: 'sushi',     emoji: '🍣', name: 'Sushi Platter',     price: 18, energy: 25, happiness: 20, bonusMember: 'jessica', bonusAmount: 8 },
   { id: 'steak',     emoji: '🥩', name: 'Grilled Steak',     price: 22, energy: 30, happiness: 18, bonusMember: null, bonusAmount: 0 },
   { id: 'pizza',     emoji: '🍕', name: 'Margherita Pizza',   price: 10, energy: 15, happiness: 12, bonusMember: null, bonusAmount: 0 },
-  { id: 'tacos',     emoji: '🌮', name: 'Tacos del Mar',     price: 14, energy: 18, happiness: 14, bonusMember: 'diego', bonusAmount: 6 },
+  { id: 'tacos',     emoji: '🌮', name: 'Tacos del Mar',     price: 14, energy: 18, happiness: 14, bonusMember: 'valentina', bonusAmount: 6 },
   { id: 'bento',     emoji: '🍱', name: 'Bento Box',         price: 16, energy: 22, happiness: 16, bonusMember: null, bonusAmount: 0 },
-  { id: 'croissant', emoji: '🥐', name: 'Croissant & Fruit', price: 6,  energy: 8,  happiness: 8,  bonusMember: 'sofia', bonusAmount: 4 },
+  { id: 'croissant', emoji: '🥐', name: 'Croissant & Fruit', price: 6,  energy: 8,  happiness: 8,  bonusMember: 'chiara', bonusAmount: 4 },
 ];
 
 export const DRINKS_MENU = [

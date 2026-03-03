@@ -1,6 +1,7 @@
 /* ===== TASK SYSTEM ===== */
 import { getState, getDifficultyMultiplier, getTeamHappiness } from './state.js';
-import { CHARACTERS } from './characters.js';
+import { CHARACTERS, getInterviewableCharacters } from './characters.js';
+import { TEAM_MEMBERS } from './team.js';
 
 export const TASK_CATEGORIES = {
   photo: {
@@ -143,7 +144,57 @@ export function getAvailableTasks(state) {
     if (task.unlockCondition && !task.unlockCondition(state)) continue;
     available.push(task);
   }
+
+  // Add dynamic interview tasks for currently interviewable characters
+  const interviewables = getInterviewableCharacters(state);
+  for (const c of interviewables) {
+    const cs = state.characters[c.id];
+    const nameLabel = cs && cs.met ? `Interview: ${c.name}` : `Meet & Interview: ${c.name}`;
+    const itask = {
+      id: `interview_${c.id}`,
+      category: 'interview',
+      name: nameLabel,
+      icon: '🎤',
+      location: c.dateLocations && c.dateLocations.length ? c.dateLocations[0] : "Captain's Lounge",
+      baseFame: c.interviewFame || 200,
+      money: 0,
+      customMoneyText: '+❤️ Love',
+      bg: c.dateBg || 'linear-gradient(135deg,#a78bfa,#ec4899)',
+      unlockDay: c.unlockDay || 1,
+      unlockCondition: null,
+      description: `Conduct an interview with ${c.name}.`,
+    };
+    available.push(itask);
+  }
+
   return available;
+}
+
+export function getTaskById(taskId, state) {
+  if (TASKS[taskId]) return TASKS[taskId];
+  
+  if (taskId.startsWith('interview_')) {
+    const charId = taskId.replace('interview_', '');
+    const c = CHARACTERS[charId];
+    if (!c) return null;
+    const cs = state.characters[charId];
+    const nameLabel = cs && cs.met ? `Interview: ${c.name}` : `Meet & Interview: ${c.name}`;
+    return {
+      id: `interview_${c.id}`,
+      category: 'interview',
+      name: nameLabel,
+      icon: '🎤',
+      location: c.dateLocations && c.dateLocations.length ? c.dateLocations[0] : "Captain's Lounge",
+      baseFame: c.interviewFame || 200,
+      money: 0,
+      customMoneyText: '+❤️ Love',
+      bg: c.dateBg || 'linear-gradient(135deg,#a78bfa,#ec4899)',
+      unlockDay: c.unlockDay || 1,
+      unlockCondition: null,
+      description: `Conduct an interview with ${c.name}.`,
+    };
+  }
+  return null;
 }
 
 export function getLockedTasks(state) {
@@ -152,6 +203,38 @@ export function getLockedTasks(state) {
     if (task.unlockDay > state.day) { locked.push(task); continue; }
     if (task.unlockCondition && !task.unlockCondition(state)) { locked.push(task); continue; }
   }
+
+  // Include interview tasks for characters that are not currently interviewable
+  const interviewables = getInterviewableCharacters(state).map(c => c.id);
+  for (const c of Object.values(CHARACTERS)) {
+    if (interviewables.includes(c.id)) continue; // already available
+
+    const itask = {
+      id: `interview_${c.id}`,
+      category: 'interview',
+      name: `Interview: ${c.name}`,
+      icon: '🎤',
+      location: c.dateLocations && c.dateLocations.length ? c.dateLocations[0] : "Captain's Lounge",
+      baseFame: c.interviewFame || 200,
+      money: 0,
+      bg: c.dateBg || 'linear-gradient(135deg,#a78bfa,#ec4899)',
+      unlockDay: c.unlockDay || 1,
+      unlockCondition: (s) => {
+        const cs = s.characters && s.characters[c.id];
+        if (!cs || !cs.met) return false;
+        if (cs.interviewed) return false;
+        if (c.id === 'captain') return s.day >= 5 && s.captainTrust >= 80;
+        return true;
+      },
+      unlockText: 'Requires meeting the character and interview conditions',
+      description: `Interview with ${c.name} (locked until conditions met).`,
+    };
+
+    // Mirror TASKS behavior: show locked interviews if unlockDay > state.day or unlockCondition fails
+    if (itask.unlockDay > state.day) { locked.push(itask); continue; }
+    if (itask.unlockCondition && !itask.unlockCondition(state)) { locked.push(itask); continue; }
+  }
+
   return locked;
 }
 
@@ -193,16 +276,22 @@ export function calculateTaskFame(task, state, minigameMultiplier = 1) {
   // Energy penalty
   if (state.energy < 30) fame *= 0.75;
 
-  // Team member special skills
+  // Team member special skills (generic)
   const members = state.teamMembers;
-  if (task.category === 'photo' && task.id === 'photo_sunset' && members.marco.assignedTo === task.id) {
-    fame *= 1.5; // Marco golden hour
-  }
-  if (task.category === 'photo' && members.yuki.assignedTo === task.id) {
-    fame *= 1.4; // Yuki macro vision
-  }
-  if (task.category === 'social' && members.sofia.assignedTo === task.id) {
-    fame *= 1.6; // Sofia viral brain
+  for (const [mid, ms] of Object.entries(members)) {
+    if (!ms.assignedTo) continue;
+    const info = TEAM_MEMBERS[mid];
+    if (!info || !info.specialSkill) continue;
+    const skill = info.specialSkill.toLowerCase();
+    if (task.category === 'photo' && task.id === 'photo_sunset' && skill.includes('golden') && ms.assignedTo === task.id) {
+      fame *= 1.5;
+    }
+    if (task.category === 'photo' && skill.includes('macro') && ms.assignedTo === task.id) {
+      fame *= 1.4;
+    }
+    if (task.category === 'social' && skill.includes('viral') && ms.assignedTo === task.id) {
+      fame *= 1.6;
+    }
   }
 
   return Math.round(fame);
@@ -224,11 +313,11 @@ export function interviewCharacter(charId, state) {
   const c = CHARACTERS[charId];
   if (!c) return 0;
   const cs = state.characters[charId];
-  if (!cs || cs.interviewed) return 0;
+  if (!cs || cs.lastInterviewDay === state.day) return 0;
 
-  cs.interviewed = true;
-  cs.love += 8;
-  if (cs.love > 100) cs.love = 100;
+  // mark interview for today and grant a small love bump
+  cs.lastInterviewDay = state.day;
+  cs.love = Math.min(100, (cs.love || 0) + 8);
 
   let fameGain = c.interviewFame;
   if (state.equipment.audioInterface) fameGain *= 1.2;

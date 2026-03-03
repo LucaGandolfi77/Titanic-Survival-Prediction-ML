@@ -17,10 +17,10 @@ const defaultState = {
 
   teamHappiness: 60,
   teamMembers: {
-    marco:  { happiness: 70, status: 'available', assignedTo: null },
-    yuki:   { happiness: 65, status: 'available', assignedTo: null },
-    sofia:  { happiness: 80, status: 'available', assignedTo: null },
-    diego:  { happiness: 90, status: 'available', assignedTo: null },
+    jessica:  { happiness: 80, status: 'available', assignedTo: null },
+    marta:    { happiness: 75, status: 'available', assignedTo: null },
+    valentina:{ happiness: 78, status: 'available', assignedTo: null },
+    chiara:   { happiness: 72, status: 'available', assignedTo: null },
   },
 
   characters: {

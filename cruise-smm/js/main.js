@@ -1,8 +1,8 @@
 /* ===== GAME LOOP, INITIALIZATION, STATE MACHINE ===== */
 import { $, showScreen, showModal, hideModal, showPanel, hidePanel, saveGame, loadGame, saveRecords, loadRecords, wait } from './utils.js';
 import { getState, setState, createNewState, resetDayStats, getTeamHappiness, getCharLoveLevel } from './state.js';
-import { CHARACTERS, getDateableCharacters, getUnlockedCharacters } from './characters.js';
-import { TASKS, getAvailableTasks, calculateTaskFame, calculateTaskMoney, getTaskMinigame } from './tasks.js';
+import { CHARACTERS, getDateableCharacters, getUnlockedCharacters, getDialogueForLevel } from './characters.js';
+import { TASKS, getAvailableTasks, calculateTaskFame, calculateTaskMoney, getTaskMinigame, interviewCharacter } from './tasks.js';
 import { TEAM_MEMBERS, payWages, applyDailyHappinessDecay, boostTeamHappiness, assignMemberToTask, releaseMember, releaseAll, getAvailableMembers } from './team.js';
 import { initDaySlots, getCurrentSlot, advanceSlot, isLunchSlot, isEveningSlot, isDayOver, setSlotTask, setSlotResult } from './planner.js';
 import { applyFood, applyDrink, applyTeamTreat, inviteCharacterToLunch } from './lunch.js';
@@ -114,6 +114,18 @@ function startDay() {
 
   // Daily encounter — auto-meet characters whose unlockDay matches
   for (const [id, c] of Object.entries(CHARACTERS)) {
+    // Ensure state has an entry for this character (backwards compatibility when new characters added)
+    if (!s.characters[id]) {
+      s.characters[id] = {
+        met: false,
+        love: c.startingLove || 0,
+        unlockDay: c.unlockDay || 1,
+        interviewed: false,
+        giftGiven: false,
+        mood: 'neutral'
+      };
+    }
+
     if (c.unlockDay === s.day && !s.characters[id].met) {
       meetCharacter(s, id);
       s.dailyEvents.push(`🤝 You met ${c.name} the ${c.role}!`);
@@ -254,7 +266,8 @@ function handleStartSlot() {
 
   // Check if it's an interview
   if (slot.taskId.startsWith('interview_')) {
-    handleInterview(slot.taskId.replace('interview_', ''));
+    const charId = slot.taskId.replace('interview_', '');
+    handleInterview(charId);
     return;
   }
 
@@ -332,29 +345,26 @@ function handleInterview(charId) {
 
   // Validation: ensure interview is allowed
   const cs = s.characters[charId] || {};
-  if (cs.interviewed) {
-    showToast(`${c.name} has already been interviewed.`, 'info');
+  if (cs.lastInterviewDay === s.day) {
+    showToast(`${c.name} has already been interviewed today.`, 'info');
     return;
   }
   if (s.day < (c.unlockDay || 1)) {
     showToast(`${c.name} will be available on Day ${c.unlockDay}.`, 'warning');
     return;
   }
-  if (charId === 'captain') {
-    const requiredDay = 5;
-    const requiredTrust = 80;
-    if (s.day < requiredDay || (s.captainTrust || 0) < requiredTrust) {
-      showToast(`The Captain will only agree to an interview after Day ${requiredDay} and with Trust ≥ ${requiredTrust}.`, 'warning');
-      return;
-    }
+  if (charId === 'captain' && s.day < 2) {
+    showToast(`The Captain will only agree to an interview after Day 2.`, 'warning');
+    return;
   }
 
   // Show interview as a mini-date scene
+  const dialogues = getDialogueForLevel(charId, cs.love || 0);
   const scene = {
     character: c,
     charId,
     bg: c.dateBg,
-    dialogue: c.dialogues.interview
+    dialogue: dialogues ? dialogues[0] : c.dialogues.interview[0]
   };
 
   gamePhase = 'date';
@@ -370,7 +380,7 @@ function handleInterview(charId) {
     addFame(st, fame);
     applyDateChoice(st, charId, effect);
 
-    st.characters[charId].interviewed = true;
+    st.characters[charId].lastInterviewDay = st.day;
     st.tasksCompleted++;
     st.tasksCompletedToday++;
     st.dailyFame += fame;

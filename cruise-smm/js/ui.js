@@ -2,7 +2,7 @@
 import { $, $$, el, showScreen, showPanel, hidePanel, showModal, hideModal, formatMoney, formatFame, formatFameExact, getDayName, getTimeLabel } from './utils.js';
 import { getState, getTeamHappiness, getCharLoveLevel, getFameMilestone } from './state.js';
 import { CHARACTERS, getAllCharacters, getUnlockedCharacters, getDateableCharacters } from './characters.js';
-import { TASKS, TASK_CATEGORIES, getAvailableTasks, getLockedTasks, calculateTaskFame, calculateTaskMoney, getTaskMinigame } from './tasks.js';
+import { TASKS, TASK_CATEGORIES, getAvailableTasks, getLockedTasks, calculateTaskFame, calculateTaskMoney, getTaskMinigame, getTaskById } from './tasks.js';
 import { TEAM_MEMBERS, getMemberStatus, getHappinessColor, getAvailableMembers } from './team.js';
 import { EQUIPMENT, getAvailableEquipment } from './economy.js';
 import { FOOD_MENU, DRINKS_MENU, TEAM_TREATS } from './lunch.js';
@@ -153,7 +153,7 @@ export function renderTaskArea(onSelectTask, onStartTask, onAssignTeam) {
   }
 
   // Task is selected — show task details
-  const task = TASKS[slot.taskId];
+  const task = getTaskById(slot.taskId, s);
   if (!task) return;
 
   $('#task-icon').textContent = task.icon;
@@ -162,7 +162,7 @@ export function renderTaskArea(onSelectTask, onStartTask, onAssignTeam) {
   const estFame = calculateTaskFame(task, s, 1);
   const estMoney = calculateTaskMoney(task, s);
   $('#task-fame-reward').textContent = `⭐ ~${formatFame(estFame)} fame`;
-  $('#task-money-reward').textContent = `💰 +${formatMoney(estMoney)}`;
+  $('#task-money-reward').textContent = task.customMoneyText || `💰 +${formatMoney(estMoney)}`;
   $('#task-duration').textContent = '⏱ 1.5 hrs';
   bg.style.background = task.bg;
 
@@ -206,30 +206,7 @@ function showTaskSelection(onSelectTask) {
       el('div', { class: 'tcc-icon', text: task.icon }),
       el('div', { class: 'tcc-name', text: task.name }),
       el('div', { class: 'tcc-reward', text: `⭐ ${formatFame(task.baseFame)}` }),
-      el('div', { class: 'tcc-money', text: `💰 ${formatMoney(task.money)}` }),
-    ]);
-    grid.appendChild(card);
-  });
-
-  // Add interview option
-  // Allow interviews during work slots. Show interviews even for characters not yet met
-  // (this schedules a meet+interview in one slot). Exclude already-interviewed characters.
-  const interviewable = Object.entries(CHARACTERS).filter(([id, c]) => {
-    const cs = s.characters[id];
-    if (cs && cs.interviewed) return false;
-    // keep captain special unlock requirement
-    if (id === 'captain') return s.day >= 5 && s.captainTrust >= 80;
-    return true;
-  });
-
-  interviewable.forEach(([id, c]) => {
-    const cs = s.characters[id];
-    const nameLabel = cs && cs.met ? `Interview: ${c.name}` : `Meet & Interview: ${c.name}`;
-    const card = el('div', { class: 'task-choice-card', onclick: () => onSelectTask(`interview_${id}`) }, [
-      el('div', { class: 'tcc-icon', text: '🎤' }),
-      el('div', { class: 'tcc-name', text: nameLabel }),
-      el('div', { class: 'tcc-reward', text: `⭐ ${formatFame(c.interviewFame)}` }),
-      el('div', { class: 'tcc-money', text: `+❤️ Love +8` }),
+      el('div', { class: 'tcc-money', text: task.customMoneyText || `💰 ${formatMoney(task.money)}` }),
     ]);
     grid.appendChild(card);
   });

@@ -330,6 +330,25 @@ function handleInterview(charId) {
   const c = CHARACTERS[charId];
   if (!c) return;
 
+  // Validation: ensure interview is allowed
+  const cs = s.characters[charId] || {};
+  if (cs.interviewed) {
+    showToast(`${c.name} has already been interviewed.`, 'info');
+    return;
+  }
+  if (s.day < (c.unlockDay || 1)) {
+    showToast(`${c.name} will be available on Day ${c.unlockDay}.`, 'warning');
+    return;
+  }
+  if (charId === 'captain') {
+    const requiredDay = 5;
+    const requiredTrust = 80;
+    if (s.day < requiredDay || (s.captainTrust || 0) < requiredTrust) {
+      showToast(`The Captain will only agree to an interview after Day ${requiredDay} and with Trust ≥ ${requiredTrust}.`, 'warning');
+      return;
+    }
+  }
+
   // Show interview as a mini-date scene
   const scene = {
     character: c,

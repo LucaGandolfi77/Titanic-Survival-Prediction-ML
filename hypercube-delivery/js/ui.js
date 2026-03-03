@@ -20,54 +20,77 @@ export class UIManager {
     
     bindEvents() {
         // Menu
-        document.getElementById('btn-play').addEventListener('click', () => {
+        const btnPlay = document.getElementById('btn-play');
+        if (btnPlay) btnPlay.addEventListener('click', () => {
             this.showScreen(null);
-            this.hud.classList.remove('hidden');
+            if (this.hud) this.hud.classList.remove('hidden');
             this.game.startLevel(1);
         });
-        document.getElementById('btn-howto').addEventListener('click', () => this.showScreen('howto'));
-        document.getElementById('btn-howto-back').addEventListener('click', () => this.showScreen('menu'));
-        document.getElementById('btn-leaderboard').addEventListener('click', () => {
+
+        const btnHowto = document.getElementById('btn-howto');
+        if (btnHowto) btnHowto.addEventListener('click', () => this.showScreen('howto'));
+
+        const btnHowtoBack = document.getElementById('btn-howto-back');
+        if (btnHowtoBack) btnHowtoBack.addEventListener('click', () => this.showScreen('menu'));
+
+        const btnLeaderboard = document.getElementById('btn-leaderboard');
+        if (btnLeaderboard) btnLeaderboard.addEventListener('click', () => {
             this.renderLeaderboard();
             this.showScreen('leaderboard');
         });
-        document.getElementById('btn-lb-back').addEventListener('click', () => this.showScreen('menu'));
-        
+
+        const btnLbBack = document.getElementById('btn-lb-back');
+        if (btnLbBack) btnLbBack.addEventListener('click', () => this.showScreen('menu'));
+
         // Pause
-        document.getElementById('btn-resume').addEventListener('click', () => {
+        const btnResume = document.getElementById('btn-resume');
+        if (btnResume) btnResume.addEventListener('click', () => {
             this.showScreen(null);
             this.game.togglePause();
         });
-        document.getElementById('btn-restart').addEventListener('click', () => {
+
+        const btnRestart = document.getElementById('btn-restart');
+        if (btnRestart) btnRestart.addEventListener('click', () => {
             this.showScreen(null);
             this.game.startLevel(this.game.currentLevel);
         });
-        document.getElementById('btn-to-menu').addEventListener('click', () => this.goToMenu());
-        
+
+        const btnToMenu = document.getElementById('btn-to-menu');
+        if (btnToMenu) btnToMenu.addEventListener('click', () => this.goToMenu());
+
         // Level Complete
-        document.getElementById('btn-next-level').addEventListener('click', () => {
+        const btnNextLevel = document.getElementById('btn-next-level');
+        if (btnNextLevel) btnNextLevel.addEventListener('click', () => {
             this.showScreen(null);
             this.game.startLevel(this.game.currentLevel + 1);
         });
-        document.getElementById('btn-replay').addEventListener('click', () => {
+
+        const btnReplay = document.getElementById('btn-replay');
+        if (btnReplay) btnReplay.addEventListener('click', () => {
             this.showScreen(null);
             this.game.startLevel(this.game.currentLevel);
         });
-        
+
         // Game Over
-        document.getElementById('btn-tryagain').addEventListener('click', () => {
+        const btnTryAgain = document.getElementById('btn-tryagain');
+        if (btnTryAgain) btnTryAgain.addEventListener('click', () => {
             this.showScreen(null);
             this.game.startLevel(this.game.currentLevel);
         });
-        document.getElementById('btn-gameover-menu').addEventListener('click', () => this.goToMenu());
-        document.getElementById('btn-save-score').addEventListener('click', () => this.saveScore());
-        
+
+        const btnGameoverMenu = document.getElementById('btn-gameover-menu');
+        if (btnGameoverMenu) btnGameoverMenu.addEventListener('click', () => this.goToMenu());
+
+        const btnSaveScore = document.getElementById('btn-save-score');
+        if (btnSaveScore) btnSaveScore.addEventListener('click', () => this.saveScore());
+
         // Escape for pause
         window.addEventListener('keydown', e => {
             if (e.key === 'Escape' && this.game.isRunning) {
                 this.game.togglePause();
                 if (this.game.isPaused) {
-                    document.getElementById('pause-info').innerHTML = `Score: ${this.game.score}<br>Level: ${this.game.currentLevel}`;
+                    const pi = document.getElementById('pause-info');
+                    if (pi) pi.innerHTML = `Score: ${this.game.score}<br>Level: ${this.game.currentLevel}`;
                     this.showScreen('pause');
                 } else {
                     this.showScreen(null);
@@ -96,6 +119,7 @@ export class UIManager {
     }
     
     showToast(message) {
+        if (!this.toastContainer) return;
         const t = document.createElement('div');
         t.className = 'toast';
         t.innerText = message;
@@ -107,23 +131,21 @@ export class UIManager {
     
     showLevelComplete(stats) {
         this.showScreen('level-complete');
-        document.getElementById('level-complete-title').innerText = `LEVEL ${stats.level} COMPLETE!`;
-        document.getElementById('score-breakdown').innerHTML = `
-            Deliveries: ${stats.deliveries}<br>
-            Score: ${stats.score}
-        `;
+        const title = document.getElementById('level-complete-title');
+        if (title) title.innerText = `LEVEL ${stats.level} COMPLETE!`;
+        const sb = document.getElementById('score-breakdown');
+        if (sb) sb.innerHTML = `Deliveries: ${stats.deliveries}<br>Score: ${stats.score}`;
     }
     
     showGameOver(stats) {
         this.showScreen('gameover');
-        document.getElementById('gameover-stats').innerHTML = `
-            Reached Level: ${stats.level}<br>
-            Final Score: ${stats.score}
-        `;
+        const go = document.getElementById('gameover-stats');
+        if (go) go.innerHTML = `Reached Level: ${stats.level}<br>Final Score: ${stats.score}`;
     }
     
     saveScore() {
-        const initials = document.getElementById('initials-input').value || 'AAA';
+        const initialsEl = document.getElementById('initials-input');
+        const initials = (initialsEl && initialsEl.value) ? initialsEl.value : 'AAA';
         const scores = JSON.parse(localStorage.getItem('hds_scores') || '[]');
         scores.push({
             name: initials.toUpperCase(),
@@ -140,6 +162,7 @@ export class UIManager {
     renderLeaderboard() {
         const scores = JSON.parse(localStorage.getItem('hds_scores') || '[]');
         const table = document.getElementById('scores-table');
+        if (!table) return;
         table.innerHTML = `<tr><th>Rank</th><th>Name</th><th>Score</th><th>Level</th></tr>`;
         scores.forEach((s, i) => {
             table.innerHTML += `<tr><td>${i+1}</td><td>${s.name}</td><td>${s.score}</td><td>${s.level}</td></tr>`;
@@ -157,7 +180,7 @@ export class UIManager {
         let angle = 0;
         
         const draw = () => {
-            if (!this.screens.menu.classList.contains('active')) {
+            if (!this.screens.menu || !this.screens.menu.classList.contains('active')) {
                 requestAnimationFrame(draw);
                 return;
             }

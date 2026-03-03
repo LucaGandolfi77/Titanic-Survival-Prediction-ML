@@ -251,7 +251,7 @@
 .record-entry .record-rank { font-size: 1.2rem; margin-right: 12px; }
 
 /* ===== HOW TO PLAY ===== */
-#screen-howto { background: var(--bg-dark); padding: 40px; gap: 20px; overflow-y: auto; }
+#screen-howto { background: var(--bg-dark); padding: 40px; gap: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 #howto-steps { max-width: 600px; width: 100%; }
 .howto-step {
   display: flex; gap: 16px; padding: 16px; background: var(--bg-card); border-radius: var(--radius-md);

@@ -1,4 +1,5 @@
 // Game loop and state manager
+import * as THREE from 'three';
 import { SceneManager } from './scene.js';
 import { WorldBuilder } from './world.js';
 import { Van } from './van.js';
@@ -25,7 +26,17 @@ class GameCore {
         this.controls = new Controls();
         this.hud = new HUD();
         this.audio = new AudioSystem();
-        this.ui = new UIManager(this);
+        try {
+            this.ui = new UIManager(this);
+        } catch (e) {
+            console.error('UI initialization failed:', e);
+            // Fallback stub so rest of game doesn't crash
+            this.ui = {
+                showToast: () => {},
+                showLevelComplete: () => {},
+                showGameOver: () => {}
+            };
+        }
         
         this.isRunning = false;
         this.isPaused = false;

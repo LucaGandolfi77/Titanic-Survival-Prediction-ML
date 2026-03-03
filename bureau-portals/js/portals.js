@@ -33,28 +33,53 @@ const PORTAL_COLORS = {
 };
 
 export class Portal {
-  constructor(scene, position, rotation, type, destinationRoom, destinationPortal) {
+  // Accepts either (scene, position, rotation, type, destinationRoom, destinationPortal)
+  // or (position, rotation, type, destinationRoom, destinationPortal)
+  constructor(a, b, c, d, e, f) {
+    let scene, position, rotation, type, destinationRoom, destinationPortal;
+
+    if (a && a.isObject3D) {
+      // signature: (scene, position, rotation, type, destinationRoom, destinationPortal)
+      scene = a;
+      position = b;
+      rotation = c;
+      type = d;
+      destinationRoom = e;
+      destinationPortal = f;
+    } else {
+      // signature: (position, rotation, type, destinationRoom, destinationPortal)
+      scene = null;
+      position = a;
+      rotation = b;
+      type = c;
+      destinationRoom = d;
+      destinationPortal = e;
+    }
+
     this.scene = scene;
-    this.position = position.clone();
-    this.rotation = rotation.clone();
+    this.position = position ? position.clone() : new THREE.Vector3();
+    this.rotation = rotation ? rotation.clone() : new THREE.Euler();
     this.type = type;
     this.destinationRoom = destinationRoom;
     this.destinationPortal = destinationPortal;
-    
+
     this.stencilID = 0;
     this.group = new THREE.Group();
-    this.group.position.copy(position);
-    this.group.rotation.copy(rotation);
-    
+    if (position) this.group.position.copy(position);
+    if (rotation) this.group.rotation.copy(rotation);
+
     this.buildFrame();
     this.buildSurface();
-    
-    scene.add(this.group);
+
+    if (this.scene && typeof this.scene.add === 'function') {
+      this.scene.add(this.group);
+    }
   }
 
   buildFrame() {
+    const frameGroup = new THREE.Group();
     const matFrame = new THREE.MeshLambertMaterial({ color: 0x8a8a8a });
-    
+
     // Left pillar
     const leftPillar = new THREE.Mesh(
       new THREE.BoxGeometry(0.3, 3.5, 0.3),
@@ -62,14 +87,14 @@ export class Portal {
     );
     leftPillar.position.x = -1.0;
     leftPillar.castShadow = true;
-    this.group.add(leftPillar);
-    
+    frameGroup.add(leftPillar);
+
     // Right pillar
     const rightPillar = leftPillar.clone();
     rightPillar.position.x = 1.0;
     rightPillar.castShadow = true;
-    this.group.add(rightPillar);
-    
+    frameGroup.add(rightPillar);
+
     // Top beam
     const topBeam = new THREE.Mesh(
       new THREE.BoxGeometry(2.6, 0.3, 0.3),
@@ -77,7 +102,11 @@ export class Portal {
     );
     topBeam.position.y = 1.75;
     topBeam.castShadow = true;
-    this.group.add(topBeam);
+    frameGroup.add(topBeam);
+
+    // Attach to portal group for transform inheritance
+    this.group.add(frameGroup);
+    return frameGroup;
   }
 
   buildSurface() {
@@ -89,6 +118,7 @@ export class Portal {
     this.surfaceMesh.userData.isPortal = true;
     this.surfaceMesh.userData.portalType = this.type;
     this.group.add(this.surfaceMesh);
+    return this.surfaceMesh;
   }
 
   createPortalMaterial() {

@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 // Three.js renderer, camera, lights setup
 
 export class SceneManager {

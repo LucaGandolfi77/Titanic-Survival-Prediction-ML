@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { SceneManager } from './scene.js';
 import { WorldGenerator } from './world.js';
 import { PortalManager, Portal } from './portals.js';
@@ -146,10 +147,25 @@ export class GameController {
           portalData.dest,
           this.world.rooms[portalData.dest]
         );
-        portal.frame = portal.buildFrame();
-        portal.surface = portal.buildSurface();
-        portal.group.add(portal.frame, portal.surface);
-        this.world.rooms[roomIdx].group.add(portal.group);
+        // Build visual components (buildFrame/buildSurface already attach to portal.group)
+        try {
+          portal.frame = portal.buildFrame();
+        } catch (err) {
+          portal.frame = null;
+        }
+        try {
+          portal.surface = portal.buildSurface();
+        } catch (err) {
+          portal.surface = null;
+        }
+
+        if (portal.frame) portal.group.add(portal.frame);
+        if (portal.surface) portal.group.add(portal.surface);
+
+        if (this.world.rooms[roomIdx] && this.world.rooms[roomIdx].group) {
+          this.world.rooms[roomIdx].group.add(portal.group);
+        }
+
         this.portals.portals.push(portal);
       });
     });

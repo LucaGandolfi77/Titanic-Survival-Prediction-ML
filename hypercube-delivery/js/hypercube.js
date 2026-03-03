@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 // Tesseract math, cell topography, and adjacency
 
 export const HYPERCUBE_GRAPH = {

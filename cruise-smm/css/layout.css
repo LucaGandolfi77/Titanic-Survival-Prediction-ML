@@ -101,9 +101,11 @@
 #day-planner {
   background: var(--bg-medium); border-right: 1px solid var(--border-subtle);
   padding: 16px; overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  overscroll-behavior: contain;
 }
 #day-planner h3 { font-size: 1rem; margin-bottom: 12px; color: var(--text-gold); }
-#time-slots-list { display: flex; flex-direction: column; gap: 6px; }
+#time-slots-list { display: flex; flex-direction: column; gap: 6px; -webkit-overflow-scrolling: touch; }
 .time-slot {
   display: flex; align-items: center; gap: 10px; padding: 10px 12px;
   border-radius: var(--radius-md); background: var(--bg-card); border: 1px solid var(--border-subtle);
@@ -156,6 +158,8 @@
 #team-status-panel {
   background: var(--bg-medium); border-left: 1px solid var(--border-subtle);
   padding: 16px; overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  overscroll-behavior: contain;
 }
 #team-status-panel h3 { font-size: 1rem; margin-bottom: 12px; color: var(--text-gold); }
 #team-mini-cards { display: flex; flex-direction: column; gap: 8px; }

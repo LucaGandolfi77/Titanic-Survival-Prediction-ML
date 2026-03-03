@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js';
+import * as THREE from 'three';
 import { MathUtils } from './utils.js';
 
 // Portal types

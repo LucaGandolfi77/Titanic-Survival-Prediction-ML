@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js';
+import * as THREE from 'three';
 import { MathUtils } from './utils.js';
 
 export class WorldGenerator {
@@ -283,7 +283,7 @@ export class WorldGenerator {
       // LED lights (emissive)
       const led = new THREE.Mesh(
         new THREE.BoxGeometry(0.02, 0.02, 0.02),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, emissive: 0x00ff00 })
+        new THREE.MeshLambertMaterial({ color: 0x00ff00, emissive: 0x00ff00 })
       );
       led.position.set(0.1, 0.1, 0.25);
       rack.add(led);

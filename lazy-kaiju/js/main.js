@@ -1,5 +1,5 @@
 // Main Entry Point
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.module.js';
+import * as THREE from 'three';
 import { MathUtils } from './utils.js';
 import { SceneManager } from './scene.js';
 import { CityGenerator } from './city.js';

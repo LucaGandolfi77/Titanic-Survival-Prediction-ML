@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.module.js';
+import * as THREE from 'three';
 
 const ALIEN_TYPES = [
     { type: 'blob', color: 0x39ff14, desc: "Blob" },

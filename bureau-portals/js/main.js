@@ -1,6 +1,6 @@
 import { SceneManager } from './scene.js';
 import { WorldGenerator } from './world.js';
-import { PortalManager } from './portals.js';
+import { PortalManager, Portal } from './portals.js';
 import { Player } from './player.js';
 import { NPCManager } from './npcs.js';
 import { ItemManager } from './items.js';
@@ -9,7 +9,7 @@ import { ParticleSystem } from './particles.js';
 import { AudioManager } from './audio.js';
 import { HUDManager } from './hud.js';
 import { UIManager } from './ui.js';
-import { ControlsManager } from './controls.js';
+import { Controls } from './controls.js';
 import { NonEuclideanEffects } from './noneuclidean.js';
 import { MathUtils } from './utils.js';
 
@@ -21,9 +21,9 @@ export class GameController {
     
     // Initialize core systems
     this.scene = new SceneManager();
-    this.world = new WorldGenerator();
-    this.portals = new PortalManager();
-    this.particles = new ParticleSystem();
+    this.world = new WorldGenerator(this.scene.scene);
+    this.portals = new PortalManager(this.scene.scene);
+    this.particles = new ParticleSystem(this.scene.scene);
     this.audio = new AudioManager();
     this.effects = new NonEuclideanEffects();
     this.puzzle = new PuzzleManager();
@@ -118,11 +118,11 @@ export class GameController {
     this.player.currentRoom = this.world.rooms[0];
     
     // Create NPCs and items
-    this.npcs = new NPCManager(this.world.rooms, this.player);
-    this.items = new ItemManager(this.world.rooms);
+    this.npcs = new NPCManager(this.scene.scene, this.world);
+    this.items = new ItemManager(this.scene.scene, this.world);
     
     // Create controls
-    this.controls = new ControlsManager(this.player);
+    this.controls = new Controls(this.player);
     
     // Create HUD
     this.hud = new HUDManager(this.puzzle, this.player);
@@ -136,7 +136,8 @@ export class GameController {
   }
 
   linkAllPortals() {
-    this.roomConnectivity.forEach((roomData, roomIdx) => {
+    Object.entries(this.roomConnectivity).forEach(([roomIdxStr, roomData]) => {
+      const roomIdx = parseInt(roomIdxStr);
       roomData.portals.forEach((portalData, portalIdx) => {
         const portal = new Portal(
           new THREE.Vector3(...portalData.pos),
@@ -166,7 +167,7 @@ export class GameController {
   startGame() {
     this.state = 'playing';
     this.initializeGame();
-    this.audio.resumeContext(); // Resume Web Audio on interaction
+    this.audio.resume(); // Resume Web Audio on interaction
     this.animate();
   }
 
@@ -404,7 +405,7 @@ window.addEventListener('DOMContentLoaded', () => {
   ['click', 'keydown', 'touchstart'].forEach(event => {
     document.addEventListener(event, () => {
       if (window.game && window.game.audio) {
-        window.game.audio.resumeContext();
+        window.game.audio.resume();
       }
     }, { once: true });
   });

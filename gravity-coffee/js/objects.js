@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.module.js';
+import * as THREE from 'three';
 import { PhysicsBody } from './physics.js';
 import { createCoffeeMaterial } from './coffee.js';
 

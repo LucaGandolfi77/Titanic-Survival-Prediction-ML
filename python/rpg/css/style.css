@@ -1,0 +1,37 @@
+:root{ --page-bg:#1a1210 }
+
+html,body{ height:100%; }
+body{
+  margin:0;
+  height:100vh;
+  background:var(--page-bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:monospace;
+  color:#ffd890;
+}
+
+#game-wrapper{
+  position:relative;
+  display:inline-block;
+}
+
+/* Canvas is rendered at internal resolution 1280x960 but shown scaled for pixel-art crispness */
+#gameCanvas{
+  width:1280px;
+  height:960px;
+  image-rendering:pixelated;
+  display:block;
+  background:transparent;
+}
+
+/* Mobile controls shown for coarse pointers (touch) */
+@media (pointer: coarse){
+  #mobile-controls{ display:block; position:fixed; left:0; right:0; bottom:8px; z-index:400; pointer-events:auto; }
+}
+
+@media (pointer: fine){
+  #mobile-controls{ display:none; }
+}
+

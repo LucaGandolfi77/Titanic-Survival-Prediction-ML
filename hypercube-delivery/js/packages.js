@@ -1,4 +1,6 @@
 // Package logic, delivery zones, rewards
+import * as THREE from 'three';
+
 export class PackageManager {
     constructor(sceneContainer) {
         this.container = sceneContainer;

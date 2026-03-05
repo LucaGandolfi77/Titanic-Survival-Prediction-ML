@@ -1,4 +1,5 @@
 // Handles the Inception-style world flipping animation
+import * as THREE from 'three';
 import { easeInOutCubic } from './utils.js';
 
 export class TransitionSystem {

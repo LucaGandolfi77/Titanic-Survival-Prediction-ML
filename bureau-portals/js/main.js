@@ -106,6 +106,8 @@ export class GameController {
   initializeGame() {
     // Clear previous game state
     this.scene.scene.clear();
+    // Recreate lighting removed by clearing the scene
+    if (typeof this.scene.setupLighting === 'function') this.scene.setupLighting();
     this.puzzle = new PuzzleManager();
     
     // Build world with all rooms

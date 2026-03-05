@@ -13,6 +13,11 @@ export class SceneManager {
         this.scene.background = new THREE.Color(0x8fb4c8);
         this.scene.fog = new THREE.FogExp2(0x8fb4c8, 0.015);
 
+        // Default camera for gameplay
+        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera.position.set(0, 20, 40);
+        this.camera.lookAt(0, 0, 0);
+
         // Lighting
         this.ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         this.scene.add(this.ambientLight);
@@ -51,6 +56,17 @@ export class SceneManager {
     renderTargetCamera(camera) {
         this.camera = camera;
         this.renderer.render(this.scene, camera);
+    }
+    
+    render() {
+        // Render using the stored camera (or create a fallback camera)
+        if (!this.renderer) return;
+        if (!this.camera) {
+            this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            this.camera.position.set(0, 20, 40);
+            this.camera.lookAt(0, 0, 0);
+        }
+        this.renderer.render(this.scene, this.camera);
     }
     
     add(obj) { this.scene.add(obj); }

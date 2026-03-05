@@ -18,9 +18,13 @@ class GameController {
         
         // Setup modules
         this.sceneMgr = new SceneManager();
-        this.city = new CityGenerator(this.sceneMgr.scene);
+        // Create city and immediately generate layout so road tiles exist for TrashManager
+        this.city = new CityGenerator(this.sceneMgr);
+        this.city.generate({ ecoCount: 8, maxHeight: 22 });
+
         this.kaiju = new Kaiju(this.sceneMgr.scene);
         this.tail = new Tail(this.sceneMgr.scene, this.kaiju, 12, 1.5);
+        // Create TrashManager after city.generate so it can spawn items on roads
         this.trashMgr = new TrashManager(this.sceneMgr.scene, this.city);
         
         // Single Audio Singleton handling context
@@ -114,41 +118,46 @@ class GameController {
             const menu = document.getElementById('screen-menu'); if (menu) menu.classList.remove('hidden');
         });
         
-        // UI Restart
-        document.getElementById('restart-btn').addEventListener('click', () => {
-             document.getElementById('game-over-screen').classList.add('hidden');
-             this.gameState = 'playing';
-             this.resetStats();
-             this.city.rebuild();
-             this.trashMgr.initialSpawn(50);
-             this.kaiju.group.position.set(0, 0, 0);
-        });
+           // UI Restart
+           const restartBtn = document.getElementById('restart-btn');
+           if (restartBtn) restartBtn.addEventListener('click', () => {
+               const go = document.getElementById('game-over-screen'); if (go) go.classList.add('hidden');
+               this.gameState = 'playing';
+               this.resetStats();
+               if (this.city && typeof this.city.rebuild === 'function') this.city.rebuild();
+               if (this.trashMgr && typeof this.trashMgr.initialSpawn === 'function') this.trashMgr.initialSpawn(50);
+               if (this.kaiju && this.kaiju.group && this.kaiju.group.position) this.kaiju.group.position.set(0, 0, 0);
+           });
         
         // Attack overlay
-        document.getElementById('sweep-btn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.keys.SPACE = true;
-        });
-        document.getElementById('sweep-btn').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.keys.SPACE = false;
-        });
+        const sweepBtn = document.getElementById('sweep-btn');
+        if (sweepBtn) {
+            sweepBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.keys.SPACE = true;
+            });
+            sweepBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.keys.SPACE = false;
+            });
+        }
         
         // Listeners
-        window.addEventListener('trashCleared', (e) => {
-             this.score++;
-             document.getElementById('trash-count').innerText = this.score;
-             window.gameAudio.playClick();
-             
-             // Gain karma for sweeping off map
-             this.modKarma(2);
-        });
+           window.addEventListener('trashCleared', (e) => {
+               this.score++;
+               const tc = document.getElementById('trash-count'); if (tc) tc.innerText = this.score;
+               if (window.gameAudio && typeof window.gameAudio.playClick === 'function') window.gameAudio.playClick();
+               // Gain karma for sweeping off map
+               this.modKarma(2);
+           });
         
         window.addEventListener('kaijuPopup', (e) => {
             const hud = document.getElementById('hud-center');
-            hud.innerText = e.detail.text;
-            hud.style.opacity = 1;
-            setTimeout(() => { hud.style.opacity = 0; }, 2000);
+            if (hud) {
+                hud.innerText = e.detail.text;
+                hud.style.opacity = 1;
+                setTimeout(() => { if (hud) hud.style.opacity = 0; }, 2000);
+            }
         });
     }
     
@@ -156,23 +165,25 @@ class GameController {
         this.score = 0;
         this.karma = 100;
         this.stamina = 100;
-        document.getElementById('trash-count').innerText = "0";
+        const trashCountEl = document.getElementById('trash-count');
+        if (trashCountEl) trashCountEl.innerText = "0";
         this.updateKarmaUI();
     }
     
     updateKarmaUI() {
         // Bar update
         const barFill = document.querySelector('.bar-fill');
-        barFill.style.width = `${this.karma}%`;
-        
-        // Color transition
-        if(this.karma > 60) barFill.style.background = 'var(--eco-green)';
-        else if(this.karma > 30) barFill.style.background = 'var(--karma-gold)';
-        else barFill.style.background = 'magenta';
-        
+        if (barFill) {
+            barFill.style.width = `${this.karma}%`;
+            // Color transition
+            if(this.karma > 60) barFill.style.background = 'var(--eco-green)';
+            else if(this.karma > 30) barFill.style.background = 'var(--karma-gold)';
+            else barFill.style.background = 'magenta';
+        }
+
         if(this.karma <= 0) {
             this.gameState = 'gameover';
-            document.getElementById('game-over-screen').classList.remove('hidden');
+            const go = document.getElementById('game-over-screen'); if (go) go.classList.remove('hidden');
         }
     }
     
@@ -183,9 +194,11 @@ class GameController {
         if(amount < 0) {
             // Flash screen red
             const flash = document.getElementById('karma-flash');
-            flash.style.animation = 'none';
-            void flash.offsetWidth; // trigger reflow
-            flash.style.animation = 'flashFade 0.5s ease-out';
+            if (flash) {
+                flash.style.animation = 'none';
+                void flash.offsetWidth; // trigger reflow
+                flash.style.animation = 'flashFade 0.5s ease-out';
+            }
         }
     }
     
@@ -212,10 +225,9 @@ class GameController {
         
         // Visual cooldown sweep arc JS update
         const cooldownInner = document.querySelector('.cooldown-inner');
-        cooldownInner.style.transform = 'scale(1)';
-        
+        if (cooldownInner) cooldownInner.style.transform = 'scale(1)';
         setTimeout(() => { 
-            cooldownInner.style.transform = 'scale(0)'; 
+            if (cooldownInner) cooldownInner.style.transform = 'scale(0)'; 
             this.isSweeping = false;
         }, 300); // quick sweep duration
         
@@ -279,24 +291,30 @@ class GameController {
         // Clamp heavily to avoid absurd physics leaps on tab switches
         const safeDt = Math.min(dt, 0.1);
         
-        if (this.gameState !== 'playing') return;
-        
-        // Regain stamina
-        this.stamina = MathUtils.clamp(this.stamina + 5 * safeDt, 0, this.maxStamina);
-        
-        // Cooldown sweep
-        if(this.sweepCooldown > 0) {
-            this.sweepCooldown -= safeDt;
-        }
-        
-        // Core Updates
-        this.handleInput();
+        // Always step visual/animation systems so Kaiju can doze/yawn and tail animates
+        // (this allows idle/menu attract mode animations to run)
         this.kaiju.update(safeDt, this.inputVec);
         this.tail.update(safeDt);
-        this.trashMgr.update(safeDt, this.tail.getCollisionSpheres()); // pass physics state to trash objects
-        
-        if(this.isSweeping) {
-            this.checkDestruction();
+
+        // Only run gameplay mechanics while playing
+        if (this.gameState === 'playing') {
+            // Regain stamina
+            this.stamina = MathUtils.clamp(this.stamina + 5 * safeDt, 0, this.maxStamina);
+
+            // Cooldown sweep
+            if(this.sweepCooldown > 0) {
+                this.sweepCooldown -= safeDt;
+            }
+
+            // Inputs and physics
+            this.handleInput();
+            if (this.trashMgr && typeof this.trashMgr.update === 'function') {
+                this.trashMgr.update(safeDt, this.tail.getCollisionSpheres()); // pass physics state to trash objects
+            }
+
+            if(this.isSweeping) {
+                this.checkDestruction();
+            }
         }
         
         // Camera Follows Kaiju smoothly

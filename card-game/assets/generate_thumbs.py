@@ -9,12 +9,16 @@ Usage:
 Requires: Pillow
 """
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-try:
+if TYPE_CHECKING:
     from PIL import Image, ImageOps
-except ImportError:
-    print("Error: Pillow is not installed. Install it with: pip install Pillow")
-    exit(1)
+else:
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        print("Error: Pillow is not installed. Install it with: pip install Pillow")
+        exit(1)
 
 BASE = Path(__file__).parent / "cards"
 OUT_THUMBS = BASE / "thumbs"

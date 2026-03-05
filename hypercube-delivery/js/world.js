@@ -1,4 +1,5 @@
 // Procedural world building for each cell
+import * as THREE from 'three';
 import { CELL_THEMES, PORTAL_POSITIONS, HYPERCUBE_GRAPH } from './hypercube.js';
 
 export class WorldBuilder {

@@ -2,8 +2,10 @@ import * as THREE from 'three';
 import { MathUtils } from './utils.js';
 
 export class CityGenerator {
-    constructor(sceneManager) {
-        this.scene = sceneManager.scene;
+    constructor(sceneOrManager) {
+        // Accept either a SceneManager (with .scene) or a raw THREE.Scene
+        this.scene = (sceneOrManager && sceneOrManager.scene) ? sceneOrManager.scene : sceneOrManager;
+        if (!this.scene) throw new Error('CityGenerator requires a THREE.Scene or SceneManager with a .scene property');
         this.cityGroup = new THREE.Group();
         this.scene.add(this.cityGroup);
         

@@ -24,8 +24,17 @@ export class Tail {
         const mat = new THREE.MeshLambertMaterial({color: 0x4a7a2a});
         const tipMat = new THREE.MeshLambertMaterial({color: 0x2d5a27});
         
-        // start position at attach
-        let startPos = this.attachTarget.position.clone();
+        // start position at attach -- support various attachTarget shapes
+        let startPos;
+        if (this.attachTarget && typeof this.attachTarget.getTailAttachPoint === 'function') {
+            startPos = this.attachTarget.getTailAttachPoint();
+        } else if (this.attachTarget && this.attachTarget.position) {
+            startPos = this.attachTarget.position.clone();
+        } else if (this.attachTarget && this.attachTarget.group && this.attachTarget.group.position) {
+            startPos = this.attachTarget.group.position.clone();
+        } else {
+            startPos = new THREE.Vector3(0, 0, 0);
+        }
         
         for(let i=0; i<this.numSegments; i++) {
             // Taper effect for tail width

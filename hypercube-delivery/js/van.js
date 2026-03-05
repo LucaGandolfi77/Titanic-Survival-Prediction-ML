@@ -1,4 +1,6 @@
 // Van mesh and physics
+import * as THREE from 'three';
+
 export class Van {
     constructor() {
         this.group = new THREE.Group();

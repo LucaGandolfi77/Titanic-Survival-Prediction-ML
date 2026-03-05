@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio → SRT · Free Local AI</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0f1117; --surface:#1a1d27; --surface2:#21253a;
+    --border:#2e3348; --accent:#6c8ef5; --accent2:#4f6de0;
+    --success:#4caf82; --warn:#e8a43a; --danger:#e05a5a;
+    --text:#e2e6f0; --muted:#7880a0; --radius:10px;
+  }
+  body { background:var(--bg); color:var(--text);
+    font-family:'Segoe UI',system-ui,sans-serif; font-size:14px;
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; padding:32px 16px 64px; }
+
+  header { text-align:center; margin-bottom:32px; }
+  header h1 { font-size:26px; font-weight:700; letter-spacing:-0.5px; }
+  header h1 span { color:var(--accent); }
+  header p { color:var(--muted); margin-top:6px; font-size:13px; }
+  .badges { display:flex; gap:8px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+  .badge { padding:4px 12px; border-radius:99px; font-size:12px; font-weight:600; border:1px solid; }
+  .badge.green  { color:#4caf82; border-color:#4caf8244; background:rgba(76,175,130,.08); }
+  .badge.blue   { color:var(--accent); border-color:#6c8ef544; background:rgba(108,142,245,.08); }
+  .badge.amber  { color:var(--warn); border-color:#e8a43a44; background:rgba(232,164,58,.08); }
+
+  .card { background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:24px; width:100%;
+    max-width:700px; margin-bottom:16px; }
+  .card-title { font-size:12px; font-weight:600; text-transform:uppercase;
+    letter-spacing:1px; color:var(--muted); margin-bottom:14px;
+    display:flex; align-items:center; gap:8px; }
+  .card-title .step { background:var(--accent); color:white; border-radius:50%;
+    width:20px; height:20px; font-size:11px; display:flex;
+    align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
+
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
+
+  select, .select-styled { width:100%; background:var(--surface2);
+    border:1px solid var(--border); border-radius:8px; color:var(--text);
+    padding:10px 14px; font-size:13px; outline:none; cursor:pointer;
+    transition:border-color .2s; }
+  select:focus { border-color:var(--accent); }
+
+  .model-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .model-card { background:var(--surface2); border:2px solid var(--border);
+    border-radius:8px; padding:14px 12px; cursor:pointer;
+    transition:border-color .2s, background .2s; text-align:center; }
+  .model-card:hover { border-color:var(--accent); }
+  .model-card.selected { border-color:var(--accent); background:rgba(108,142,245,.1); }
+  .model-card .model-name { font-weight:700; font-size:14px; }
+  .model-card .model-size { color:var(--muted); font-size:11px; margin-top:3px; }
+  .model-card .model-speed { font-size:11px; margin-top:6px; }
+
+  .options-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  .drop-zone { border:2px dashed var(--border); border-radius:var(--radius);
+    padding:36px 20px; text-align:center; cursor:pointer;
+    transition:border-color .2s, background .2s; position:relative; }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color:var(--accent); background:rgba(108,142,245,.05); }
+  .drop-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; }
+  .drop-zone .icon { font-size:36px; margin-bottom:10px; }
+  .drop-zone .label { color:var(--muted); font-size:13px; line-height:1.6; }
+  .drop-zone .label strong { color:var(--accent); }
+
+  .file-preview { display:none; align-items:center; gap:12px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:12px 16px; margin-top:12px; }
+  .file-preview.visible { display:flex; }
+  .file-preview .file-icon { font-size:24px; }
+  .file-preview .file-info { flex:1; }
+  .file-preview .file-name { font-weight:600; font-size:13px; word-break:break-all; }
+  .file-preview .file-size { color:var(--muted); font-size:12px; }
+  .remove-btn { background:transparent; border:none; color:var(--danger);
+    cursor:pointer; font-size:18px; padding:4px; }
+  audio { width:100%; margin-top:12px; border-radius:8px;
+    filter:invert(1) hue-rotate(180deg); display:none; }
+  audio.visible { display:block; }
+
+  /* Progress */
+  .phase-block { margin-bottom:16px; }
+  .phase-label { font-size:12px; color:var(--muted); margin-bottom:6px;
+    display:flex; justify-content:space-between; }
+  .phase-label span { color:var(--accent); font-weight:600; }
+  .progress-bg { background:var(--surface2); border-radius:99px; height:7px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:99px; transition:width .3s ease;
+    background:linear-gradient(90deg, var(--accent), #9b8ef5); }
+  .progress-fill.pulse { animation:pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+  .file-list { margin-top:10px; max-height:120px; overflow-y:auto; }
+  .file-row { display:flex; align-items:center; gap:8px;
+    padding:4px 0; border-bottom:1px solid var(--border); }
+  .file-row:last-child { border:none; }
+  .file-row .fname { flex:1; font-size:11px; color:var(--muted);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .file-row .fpct { font-size:11px; color:var(--accent); width:36px; text-align:right; }
+  .file-row .fbar { flex:1; }
+
+  .btn-generate { width:100%; background:var(--accent); color:white; border:none;
+    border-radius:8px; padding:13px; font-size:15px; font-weight:600;
+    cursor:pointer; transition:background .2s, transform .1s;
+    display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-generate:hover:not(:disabled) { background:var(--accent2); }
+  .btn-generate:active:not(:disabled) { transform:scale(.99); }
+  .btn-generate:disabled { opacity:.5; cursor:not-allowed; }
+
+  .alert { display:none; padding:12px 16px; border-radius:8px;
+    font-size:13px; margin-bottom:12px; border:1px solid; }
+  .alert.visible { display:flex; gap:8px; align-items:flex-start; }
+  .alert.error   { background:rgba(224,90,90,.1); border-color:var(--danger); color:#f09090; }
+  .alert.success { background:rgba(76,175,130,.1); border-color:var(--success); color:#7ddaaa; }
+  .alert.info    { background:rgba(108,142,245,.1); border-color:var(--accent); color:#9ab4f8; }
+  .alert.warn    { background:rgba(232,164,58,.1); border-color:var(--warn); color:#f0c070; }
+
+  #srt-card { display:none; }
+  #srt-card.visible { display:block; }
+  .srt-stats { display:flex; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .stat-pill { background:var(--surface2); border:1px solid var(--border);
+    border-radius:99px; padding:4px 12px; font-size:12px; color:var(--muted); }
+  .stat-pill strong { color:var(--text); }
+  textarea#srt-output { width:100%; height:300px; background:var(--surface2);
+    border:1px solid var(--border); border-radius:8px; color:var(--text);
+    padding:14px; font-family:'Consolas','Courier New',monospace;
+    font-size:12px; line-height:1.8; resize:vertical; outline:none;
+    transition:border-color .2s; }
+  textarea#srt-output:focus { border-color:var(--accent); }
+  .output-actions { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  .btn { padding:9px 18px; border-radius:8px; border:1px solid var(--border);
+    background:var(--surface2); color:var(--text); font-size:13px;
+    font-weight:500; cursor:pointer; transition:background .2s, border-color .2s;
+    display:flex; align-items:center; gap:6px; }
+  .btn:hover { background:var(--surface); border-color:var(--accent); }
+  .btn.primary { background:var(--success); border-color:var(--success); color:white; font-weight:600; }
+  .btn.primary:hover { background:#3d9e6e; border-color:#3d9e6e; }
+  .btn.danger { border-color:var(--danger); color:var(--danger); }
+  .btn.danger:hover { background:rgba(224,90,90,.1); }
+
+  .progress-section { display:none; }
+  .progress-section.visible { display:block; }
+
+  #partial-text { font-size:12px; color:var(--muted); margin-top:8px;
+    font-family:monospace; min-height:36px; padding:8px; background:var(--surface2);
+    border-radius:6px; display:none; }
+  #partial-text.visible { display:block; }
+
+  .model-card .model-speed.fastest { color:#4caf82; }
+  .model-card .model-speed.balanced { color:#e8a43a; }
+  .model-card .model-speed.accurate { color:#6c8ef5; }
+
+  #partial-text { font-size:12px; color:var(--muted); margin-top:8px;
+    font-family:monospace; min-height:36px; padding:8px; background:var(--surface2);
+    border-radius:6px; display:none; }
+  #partial-text.visible { display:block; }
+
+  .file-list { max-width:120px; }
+
+  #trans-progress-section #partial-text { display:none; }
+  #trans-progress-section #partial-text.visible { display:block; }
+
+  .progress-fill.initial { width:30%; }
+
+  .model-card .model-speed { color:#6c8ef5; }
+  .model-card .model-speed.fastest { color:#4caf82; }
+  .model-card .model-speed.balanced { color:#e8a43a; }
+  .model-card .model-speed.accurate { color:#6c8ef5; }
+
+  footer { margin-top:32px; text-align:center; font-size:12px;
+    color:var(--muted); max-width:700px; line-height:1.7; }
+  footer a { color:var(--accent); text-decoration:none; }
+
+  @media (max-width:500px) {
+    .model-grid { grid-template-columns:1fr; }
+    .options-row { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎙️ Audio → <span>SRT</span> Generator</h1>
+  <p>Transcribes any audio file into subtitle format — no server, no account</p>
+  <div class="badges">
+    <span class="badge green">🔒 100% Private</span>
+    <span class="badge blue">⚡ Free · No API Key</span>
+    <span class="badge amber">🌐 Works Offline*</span>
+  </div>
+</header>
+
+<!-- STEP 1: Model -->
+<div class="card">
+  <div class="card-title"><span class="step">1</span> Choose Whisper Model</div>
+  <div class="model-grid">
+    <div class="model-card selected" data-model="Xenova/whisper-tiny" onclick="selectModel(this)">
+      <div class="model-name">Tiny</div>
+      <div class="model-size">~ 40 MB</div>
+      <div class="model-speed" style="color:#4caf82">⚡ Fastest</div>
+    </div>
+    <div class="model-card" data-model="Xenova/whisper-base" onclick="selectModel(this)">
+      <div class="model-name">Base</div>
+      <div class="model-size">~ 74 MB</div>
+      <div class="model-speed" style="color:#e8a43a">⚖ Balanced</div>
+    </div>
+    <div class="model-card" data-model="Xenova/whisper-small" onclick="selectModel(this)">
+      <div class="model-name">Small</div>
+      <div class="model-size">~ 244 MB</div>
+      <div class="model-speed" style="color:#6c8ef5">🎯 Most Accurate</div>
+    </div>
+  </div>
+  <p style="color:var(--muted);font-size:12px;margin-top:10px">
+    ℹ Models are downloaded once and cached in your browser automatically.
+  </p>
+</div>
+
+<!-- STEP 2: Language + Options -->
+<div class="card">
+  <div class="card-title"><span class="step">2</span> Options</div>
+  <div class="options-row">
+    <div>
+      <label for="lang-select">Language</label>
+      <select id="lang-select">
+        <option value="">Auto-detect</option>
+        <option value="italian">🇮🇹 Italian</option>
+        <option value="english">🇬🇧 English</option>
+        <option value="spanish">🇪🇸 Spanish</option>
+        <option value="french">🇫🇷 French</option>
+        <option value="german">🇩🇪 German</option>
+        <option value="portuguese">🇵🇹 Portuguese</option>
+        <option value="russian">🇷🇺 Russian</option>
+        <option value="chinese">🇨🇳 Chinese</option>
+        <option value="japanese">🇯🇵 Japanese</option>
+        <option value="arabic">🇸🇦 Arabic</option>
+        <option value="korean">🇰🇷 Korean</option>
+        <option value="dutch">🇳🇱 Dutch</option>
+        <option value="polish">🇵🇱 Polish</option>
+        <option value="turkish">🇹🇷 Turkish</option>
+        <option value="ukrainian">🇺🇦 Ukrainian</option>
+      </select>
+    </div>
+    <div>
+      <label for="task-select">Task</label>
+      <select id="task-select">
+        <option value="transcribe">Transcribe (keep original language)</option>
+        <option value="translate">Translate to English</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: File -->
+<div class="card">
+  <div class="card-title"><span class="step">3</span> Audio File</div>
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="audio-input" accept="audio/*,video/mp4,.mp3,.wav,.m4a,.ogg,.webm,.flac">
+    <div class="icon">📂</div>
+    <div class="label">
+      <strong>Click to choose</strong> or drag & drop<br>
+      MP3, WAV, M4A, OGG, FLAC, WEBM — any length
+    </div>
+  </div>
+  <div class="file-preview" id="file-preview">
+    <span class="file-icon">🎵</span>
+    <div class="file-info">
+      <div class="file-name" id="file-name">—</div>
+      <div class="file-size" id="file-size">—</div>
+    </div>
+    <button class="remove-btn" id="remove-btn" title="Remove">✕</button>
+  </div>
+  <audio id="audio-player" controls></audio>
+</div>
+
+<!-- STEP 4: Transcribe -->
+<div class="card">
+  <div class="card-title"><span class="step">4</span> Transcribe</div>
+
+  <div class="alert warn visible" id="alert-warn">
+    <span>⚠️</span>
+    <span>First run will download the model. Tiny ≈ 40 MB. This may take a minute on slow connections.</span>
+  </div>
+  <div class="alert error" id="alert-error">
+    <span>❌</span>
+    <span id="error-msg">An error occurred.</span>
+  </div>
+  <div class="alert success" id="alert-success">
+    <span>✅</span>
+    <span id="success-msg">Done!</span>
+  </div>
+
+  <!-- Model loading progress -->
+  <div class="progress-section" id="model-progress-section">
+    <div class="phase-block">
+      <div class="phase-label">Downloading model… <span id="model-pct">0%</span></div>
+      <div class="progress-bg"><div class="progress-fill pulse" id="model-bar" style="width:0%"></div></div>
+    </div>
+    <div class="file-list" id="file-list"></div>
+  </div>
+
+  <!-- Transcription progress -->
+  <div class="progress-section" id="trans-progress-section">
+    <div class="phase-block">
+      <div class="phase-label">Transcribing audio… <span id="trans-pct" style="color:var(--warn)">running</span></div>
+      <div class="progress-bg"><div class="progress-fill pulse" id="trans-bar" style="width:30%"></div></div>
+    </div>
+    <div id="partial-text" style="font-size:12px;color:var(--muted);margin-top:8px;
+      font-family:monospace;min-height:36px;padding:8px;background:var(--surface2);
+      border-radius:6px;display:none;"></div>
+  </div>
+
+  <button class="btn-generate" id="generate-btn">
+    <span id="btn-icon">✨</span>
+    <span id="btn-label">Transcribe & Generate SRT</span>
+  </button>
+</div>
+
+<!-- OUTPUT -->
+<div class="card" id="srt-card">
+  <div class="card-title">📄 SRT Output</div>
+  <div class="srt-stats" id="srt-stats"></div>
+  <textarea id="srt-output" spellcheck="false"></textarea>
+  <div class="output-actions">
+    <button class="btn primary" id="download-btn">⬇️ Download .srt</button>
+    <button class="btn" id="copy-btn">📋 Copy to clipboard</button>
+    <button class="btn danger" id="clear-btn">🗑 Clear</button>
+  </div>
+</div>
+
+<footer>
+  * After the first model download, the weights are cached in your browser (Cache Storage).<br>
+  No audio ever leaves your device. Powered by
+  <a href="https://github.com/xenova/transformers.js" target="_blank" rel="noopener">Transformers.js</a>
+  + <a href="https://openai.com/research/whisper" target="_blank" rel="noopener">OpenAI Whisper</a> (open-source weights).
+  Works in Chrome, Edge, Firefox 111+.
+</footer>
+
+<script type="module">
+// ── Imports ────────────────────────────────────────────────────────────────
+import { pipeline, env }
+  from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+
+env.allowLocalModels = false;
+env.useBrowserCache  = true;
+
+// ── State ──────────────────────────────────────────────────────────────────
+let selectedFile   = null;
+let selectedModel  = 'Xenova/whisper-tiny';
+let cachedPipeline = null;
+let lastModelId    = null;
+const fileProgress = {};
+
+// ── Model cards ────────────────────────────────────────────────────────────
+window.selectModel = (el) => {
+  document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedModel = el.dataset.model;
+  if (selectedModel !== lastModelId) cachedPipeline = null;
+};
+
+// ── File input ─────────────────────────────────────────────────────────────
+document.getElementById('audio-input').addEventListener('change', e => {
+  handleFile(e.target.files[0]);
+});
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag-over');
+  handleFile(e.dataTransfer.files[0]);
+});
+document.getElementById('remove-btn').addEventListener('click', clearFile);
+
+function handleFile(file) {
+  if (!file) return;
+  selectedFile = file;
+  document.getElementById('file-name').textContent = file.name;
+  document.getElementById('file-size').textContent =
+    formatBytes(file.size) + '  ·  ' + (file.type || 'audio');
+  document.getElementById('file-preview').classList.add('visible');
+  const player = document.getElementById('audio-player');
+  player.src = URL.createObjectURL(file);
+  player.classList.add('visible');
+  clearAlerts();
+}
+
+function clearFile() {
+  selectedFile = null;
+  document.getElementById('audio-input').value = '';
+  document.getElementById('file-preview').classList.remove('visible');
+  const p = document.getElementById('audio-player');
+  p.src = ''; p.classList.remove('visible');
+}
+
+// ── Transcribe ─────────────────────────────────────────────────────────────
+document.getElementById('generate-btn').addEventListener('click', runTranscription);
+
+async function runTranscription() {
+  clearAlerts();
+  if (!selectedFile) { showAlert('error', 'Please select an audio file first.'); return; }
+
+  setLoading(true);
+
+  try {
+    // Phase 1 — Load / get cached model
+    if (!cachedPipeline || lastModelId !== selectedModel) {
+      showModelProgress();
+      cachedPipeline = await pipeline(
+        'automatic-speech-recognition',
+        selectedModel,
+        { progress_callback: onModelProgress }
+      );
+      lastModelId = selectedModel;
+    }
+    hideModelProgress();
+
+    // Phase 2 — Decode audio to Float32Array @ 16 kHz
+    updateBtn('⏳', 'Decoding audio…');
+    const audioData = await decodeAudio(selectedFile);
+
+    // Phase 3 — Transcribe
+    showTransProgress();
+    updateBtn('🔊', 'Transcribing…');
+
+    const lang    = document.getElementById('lang-select').value  || null;
+    const task    = document.getElementById('task-select').value;
+    const partial = document.getElementById('partial-text');
+    partial.style.display = 'block';
+
+    const result = await cachedPipeline(audioData, {
+      language: lang,
+      task,
+      return_timestamps: true,
+      chunk_length_s: 30,
+      stride_length_s:  5,
+      callback_function: (beams) => {
+        const txt = beams[0]?.output_token_ids
+          ? '' : (beams[0]?.text || '');
+        if (txt) partial.textContent = '…' + txt.slice(-120);
+      }
+    });
+
+    hideTransProgress();
+    partial.style.display = 'none';
+
+    if (!result || !result.chunks || result.chunks.length === 0) {
+      throw new Error('No speech detected in the audio. Try a different language setting.');
+    }
+
+    const srt = chunksToSRT(result.chunks);
+    displaySRT(srt);
+    showAlert('success',
+      `Generated ${result.chunks.length} subtitle blocks from "${selectedFile.name}"`);
+
+  } catch (err) {
+    hideModelProgress(); hideTransProgress();
+    showAlert('error', err.message || String(err));
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ── Audio decoding ─────────────────────────────────────────────────────────
+async function decodeAudio(file) {
+  const buf = await file.arrayBuffer();
+  const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+  const decoded = await ctx.decodeAudioData(buf);
+  await ctx.close();
+
+  const TARGET = 16000;
+  if (decoded.sampleRate === TARGET && decoded.numberOfChannels === 1) {
+    return decoded.getChannelData(0).slice();
+  }
+
+  const numSamples = Math.ceil(decoded.duration * TARGET);
+  const offCtx = new OfflineAudioContext(1, numSamples, TARGET);
+  const src = offCtx.createBufferSource();
+  src.buffer = decoded;
+  src.connect(offCtx.destination);
+  src.start(0);
+  const resampled = await offCtx.startRendering();
+  return resampled.getChannelData(0).slice();
+}
+
+// ── Model progress callback ────────────────────────────────────────────────
+function onModelProgress(p) {
+  if (p.status === 'progress') {
+    const pct = p.progress ? p.progress.toFixed(1) : 0;
+    fileProgress[p.file] = +pct;
+
+    // Update aggregate bar
+    const vals = Object.values(fileProgress);
+    const avg  = vals.reduce((a,b)=>a+b,0) / vals.length;
+    document.getElementById('model-bar').style.width  = avg + '%';
+    document.getElementById('model-pct').textContent  = avg.toFixed(0) + '%';
+
+    // Update file list
+    const list = document.getElementById('file-list');
+    let row = document.getElementById('fr-' + CSS.escape(p.file));
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'file-row';
+      row.id = 'fr-' + CSS.escape(p.file);
+      row.innerHTML = `<span class="fname">${p.file}</span>
+        <div class="fbar progress-bg" style="max-width:120px">
+          <div class="progress-fill" id="fb-${CSS.escape(p.file)}" style="width:0%"></div>
+        </div>
+        <span class="fpct" id="fp-${CSS.escape(p.file)}">0%</span>`;
+      list.appendChild(row);
+    }
+    const bar = document.getElementById('fb-' + CSS.escape(p.file));
+    const lbl = document.getElementById('fp-' + CSS.escape(p.file));
+    if (bar) bar.style.width = pct + '%';
+    if (lbl) lbl.textContent = pct + '%';
+  }
+  if (p.status === 'ready') {
+    document.getElementById('model-bar').style.width = '100%';
+    document.getElementById('model-pct').textContent = '100%';
+  }
+}
+
+// ── SRT helpers ────────────────────────────────────────────────────────────
+function toTimestamp(secs) {
+  if (secs == null) secs = 0;
+  const h  = Math.floor(secs / 3600);
+  const m  = Math.floor((secs % 3600) / 60);
+  const s  = Math.floor(secs % 60);
+  const ms = Math.round((secs % 1) * 1000);
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:`
+       + `${String(s).padStart(2,'0')},${String(ms).padStart(3,'0')}`;
+}
+
+function chunksToSRT(chunks) {
+  return chunks
+    .filter(c => c.text && c.text.trim())
+    .map((c, i) => {
+      const s = c.timestamp?.[0] ?? 0;
+      const e = c.timestamp?.[1] ?? s + 2;
+      return `${i+1}\n${toTimestamp(s)} --> ${toTimestamp(e)}\n${c.text.trim()}`;
+    })
+    .join('\n\n');
+}
+
+// ── Display result ─────────────────────────────────────────────────────────
+function displaySRT(srt) {
+  document.getElementById('srt-output').value = srt;
+  const card = document.getElementById('srt-card');
+  card.classList.add('visible');
+  const blocks = srt.trim().split(/\n\n+/).length;
+  const words  = srt.replace(/\d+\n[\d:,]+ --> [\d:,]+\n/g,'')
+                    .replace(/\n/g,' ').split(/\s+/).filter(Boolean).length;
+  document.getElementById('srt-stats').innerHTML =
+    `<span class="stat-pill"><strong>${blocks}</strong> blocks</span>
+     <span class="stat-pill">≈ <strong>${words}</strong> words</span>
+     <span class="stat-pill"><strong>${formatBytes(new Blob([srt]).size)}</strong></span>`;
+  card.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ── Output actions ─────────────────────────────────────────────────────────
+document.getElementById('download-btn').addEventListener('click', () => {
+  const txt = document.getElementById('srt-output').value;
+  if (!txt) return;
+  const base = selectedFile?.name.replace(/\.[^.]+$/, '') || 'subtitles';
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([txt], {type:'text/plain;charset=utf-8'})),
+    download: base + '.srt'
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const txt = document.getElementById('srt-output').value;
+  if (txt) navigator.clipboard.writeText(txt).then(() => {
+    showAlert('success', 'Copied to clipboard!');
+    setTimeout(clearAlerts, 2000);
+  });
+});
+
+document.getElementById('clear-btn').addEventListener('click', () => {
+  document.getElementById('srt-output').value = '';
+  document.getElementById('srt-card').classList.remove('visible');
+});
+
+// ── UI helpers ─────────────────────────────────────────────────────────────
+function setLoading(on) {
+  document.getElementById('generate-btn').disabled = on;
+  if (!on) updateBtn('✨', 'Transcribe & Generate SRT');
+}
+function updateBtn(icon, label) {
+  document.getElementById('btn-icon').textContent  = icon;
+  document.getElementById('btn-label').textContent = label;
+}
+function showModelProgress() {
+  document.getElementById('model-progress-section').classList.add('visible');
+}
+function hideModelProgress() {
+  document.getElementById('model-progress-section').classList.remove('visible');
+}
+function showTransProgress() {
+  document.getElementById('trans-progress-section').classList.add('visible');
+}
+function hideTransProgress() {
+  document.getElementById('trans-progress-section').classList.remove('visible');
+}
+function showAlert(type, msg) {
+  clearAlerts();
+  if (type === 'error')   { document.getElementById('error-msg').textContent  = msg; }
+  if (type === 'success') { document.getElementById('success-msg').textContent= msg; }
+  document.getElementById('alert-' + type)?.classList.add('visible');
+}
+function clearAlerts() {
+  ['error','success'].forEach(t =>
+    document.getElementById('alert-'+t)?.classList.remove('visible'));
+  document.getElementById('alert-warn').classList.remove('visible');
+}
+function formatBytes(b) {
+  if (b < 1024)     return b + ' B';
+  if (b < 1048576)  return (b/1024).toFixed(1) + ' KB';
+  return (b/1048576).toFixed(2) + ' MB';
+}
+</script>
+</body>
+</html>

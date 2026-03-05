@@ -1,0 +1,108 @@
+:root{
+	--bg:#2d1b0e;
+	--border:#a06b3e;
+	--text:#ffd890;
+	--heading:#f2c97a;
+	--panel-radius:6px;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:monospace;color:var(--text);background:transparent}
+
+.panel{
+	background:var(--bg);
+	border:2px solid var(--border);
+	border-radius:var(--panel-radius);
+	color:var(--text);
+	font-family:monospace;
+	padding:10px;
+}
+
+#dialogue-box{
+	position:fixed;
+	left:50%;
+	transform:translateX(-50%);
+	bottom:20px;
+	width:600px;
+	height:120px;
+	z-index:100;
+	overflow:auto;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	padding:12px;
+}
+
+#shop-overlay{
+	position:fixed;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	width:520px;
+	height:380px;
+	z-index:200;
+	overflow:auto;
+	display:grid;
+	grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
+	gap:10px;
+	padding:14px;
+}
+
+#journal-overlay{
+	position:fixed;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	width:580px;
+	height:420px;
+	z-index:200;
+	overflow:auto;
+	padding:12px;
+}
+
+#pause-overlay{
+	position:fixed;
+	left:0;top:0;right:0;bottom:0;
+	background:rgba(20,14,8,0.75);
+	z-index:300;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.toast{
+	position:fixed;
+	top:20px;
+	right:20px;
+	width:220px;
+	height:32px;
+	background:var(--bg);
+	border:2px solid var(--border);
+	border-radius:6px;
+	color:var(--text);
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	transform:translateX(120%);
+	transition:transform 240ms ease, opacity 240ms ease;
+	opacity:0;
+}
+.toast.visible{ transform:translateX(0); opacity:1; }
+
+.tab-btn{
+	background:#3d2510;
+	color:var(--text);
+	border:1px solid var(--border);
+	padding:6px 10px;
+	border-radius:4px;
+	cursor:pointer;
+}
+.tab-btn.active{ background:var(--border); color:var(--bg); }
+
+h1,h2,h3{ color:var(--heading); margin:0 0 6px 0 }
+
+/* small utilities */
+.scrollable{ overflow:auto }
+
+/* accessibility: ensure overlays are above canvas */
+#dialogue-box, #shop-overlay, #journal-overlay, #pause-overlay{ box-shadow:0 6px 18px rgba(0,0,0,0.45) }

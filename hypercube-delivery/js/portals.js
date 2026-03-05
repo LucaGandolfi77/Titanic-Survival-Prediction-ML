@@ -1,4 +1,5 @@
 // Portal zones and transition triggers
+import * as THREE from 'three';
 import { PORTAL_POSITIONS, HYPERCUBE_GRAPH } from './hypercube.js';
 
 export class PortalManager {
@@ -25,7 +26,9 @@ export class PortalManager {
                 transparent: true,
                 opacity: 0.6,
                 side: THREE.DoubleSide,
-                additiveBlending: true
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                depthTest: true
             });
             
             const mesh = new THREE.Mesh(geo, mat);

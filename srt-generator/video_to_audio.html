@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video → Audio · Free Local AI</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0f1117; --surface:#1a1d27; --surface2:#21253a;
+    --border:#2e3348; --accent:#6c8ef5; --accent2:#4f6de0;
+    --success:#4caf82; --warn:#e8a43a; --danger:#e05a5a;
+    --text:#e2e6f0; --muted:#7880a0; --radius:10px;
+  }
+  body { background:var(--bg); color:var(--text);
+    font-family:'Segoe UI',system-ui,sans-serif; font-size:14px;
+    min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; padding:32px 16px 64px; }
+
+  header { text-align:center; margin-bottom:32px; }
+  header h1 { font-size:26px; font-weight:700; letter-spacing:-0.5px; }
+  header h1 span { color:var(--accent); }
+  header p { color:var(--muted); margin-top:6px; font-size:13px; }
+
+  .card { background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:24px; width:100%;
+    max-width:700px; margin-bottom:16px; }
+  .card-title { font-size:12px; font-weight:600; text-transform:uppercase;
+    letter-spacing:1px; color:var(--muted); margin-bottom:14px; }
+
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
+
+  .drop-zone { border:2px dashed var(--border); border-radius:var(--radius);
+    padding:36px 20px; text-align:center; cursor:pointer;
+    transition:border-color .2s, background .2s; position:relative; }
+  .drop-zone:hover, .drop-zone.drag-over { border-color:var(--accent); background:rgba(108,142,245,.05); }
+  .drop-zone input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; }
+
+  .file-preview { display:none; align-items:center; gap:12px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:12px 16px; margin-top:12px; }
+  .file-preview.visible { display:flex; }
+
+  .format-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .format-card { background:var(--surface2); border:2px solid var(--border);
+    border-radius:8px; padding:12px; cursor:pointer; text-align:center; }
+  .format-card.selected { border-color:var(--accent); background:rgba(108,142,245,.06); }
+
+  .btn { padding:12px 16px; border-radius:8px; border:none; cursor:pointer; font-weight:600; }
+  .btn.primary { background:var(--accent); color:white; }
+
+  .alert { display:none; padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:12px; border:1px solid; }
+  .alert.visible { display:flex; gap:8px; align-items:flex-start; }
+  .alert.error   { background:rgba(224,90,90,.1); border-color:var(--danger); color:#f09090; }
+  .alert.success { background:rgba(76,175,130,.1); border-color:var(--success); color:#7ddaaa; }
+  .alert.info    { background:rgba(108,142,245,.1); border-color:var(--accent); color:#9ab4f8; }
+
+  audio { width:100%; margin-top:12px; border-radius:8px; display:none; }
+  audio.visible { display:block; }
+
+  .progress-bg { background:var(--surface2); border-radius:99px; height:8px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:99px; transition:width .2s ease; background:linear-gradient(90deg, var(--accent), #9b8ef5); }
+
+  @media (max-width:500px) { .format-grid { grid-template-columns:1fr; } }
+  footer { margin-top:32px; text-align:center; font-size:12px; color:var(--muted); max-width:700px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎬 Video → <span>Audio</span></h1>
+  <p>Estrai l'audio da qualsiasi video e scaricalo nel formato scelto — tutto nel browser</p>
+</header>
+
+<div class="card">
+  <div class="card-title">1. Carica video</div>
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="video-input" accept="video/*">
+    <div class="icon">📁</div>
+    <div class="label"><strong>Click o trascina</strong><br>Qualsiasi formato video (mp4, mov, webm, mkv...)</div>
+  </div>
+  <div class="file-preview" id="file-preview">
+    <span class="file-icon">🎞️</span>
+    <div class="file-info">
+      <div class="file-name" id="file-name">—</div>
+      <div class="file-size" id="file-size">—</div>
+    </div>
+    <button class="btn" id="remove-btn">✕</button>
+  </div>
+  <video id="video-player" controls style="width:100%;margin-top:12px;display:none"></video>
+</div>
+
+<div class="card">
+  <div class="card-title">2. Formato audio</div>
+  <div class="format-grid" id="format-grid">
+    <div class="format-card selected" data-format="wav" onclick="selectFormat(this)">
+      <div class="name">WAV</div>
+      <div class="meta">PCM, compatibile</div>
+    </div>
+    <div class="format-card" data-format="mp3" onclick="selectFormat(this)">
+      <div class="name">MP3</div>
+      <div class="meta">Compressed</div>
+    </div>
+    <div class="format-card" data-format="m4a" onclick="selectFormat(this)">
+      <div class="name">M4A</div>
+      <div class="meta">AAC</div>
+    </div>
+    <div class="format-card" data-format="ogg" onclick="selectFormat(this)">
+      <div class="name">OGG</div>
+      <div class="meta">Vorbis</div>
+    </div>
+    <div class="format-card" data-format="webm" onclick="selectFormat(this)">
+      <div class="name">WEBM</div>
+      <div class="meta">Opus/Vorbis</div>
+    </div>
+    <div class="format-card" data-format="flac" onclick="selectFormat(this)">
+      <div class="name">FLAC</div>
+      <div class="meta">Lossless</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">3. Estrai</div>
+  <div class="alert info visible" id="alert-info">Prima esecuzione scaricherà i file necessari di FFmpeg (può richiedere tempo).</div>
+  <div class="alert error" id="alert-error"></div>
+  <div style="margin-bottom:10px">
+    <div class="progress-bg"><div id="load-bar" class="progress-fill" style="width:0%"></div></div>
+  </div>
+  <button class="btn primary" id="extract-btn">⬇️ Estrai audio</button>
+</div>
+
+<div class="card" id="out-card" style="display:none">
+  <div class="card-title">Output</div>
+  <audio id="audio-player" controls></audio>
+  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn" id="download-btn">⬇️ Scarica</button>
+    <button class="btn" id="copy-btn">📋 Copia link</button>
+    <button class="btn" id="clear-btn">🗑 Pulire</button>
+  </div>
+</div>
+
+<footer>Funziona interamente nel browser con <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" style="color:var(--accent)">ffmpeg.wasm</a>.</footer>
+
+<script type="module">
+import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js';
+
+const ffmpeg = createFFmpeg({ log: true });
+let selectedFile = null;
+let selectedFormat = 'wav';
+let outUrl = null;
+
+// UI refs
+const dz = document.getElementById('drop-zone');
+const vin = document.getElementById('video-input');
+const preview = document.getElementById('file-preview');
+const fname = document.getElementById('file-name');
+const fsize = document.getElementById('file-size');
+const removeBtn = document.getElementById('remove-btn');
+const videoPlayer = document.getElementById('video-player');
+const formatGrid = document.getElementById('format-grid');
+const extractBtn = document.getElementById('extract-btn');
+const loadBar = document.getElementById('load-bar');
+const alertErr = document.getElementById('alert-error');
+const alertInfo = document.getElementById('alert-info');
+const outCard = document.getElementById('out-card');
+const audioPlayer = document.getElementById('audio-player');
+const downloadBtn = document.getElementById('download-btn');
+const copyBtn = document.getElementById('copy-btn');
+const clearBtn = document.getElementById('clear-btn');
+
+vin.addEventListener('change', e => handleFile(e.target.files[0]));
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+removeBtn.addEventListener('click', clearFile);
+
+function handleFile(file){
+  if(!file) return;
+  selectedFile = file;
+  fname.textContent = file.name;
+  fsize.textContent = formatBytes(file.size) + ' · ' + (file.type || 'video');
+  preview.classList.add('visible');
+  videoPlayer.src = URL.createObjectURL(file);
+  videoPlayer.style.display = 'block';
+  clearAlerts();
+}
+function clearFile(){
+  selectedFile = null;
+  vin.value = '';
+  preview.classList.remove('visible');
+  videoPlayer.src = '';
+  videoPlayer.style.display = 'none';
+}
+
+function selectFormat(el){
+  document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedFormat = el.dataset.format;
+}
+
+function showError(msg){ alertErr.textContent = msg; alertErr.classList.add('visible'); }
+function clearAlerts(){ alertErr.classList.remove('visible'); alertInfo.classList.remove('visible'); }
+
+extractBtn.addEventListener('click', async () => {
+  clearAlerts();
+  if(!selectedFile) { showError('Seleziona prima un video.'); return; }
+
+  extractBtn.disabled = true;
+  loadBar.style.width = '5%';
+
+  try {
+    if(!ffmpeg.isLoaded()){
+      await ffmpeg.load();
+    }
+
+    ffmpeg.setProgress(({ ratio }) => {
+      const pct = Math.min(100, Math.round(ratio * 100));
+      loadBar.style.width = pct + '%';
+    });
+
+    const inName = 'input' + getExt(selectedFile.name);
+    const outName = 'output.' + selectedFormat;
+
+    ffmpeg.FS('writeFile', inName, await fetchFile(selectedFile));
+
+    // Basic command: remove video stream (-vn) and encode audio for selected format
+    const cmd = buildFFmpegCmd(inName, outName, selectedFormat);
+    await ffmpeg.run(...cmd);
+
+    const data = ffmpeg.FS('readFile', outName);
+    const blob = new Blob([data.buffer], { type: mimeFromFormat(selectedFormat) });
+    if(outUrl) URL.revokeObjectURL(outUrl);
+    outUrl = URL.createObjectURL(blob);
+
+    audioPlayer.src = outUrl; audioPlayer.classList.add('visible');
+    outCard.style.display = 'block';
+    downloadBtn.onclick = () => downloadBlob(blob, selectedFile.name.replace(/\.[^.]+$/, '') + '.' + selectedFormat);
+    copyBtn.onclick = async () => { await navigator.clipboard.writeText(outUrl); alert('Link copiato negli appunti.'); };
+
+  } catch (err){
+    console.error(err);
+    showError(err.message || String(err));
+  } finally {
+    extractBtn.disabled = false;
+    loadBar.style.width = '100%';
+  }
+});
+
+clearBtn.addEventListener('click', () => {
+  if(outUrl) URL.revokeObjectURL(outUrl);
+  outUrl = null;
+  audioPlayer.src = '';
+  audioPlayer.classList.remove('visible');
+  outCard.style.display = 'none';
+});
+
+function buildFFmpegCmd(inName, outName, fmt){
+  // Return argument array for ffmpeg.run
+  // We'll pick safe codecs supported in the wasm build
+  switch(fmt){
+    case 'mp3': return ['-i', inName, '-vn', '-acodec', 'libmp3lame', '-q:a', '2', outName];
+    case 'm4a': return ['-i', inName, '-vn', '-c:a', 'aac', '-b:a', '192k', outName];
+    case 'ogg': return ['-i', inName, '-vn', '-c:a', 'libvorbis', '-q:a', '5', outName];
+    case 'webm': return ['-i', inName, '-vn', '-c:a', 'libopus', '-b:a', '128k', outName];
+    case 'flac': return ['-i', inName, '-vn', '-c:a', 'flac', outName];
+    case 'wav':
+    default: return ['-i', inName, '-vn', '-acodec', 'pcm_s16le', '-ar', '44100', '-ac', '2', outName];
+  }
+}
+
+function mimeFromFormat(fmt){
+  switch(fmt){ case 'mp3': return 'audio/mpeg'; case 'm4a': return 'audio/mp4'; case 'ogg': return 'audio/ogg'; case 'webm': return 'audio/webm'; case 'flac': return 'audio/flac'; default: return 'audio/wav'; }
+}
+
+function downloadBlob(blob, name){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m ? m[0] : '' }
+function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+
+</script>
+</body>
+</html>

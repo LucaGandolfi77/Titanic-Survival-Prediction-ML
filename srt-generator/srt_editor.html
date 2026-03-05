@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SRT Editor · Free Local AI</title>
+  <style>
+    *, *::before, *::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#21253a;--border:#2e3348;--accent:#6c8ef5;--text:#e2e6f0;--muted:#7880a0;--radius:10px}
+    body{background:var(--bg);color:var(--text);font-family:Segoe UI,system-ui, sans-serif;padding:28px;display:flex;flex-direction:column;align-items:center}
+    header{margin-bottom:18px;text-align:center}
+    header h1{font-size:24px} header h1 span{color:var(--accent)}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;width:100%;max-width:1100px;margin-bottom:12px}
+    .card-title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px}
+    .drop-zone{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;background:var(--surface2);cursor:pointer}
+    .drop-zone.drag-over{border-color:var(--accent)}
+    input[type=file]{position:absolute;inset:0;opacity:0;width:100%}
+    .layout{display:grid;grid-template-columns:1fr 380px;gap:12px}
+    textarea{width:100%;height:320px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:8px;resize:vertical}
+    .timeline{height:160px;background:linear-gradient(180deg,var(--surface2),#161824);border-radius:8px;border:1px solid var(--border);position:relative;overflow:hidden}
+    .time-scale{position:absolute;left:0;right:0;top:0;height:20px;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;font-size:12px;color:var(--muted);padding:0 6px}
+    .blocks{position:absolute;left:0;right:0;top:20px;bottom:0;padding:6px}
+    .block{position:absolute;top:6px;height:40px;background:linear-gradient(90deg,var(--accent),#9b8ef5);border-radius:6px;color:black;padding:6px;font-size:12px;cursor:grab;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .block.dragging{opacity:.9;cursor:grabbing}
+    .resize-handle{position:absolute;right:2px;top:2px;width:10px;height:36px;cursor:ew-resize;background:rgba(0,0,0,0.2);border-radius:4px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:8px;background:var(--accent);border:none;color:white;cursor:pointer}
+    .btn.ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text)}
+    .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
+    .editor{display:flex;flex-direction:column;gap:8px}
+    .field{display:flex;flex-direction:column}
+    label{font-size:12px;color:var(--muted);margin-bottom:6px}
+    input[type=text], input[type=number]{padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text)}
+    footer{color:var(--muted);margin-top:14px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>✍️ <span>SRT Editor</span></h1>
+    <p style="color:var(--muted)">Carica, modifica graficamente i sottotitoli su una timeline, salva ed esporta in .srt</p>
+  </header>
+
+  <div class="card">
+    <div class="card-title">1 — Carica SRT</div>
+    <div class="drop-zone" id="srt-drop">
+      <input id="srt-file" type="file" accept=".srt">
+      <div>Click o trascina un file .srt qui</div>
+    </div>
+    <div class="meta" id="srt-info" style="display:none"></div>
+  </div>
+
+  <div class="card layout">
+    <div>
+      <div class="card-title">2 — Timeline Visuale</div>
+      <div class="timeline" id="timeline">
+        <div class="time-scale" id="scale"></div>
+        <div class="blocks" id="blocks"></div>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+        <div class="meta" id="duration-info">Durata stimata: 0s</div>
+        <div class="controls">
+          <button class="btn ghost" id="zoom-in">Zoom +</button>
+          <button class="btn ghost" id="zoom-out">Zoom -</button>
+          <button class="btn" id="snap-toggle">Snap: ON</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor">
+      <div class="card-title">3 — Editor Dettagli</div>
+      <div class="field"><label>Blocchi SRT (modificabile)</label><textarea id="srt-textarea" placeholder="Carica o incolla SRT qui"></textarea></div>
+      <div class="field" style="display:flex;gap:8px"><input id="sel-start" type="text" placeholder="00:00:00,000"><input id="sel-end" type="text" placeholder="00:00:02,000"></div>
+      <input id="sel-text" type="text" placeholder="Testo sottotitolo">
+      <div style="display:flex;gap:8px"><button class="btn" id="apply-edit">Applica</button><button class="btn ghost" id="select-prev">◀ Prev</button><button class="btn ghost" id="select-next">Next ▶</button></div>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="save-local">Salva locale</button><button class="btn" id="export-srt">Esporta .srt</button></div>
+    </div>
+  </div>
+
+  <footer>Design e colori presi dall'interfaccia principale.</footer>
+
+  <script>
+    // Simple SRT parser/formatter
+    function parseTime(t){ // "HH:MM:SS,mmm"
+      const m = t.trim().match(/(\d+):(\d+):(\d+),(\d+)/);
+      if(!m) return 0; return parseInt(m[1])*3600 + parseInt(m[2])*60 + parseInt(m[3]) + parseInt(m[4])/1000;
+    }
+    function fmtTime(s){
+      const h = Math.floor(s/3600); s%=3600; const m = Math.floor(s/60); const sec = Math.floor(s%60); const ms = Math.round((s - Math.floor(s))*1000);
+      return String(h).padStart(2,'0')+ ':' + String(m).padStart(2,'0')+ ':' + String(sec).padStart(2,'0')+ ',' + String(ms).padStart(3,'0');
+    }
+
+    function parseSRT(text){
+      const parts = text.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+      const items = [];
+      for(const p of parts){
+        const lines = p.split(/\n/);
+        let idx=0; if(/^\d+$/.test(lines[0].trim())) idx=1; // skip index
+        const times = lines[idx].split('-->');
+        if(!times || times.length<2) continue;
+        const start = parseTime(times[0]); const end = parseTime(times[1]);
+        const textLines = lines.slice(idx+1).join('\n');
+        items.push({start, end, text: textLines});
+      }
+      return items;
+    }
+
+    function buildSRT(items){
+      return items.map((it,i)=>`${i+1}\n${fmtTime(it.start)} --> ${fmtTime(it.end)}\n${it.text}`).join('\n\n');
+    }
+
+    // DOM refs
+    const srtFile = document.getElementById('srt-file');
+    const srtDrop = document.getElementById('srt-drop');
+    const srtInfo = document.getElementById('srt-info');
+    const srtTextarea = document.getElementById('srt-textarea');
+    const blocksEl = document.getElementById('blocks');
+    const scaleEl = document.getElementById('scale');
+    const durationInfo = document.getElementById('duration-info');
+    const selStart = document.getElementById('sel-start');
+    const selEnd = document.getElementById('sel-end');
+    const selText = document.getElementById('sel-text');
+    const applyEdit = document.getElementById('apply-edit');
+    const exportBtn = document.getElementById('export-srt');
+    const saveLocal = document.getElementById('save-local');
+    const snapToggle = document.getElementById('snap-toggle');
+
+    let items = [];
+    let total = 0;
+    let zoom = 1; // scale multiplier
+    let snap = true;
+    let selectedIndex = -1;
+
+    function renderScale(){
+      scaleEl.innerHTML = '';
+      const steps = 10;
+      for(let i=0;i<=steps;i++){
+        const t = (i/steps)*total;
+        const el = document.createElement('div'); el.style.marginRight='12px'; el.textContent = Math.round(t)+'s'; scaleEl.appendChild(el);
+      }
+    }
+
+    function renderBlocks(){
+      blocksEl.innerHTML='';
+      const W = blocksEl.clientWidth;
+      items.forEach((it,i)=>{
+        const left = (it.start/total)*100*zoom;
+        const width = ((it.end - it.start)/total)*100*zoom;
+        const b = document.createElement('div'); b.className='block'; b.style.left = left + '%'; b.style.width = Math.max(2,width) + '%'; b.textContent = it.text.replace(/\n/g,' ');
+        b.dataset.index = i;
+        const handle = document.createElement('div'); handle.className='resize-handle'; b.appendChild(handle);
+        blocksEl.appendChild(b);
+
+        // events
+        b.addEventListener('mousedown', e=> startDrag(e,b,i));
+        handle.addEventListener('mousedown', e=> startResize(e,b,i));
+        b.addEventListener('dblclick', ()=> selectIndex(i));
+      });
+    }
+
+    function selectIndex(i){ selectedIndex = i; const it = items[i]; selStart.value = fmtTime(it.start); selEnd.value = fmtTime(it.end); selText.value = it.text; highlightSelected(); }
+
+    function highlightSelected(){ document.querySelectorAll('.block').forEach(el=> el.style.outline='none'); if(selectedIndex>=0){ const el = document.querySelector('.block[data-index="'+selectedIndex+'"]'); if(el) el.style.outline='3px solid rgba(255,255,255,0.08)'; }}
+
+    // Dragging
+    let dragState = null;
+    function startDrag(e,el,i){ if(e.button!==0) return; e.preventDefault(); dragState = {el,i,startX:e.clientX,origLeft:el.offsetLeft}; el.classList.add('dragging'); window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', endDrag); }
+    function onDrag(e){ if(!dragState) return; const el = dragState.el; const parent = blocksEl; const dx = e.clientX - dragState.startX; const parentW = parent.clientWidth; let newLeftPx = dragState.origLeft + dx; newLeftPx = Math.max(0, Math.min(newLeftPx, parentW - el.clientWidth)); const newLeftPct = (newLeftPx/parentW)/zoom*100; el.style.left = newLeftPct + '%'; const idx = parseInt(el.dataset.index); const newStart = (newLeftPct/100)*total; const dur = items[idx].end - items[idx].start; let newEnd = newStart + dur; if(snap) { newStart = Math.round(newStart*10)/10; newEnd = Math.round(newEnd*10)/10; }
+      items[idx].start = Math.max(0,newStart); items[idx].end = Math.max(items[idx].start+0.1,newEnd); durationInfo.textContent = 'Durata stimata: ' + Math.round(total) + 's'; }
+    function endDrag(){ if(!dragState) return; dragState.el.classList.remove('dragging'); window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); dragState = null; updateTextareaFromItems(); }
+
+    // Resize handle
+    let resizeState = null;
+    function startResize(e,el,i){ e.stopPropagation(); e.preventDefault(); resizeState = {el,i,startX:e.clientX,origW:el.clientWidth}; window.addEventListener('mousemove', onResize); window.addEventListener('mouseup', endResize); }
+    function onResize(e){ if(!resizeState) return; const el = resizeState.el; const parent = blocksEl; const dx = e.clientX - resizeState.startX; const parentW = parent.clientWidth; let newWpx = resizeState.origW + dx; newWpx = Math.max(6, Math.min(newWpx, parentW - el.offsetLeft)); const newWpct = (newWpx/parentW)/zoom*100; el.style.width = newWpct + '%'; const idx = parseInt(el.dataset.index); const startPct = parseFloat(el.style.left); const startTime = (startPct/100)*total; const newEnd = startTime + (newWpct/100)*total; items[idx].end = Math.max(startTime + 0.05, newEnd); if(snap) items[idx].end = Math.round(items[idx].end*10)/10; updateTextareaFromItems(); }
+    function endResize(){ if(!resizeState) return; window.removeEventListener('mousemove', onResize); window.removeEventListener('mouseup', endResize); resizeState = null; }
+
+    function updateTextareaFromItems(){ srtTextarea.value = buildSRT(items); }
+
+    // Import SRT
+    srtFile.addEventListener('change', async e=>{ const f = e.target.files[0]; if(!f) return; const txt = await f.text(); srtTextarea.value = txt; loadFromTextarea(); srtInfo.style.display='block'; srtInfo.textContent = 'Caricato: '+f.name+' · '+formatBytes(f.size); });
+    srtDrop.addEventListener('dragover', e=>{ e.preventDefault(); srtDrop.classList.add('drag-over'); }); srtDrop.addEventListener('dragleave', ()=> srtDrop.classList.remove('drag-over'));
+    srtDrop.addEventListener('drop', async e=>{ e.preventDefault(); srtDrop.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if(f) { const txt = await f.text(); srtTextarea.value = txt; loadFromTextarea(); srtInfo.style.display='block'; srtInfo.textContent = 'Caricato: '+f.name+' · '+formatBytes(f.size); } });
+
+    // Load into timeline
+    function loadFromTextarea(){ items = parseSRT(srtTextarea.value); if(items.length===0) { alert('Nessun blocco valido trovato nel SRT'); return; } total = Math.max(...items.map(it=>it.end)); if(total<=0) total = 60; durationInfo.textContent = 'Durata stimata: ' + Math.round(total) + 's'; renderScale(); renderBlocks(); }
+
+    // apply edit from editor fields
+    applyEdit.addEventListener('click', ()=>{
+      if(selectedIndex<0) { alert('Seleziona prima un blocco nella timeline'); return; }
+      const it = items[selectedIndex]; const ns = parseTime(selStart.value); const ne = parseTime(selEnd.value); if(isNaN(ns)||isNaN(ne)||ne<=ns) { alert('Tempi non validi'); return; }
+      it.start = ns; it.end = ne; it.text = selText.value; updateTextareaFromItems(); renderBlocks(); highlightSelected();
+    });
+
+    // clicking textarea parse
+    srtTextarea.addEventListener('blur', loadFromTextarea);
+
+    // export
+    exportBtn.addEventListener('click', ()=>{ const out = buildSRT(items); const blob = new Blob([out], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.edited.srt'; a.click(); URL.revokeObjectURL(a.href); });
+
+    saveLocal.addEventListener('click', ()=>{ localStorage.setItem('srt_editor_saved', srtTextarea.value); alert('Salvato localmente'); });
+    document.getElementById('zoom-in').addEventListener('click', ()=>{ zoom=Math.min(4, zoom*1.2); renderBlocks(); });
+    document.getElementById('zoom-out').addEventListener('click', ()=>{ zoom=Math.max(0.5, zoom/1.2); renderBlocks(); });
+    snapToggle.addEventListener('click', ()=>{ snap = !snap; snapToggle.textContent = 'Snap: ' + (snap? 'ON':'OFF'); });
+
+    // navigation
+    document.getElementById('select-prev').addEventListener('click', ()=>{ if(selectedIndex>0) selectIndex(selectedIndex-1); });
+    document.getElementById('select-next').addEventListener('click', ()=>{ if(selectedIndex<items.length-1) selectIndex(selectedIndex+1); });
+
+    function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+  </script>
+</body>
+</html>

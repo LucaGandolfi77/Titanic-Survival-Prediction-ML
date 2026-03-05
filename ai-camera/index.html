@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Camera — Live Effects</title>
+  <style>
+    :root{--bg:#0f1117;--card:#12131a;--muted:#9aa3c7;--text:#e6eef8;--accent:#6c8ef5}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#071025,#0f1117);color:var(--text);display:flex;align-items:center;justify-content:center;height:100vh;padding:24px}
+    .app{width:100%;max-width:980px}
+    .card{background:var(--card);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 40px rgba(2,6,23,0.6)}
+    .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    label{font-size:13px;color:var(--muted)}
+    select,input[type=range]{background:#0b0d12;color:var(--text);border-radius:8px;padding:6px;border:1px solid rgba(255,255,255,0.04)}
+    .preview-wrap{display:grid;grid-template-columns:1fr 320px;gap:12px}
+    .video-box{background:#000;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+    video, canvas{width:100%;height:auto;display:block}
+    canvas.overlay{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+    .controls{display:flex;flex-direction:column;gap:8px;padding:8px}
+    .btn{background:var(--accent);color:#fff;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+    .small{padding:8px 10px;font-size:14px}
+    .footer{margin-top:12px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="app card">
+    <div class="toolbar">
+      <div>
+        <label for="effect">Effect</label><br>
+        <select id="effect">
+          <option value="none">None</option>
+          <option value="grayscale">Grayscale</option>
+          <option value="sepia">Sepia</option>
+          <option value="invert">Invert</option>
+          <option value="contrast">High Contrast</option>
+          <option value="blur">Blur</option>
+          <option value="edge">Edge Detect</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="intensity">Intensity</label><br>
+        <input id="intensity" type="range" min="0" max="100" value="60">
+      </div>
+
+      <div>
+        <label for="quality">JPEG Quality</label><br>
+        <input id="quality" type="range" min="0.3" max="1" step="0.05" value="0.85">
+      </div>
+
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <button id="switch-camera" class="ghost small">Switch Camera</button>
+        <button id="shutter" class="btn small">Shutter</button>
+      </div>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="video-box">
+        <video id="video" autoplay playsinline muted></video>
+        <!-- offscreen canvas used for processing preview -->
+        <canvas id="processing" style="display:none"></canvas>
+        <canvas id="preview" aria-hidden="true"></canvas>
+        <canvas id="overlay" class="overlay" aria-hidden="true"></canvas>
+      </div>
+
+      <div class="controls">
+        <div><label>Live Preview</label></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <label style="font-size:13px;color:var(--muted)"><input id="toggle-objects" type="checkbox"> Objects</label>
+          <label style="font-size:13px;color:var(--muted)"><input id="toggle-faces" type="checkbox"> Faces</label>
+          <label style="font-size:13px;color:var(--muted)"><input id="toggle-body" type="checkbox"> Body</label>
+          <label style="font-size:13px;color:var(--muted)"><input id="blur-faces" type="checkbox"> Blur Faces</label>
+        </div>
+        <div id="metadata" class="small" style="color:var(--muted)"></div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03)">
+        <div><label>Download</label></div>
+        <div style="display:flex;gap:8px">
+          <button id="download-jpeg" class="btn small">Download JPEG</button>
+          <button id="download-png" class="ghost small">Download PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Permissions: allow camera access. Effects run locally in real time using canvas filters.</div>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const preview = document.getElementById('preview');
+    const proc = document.getElementById('processing');
+    const overlay = document.getElementById('overlay');
+    const toggleObjects = document.getElementById('toggle-objects');
+    const toggleFaces = document.getElementById('toggle-faces');
+    const toggleBody = document.getElementById('toggle-body');
+    const blurFaces = document.getElementById('blur-faces');
+    const effectSel = document.getElementById('effect');
+    const intensity = document.getElementById('intensity');
+    const quality = document.getElementById('quality');
+    const shutter = document.getElementById('shutter');
+    const downloadJ = document.getElementById('download-jpeg');
+    const downloadP = document.getElementById('download-png');
+    const metadata = document.getElementById('metadata');
+    const switchCam = document.getElementById('switch-camera');
+
+    let stream = null;
+    let usingFront = false;
+    let raf = null;
+    let models = { coco: null, blaze: null, bodypix: null };
+    let modelsReady = false;
+    let lastDetect = 0;
+
+    async function startCamera(){
+      try{
+        if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
+        const constraints = { video: { facingMode: usingFront ? 'user' : 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false };
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        await video.play();
+        setupCanvases();
+        await ensureModels();
+        drawLoop();
+      }catch(e){ console.error('Camera error', e); metadata.textContent = 'Camera access denied or unavailable'; }
+    }
+
+    function setupCanvases(){
+      const w = video.videoWidth || 640;
+      const h = video.videoHeight || 480;
+      preview.width = w; preview.height = h;
+      proc.width = w; proc.height = h;
+      overlay.width = w; overlay.height = h;
+      preview.style.width = '100%';
+    }
+
+    function applyEffect(ctx, effect, t){
+      // use canvas context filter for many effects
+      ctx.filter = 'none';
+      if(effect === 'none') return;
+      const v = t/100; // intensity 0..1
+      switch(effect){
+        case 'grayscale': ctx.filter = `grayscale(${v})`; break;
+        case 'sepia': ctx.filter = `sepia(${v})`; break;
+        case 'invert': ctx.filter = `invert(${v})`; break;
+        case 'contrast': ctx.filter = `contrast(${1 + v*1.5})`; break;
+        case 'blur': ctx.filter = `blur(${Math.max(0.5, v*6)}px)`; break;
+        case 'edge': /* handled separately below */ break;
+      }
+    }
+
+    function drawLoop(){
+      if(video.readyState < 2) { raf = requestAnimationFrame(drawLoop); return; }
+      const w = preview.width, h = preview.height;
+      const pctx = preview.getContext('2d');
+      const cctx = proc.getContext('2d');
+      const octx = overlay.getContext('2d');
+
+      // draw to processing canvas with filter
+      cctx.save();
+      applyEffect(cctx, effectSel.value, intensity.value);
+      cctx.drawImage(video, 0, 0, w, h);
+      cctx.restore();
+
+      // if edge detect effect selected, run simple convolution
+      if(effectSel.value === 'edge'){
+        const src = cctx.getImageData(0,0,w,h);
+        const out = cctx.createImageData(w,h);
+        // simple sobel-like kernel (horizontal)
+        const kx = [-1,0,1,-2,0,2,-1,0,1];
+        const ky = [-1,-2,-1,0,0,0,1,2,1];
+        for(let y=1;y<h-1;y++){
+          for(let x=1;x<w-1;x++){
+            let gx=0, gy=0;
+            for(let ky_i=-1;ky_i<=1;ky_i++){
+              for(let kx_i=-1;kx_i<=1;kx_i++){
+                const px = x+kx_i, py = y+ky_i;
+                const i = (py*w+px)*4;
+                const lum = (src.data[i]+src.data[i+1]+src.data[i+2])/3;
+                const kidx = (ky_i+1)*3 + (kx_i+1);
+                gx += lum * kx[kidx];
+                gy += lum * ky[kidx];
+              }
+            }
+            const mag = Math.min(255, Math.hypot(gx,gy));
+            const oi = (y*w+x)*4;
+            out.data[oi]=out.data[oi+1]=out.data[oi+2]=mag; out.data[oi+3]=255;
+          }
+        }
+        pctx.putImageData(out,0,0);
+      }else{
+        // copy processed to preview canvas
+        pctx.clearRect(0,0,w,h);
+        pctx.drawImage(proc,0,0,w,h);
+      }
+
+      // detection / overlay throttle
+      octx.clearRect(0,0,w,h);
+      const now = performance.now();
+      if(modelsReady && (now - lastDetect) > 200){
+        lastDetect = now;
+        runDetections(w,h, pctx, octx);
+      }
+
+      metadata.textContent = `Resolution: ${w}×${h} • Effect: ${effectSel.value} • Intensity: ${intensity.value}%`;
+      raf = requestAnimationFrame(drawLoop);
+    }
+
+    async function ensureModels(){
+      if(modelsReady) return;
+      metadata.textContent = 'Loading models...';
+      try{
+        // load TFJS then models from CDN
+        if(typeof tf === 'undefined'){
+          await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs');
+        }
+        const cocoUrl = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd';
+        const blazeUrl = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface';
+        const bodyUrl = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix';
+        await loadScript(cocoUrl + '/dist/coco-ssd.min.js');
+        await loadScript(blazeUrl + '/dist/blazeface.min.js');
+        await loadScript(bodyUrl + '/dist/body-pix.min.js');
+
+        models.coco = await cocoSsd.load();
+        models.blaze = await blazeface.load();
+        models.bodypix = await bodyPix.load();
+        modelsReady = true;
+        metadata.textContent = 'Models loaded';
+      }catch(err){ console.warn('Model load failed', err); metadata.textContent = 'Models failed to load'; }
+    }
+
+    function loadScript(src){
+      return new Promise((resolve, reject)=>{
+        const s = document.createElement('script'); s.src = src; s.onload = resolve; s.onerror = reject; document.head.appendChild(s);
+      });
+    }
+
+    async function runDetections(w,h, pctx, octx){
+      try{
+        // objects
+        if(toggleObjects.checked && models.coco){
+          const preds = await models.coco.detect(video);
+          octx.strokeStyle = '#6c8ef5'; octx.lineWidth = 2; octx.font = '14px sans-serif'; octx.fillStyle = '#6c8ef5';
+          preds.slice(0,10).forEach(p=>{
+            const [x,y,wbox,hbox] = p.bbox;
+            octx.strokeRect(x,y,wbox,hbox);
+            octx.fillText(`${p.class} ${Math.round(p.score*100)}%`, x+4, y+14);
+          });
+        }
+
+        // faces
+        if(toggleFaces.checked && models.blaze){
+          const faces = await models.blaze.estimateFaces(video, false);
+          octx.strokeStyle = '#ffcc00'; octx.lineWidth = 2; octx.fillStyle = '#ffcc00';
+          for(const f of faces){
+            const topLeft = f.topLeft; const bottomRight = f.bottomRight;
+            const x = topLeft[0], y = topLeft[1], wbox = bottomRight[0]-x, hbox = bottomRight[1]-y;
+            octx.strokeRect(x,y,wbox,hbox);
+            if(blurFaces.checked){
+              // blur region by drawing to temporary canvas and applying filter
+              const tmp = document.createElement('canvas'); tmp.width = wbox; tmp.height = hbox; const tctx = tmp.getContext('2d');
+              tctx.drawImage(preview, x, y, wbox, hbox, 0, 0, wbox, hbox);
+              tctx.filter = 'blur(8px)';
+              const blurred = tctx.getImageData(0,0,wbox,hbox);
+              // draw blurred back to preview
+              pctx.save(); pctx.globalCompositeOperation = 'source-over'; pctx.putImageData(blurred, x, y); pctx.restore();
+            }
+          }
+        }
+
+        // body segmentation
+        if(toggleBody.checked && models.bodypix){
+          const segmentation = await models.bodypix.segmentPerson(video, {internalResolution:'medium'});
+          const mask = bodyPix.toMask(segmentation);
+          // draw mask onto overlay
+          const imgData = new ImageData(new Uint8ClampedArray(mask.data), mask.width, mask.height);
+          // scale mask to overlay size
+          const tmpc = document.createElement('canvas'); tmpc.width = mask.width; tmpc.height = mask.height; tmpc.getContext('2d').putImageData(imgData,0,0);
+          octx.save(); octx.globalAlpha = 0.5; octx.drawImage(tmpc, 0, 0, mask.width, mask.height, 0, 0, w, h); octx.restore();
+        }
+      }catch(e){ console.warn('Detection error', e); }
+    }
+
+    shutter.addEventListener('click', ()=> takePhoto());
+    downloadJ.addEventListener('click', ()=> takePhoto('jpeg'));
+    downloadP.addEventListener('click', ()=> takePhoto('png'));
+
+    async function takePhoto(format='jpeg'){
+      // ensure canvas up to date
+      const w = preview.width, h = preview.height;
+      const c = document.createElement('canvas'); c.width=w; c.height=h;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(preview,0,0,w,h);
+      if(format === 'jpeg'){
+        const q = parseFloat(quality.value) || 0.85;
+        c.toBlob(blob=>{
+          const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `photo-${Date.now()}.jpg`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+        }, 'image/jpeg', q);
+      }else{
+        c.toBlob(blob=>{
+          const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `photo-${Date.now()}.png`; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+        }, 'image/png');
+      }
+    }
+
+    switchCam.addEventListener('click', ()=>{ usingFront = !usingFront; startCamera(); });
+
+    // wire controls
+    effectSel.addEventListener('change', ()=>{});
+    intensity.addEventListener('input', ()=>{});
+
+    // start on load
+    startCamera();
+
+    // cleanup on unload
+    window.addEventListener('beforeunload', ()=>{ if(stream) stream.getTracks().forEach(t=>t.stop()); if(raf) cancelAnimationFrame(raf); });
+  </script>
+</body>
+</html>

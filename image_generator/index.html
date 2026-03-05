@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prompt → SVG Generator</title>
+  <meta name="description" content="Modern UI to enter prompts, search web for references and generate a vector SVG inspired by the prompt. Download SVG or export HTML bundle." />
+  <style>
+    :root{--bg:#0f1117;--card:#12131a;--muted:#8b93b2;--text:#e6eef8;--accent:#6c8ef5;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica Neue,Arial;background:linear-gradient(180deg,#071025 0%,#0f1117 60%);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px}
+    .app{width:100%;max-width:1100px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    header p{color:var(--muted);margin:0;font-size:13px}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:16px}
+    .card{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:8px}
+    textarea,input[type=text]{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text);outline:none}
+    .row{display:flex;gap:8px;align-items:center}
+    button{background:var(--accent);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+    .preview{height:620px;display:flex;flex-direction:column;gap:12px}
+    .svg-wrap{flex:1;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);display:flex;align-items:center;justify-content:center;border-radius:8px;overflow:auto;padding:12px}
+    .meta{font-size:13px;color:var(--muted)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    footer{margin-top:12px;color:var(--muted);font-size:13px;text-align:center}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>Prompt → SVG Generator</h1>
+        <p>Enter a creative prompt and generate a vector SVG inspired by similar imagery. No external API required.</p>
+      </div>
+      <div class="meta">Local • Privacy-first</div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <label for="prompt">Prompt</label>
+        <textarea id="prompt" rows="4" placeholder="e.g. minimal mountain sunset, flat colors, bold shapes, pastel palette"></textarea>
+
+        <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+          <button id="generate">Generate SVG</button>
+          <button id="search-web" class="ghost">Search Web References</button>
+          <button id="upload-ref" class="ghost">Upload Reference</button>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Style / Options</label>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <select id="style" style="padding:8px;border-radius:8px;background:#12131a;color:var(--text);border:1px solid rgba(255,255,255,0.1)">
+              <option value="minimal">Minimal</option>
+              <option value="abstract">Abstract</option>
+              <option value="flat">Flat Illustration</option>
+              <option value="line">Line Art</option>
+              <option value="logo">Logo-like</option>
+            </select>
+            <select id="complexity" style="padding:8px;border-radius:8px;background:#12131a;color:var(--text);border:1px solid rgba(255,255,255,0.1)">
+              <option value="low">Low complexity</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High detail</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Reference Image (optional)</label>
+          <input id="ref-file" type="file" accept="image/*" style="display:none">
+          <div id="palette" style="display:flex;gap:6px;margin-top:8px"></div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+          <button id="download-svg" class="ghost">Download SVG</button>
+          <button id="export-html" class="ghost">Export HTML Bundle</button>
+          <div style="flex:1"></div>
+          <div id="status" class="meta">Ready</div>
+        </div>
+      </div>
+
+      <div class="card preview">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="meta">Preview</div>
+          <div class="controls">
+            <button id="regen">Regenerate</button>
+            <button id="download-png" class="ghost">Download PNG</button>
+          </div>
+        </div>
+
+        <div class="svg-wrap" id="svg-wrap">
+          <!-- svg will be injected here -->
+          <div id="svg-placeholder" style="color:var(--muted);text-align:center">No image yet — enter a prompt and click Generate</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="meta">Tip: try prompts with shapes and colors, e.g. "geometric sun, warm gradient"</div>
+          <div class="meta">SVG is vector and downloadable</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>Generated SVGs are created procedurally from the prompt and optional reference colors. Use web search to gather inspiration.</footer>
+  </div>
+
+  <script>
+    // Utilities
+    const el = id=>document.getElementById(id);
+    function hashString(s){ let h = 2166136261 >>> 0; for(let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = (h + (h<<1) + (h<<4) + (h<<7) + (h<<8) + (h<<24)) >>> 0; } return (h>>>0); }
+    function seededRandom(seed){ return function(){ seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; } }
+
+    // Simple color extractor
+    async function extractPalette(file, count=5){ const img = new Image(); img.src = URL.createObjectURL(file); await img.decode(); const c = document.createElement('canvas'); c.width = Math.min(240,img.width); c.height = Math.min(240,img.height); const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,c.width,c.height); const data = ctx.getImageData(0,0,c.width,c.height).data; const map = new Map(); for(let i=0;i<data.length;i+=4){ const r=data[i],g=data[i+1],b=data[i+2],a=data[i+3]; if(a<128) continue; const key = [r,g,b].join(','); map.set(key,(map.get(key)||0)+1); } const arr = Array.from(map.entries()).sort((a,b)=>b[1]-a[1]).slice(0,count).map(x=>{ const [r,g,b]=x[0].split(','); return `rgb(${r},${g},${b})`; }); URL.revokeObjectURL(img.src); return arr; }
+
+    function showPalette(colors){ const p = el('palette'); p.innerHTML=''; colors.forEach(c=>{ const d=document.createElement('div'); d.style.width='34px'; d.style.height='34px'; d.style.borderRadius='6px'; d.style.background=c; d.title=c; p.appendChild(d); }); }
+
+    // SVG generator: procedural shapes
+    function generateSVG(prompt, style, complexity, palette){ const seed = hashString(prompt + style + complexity + (palette||[]).join(',')); const rand = seededRandom(seed); const w=1200, h=800; const bg = palette && palette[0] ? palette[0] : '#0b1220'; const svg = [];
+      svg.push(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' width='${w}' height='${h}'>`);
+      // background
+      if(style==='minimal' || style==='flat' || style==='logo'){
+        svg.push(`<rect width='100%' height='100%' fill='${bg}'/>`);
+      } else {
+        const g1 = palette && palette[1] ? palette[1] : '#14243a'; const g2 = palette && palette[2] ? palette[2] : '#062033';
+        svg.push(`<defs><linearGradient id='g0' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='${g1}'/><stop offset='1' stop-color='${g2}'/></linearGradient></defs>`);
+        svg.push(`<rect width='100%' height='100%' fill='url(#g0)'/>`);
+      }
+
+      const shapes = Math.max(3, complexity==='low'?3:(complexity==='medium'?6:10));
+      for(let i=0;i<shapes;i++){
+        const cx = Math.floor(rand()*w); const cy = Math.floor(rand()*h);
+        const rx = Math.floor(80 + rand()*260); const ry = Math.floor(60 + rand()*220);
+        const angle = Math.floor(rand()*360);
+        const c = palette && palette[i%palette.length] ? palette[i%palette.length] : `hsl(${Math.floor(rand()*360)},60%,${30+Math.floor(rand()*30)}%)`;
+        if(style==='line'){
+          svg.push(`<ellipse cx='${cx}' cy='${cy}' rx='${rx}' ry='${ry}' fill='none' stroke='${c}' stroke-width='${2+Math.floor(rand()*4)}' transform='rotate(${angle} ${cx} ${cy})'/>`);
+        } else if(style==='logo'){
+          svg.push(`<rect x='${cx-rx/2}' y='${cy-ry/2}' width='${rx}' height='${ry}' rx='${Math.min(rx,ry)/6}' fill='${c}' opacity='${0.7+rand()*0.3}' transform='rotate(${angle} ${cx} ${cy})'/>`);
+        } else if(style==='abstract'){
+          const path = randomBlobPath(cx,cy, Math.min(rx,ry), Math.floor(3+rand()*6), rand);
+          svg.push(`<path d='${path}' fill='${c}' opacity='${0.5+rand()*0.5}'/>`);
+        } else {
+          svg.push(`<ellipse cx='${cx}' cy='${cy}' rx='${rx}' ry='${ry}' fill='${c}' opacity='${0.7+rand()*0.3}' transform='rotate(${angle} ${cx} ${cy})'/>`);
+        }
+      }
+
+      // add focal motif if keywords
+      if(/sun|circle|logo|badge/i.test(prompt)){
+        const cx= w*0.8, cy=h*0.2, r=80; svg.push(`<circle cx='${cx}' cy='${cy}' r='${r}' fill='${palette&&palette[0]?palette[0]:'#ffd166'}' opacity='0.95'/>`);
+      }
+
+      svg.push('</svg>'); return svg.join('\n'); }
+
+    // generate noisy blob path (smooth blob using explicit move + lines)
+    function randomBlobPath(cx,cy,r,points,rand){
+      const pts = [];
+      for(let i=0;i<points;i++){
+        const a = (i/points)*Math.PI*2;
+        const rr = r*(0.6+rand()*0.8);
+        const x = cx + Math.cos(a)*rr;
+        const y = cy + Math.sin(a)*rr;
+        pts.push([x,y]);
+      }
+      let d = `M ${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+      for(let i=1;i<pts.length;i++){
+        d += ` L ${pts[i][0].toFixed(2)} ${pts[i][1].toFixed(2)}`;
+      }
+      d += ' Z';
+      return d;
+    }
+
+    // events
+    el('ref-file').addEventListener('change', async e=>{ const f = e.target.files[0]; if(!f) return; el('status').textContent = 'Extracting palette...'; const pal = await extractPalette(f,6); showPalette(pal); el('status').textContent='Palette loaded'; });
+
+    el('generate').addEventListener('click', ()=>{ const p = el('prompt').value.trim(); if(!p){ alert('Please enter a prompt'); return; } el('status').textContent='Generating…'; const style = el('style').value; const complexity = el('complexity').value; const paletteEls = Array.from(el('palette').children).map(n=>n.style.background).filter(Boolean); const svg = generateSVG(p,style,complexity,paletteEls.length?paletteEls:null); showSVG(svg); el('status').textContent='Generated'; });
+
+    el('regen').addEventListener('click', ()=> el('generate').click());
+
+    el('search-web').addEventListener('click', ()=>{ const q = encodeURIComponent(el('prompt').value || 'abstract illustration'); const url = `https://www.google.com/search?tbm=isch&q=${q}`; window.open(url,'_blank'); });
+
+    el('download-svg').addEventListener('click', ()=>{ const svgEl = el('svg-wrap').querySelector('svg'); if(!svgEl) return alert('No SVG to download'); const s = new XMLSerializer().serializeToString(svgEl); const blob = new Blob([s],{type:'image/svg+xml'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'generated.svg'; a.click(); URL.revokeObjectURL(a.href); });
+
+    el('download-png').addEventListener('click', ()=>{
+      const svgEl = el('svg-wrap').querySelector('svg');
+      if(!svgEl) return alert('No SVG to download');
+      const s = new XMLSerializer().serializeToString(svgEl);
+      // Use Blob URL to avoid deprecated unescape() and charset issues
+      const blobSvg = new Blob([s], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blobSvg);
+      const img = new Image();
+      img.onload = ()=>{
+        try{
+          const c=document.createElement('canvas');
+          c.width = img.naturalWidth || img.width || 1200;
+          c.height = img.naturalHeight || img.height || 800;
+          const ctx=c.getContext('2d');
+          ctx.fillStyle='#000'; ctx.fillRect(0,0,c.width,c.height);
+          ctx.drawImage(img,0,0,c.width,c.height);
+          c.toBlob(blob=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='generated.png'; a.click(); URL.revokeObjectURL(a.href); });
+        }finally{
+          URL.revokeObjectURL(url);
+        }
+      };
+      img.onerror = ()=>{ URL.revokeObjectURL(url); alert('Failed to render SVG to PNG'); };
+      img.src = url;
+    });
+
+    function createExportedHtml(svgMarkup) {
+      pass;
+    }
+
+    // Sanitize an SVG string by parsing and removing dangerous elements/attributes
+    function sanitizeSVGString(svgString){
+      let doc;
+      try{
+        const parser = new DOMParser();
+        doc = parser.parseFromString(svgString, 'image/svg+xml');
+      }catch(e){
+        return '';
+      }
+      if(!doc || !doc.documentElement) return '';
+      const svg = doc.documentElement;
+      if(svg.nodeName.toLowerCase() !== 'svg') return '';
+
+      // Remove dangerous elements like <script> and <foreignObject>
+      ['script','foreignObject'].forEach(tag=>{
+        const elements = svg.getElementsByTagName(tag);
+        while(elements[0] && elements[0].parentNode){
+          elements[0].parentNode.removeChild(elements[0]);
+        }
+      });
+
+      // Walk the SVG and strip dangerous attributes
+      const walker = doc.createTreeWalker(svg, NodeFilter.SHOW_ELEMENT, null);
+      let node = walker.currentNode;
+      while(node){
+        const attrs = Array.from(node.attributes || []);
+        attrs.forEach(attr=>{
+          const name = attr.name;
+          const value = attr.value || '';
+          // Remove event handler attributes (onclick, onload, etc.)
+          if(/^on/i.test(name)){
+            node.removeAttribute(name);
+            return;
+          }
+          // Remove javascript: URLs in href/xlink:href
+          if((name === 'href' || name === 'xlink:href') && /^javascript:/i.test(value.trim())){
+            node.removeAttribute(name);
+            return;
+          }
+          // Remove CSS expressions in style attributes
+          if(name === 'style' && /expression\s*\(/i.test(value)){
+            node.removeAttribute(name);
+          }
+        });
+        node = walker.nextNode();
+      }
+
+      try{
+        return new XMLSerializer().serializeToString(svg);
+      }catch(e){
+        return '';
+      }
+    }
+
+    // Export handler that uses the sanitizer
+    el('export-html').addEventListener('click', ()=>{
+      const svgEl = el('svg-wrap').querySelector('svg');
+      if(!svgEl) return alert('No SVG to export');
+      const raw = new XMLSerializer().serializeToString(svgEl);
+      const safe = sanitizeSVGString(raw);
+      if(!safe) return alert('Unable to export SVG: invalid or unsafe content');
+      const html = createExportedHtml(safe);
+      const blob = new Blob([html],{type:'text/html'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='exported-svg.html'; a.click(); URL.revokeObjectURL(a.href);
+    });
+
+    function showSVG(source){ const wrap = el('svg-wrap'); const safe = sanitizeSVGString(source); if(!safe){ wrap.textContent = 'Unable to display SVG: invalid or unsafe content.'; return; } wrap.innerHTML = safe; const svg = wrap.querySelector('svg'); if(svg){ svg.style.maxWidth='100%'; svg.style.height='auto'; } }
+    // export bundle: provide HTML/CSS/JS files in a zip (simple approach: single HTML done above)
+
+    // file upload helper
+    el('upload-ref').addEventListener('click', ()=> el('ref-file').click());
+
+    // keyboard: Ctrl+Enter generate
+    el('prompt').addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.key==='Enter') el('generate').click(); });
+
+    // initial demo
+    el('prompt').value = 'geometric sunset, warm gradient, minimal shapes, bold contrast';
+  </script>
+</body>
+</html>

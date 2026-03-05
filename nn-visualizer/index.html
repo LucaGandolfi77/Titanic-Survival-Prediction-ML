@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NN Visualizer</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#60a5fa;--muted:#9aa3c7;--text:#e6eef8}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:var(--text)}
+    .app{display:flex;gap:12px;height:100vh;padding:14px}
+    .panel{width:320px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .viewer{flex:1;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,#071028,#07101a);position:relative}
+    .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    button,input,select{background:#091223;color:var(--text);border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px}
+    .info{font-size:13px;color:var(--muted);margin-top:8px}
+    svg{width:100%;height:100%;display:block}
+    .sidebar h3{margin:6px 0}
+    .node-item{padding:6px;border-radius:6px;margin:4px 0;background:rgba(255,255,255,0.01);cursor:pointer}
+    .node-item:hover{background:rgba(255,255,255,0.02)}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel sidebar">
+      <div class="toolbar">
+        <button id="reset">Reset View</button>
+        <button id="fit">Fit</button>
+      </div>
+
+      <h3>Modello di esempio</h3>
+      <select id="models">
+        <option value="sample">Sample MLP (3-4-2)</option>
+      </select>
+
+      <div class="info">Interazioni: trascina per pan, rotella per zoom, clicca nodo per dettaglio.</div>
+
+      <h3>Layer & Nodi</h3>
+      <div id="nodes-list" style="max-height:50vh;overflow:auto;margin-top:6px"></div>
+
+      <h3>Dettaglio nodo</h3>
+      <div id="node-detail" class="info">Seleziona un nodo per vedere pesi e bias.</div>
+    </div>
+
+    <div class="viewer card">
+      <svg id="svgroot" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <script>
+    // Simple NN visualizer: layers -> nodes -> weights
+    const svg = document.getElementById('svgroot');
+    const nodesList = document.getElementById('nodes-list');
+    const nodeDetail = document.getElementById('node-detail');
+    const resetBtn = document.getElementById('reset');
+    const fitBtn = document.getElementById('fit');
+
+    // Example model
+    const sampleModel = {
+      name: 'Sample MLP',
+      layers: [
+        {type:'input', size:3},
+        {type:'dense', size:4, activation:'relu'},
+        {type:'output', size:2, activation:'softmax'}
+      ],
+      // weights[layer][toNode][fromNode]
+      weights: [],
+      biases: []
+    };
+
+    // random init weights for demo
+    function rand(a= -1, b=1){ return a + Math.random()*(b-a); }
+    for(let L=1; L<sampleModel.layers.length; L++){
+      const to = sampleModel.layers[L].size;
+      const from = sampleModel.layers[L-1].size;
+      const W = Array.from({length:to}, ()=> Array.from({length:from}, ()=> Number(rand().toFixed(3))));
+      const B = Array.from({length:to}, ()=> Number(rand(-0.5,0.5).toFixed(3)));
+      sampleModel.weights.push(W);
+      sampleModel.biases.push(B);
+    }
+
+    let state = { model: sampleModel, scale:1, tx:0, ty:0, dragging:false, last:[0,0], selected:null };
+
+    function render(){
+      const M = state.model;
+      svg.innerHTML = '';
+      const width = 1200, height = 800, margin=80;
+      const layers = M.layers.length;
+      const layerX = (i)=> margin + i*( (width-2*margin)/(layers-1) );
+      // compute node positions
+      const positions = [];
+      for(let i=0;i<layers;i++){
+        const size = M.layers[i].size; positions[i]=[];
+        const colYStart = (height - size*80)/2 + 40;
+        for(let n=0;n<size;n++) positions[i].push({x:layerX(i), y: colYStart + n*80});
+      }
+
+      // group for pan/zoom
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.setAttribute('transform', `translate(${state.tx},${state.ty}) scale(${state.scale})`);
+      svg.appendChild(g);
+
+      // draw links
+      for(let L=1; L<layers; L++){
+        const W = M.weights[L-1];
+        for(let to=0; to<W.length; to++){
+          for(let from=0; from<W[to].length; from++){
+            const w = W[to][from];
+            const p1 = positions[L-1][from]; const p2 = positions[L][to];
+            const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+            line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+            line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+            const weightScale = Math.min(6, Math.max(0.6, Math.abs(w)*6));
+            line.setAttribute('stroke-width', weightScale);
+            line.setAttribute('stroke', w>0? '#60a5fa':'#fb7185'); line.setAttribute('opacity', 0.6);
+            g.appendChild(line);
+          }
+        }
+      }
+
+      // draw nodes
+      for(let i=0;i<layers;i++){
+        for(let n=0;n<positions[i].length;n++){
+          const p = positions[i][n];
+          const group = document.createElementNS('http://www.w3.org/2000/svg','g');
+          group.setAttribute('transform', `translate(${p.x},${p.y})`);
+
+          const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+          circle.setAttribute('r', 22);
+          circle.setAttribute('fill', i===0? '#111827' : '#0b1220');
+          circle.setAttribute('stroke', '#20344d'); circle.setAttribute('stroke-width', 2);
+          circle.style.cursor = 'pointer';
+          group.appendChild(circle);
+
+          const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+          label.setAttribute('y',6); label.setAttribute('text-anchor','middle'); label.setAttribute('font-size','11');
+          label.textContent = `${i}:${n}`; label.setAttribute('fill','#9aa3c7'); group.appendChild(label);
+
+          // interactivity
+          (function(layer, idx, gnode){
+            gnode.addEventListener('click', (ev)=>{ ev.stopPropagation(); showNodeDetail(layer, idx); focusNode(p.x,p.y); });
+          })(i,n,group);
+
+          g.appendChild(group);
+        }
+      }
+
+      // populate list
+      nodesList.innerHTML = '';
+      for(let i=0;i<layers;i++){
+        const h = document.createElement('div'); h.textContent = `Layer ${i} (${M.layers[i].type} — ${M.layers[i].size})`; h.style.fontWeight='600'; nodesList.appendChild(h);
+        for(let n=0;n<M.layers[i].size;n++){
+          const it = document.createElement('div'); it.className='node-item'; it.textContent = `Node ${i}:${n}`;
+          it.onclick = ()=> { showNodeDetail(i,n); focusNode(positions[i][n].x, positions[i][n].y); };
+          nodesList.appendChild(it);
+        }
+      }
+    }
+
+    function showNodeDetail(layer, idx){
+      const M = state.model; const layers = M.layers.length;
+      let html = `<strong>Node ${layer}:${idx}</strong><br>`;
+      if(layer>0){
+        const weights = M.weights[layer-1][idx];
+        html += `<div>Bias: ${M.biases[layer-1][idx]}</div>`;
+        html += `<div>Incoming weights: <ul>`+weights.map((w,i)=>`<li>${i} → ${w}</li>`).join('')+`</ul></div>`;
+      } else html += `<div>Input node (no weights)</div>`;
+      if(layer < M.layers.length-1){
+        const out = [];
+        const Wnext = M.weights[layer];
+        for(let to=0; to<Wnext.length; to++) out.push(`${layer}:${idx} → ${to} = ${Wnext[to][idx]}`);
+        html += `<div>Outgoing: <ul>`+out.map(l=>`<li>${l}</li>`).join('')+`</ul></div>`;
+      }
+      nodeDetail.innerHTML = html;
+    }
+
+    // zoom & pan
+    svg.addEventListener('wheel', (e)=>{
+      e.preventDefault(); const delta = -e.deltaY*0.001; const old = state.scale; state.scale = Math.max(0.2, Math.min(4, state.scale*(1+delta)));
+      // keep center
+      const rect = svg.getBoundingClientRect(); const cx = e.clientX - rect.left; const cy = e.clientY - rect.top;
+      state.tx -= (cx/state.scale - cx/old); state.ty -= (cy/state.scale - cy/old);
+      applyTransform();
+    }, {passive:false});
+
+    svg.addEventListener('mousedown', (e)=>{ state.dragging=true; state.last=[e.clientX,e.clientY]; });
+    window.addEventListener('mousemove', (e)=>{ if(!state.dragging) return; const dx = e.clientX - state.last[0]; const dy = e.clientY - state.last[1]; state.last=[e.clientX,e.clientY]; state.tx += dx; state.ty += dy; applyTransform(); });
+    window.addEventListener('mouseup', ()=>{ state.dragging=false; });
+    svg.addEventListener('click', ()=>{ /* clear selection? */ });
+
+    function applyTransform(){
+      const g = svg.querySelector('g'); if(!g) return; g.setAttribute('transform', `translate(${state.tx},${state.ty}) scale(${state.scale})`);
+    }
+
+    function focusNode(x,y){
+      // center viewport on x,y in svg coords
+      const vbW = 1200, vbH = 800; state.tx = (vbW/2 - x)*state.scale; state.ty = (vbH/2 - y)*state.scale; applyTransform();
+    }
+
+    resetBtn.addEventListener('click', ()=>{ state.scale=1; state.tx=0; state.ty=0; applyTransform(); });
+    fitBtn.addEventListener('click', ()=>{ state.scale=1; state.tx=0; state.ty=0; render(); });
+
+    // initial render
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video Editor · Free Local AI</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#21253a;--border:#2e3348;--accent:#6c8ef5;--accent2:#4f6de0;--text:#e2e6f0;--muted:#7880a0;--radius:10px}
+    body{background:var(--bg);color:var(--text);font-family:Segoe UI,system-ui, sans-serif;padding:28px;display:flex;flex-direction:column;align-items:center}
+    header{margin-bottom:18px;text-align:center}
+    header h1{font-size:24px} header h1 span{color:var(--accent)}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;width:100%;max-width:1100px;margin-bottom:12px}
+    .card-title{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px}
+    .drop-zone{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;background:var(--surface2);cursor:pointer;position:relative}
+    .drop-zone.drag-over{border-color:var(--accent)}
+    input[type=file]{position:absolute;inset:0;opacity:0;width:100%}
+    .layout{display:grid;grid-template-columns:1fr 360px;gap:12px}
+    .timeline{height:220px;background:linear-gradient(180deg,var(--surface2),#161824);border-radius:8px;border:1px solid var(--border);position:relative;overflow:hidden;padding:8px}
+    .track{height:56px;border-radius:6px;background:transparent;margin-bottom:8px;position:relative}
+    .seg{position:absolute;top:6px;height:44px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;color:#000;padding:6px;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:grab;overflow:hidden}
+    .seg.dragging{opacity:.9;cursor:grabbing}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:8px;background:var(--accent);border:none;color:white;cursor:pointer}
+    .btn.ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text)}
+    .small{padding:8px 10px}
+    video{width:100%;border-radius:8px;background:#000}
+    .meta{font-size:13px;color:var(--muted)}
+    .progress-bg{background:var(--surface2);height:8px;border-radius:99px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#9b8ef5);width:0%}
+    @media(max-width:900px){.layout{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎬 <span>Video Editor</span></h1>
+    <p style="color:var(--muted)">Carica un video, taglia, copia/incolla segmenti su tracce, visualizza timeline e scarica il risultato (tutto nel browser).</p>
+  </header>
+
+  <div class="card">
+    <div class="card-title">1 — Carica Video</div>
+    <div class="drop-zone" id="video-drop">
+      <input id="video-file" type="file" accept="video/*">
+      <div>Click o trascina un file video qui (mp4, mov, webm, mkv...)</div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:12px;align-items:center">
+      <div style="flex:1">
+        <div class="meta" id="video-name">Nessun file caricato</div>
+        <video id="player" controls style="display:none;margin-top:8px"></video>
+      </div>
+      <div style="width:220px">
+        <div class="meta">Esporta</div>
+        <div style="margin-top:8px" class="progress-bg"><div id="ffp" class="progress-fill"></div></div>
+        <div style="margin-top:8px;display:flex;gap:8px"><button id="export-btn" class="btn">Esporta video</button><button id="download-btn" class="btn ghost">Scarica</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2 — Timeline Editor</div>
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+      <div class="controls">
+        <button id="split-btn" class="btn small">Split (playhead)</button>
+        <button id="cut-btn" class="btn small">Cut</button>
+        <button id="copy-btn" class="btn small">Copy</button>
+        <button id="paste-btn" class="btn small">Paste</button>
+        <button id="del-btn" class="btn small">Delete</button>
+      </div>
+      <div class="meta" id="timeline-info">Segments: 0</div>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+      <div class="meta">Playhead: <span id="playhead-time">0.00s</span></div>
+      <div style="flex:1"></div>
+      <div class="meta">Tracks: 2</div>
+    </div>
+  </div>
+
+  <div class="card layout">
+    <div>
+      <div class="card-title">Preview</div>
+      <video id="preview" controls></video>
+    </div>
+
+    <div>
+      <div class="card-title">Segment Details</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <input id="seg-start" type="text" placeholder="Start (s)" />
+        <input id="seg-end" type="text" placeholder="End (s)" />
+        <input id="seg-track" type="number" value="0" min="0" />
+        <input id="seg-text" type="text" placeholder="Nome segment" />
+        <div style="display:flex;gap:8px"><button id="apply-seg" class="btn">Apply</button><button id="nav-prev" class="btn ghost">Prev</button><button id="nav-next" class="btn ghost">Next</button></div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:14px;color:var(--muted)">Powered by ffmpeg.wasm — questo editor crea clip e concatena i segmenti.</footer>
+
+  <script type="module">
+    import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js';
+    const ffmpeg = createFFmpeg({ log: true });
+
+    // DOM
+    const videoFile = document.getElementById('video-file');
+    const videoDrop = document.getElementById('video-drop');
+    const player = document.getElementById('player');
+    const preview = document.getElementById('preview');
+    const videoName = document.getElementById('video-name');
+    const timeline = document.getElementById('timeline');
+    const timelineInfo = document.getElementById('timeline-info');
+    const playheadTime = document.getElementById('playhead-time');
+    const splitBtn = document.getElementById('split-btn');
+    const cutBtn = document.getElementById('cut-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const pasteBtn = document.getElementById('paste-btn');
+    const delBtn = document.getElementById('del-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const ffProgress = document.getElementById('ffp');
+
+    const segStart = document.getElementById('seg-start');
+    const segEnd = document.getElementById('seg-end');
+    const segTrack = document.getElementById('seg-track');
+    const segText = document.getElementById('seg-text');
+    const applySeg = document.getElementById('apply-seg');
+    const navPrev = document.getElementById('nav-prev');
+    const navNext = document.getElementById('nav-next');
+
+    let srcFile = null; let duration = 0; let segments = []; // {start,end,track,label}
+    let selected = -1; let clipboard = null; let generatedUrl = null;
+
+    videoFile.addEventListener('change', e => handleFile(e.target.files[0]));
+    videoDrop.addEventListener('dragover', e => { e.preventDefault(); videoDrop.classList.add('drag-over'); });
+    videoDrop.addEventListener('dragleave', () => videoDrop.classList.remove('drag-over'));
+    videoDrop.addEventListener('drop', e => { e.preventDefault(); videoDrop.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+
+    function handleFile(f){ if(!f) return; srcFile = f; videoName.textContent = f.name + ' · ' + formatBytes(f.size); player.src = URL.createObjectURL(f); player.style.display = 'block'; preview.src = player.src; preview.style.display = 'block'; player.onloadedmetadata = ()=>{ duration = player.duration; initSegments(); renderTimeline(); }}
+
+    function initSegments(){ segments = [{start:0,end:duration,track:0,label:'clip-0'}]; selected = 0; updateInfo(); }
+
+    function renderTimeline(){ timeline.innerHTML=''; const trackCount = 2; const w = timeline.clientWidth; for(let t=0;t<trackCount;t++){ const trackEl = document.createElement('div'); trackEl.className='track'; trackEl.style.top = (t*(56+8))+'px'; trackEl.style.position='relative'; timeline.appendChild(trackEl); }
+      // container for segments
+      const blocks = document.createElement('div'); blocks.style.position='absolute'; blocks.style.left='8px'; blocks.style.right='8px'; blocks.style.top='8px'; blocks.style.bottom='8px'; blocks.id='blocks'; timeline.appendChild(blocks);
+      // render segments
+      segments.forEach((s,i)=>{
+        const left = (s.start/duration)*100; const width = ((s.end-s.start)/duration)*100;
+        const el = document.createElement('div'); el.className='seg'; el.style.left = left + '%'; el.style.width = Math.max(1,width) + '%'; el.style.top = (s.track*(56+8)) + 'px'; el.textContent = s.label || (`seg ${i}`); el.dataset.i = i;
+        el.addEventListener('mousedown', e=> startDrag(e,el,i)); el.addEventListener('dblclick', ()=> selectSegment(i)); blocks.appendChild(el);
+      });
+      timelineInfo.textContent = 'Segments: ' + segments.length; highlightSelected();
+    }
+
+    function selectSegment(i){ selected = i; const s = segments[i]; segStart.value = s.start.toFixed(3); segEnd.value = s.end.toFixed(3); segTrack.value = s.track; segText.value = s.label || ''; highlightSelected(); }
+    function highlightSelected(){ document.querySelectorAll('.seg').forEach(el=> el.style.outline='none'); if(selected>=0){ const node = document.querySelector(`.seg[data-i="${selected}"]`); if(node) node.style.outline='3px solid rgba(255,255,255,0.06)'; }}
+
+    // Dragging segments
+    let drag = null;
+    function startDrag(e,el,i){ if(e.button!==0) return; e.preventDefault(); drag = {el,i,startX:e.clientX,origLeft:el.offsetLeft}; el.classList.add('dragging'); window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', endDrag); }
+    function onDrag(e){ if(!drag) return; const blocks = document.getElementById('blocks'); const parentW = blocks.clientWidth; const dx = e.clientX - drag.startX; let newLeftPx = drag.origLeft + dx; newLeftPx = Math.max(0, Math.min(newLeftPx, parentW - drag.el.clientWidth)); const newLeftPct = newLeftPx/parentW; const newStart = newLeftPct * duration; const i = drag.i; const dur = segments[i].end - segments[i].start; segments[i].start = Math.max(0, newStart); segments[i].end = Math.min(duration, segments[i].start + dur); drag.el.style.left = (segments[i].start/duration)*100 + '%'; playheadTime.textContent = segments[i].start.toFixed(2)+'s'; }
+    function endDrag(){ if(!drag) return; drag.el.classList.remove('dragging'); window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); updateSegments(); drag=null; }
+
+    // Basic ops
+    splitBtn.addEventListener('click', ()=>{
+      const t = player.currentTime; const idx = findSegmentAt(t); if(idx<0) return alert('No segment at playhead'); const s = segments[idx]; if(t<=s.start || t>=s.end) return; const a = {start:s.start,end:t,track:s.track,label:s.label+'-a'}; const b = {start:t,end:s.end,track:s.track,label:s.label+'-b'}; segments.splice(idx,1,a,b); selected = idx+1; renderTimeline(); updateSegments();
+    });
+
+    cutBtn.addEventListener('click', ()=>{ if(selected<0) return alert('Seleziona un segmento'); segments.splice(selected,1); selected = Math.max(0, selected-1); renderTimeline(); updateSegments(); });
+    copyBtn.addEventListener('click', ()=>{ if(selected<0) return; clipboard = Object.assign({}, segments[selected]); alert('Copied'); });
+    pasteBtn.addEventListener('click', ()=>{ if(!clipboard) return alert('Clipboard vuoto'); const insertAt = selected>=0?selected+1:segments.length; const copy = Object.assign({}, clipboard); // insert
+      segments.splice(insertAt,0,copy); renderTimeline(); updateSegments(); });
+    delBtn.addEventListener('click', ()=>{ if(selected<0) return alert('Seleziona un segmento'); segments.splice(selected,1); selected = -1; renderTimeline(); updateSegments(); });
+
+    function findSegmentAt(t){ for(let i=0;i<segments.length;i++){ if(t>=segments[i].start && t<=segments[i].end) return i; } return -1 }
+
+    function updateSegments(){ // sort by start
+      segments.sort((a,b)=>a.start-b.start); renderTimeline(); }
+
+    // nav/apply
+    applySeg.addEventListener('click', ()=>{ if(selected<0) return; const s = parseFloat(segStart.value); const e = parseFloat(segEnd.value); const tr = parseInt(segTrack.value||0,10); if(isNaN(s)||isNaN(e)||e<=s) return alert('Tempi non validi'); segments[selected].start = Math.max(0,s); segments[selected].end = Math.min(duration,e); segments[selected].track = tr; segments[selected].label = segText.value; updateSegments(); });
+    navPrev.addEventListener('click', ()=>{ if(selected>0) selectSegment(selected-1); }); navNext.addEventListener('click', ()=>{ if(selected<segments.length-1) selectSegment(selected+1); });
+
+    // preview sync
+    player.addEventListener('timeupdate', ()=>{ playheadTime.textContent = player.currentTime.toFixed(2) + 's'; });
+
+    // Export — create segments using ffmpeg and concat
+    exportBtn.addEventListener('click', async ()=>{
+      if(!srcFile) return alert('Carica un video prima');
+      exportBtn.disabled = true; ffProgress.style.width = '3%';
+      try{
+        if(!ffmpeg.isLoaded()){ await ffmpeg.load(); }
+        ffmpeg.FS('writeFile', 'input'+getExt(srcFile.name), await fetchFile(srcFile));
+        // create clips
+        const sorted = segments.slice().sort((a,b)=>a.start-b.start);
+        const clipNames = [];
+        for(let i=0;i<sorted.length;i++){
+          const s = sorted[i]; const name = `seg_${i}.mp4`; clipNames.push(name);
+          const ss = s.start.toFixed(3); const dur = (s.end - s.start).toFixed(3);
+          await ffmpeg.run('-i', 'input'+getExt(srcFile.name), '-ss', ss, '-t', dur, '-c', 'copy', name);
+        }
+        // create list
+        const listTxt = clipNames.map(n=>`file '${n}'`).join('\n'); ffmpeg.FS('writeFile','list.txt',listTxt);
+        // concat
+        await ffmpeg.run('-f','concat','-safe','0','-i','list.txt','-c','copy','out.mp4');
+        const data = ffmpeg.FS('readFile','out.mp4'); const blob = new Blob([data.buffer],{type:'video/mp4'}); if(generatedUrl) URL.revokeObjectURL(generatedUrl); generatedUrl = URL.createObjectURL(blob); downloadBtn.onclick = ()=>{ const a=document.createElement('a'); a.href=generatedUrl; a.download = srcFile.name.replace(/\.[^.]+$/,'') + '-edited.mp4'; a.click(); }; preview.src = generatedUrl; preview.play(); ffProgress.style.width = '100%'; alert('Esportazione completata');
+      }catch(err){ console.error(err); alert('Errore export: '+(err.message||err)); }
+      finally{ exportBtn.disabled=false; }
+    });
+
+    function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m?m[0]:'' }
+    function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+
+    // update timeline periodically
+    setInterval(()=>{ if(player && !isNaN(player.currentTime)) playheadTime.textContent = player.currentTime.toFixed(2)+'s'; },200);
+
+  </script>
+</body>
+</html>

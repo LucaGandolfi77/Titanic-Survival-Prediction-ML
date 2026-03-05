@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video → Video con Sottotitoli</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0 }
+    :root{ --bg:#0f1117; --surface:#1a1d27; --surface2:#21253a; --border:#2e3348; --accent:#6c8ef5; --text:#e2e6f0; --muted:#7880a0; --radius:10px }
+    body{ background:var(--bg); color:var(--text); font-family:Segoe UI, system-ui, sans-serif; padding:32px; display:flex; flex-direction:column; align-items:center }
+    header{ text-align:center; margin-bottom:20px }
+    header h1{ font-size:24px } header h1 span{ color:var(--accent) }
+    .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; width:100%; max-width:900px; margin-bottom:14px }
+    .card-title{ font-size:12px; color:var(--muted); margin-bottom:10px; font-weight:600 }
+    .drop-zone{ border:2px dashed var(--border); border-radius:10px; padding:24px; text-align:center; cursor:pointer; background:var(--surface2) }
+    .drop-zone.drag-over{ border-color:var(--accent) }
+    input[type=file]{ position:absolute; inset:0; opacity:0; width:100% }
+    .flex{ display:flex; gap:12px; align-items:center }
+    textarea{ width:100%; height:200px; background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px; border-radius:8px; resize:vertical }
+    label{ font-size:13px; color:var(--muted); display:block; margin-bottom:6px }
+    .controls{ display:flex; gap:12px; flex-wrap:wrap }
+    .btn{ padding:10px 14px; border-radius:8px; background:var(--accent); color:white; border:none; cursor:pointer }
+    .btn:disabled{ opacity:.5 }
+    .small{ padding:8px 10px }
+    .progress-bg{ background:var(--surface2); height:8px; border-radius:99px; overflow:hidden }
+    .progress-fill{ height:100%; background:linear-gradient(90deg,var(--accent),#9b8ef5); width:0% }
+    footer{ color:var(--muted); margin-top:18px }
+    @media (max-width:600px){ .flex{ flex-direction:column; align-items:stretch } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎞️ Video → <span>Video con Sottotitoli</span></h1>
+    <p style="color:var(--muted)">Carica un video e un file SRT (editabile), scegli dimensione/colore/outline/margine e genera il video con sottotitoli nel browser.</p>
+  </header>
+
+  <div class="card">
+    <div class="card-title">1 — Carica Video</div>
+    <div class="drop-zone" id="video-drop">
+      <input id="video-file" type="file" accept="video/*">
+      <div style="pointer-events:none">Clicca o trascina qui il video (mp4, webm, mkv...)</div>
+    </div>
+    <div id="video-meta" style="margin-top:10px;display:none">
+      <div id="video-name" style="color:var(--muted)"></div>
+      <video id="preview-video" controls style="width:100%;margin-top:8px;display:none"></video>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">2 — Carica / Modifica SRT</div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <input id="srt-file" type="file" accept=".srt">
+      <button id="load-srt" class="btn small">Carica nel textarea</button>
+      <button id="download-srt" class="btn small" style="background:#3d9e6e">Scarica SRT</button>
+    </div>
+    <label for="srt-text">SRT (modificabile)</label>
+    <textarea id="srt-text" spellcheck="false" placeholder="Inserisci o incolla qui il contenuto .srt"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">3 — Stile Sottotitoli</div>
+    <div class="controls">
+      <div>
+        <label>Font size (px)</label>
+        <input id="font-size" type="number" value="36" min="8" style="width:100px;padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text)">
+      </div>
+      <div>
+        <label>Outline (px)</label>
+        <input id="outline" type="number" value="2" min="0" style="width:100px;padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text)">
+      </div>
+      <div>
+        <label>Color</label>
+        <input id="color" type="color" value="#FFFFFF" style="width:56px;height:36px;border-radius:6px;border:1px solid var(--border);background:var(--surface2)">
+      </div>
+      <div>
+        <label>Margin V (px)</label>
+        <input id="marginv" type="number" value="40" min="0" style="width:100px;padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text)">
+      </div>
+      <div>
+        <label>Font name</label>
+        <input id="font-name" type="text" value="Arial" style="width:140px;padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text)">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4 — Genera video con sottotitoli</div>
+    <div style="margin-bottom:8px">Nota: la prima esecuzione scaricherà i binari di FFmpeg in WebAssembly; i video grandi possono richiedere memoria significativa.</div>
+    <div class="progress-bg" style="margin-bottom:8px"><div id="prog" class="progress-fill"></div></div>
+    <div class="flex">
+      <button id="start" class="btn">Genera</button>
+      <button id="cancel" class="btn" style="background:#e05a5a">Annulla</button>
+      <div id="status" style="color:var(--muted);margin-left:8px"></div>
+    </div>
+  </div>
+
+  <div class="card" id="out" style="display:none">
+    <div class="card-title">Output</div>
+    <video id="out-video" controls style="width:100%"></video>
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button id="download-out" class="btn">Scarica video</button>
+    </div>
+  </div>
+
+  <footer>Powered by <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" style="color:var(--accent)">ffmpeg.wasm</a></footer>
+
+  <script type="module">
+    import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js';
+    const ffmpeg = createFFmpeg({ log:true });
+
+    const videoInput = document.getElementById('video-file');
+    const srtInput = document.getElementById('srt-file');
+    const loadSrtBtn = document.getElementById('load-srt');
+    const downloadSrtBtn = document.getElementById('download-srt');
+    const srtText = document.getElementById('srt-text');
+    const startBtn = document.getElementById('start');
+    const cancelBtn = document.getElementById('cancel');
+    const prog = document.getElementById('prog');
+    const status = document.getElementById('status');
+    const outCard = document.getElementById('out');
+    const outVideo = document.getElementById('out-video');
+    const downloadOut = document.getElementById('download-out');
+
+    const previewVideo = document.getElementById('preview-video');
+    const videoMeta = document.getElementById('video-meta');
+    const videoName = document.getElementById('video-name');
+
+    let currentVideoFile = null;
+    let generatedUrl = null;
+    let running = false;
+
+    videoInput.addEventListener('change', e => handleVideo(e.target.files[0]));
+    srtInput.addEventListener('change', async e => {
+      const f = e.target.files[0];
+      if(!f) return;
+      const txt = await f.text();
+      srtText.value = txt;
+    });
+
+    function handleVideo(file){
+      if(!file) return;
+      currentVideoFile = file;
+      videoMeta.style.display = 'block';
+      videoName.textContent = file.name + ' · ' + formatBytes(file.size);
+      previewVideo.src = URL.createObjectURL(file);
+      previewVideo.style.display = 'block';
+    }
+
+    loadSrtBtn.addEventListener('click', () => {
+      // if srt input chosen, it's already loaded; otherwise try to parse from textarea
+      if(!srtText.value) alert('Nessun SRT nel textarea. Carica un file .srt o incolla il testo.');
+    });
+
+    downloadSrtBtn.addEventListener('click', () => {
+      const txt = srtText.value || '';
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.srt'; a.click(); URL.revokeObjectURL(a.href);
+    });
+
+    function assColorFromHex(hex){
+      // hex #RRGGBB -> &H00BBGGRR
+      const h = hex.replace('#','');
+      return '&H00' + h.slice(4,6) + h.slice(2,4) + h.slice(0,2);
+    }
+
+    function buildForceStyle(){
+      const font = document.getElementById('font-name').value || 'Arial';
+      const size = parseInt(document.getElementById('font-size').value || 36,10);
+      const outline = parseInt(document.getElementById('outline').value || 2,10);
+      const color = document.getElementById('color').value || '#FFFFFF';
+      const marginv = parseInt(document.getElementById('marginv').value || 40,10);
+      const pc = assColorFromHex(color);
+      const oc = '&H00000000';
+      // ASS force_style expects comma separated key=val pairs
+      return `FontName=${font},FontSize=${size},PrimaryColour=${pc},OutlineColour=${oc},Outline=${outline},MarginV=${marginv}`;
+    }
+
+    startBtn.addEventListener('click', async () => {
+      if(running) return;
+      if(!currentVideoFile){ alert('Seleziona un video prima.'); return; }
+      if(!srtText.value){ alert('Inserisci/Carica un file SRT.'); return; }
+
+      running = true; startBtn.disabled = true; status.textContent = 'Preparazione...'; prog.style.width = '5%'; outCard.style.display = 'none';
+
+      try{
+        if(!ffmpeg.isLoaded()){
+          status.textContent = 'Caricamento FFmpeg (prima esecuzione)...';
+          await ffmpeg.load();
+        }
+
+        ffmpeg.setProgress(({ ratio }) => { prog.style.width = Math.round(ratio*100) + '%'; status.textContent = 'Processando: ' + Math.round(ratio*100) + '%'; });
+
+        const inName = 'input' + getExt(currentVideoFile.name);
+        const srtName = 'subs.srt';
+        const outName = 'output.mp4';
+
+        ffmpeg.FS('writeFile', inName, await fetchFile(currentVideoFile));
+        ffmpeg.FS('writeFile', srtName, new TextEncoder().encode(srtText.value));
+
+        const force = buildForceStyle();
+        // Using subtitles filter with force_style
+        const vf = `subtitles=${srtName}:force_style='${force}'`;
+
+        // run encoding
+        await ffmpeg.run('-i', inName, '-vf', vf, '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', '-c:a', 'copy', outName);
+
+        const data = ffmpeg.FS('readFile', outName);
+        const blob = new Blob([data.buffer], { type: 'video/mp4' });
+        if(generatedUrl) URL.revokeObjectURL(generatedUrl);
+        generatedUrl = URL.createObjectURL(blob);
+        outVideo.src = generatedUrl; outCard.style.display = 'block';
+        downloadOut.onclick = () => { const a = document.createElement('a'); a.href = generatedUrl; a.download = currentVideoFile.name.replace(/\.[^.]+$/, '') + '-subbed.mp4'; a.click(); };
+        status.textContent = 'Completato'; prog.style.width = '100%';
+
+      }catch(err){
+        console.error(err); alert('Errore: ' + (err.message || err)); status.textContent = 'Errore';
+      }finally{
+        running = false; startBtn.disabled = false;
+      }
+    });
+
+    cancelBtn.addEventListener('click', () => { if(running){ alert('Non è possibile annullare l’operazione al momento.'); } });
+
+    function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m ? m[0] : '' }
+    function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+
+  </script>
+</body>
+</html>

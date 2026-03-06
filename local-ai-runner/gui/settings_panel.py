@@ -1,7 +1,9 @@
 import os
 import tkinter as tk
-from tkinter import ttk
-from config import DEFAULT_CTX, DEFAULT_MAX_TOKENS, DEFAULT_TEMP, DEFAULT_TOP_P
+from tkinter import ttk, filedialog
+from pathlib import Path
+import config
+from config import DEFAULT_CTX, DEFAULT_MAX_TOKENS, DEFAULT_TEMP, DEFAULT_TOP_P, MODELS_DIR
 
 
 class SettingsPanel:
@@ -72,6 +74,27 @@ class SettingsPanel:
                  bg="#1e3a1e", fg="#a6e3a1",
                  font=("Segoe UI", 9), justify="left",
                  padx=12, pady=10).pack(anchor="w")
+
+        # Default models directory chooser
+        dir_row = ttk.Frame(f)
+        dir_row.pack(fill="x", padx=16, pady=(6,12))
+        ttk.Label(dir_row, text="Default models folder:", width=30).pack(side="left")
+        self._models_dir_var = tk.StringVar(value=str(MODELS_DIR))
+        dir_entry = ttk.Entry(dir_row, textvariable=self._models_dir_var, width=50)
+        dir_entry.pack(side="left", padx=(0,8))
+        def _choose_dir():
+            sel = filedialog.askdirectory(title="Select default models folder")
+            if sel:
+                self._models_dir_var.set(sel)
+                # update runtime config
+                try:
+                    p = Path(sel)
+                    p.mkdir(parents=True, exist_ok=True)
+                    config.MODELS_DIR = p
+                except Exception:
+                    pass
+
+        ttk.Button(dir_row, text="Change…", command=_choose_dir).pack(side="left")
 
     def get_settings(self) -> dict:
         return {key: var.get() for key, var in self._vars.items()}

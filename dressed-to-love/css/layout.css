@@ -1,0 +1,114 @@
+/* ─── Root layout ───────────────────────────────────────────────── */
+body{
+  display:grid;
+  grid-template-areas:
+    'hud    hud'
+    'stage  panel'
+    'bar    bar';
+  grid-template-columns:1fr var(--panel-w);
+  grid-template-rows:var(--hud-h) 1fr var(--bar-h);
+  height:100vh;
+  width:100vw;
+  overflow:hidden;
+}
+
+#stage{
+  grid-area:stage;
+  display:block;
+  width:100%;
+  height:100%;
+  background:#0d0d1a;
+}
+
+#panel-right{
+  grid-area:panel;
+  width:var(--panel-w);
+  background:var(--bg-panel);
+  border-left:1px solid var(--glass-border);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+#char-selector{
+  padding:10px 12px 6px;
+  border-bottom:1px solid var(--glass-border);
+  flex-shrink:0;
+}
+
+#wardrobe-panel{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  overflow:hidden;
+  padding:10px 12px 6px;
+}
+
+#hud{
+  grid-area:hud;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background:var(--bg-medium);
+  border-bottom:1px solid var(--glass-border);
+  z-index:10;
+  gap:8px;
+}
+
+#relationship-bar{
+  grid-area:bar;
+  background:var(--bg-medium);
+  border-top:1px solid var(--glass-border);
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  z-index:10;
+}
+
+#hud-left{display:flex;align-items:center;gap:12px;min-width:160px}
+#hud-center{display:flex;align-items:center;gap:6px;flex:1;overflow:hidden}
+#hud-right{display:flex;align-items:center;gap:6px;min-width:200px;justify-content:flex-end}
+
+.panel-title{
+  font-family:var(--font-display);
+  font-size:13px;
+  color:var(--love-pink);
+  margin-bottom:8px;
+  letter-spacing:.5px;
+}
+
+/* ── Mobile ────────────────────────────────────────────────────── */
+@media(max-width:768px){
+  body{
+    grid-template-areas:
+      'hud'
+      'stage'
+      'panel'
+      'bar';
+    grid-template-columns:1fr;
+    grid-template-rows:var(--hud-h) 55vw 1fr var(--bar-h);
+  }
+  #panel-right{width:100%;border-left:none;border-top:1px solid var(--glass-border)}
+}
+
+/* ── Char info bar ─────────────────────────────────────────────── */
+#char-info-bar{
+  position:fixed;
+  bottom:calc(var(--bar-h) + 8px);
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  border-radius:var(--radius);
+  padding:10px 16px;
+  z-index:20;
+  min-width:280px;
+  max-width:500px;
+  transition:opacity .3s;
+}
+#char-info-bar.hidden{display:none}

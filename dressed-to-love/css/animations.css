@@ -1,0 +1,71 @@
+@keyframes float {
+  from {transform:translateY(0)}
+  to   {transform:translateY(-8px)}
+}
+
+@keyframes slideUp {
+  from {transform:translateY(20px);opacity:0}
+  to   {transform:translateY(0);opacity:1}
+}
+
+@keyframes fadeIn {
+  from {opacity:0}
+  to   {opacity:1}
+}
+
+@keyframes toastIn {
+  from {transform:translateX(60px);opacity:0}
+  to   {transform:translateX(0);opacity:1}
+}
+@keyframes toastOut {
+  from {transform:translateX(0);opacity:1}
+  to   {transform:translateX(60px);opacity:0}
+}
+
+@keyframes heartBurst {
+  0%  {transform:scale(0);opacity:1}
+  60% {transform:scale(1.4);opacity:.8}
+  100%{transform:scale(1);opacity:0}
+}
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%    {transform:translateX(-8px)}
+  40%    {transform:translateX(8px)}
+  60%    {transform:translateX(-5px)}
+  80%    {transform:translateX(5px)}
+}
+
+@keyframes glow {
+  from {text-shadow:0 0 8px var(--gold),0 0 16px var(--gold)}
+  to   {text-shadow:0 0 20px var(--gold),0 0 40px var(--gold)}
+}
+
+@keyframes spin {
+  from {transform:rotate(0deg)}
+  to   {transform:rotate(360deg)}
+}
+
+@keyframes pulse {
+  0%,100%{transform:scale(1)}
+  50%    {transform:scale(1.06)}
+}
+
+/* Particle heart */
+.particle-heart{
+  position:fixed;
+  pointer-events:none;
+  font-size:18px;
+  z-index:50;
+  animation:particleFly 1.2s ease-out forwards;
+}
+@keyframes particleFly{
+  0%  {transform:translateY(0) scale(1);opacity:1}
+  100%{transform:translateY(-80px) scale(.4);opacity:0}
+}
+
+/* Shake card on conflict */
+.shake{animation:shake .5s ease}
+
+/* Glow ring on wedding */
+.glow-gold{animation:glow 2s ease-in-out infinite alternate}

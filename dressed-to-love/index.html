@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>💍 Dressed To Love</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/reset.css"/>
+  <link rel="stylesheet" href="css/layout.css"/>
+  <link rel="stylesheet" href="css/wardrobe.css"/>
+  <link rel="stylesheet" href="css/ui.css"/>
+  <link rel="stylesheet" href="css/relationships.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+  <aside id="panel-right">
+    <div id="char-selector">
+      <h3 class="panel-title">✨ Characters</h3>
+      <div id="char-avatars"></div>
+    </div>
+    <div id="wardrobe-panel">
+      <h3 class="panel-title">👗 Wardrobe</h3>
+      <div id="wardrobe-tabs">
+        <button class="tab-btn active" data-slot="top">Tops</button>
+        <button class="tab-btn" data-slot="bottom">Bottoms</button>
+        <button class="tab-btn" data-slot="shoes">Shoes</button>
+        <button class="tab-btn" data-slot="accessory">Access.</button>
+        <button class="tab-btn" data-slot="outerwear">Outer</button>
+      </div>
+      <div id="wardrobe-cards"></div>
+    </div>
+  </aside>
+  <header id="hud">
+    <div id="hud-left">
+      <span id="day-counter">📅 Day 1</span>
+      <span id="score-display">⭐ 0</span>
+    </div>
+    <div id="hud-center" id="hud-pairs"></div>
+    <div id="hud-right">
+      <button class="hud-btn" id="btn-relationships">💑 Map</button>
+      <button class="hud-btn" id="btn-stats">📊 Stats</button>
+      <button class="hud-btn primary" id="btn-next-day">Next Day ▶</button>
+    </div>
+  </header>
+  <footer id="relationship-bar">
+    <div id="pair-pills"></div>
+  </footer>
+  <div id="relationship-map-overlay" class="overlay hidden">
+    <div class="overlay-panel">
+      <div class="overlay-header"><h2>💑 Relationship Map</h2><button class="close-btn" data-close="relationship-map-overlay">✕</button></div>
+      <svg id="relationship-svg" width="700" height="460"></svg>
+    </div>
+  </div>
+  <div id="stats-overlay" class="overlay hidden">
+    <div class="overlay-panel">
+      <div class="overlay-header"><h2>📊 Velvetville Stats</h2><button class="close-btn" data-close="stats-overlay">✕</button></div>
+      <div id="stats-content"></div>
+    </div>
+  </div>
+  <div id="modal-layer" class="hidden">
+    <div id="modal-box">
+      <div id="modal-header"></div>
+      <div id="modal-body"></div>
+      <div id="modal-choices"></div>
+    </div>
+  </div>
+  <div id="toasts"></div>
+  <div id="char-info-bar" class="hidden">
+    <div id="char-info-content"></div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from config import MODEL_CATALOG
 
 
@@ -62,7 +62,8 @@ class ModelPanel:
 
     def _build_card(self, m: dict):
         mid     = m["id"]
-        is_dl   = self.manager.is_downloaded(mid)
+        # consider downloaded if manager reports a local path (indexed or default)
+        is_dl   = bool(self.manager.get_local_path(mid))
         card_bg = "#313244"
 
         card = tk.Frame(self._cards_frame, bg=card_bg,
@@ -122,6 +123,24 @@ class ModelPanel:
                                     _mid))
             dl_btn.pack(side="left", padx=2)
             self._dl_buttons[mid] = dl_btn
+
+            # Allow the user to register a local GGUF file for this model
+            def _choose_local():
+                fp = filedialog.askopenfilename(
+                    title=f"Select local GGUF for {m['name']}",
+                    filetypes=[("GGUF files", "*.gguf"), ("All files", "*.*")])
+                if not fp:
+                    return
+                ok = self.manager.register_local_path(mid, fp)
+                if ok:
+                    self._build_cards()
+                    self.app.refresh_chat_model_list()
+                    self.app.set_status(f"📁 Registered local file for {m['name']}")
+                else:
+                    messagebox.showerror("Error", "Failed to register local file.")
+
+            ttk.Button(btn_frame, text="📁 Use local",
+                       command=_choose_local).pack(side="left", padx=2)
             status_text = f"{m['size_gb']:.1f} GB"
             status_col  = "#6c7086"
 
@@ -170,7 +189,13 @@ class ModelPanel:
                 messagebox.showerror("Download Error", msg),
             ))
 
+        # Ask user where to download (default: configured models dir)
+        dest = filedialog.askdirectory(
+            title="Choose download folder (Cancel to use default)")
+        dest_arg = dest if dest else None
+
         self.manager.download(mid,
+                              dest_dir=dest_arg,
                               on_progress=on_progress,
                               on_complete=on_complete,
                               on_error=on_error)

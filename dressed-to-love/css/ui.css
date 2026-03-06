@@ -1,0 +1,247 @@
+/* ─── HUD ───────────────────────────────────────────────────────── */
+#hud-left{gap:14px}
+#hud-left span{font-size:13px;font-weight:600;white-space:nowrap}
+#day-counter{color:var(--teal)}
+#score-display{color:var(--gold)}
+
+.hud-btn{
+  padding:5px 10px;
+  border-radius:var(--radius-sm);
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  color:#d0d8e8;
+  font-size:12px;
+  font-weight:600;
+  transition:background .15s;
+}
+.hud-btn:hover{background:rgba(255,107,157,.15)}
+.hud-btn.primary{
+  background:var(--love-pink);
+  border-color:var(--love-pink);
+  color:#fff;
+}
+.hud-btn.primary:hover{background:var(--love-deep)}
+
+/* ─── Modal Layer ─────────────────────────────────────────────── */
+#modal-layer{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#modal-layer.hidden{display:none}
+
+#modal-box{
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  padding:24px 28px;
+  max-width:540px;
+  width:90vw;
+  max-height:80vh;
+  overflow-y:auto;
+  box-shadow:0 24px 60px rgba(0,0,0,.6);
+  animation:slideUp .25s ease;
+}
+#modal-header{
+  font-family:var(--font-display);
+  font-size:18px;
+  color:var(--love-pink);
+  margin-bottom:12px;
+  border-bottom:1px solid var(--glass-border);
+  padding-bottom:10px;
+}
+#modal-body{
+  color:#c8cfe0;
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:16px;
+}
+#modal-choices{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.modal-choice-btn{
+  padding:10px 14px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  color:#dde4f0;
+  text-align:left;
+  font-size:13px;
+  transition:background .15s,transform .1s;
+}
+.modal-choice-btn:hover{
+  background:rgba(255,107,157,.15);
+  border-color:var(--love-pink);
+  transform:translateX(3px);
+}
+
+/* ─── Toasts ──────────────────────────────────────────────────── */
+#toasts{
+  position:fixed;
+  top:60px;
+  right:16px;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  pointer-events:none;
+}
+.toast{
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  font-size:12px;
+  color:#dde4f0;
+  max-width:260px;
+  animation:toastIn .25s ease, toastOut .3s ease 2.7s forwards;
+  pointer-events:all;
+}
+.toast.love  {border-left:3px solid var(--love-pink)}
+.toast.gold  {border-left:3px solid var(--gold)}
+.toast.danger{border-left:3px solid var(--danger)}
+.toast.info  {border-left:3px solid var(--teal)}
+
+/* ─── Overlay Panels (map / stats) ───────────────────────────── */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  z-index:90;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.overlay.hidden{display:none}
+.overlay-panel{
+  background:var(--bg-card);
+  border:1px solid var(--glass-border);
+  border-radius:14px;
+  padding:20px 24px;
+  max-width:780px;
+  width:92vw;
+  max-height:90vh;
+  overflow-y:auto;
+  animation:slideUp .25s ease;
+}
+.overlay-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+  border-bottom:1px solid var(--glass-border);
+  padding-bottom:10px;
+}
+.overlay-header h2{
+  font-family:var(--font-display);
+  font-size:18px;
+  color:var(--love-pink);
+}
+.close-btn{
+  background:transparent;
+  border:none;
+  color:#7a8899;
+  font-size:18px;
+  padding:2px 6px;
+  border-radius:4px;
+  transition:color .15s;
+}
+.close-btn:hover{color:#fff}
+
+/* ─── Stats ───────────────────────────────────────────────────── */
+#stats-content{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.stat-card{
+  background:var(--bg-panel);
+  border-radius:var(--radius-sm);
+  padding:12px;
+  border:1px solid var(--glass-border);
+}
+.stat-label{font-size:11px;color:#7a8899;margin-bottom:4px}
+.stat-value{font-size:22px;font-weight:700;color:var(--gold)}
+
+/* ─── Day-end summary ─────────────────────────────────────────── */
+.day-summary h3{
+  font-family:var(--font-display);
+  color:var(--gold);
+  font-size:16px;
+  margin-bottom:12px;
+}
+.day-summary ul{list-style:none;padding:0;font-size:12px;color:#b0b8cc;line-height:1.9}
+
+/* ─── Pair pills (footer) ─────────────────────────────────────── */
+#pair-pills{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+.pair-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:4px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:transform .1s;
+  white-space:nowrap;
+}
+.pair-pill:hover{transform:scale(1.05)}
+
+/* ─── HUD pair line ───────────────────────────────────────────── */
+.hud-pair{
+  font-size:11px;
+  white-space:nowrap;
+  padding:2px 6px;
+  border-radius:4px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+}
+
+/* ─── Character info bar ──────────────────────────────────────── */
+#char-info-content{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.ci-name{font-family:var(--font-display);font-size:15px;color:var(--love-pink)}
+.ci-stat{font-size:11px;color:#7a8899}
+.ci-stat span{color:#dde4f0;font-weight:600}
+
+/* ─── Divorce step UI ─────────────────────────────────────────── */
+.divorce-step{margin-bottom:14px}
+.divorce-step h4{color:var(--warning);font-size:13px;margin-bottom:8px}
+.item-split-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 0;
+  border-bottom:1px solid var(--glass-border);
+  font-size:12px;
+}
+.split-btn{
+  padding:3px 8px;
+  font-size:11px;
+  background:var(--glass);
+  border:1px solid var(--glass-border);
+  border-radius:4px;
+  color:#dde4f0;
+}
+.split-btn.assigned-a{border-color:var(--love-pink);color:var(--love-pink)}
+.split-btn.assigned-b{border-color:var(--teal);color:var(--teal)}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>AR Snap Camera</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "mediapipe-tasks": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <video id="camera" class="hidden-video" autoplay muted></video>
+
+    <div id="render-stack" class="render-stack">
+      <canvas id="gl-canvas" aria-label="WebGL camera filter output"></canvas>
+      <canvas id="overlay-canvas" aria-label="AR overlay canvas"></canvas>
+      <div id="fallback-video-layer" class="fallback-video-layer hidden">
+        <video id="fallback-video" autoplay muted></video>
+      </div>
+    </div>
+
+    <div id="ui-layer" class="ui-layer">
+      <header class="top-hud glass-panel">
+        <div class="hud-row">
+          <span class="section-title">EFFETTI</span>
+          <div class="effects-row">
+            <button id="effects-prev" class="effects-arrow left" aria-label="Previous filter">◀</button>
+            <div id="effects-strip" class="filter-carousel" aria-label="Effect filters carousel"></div>
+            <button id="effects-next" class="effects-arrow right" aria-label="Next filter">▶</button>
+          </div>
+        </div>
+      </header>
+
+      <div id="status-banner" class="status-banner hidden"></div>
+      <div id="loading-pill" class="loading-pill hidden">Loading filter…</div>
+
+      <section id="permission-screen" class="message-screen hidden">
+        <div class="message-card glass-panel">
+          <h1>Camera access needed</h1>
+          <p>Allow access to use live filters and AR tracking.</p>
+          <button id="retry-camera" class="action-btn primary">Retry</button>
+        </div>
+      </section>
+
+      <section id="https-warning" class="message-screen hidden">
+        <div class="message-card glass-panel">
+          <h1>Secure context required</h1>
+          <p>Use HTTPS or localhost so camera APIs can work on mobile Safari.</p>
+        </div>
+      </section>
+
+      <footer class="bottom-bar glass-panel">
+        <button id="flip-camera" class="round-btn small" aria-label="Flip camera">🔄</button>
+        <button id="shutter" class="shutter-btn" aria-label="Take photo"></button>
+        <button id="share-last" class="round-btn small" aria-label="Share last photo">⬆️</button>
+      </footer>
+
+      <div class="side-controls">
+        <button id="torch-toggle" class="round-btn" aria-label="Torch">🔦</button>
+        <button id="zoom-pill" class="zoom-pill" aria-label="Zoom level">1.0x</button>
+      </div>
+
+      <section id="capture-preview" class="capture-preview hidden">
+        <div class="preview-sheet glass-panel">
+          <img id="preview-image" alt="Captured photo preview">
+          <div class="preview-actions">
+            <button id="discard-photo" class="action-btn">Discard</button>
+            <button id="save-photo" class="action-btn primary">Save / Share</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

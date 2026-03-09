@@ -38,6 +38,10 @@
   </div>
   <p class="lobby-hint">Share the room code with friends (2–4 players)</p>
   <div id="lobby-players"></div>
+  <div class="log-title">📜 Lobby Log</div>
+  <div id="lobby-log" class="log-entries"></div>
+  <div class="log-title">🖥️ Server Logs</div>
+  <div id="server-log" class="log-entries" style="max-height:160px;overflow:auto;font-size:0.9rem"></div>
   <button id="btn-start" class="btn-primary big hidden" onclick="startGame()">
     ▶ Start Game
   </button>
@@ -142,8 +146,8 @@
       ▶ Play Selected (<span id="play-count">0</span>)
     </button>
     <div id="target-selector" class="hidden">
-      <span>Target:</span>
-      <select id="target-select"></select>
+      <label for="target-select">Target:</label>
+      <select id="target-select" title="Select a target player"></select>
     </div>
   </div>
 

@@ -1,8 +1,13 @@
 let currentTarget = null;
 
+async function fetchApi(path, options = {}) {
+    const baseUrl = window.location.port === '5500' ? 'http://127.0.0.1:5001' : '';
+    const res = await fetch(baseUrl + path, options);
+    return res.json();
+}
+
 async function nextModel() {
-    const res = await fetch('/api/strut');
-    const data = await res.json();
+    const data = await fetchApi('/api/strut');
     
     if (data.username) {
         currentTarget = data.username;
@@ -22,12 +27,11 @@ async function submitVote() {
     if (!currentTarget) return;
     const score = parseInt(document.getElementById('score-slider').value);
 
-    const res = await fetch('/api/vote', {
+    const data = await fetchApi('/api/vote', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ target_username: currentTarget, score: score })
     });
-    const data = await res.json();
 
     // Visual and text feedback based on how harsh the judge is
     const feedback = document.getElementById('vote-feedback');
@@ -51,5 +55,30 @@ async function submitVote() {
     setTimeout(nextModel, 2000);
 }
 
+// Mock Three.js init just in case it's missing from your setup
+if (typeof window.scene === 'undefined') {
+    window.scene = { background: { set: function(){} } };
+}
+if (typeof window.playerMesh === 'undefined') {
+    window.playerMesh = { rotation: { y: 0 }, scale: { set: function(){} } };
+}
+
 // Call this once at the bottom of your script to load the first player
-nextModel();
+setTimeout(() => {
+    nextModel();
+}, 100);
+
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const box = document.getElementById('chat-box');
+    const msg = input.value.trim();
+    if (msg) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'msg';
+        msgDiv.innerText = "You: " + msg;
+        box.appendChild(msgDiv);
+        input.value = '';
+        box.scrollTop = box.scrollHeight;
+    }
+}
+window.sendMessage = sendMessage;

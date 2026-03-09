@@ -54,7 +54,9 @@ let S = {
   nopeTimer: null,
   pollTimer: null,
   prevLog:   [],
+  prevLobbyLog: [],
   seeFutureSeen: false,
+  serverLogTimer: null,
 };
 
 // ── Particle system ───────────────────────────────────────────────────────────
@@ -91,6 +93,13 @@ function spawnPts(x, y, color, n = 20, spread = 6) {
 // ── Audio (Web Audio API) ─────────────────────────────────────────────────────
 const AC = new (window.AudioContext || window.webkitAudioContext)();
 
+// Global error handlers to surface issues in console
+window.addEventListener('error', (e) => {
+  console.error('Uncaught error:', e.error || e.message, e.filename + ':' + e.lineno);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Unhandled promise rejection:', e.reason);
+});
 function tone(freq, dur = 0.12, type = 'sine', vol = 0.15, delay = 0) {
   const o = AC.createOscillator();
   const g = AC.createGain();
@@ -138,11 +147,23 @@ function floater(text, color = '#ffd700') {
 async function api(path, method = 'GET', body = null) {
   resumeAC();
   try {
+    // When using Live Server (different port), route /api calls to Flask backend
+    const backendBase = (location.port === '5000') ? '' : 'http://127.0.0.1:5000';
+    const url = path.startsWith('/api') ? backendBase + path : path;
     const opts = { method, headers: { 'Content-Type': 'application/json' } };
     if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(path, opts);
-    return await res.json();
+    const res = await fetch(url, opts);
+    const text = await res.text();
+    try {
+      const json = JSON.parse(text);
+      console.log('API:', method, url, { body }, '→', json);
+      return json;
+    } catch (err) {
+      console.error('API parse error: non-JSON response from', url, text.slice(0,200));
+      return { error: 'Invalid JSON response' };
+    }
   } catch(e) {
+    console.error('API error:', method, path, e);
     return { error: 'Network error' };
   }
 }
@@ -232,6 +253,7 @@ function stopPolling() {
 
 async function poll() {
   if (!S.roomId || !S.playerId) return;
+  console.log('poll: room=', S.roomId, 'pid=', S.playerId);
   const data = await api(`/api/state/${S.roomId}?pid=${S.playerId}`);
   if (data.error) return;
   applyState(data);
@@ -240,6 +262,7 @@ async function poll() {
 // ── Master state applier ──────────────────────────────────────────────────────
 function applyState(data) {
   S.state = data;
+  console.log('applyState:', data && data.state, data);
 
   if (data.state === 'lobby') {
     renderLobby(data);
@@ -297,11 +320,52 @@ function renderLobby(data) {
     waitingMsg.textContent = 'Waiting for host to start…';
     waitingMsg.classList.remove('hidden');
   }
+
+  // Render recent lobby log (use separate prev buffer so we don't interfere with game log)
+  const lobbyEntries = data.log || [];
+  const lobbyContainer = document.getElementById('lobby-log');
+  if (lobbyContainer) {
+    lobbyContainer.innerHTML = (lobbyEntries || []).slice(0, 8).map(e =>
+      `<div class="log-entry">${e.msg}</div>`
+    ).join('');
+
+    const firstNew = lobbyEntries[0];
+    if (firstNew && S.prevLobbyLog[0]?.msg !== firstNew.msg) {
+      const msg = firstNew.msg.toLowerCase();
+      if (msg.includes('joined') || msg.includes('room')) {
+        floater(firstNew.msg, '#06d6a0');
+      }
+    }
+    S.prevLobbyLog = lobbyEntries;
+  }
+}
+
+// ── Server logs polling ─────────────────────────────────────────────────────
+async function fetchServerLogs() {
+  try {
+    const res = await api('/api/server_logs?n=60');
+    if (!res || !res.logs) return;
+    const el = document.getElementById('server-log');
+    if (!el) return;
+    el.innerHTML = (res.logs || []).map(l => `<div class="log-entry">${l}</div>`).join('');
+  } catch (e) { console.error('fetchServerLogs error', e); }
+}
+
+function startServerLogPolling() {
+  if (S.serverLogTimer) return;
+  fetchServerLogs();
+  S.serverLogTimer = setInterval(fetchServerLogs, 3000);
+}
+
+function stopServerLogPolling() {
+  if (!S.serverLogTimer) return;
+  clearInterval(S.serverLogTimer); S.serverLogTimer = null;
 }
 
 // ── HUD ───────────────────────────────────────────────────────────────────────
 function renderHUD(data) {
   document.getElementById('hud-room').textContent = `💣 ${data.room_id}`;
+  console.log('renderHUD:', data.room_id, data.state);
 
   const stateLabel = {
     playing:        '▶ Playing',
@@ -378,6 +442,8 @@ function renderHand(data) {
 
   // Keep selection only on valid cards
   S.selected = S.selected.filter(id => hand.includes(id));
+
+  console.log('renderHand: handCount=', hand.length, 'selected=', S.selected.slice());
 
   container.innerHTML = '';
   hand.forEach(cardId => {
@@ -811,9 +877,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     const data = await api(`/api/state/${S.roomId}?pid=${S.playerId}`);
     if (!data.error) {
       startPolling();
+      startServerLogPolling();
       applyState(data);
       return;
     }
   }
+  // start background server log polling even on home screen
+  startServerLogPolling();
   showScreen('screen-home');
 });

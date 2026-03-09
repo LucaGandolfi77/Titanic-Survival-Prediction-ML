@@ -1,19 +1,41 @@
-<!-- Drop this inside <div id="ui-panel"> right below the leaderboard -->
-<div id="voting-booth" style="background: #e94560; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);">
-    <h2 class="glowing-text" style="margin-top: 0;">👠 The Runway</h2>
-    <p>Judging: <b id="target-model" style="font-size: 1.2em;">Nobody</b></p>
-    <p>Wearing: <i id="target-outfit">Nothing</i></p>
-    
-    <input type="range" id="score-slider" min="1" max="10" value="5" 
-           oninput="document.getElementById('score-display').innerText = this.value"
-           style="width: 100%; margin: 10px 0;">
-           
-    <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">
-        <span id="score-display">5</span>/10
-    </div>
-    
-    <button onclick="submitVote()" style="background: #1a1a2e; width: 45%;">Slay/Nay? 💅</button>
-    <button onclick="nextModel()" style="background: #0f3460; width: 45%;">Skip ⏭️</button>
-    
-    <div id="vote-feedback" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
-</div>
+from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS
+import random
+
+app = Flask(__name__)
+CORS(app)
+
+models = [
+    {"username": "GlowUpQueen", "outfit": "Sequin Gown & Boa"},
+    {"username": "VaporwaveVixen", "outfit": "Neon Trenchcoat"},
+    {"username": "BasicBob", "outfit": "Cargo Shorts & Flip Flops"},
+    {"username": "VelvetVamp", "outfit": "Crushed Velvet Suit"}
+]
+
+@app.route('/')
+def index():
+    return render_template('login.html')
+
+@app.route('/game')
+def game():
+    event_data = {
+        "name": "Summer Fashion Week",
+        "multiplier": 2
+    }
+    return render_template('game.html', event=event_data)
+
+@app.route('/api/strut')
+def strut():
+    model = random.choice(models)
+    return jsonify(model)
+
+@app.route('/api/vote', methods=['POST'])
+def vote():
+    data = request.json
+    target = data.get('target_username')
+    score = data.get('score')
+    print(f"Voted {score}/10 for {target}")
+    return jsonify({"status": "success", "message": "Vote recorded."})
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)

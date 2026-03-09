@@ -1,9 +1,33 @@
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import random, time, uuid
+import logging
 
 app = Flask(__name__, static_folder='client', static_url_path='')
 CORS(app)
+
+# Basic logging to console
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
+
+# In-memory server log buffer (newest first)
+server_logs = []
+
+class InMemoryHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+        except Exception:
+            msg = str(record)
+        # prepend newest first
+        server_logs.insert(0, msg)
+        # keep buffer bounded
+        if len(server_logs) > 500:
+            server_logs[:] = server_logs[:500]
+
+# Attach handler to root logger
+handler = InMemoryHandler()
+handler.setLevel(logging.INFO)
+logging.getLogger().addHandler(handler)
 
 # ── Card definitions ──────────────────────────────────────────────────────────
 CARD_DEFS = {
@@ -94,6 +118,8 @@ def advance_turn(room):
 def add_log(room, msg):
     room['log'].insert(0, {'msg': msg, 'ts': time.time()})
     room['log'] = room['log'][:60]
+    # Mirror room log to server console for visibility
+    logging.info(f"[ROOM {room['id']}] {msg}")
 
 def check_win(room):
     al = alive(room)
@@ -231,6 +257,13 @@ def public_state(room, pid):
         'my_id':        pid,
     }
 
+
+@app.route('/api/server_logs')
+def get_server_logs():
+    n = int(request.args.get('n', 100))
+    # return newest first
+    return jsonify({'logs': server_logs[:n]})
+
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 @app.route('/')
@@ -240,6 +273,7 @@ def index():
 @app.route('/api/create_room', methods=['POST'])
 def create_room():
     name = (request.json.get('name') or 'Player')[:20].strip()
+    logging.info(f"create_room request: name={name}")
     pid  = str(uuid.uuid4())[:8]
     rid  = str(uuid.uuid4())[:5].upper()
     rooms[rid] = {
@@ -257,7 +291,9 @@ def join_room():
     data = request.json
     rid  = (data.get('room_id') or '').upper().strip()
     name = (data.get('name') or 'Player')[:20].strip()
+    logging.info(f"join_room request: room={rid} name={name}")
     if rid not in rooms:
+        logging.warning(f"join_room: room not found {rid}")
         return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
     if room['state'] != 'lobby':
@@ -275,6 +311,7 @@ def start_game():
     data = request.json
     rid  = data.get('room_id')
     pid  = data.get('player_id')
+    logging.info(f"start_game request: room={rid} by={pid}")
     if rid not in rooms: return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
     if room['host'] != pid: return jsonify({'error': 'Only host can start'}), 403
@@ -301,6 +338,7 @@ def get_state(rid):
     if rid not in rooms: return jsonify({'error': 'Not found'}), 404
     room = rooms[rid]
     pid  = request.args.get('pid')
+    logging.info(f"get_state: room={rid} pid={pid}")
     check_deadlines(room)
     return jsonify(public_state(room, pid))
 
@@ -311,6 +349,7 @@ def play_card():
     pid    = data.get('player_id')
     cards  = data.get('cards', [])
     target = data.get('target')
+    logging.info(f"play_card: room={rid} pid={pid} cards={cards} target={target}")
 
     if rid not in rooms: return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
@@ -326,10 +365,13 @@ def play_card():
 
     for c in cards:
         if c not in hand:
+            logging.warning(f"play_card: {c} not in hand for pid={pid}")
             return jsonify({'error': f'{c} not in hand'}), 400
     if 'DEFUSE' in ctypes:
+        logging.warning(f"play_card: attempted to play DEFUSE manually by {pid}")
         return jsonify({'error': 'Defuse is used automatically against Bombs'}), 400
     if 'NOPE' in ctypes:
+        logging.warning(f"play_card: attempted to play NOPE as action by {pid}")
         return jsonify({'error': 'NOPE is played reactively, not as your action'}), 400
 
     def restore():
@@ -383,6 +425,7 @@ def play_card():
         room['nope_count'] = 0
         tgt_name = f" → {room['players'][target]['name']}" if target else ''
         add_log(room, f"🃏 {room['players'][pid]['name']} plays {action}{tgt_name}! (4s to NOPE)")
+        logging.info(f"action pending: room={rid} by={pid} action={action} target={target}")
 
     return jsonify(public_state(room, pid))
 
@@ -391,9 +434,11 @@ def play_nope():
     data = request.json
     rid  = data.get('room_id')
     pid  = data.get('player_id')
+    logging.info(f"play_nope: room={rid} pid={pid}")
     if rid not in rooms: return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
     if room['state'] != 'nope_window':
+        logging.warning(f"play_nope: nothing to nope in room={rid}")
         return jsonify({'error': 'Nothing to NOPE right now'}), 400
     hand = room['players'][pid]['hand']
     nope = next((c for c in hand if ctype(c) == 'NOPE'), None)
@@ -415,6 +460,7 @@ def draw_card():
     data = request.json
     rid  = data.get('room_id')
     pid  = data.get('player_id')
+    logging.info(f"draw_card: room={rid} pid={pid}")
     if rid not in rooms: return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
     check_deadlines(room)
@@ -437,10 +483,12 @@ def draw_card():
             room['state']   = 'defuse_pending'
             room['pending'] = {'player': pid, 'bomb': card, 'dl': time.time() + 15}
             add_log(room, f"💣 {name} drew a BOMB! 🔧 Defuse activated — choose where to reinsert it! (15s)")
+            logging.info(f"draw_card: bomb drawn by {pid}, defuse present")
         else:
             room['discard'].append(card)
             room['players'][pid]['alive'] = False
             add_log(room, f"💥 {name} drew a BOMB and had no Defuse! 💀 ELIMINATED!")
+            logging.info(f"draw_card: bomb drawn by {pid}, eliminated")
             if not check_win(room):
                 advance_turn(room)
     else:
@@ -458,6 +506,7 @@ def insert_bomb():
     rid  = data.get('room_id')
     pid  = data.get('player_id')
     pos  = int(data.get('position', 0))
+    logging.info(f"insert_bomb: room={rid} pid={pid} pos={pos}")
     if rid not in rooms: return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
     if room['state'] != 'defuse_pending': return jsonify({'error': 'No bomb pending'}), 400
@@ -478,6 +527,7 @@ def give_favor():
     rid     = data.get('room_id')
     pid     = data.get('player_id')
     card_id = data.get('card_id')
+    logging.info(f"give_favor: room={rid} pid={pid} card={card_id}")
     if rid not in rooms: return jsonify({'error': 'Room not found'}), 404
     room = rooms[rid]
     if room['state'] != 'favor_pending': return jsonify({'error': 'No favor pending'}), 400

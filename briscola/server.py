@@ -25,7 +25,7 @@ RANK_NAMES = {
     '7': 'Seven', '6': 'Six', '5': 'Five', '4': 'Four', '2': 'Two'
 }
 
-game = {}   # single global game state
+game = None   # single global game state (None when no active game)
 
 
 def card_rank(c):   return c.split('_')[0]
@@ -244,9 +244,17 @@ def new_game():
 
 @app.route('/api/game_state')
 def get_state():
-    if not game:
+    if game is None:
         return jsonify({'error': 'No active game'}), 404
     return jsonify(client_state())
+
+
+@app.route('/api/reset', methods=['POST'])
+def reset_game():
+    """Reset/clear the in-memory game state (useful during development)."""
+    global game
+    game = None
+    return jsonify({'ok': True})
 
 
 @app.route('/api/play_card', methods=['POST'])
@@ -281,4 +289,4 @@ def play_card():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=6000)

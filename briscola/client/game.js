@@ -20,7 +20,8 @@ let state = null;
 async function api(path, method = 'GET', body = null) {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(path, opts);
+  const baseUrl = window.location.port === '5500' ? 'http://127.0.0.1:6000' : '';
+  const res = await fetch(baseUrl + path, opts);
   return res.json();
 }
 

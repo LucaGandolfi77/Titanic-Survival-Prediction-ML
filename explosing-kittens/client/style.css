@@ -2,7 +2,7 @@
 .hand-card{width:88px;min-height:130px;border-radius:10px;border:2px solid;
   display:flex;flex-direction:column;align-items:center;justify-content:space-between;
   padding:8px 5px;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;
-  user-select:none}
+  -webkit-user-select:none;user-select:none}
 .hand-card:hover{transform:translateY(-10px) scale(1.05)}
 .hc-emoji{font-size:2rem;line-height:1}
 .hc-label{font-size:.7rem;font-weight:700;text-align:center;letter-spacing:.5px}
@@ -27,7 +27,7 @@
 /* ── Overlays ── */
 .panel-overlay{position:fixed;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:16px;
-  background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:50;padding:20px}
+  background:rgba(0,0,0,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);z-index:50;padding:20px}
 .panel-overlay h3{font-size:1.4rem;color:var(--gold);text-align:center}
 .nope-overlay{background:rgba(80,0,30,.92)}
 

@@ -1,0 +1,252 @@
+/* =========================================
+   💅 VELVETVILLE GLOBAL STYLES & VARIABLES
+   ========================================= */
+:root {
+    --bg-deep: #1a1a2e;
+    --bg-panel: #16213e;
+    --bg-chat: #0f3460;
+    --accent-pink: #e94560;
+    --accent-hot: #ff2e63;
+    --text-light: #ffffff;
+    --text-muted: #a0a0b5;
+    --gold: #ffdd59;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-light);
+    /* A fun, slightly chaotic fashion font stack */
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif; 
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Custom Scrollbar for that premium feel */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-panel); }
+::-webkit-scrollbar-thumb { background: var(--accent-pink); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-hot); }
+
+/* =========================================
+   ✨ TYPOGRAPHY & GLOW EFFECTS
+   ========================================= */
+h1, h2, h3 {
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.glowing-text {
+    color: var(--text-light);
+    text-shadow: 0 0 5px var(--accent-pink), 0 0 15px var(--accent-pink);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { text-shadow: 0 0 5px var(--accent-pink), 0 0 10px var(--accent-pink); }
+    100% { text-shadow: 0 0 8px var(--accent-hot), 0 0 20px var(--accent-hot); }
+}
+
+/* =========================================
+   🎮 MAIN LAYOUT (GAME VS UI)
+   ========================================= */
+#game-container {
+    flex: 2;
+    height: 100vh;
+    position: relative;
+    box-shadow: inset -10px 0 20px rgba(0,0,0,0.5); /* Depth between 3D and UI */
+}
+
+#ui-panel {
+    flex: 1;
+    min-width: 350px;
+    max-width: 450px;
+    background: var(--bg-panel);
+    padding: 20px;
+    border-left: 4px solid var(--accent-pink);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 10;
+}
+
+/* =========================================
+   🏆 LEADERBOARD
+   ========================================= */
+#leaderboard-list {
+    list-style: none;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#leaderboard-list li {
+    padding: 8px;
+    margin-bottom: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    border-left: 3px solid var(--gold);
+    transition: transform 0.2s;
+}
+
+#leaderboard-list li:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================
+   👠 VOTING BOOTH (SLAY OR NAY)
+   ========================================= */
+#voting-booth {
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-hot));
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(233, 69, 96, 0.4);
+    border: 2px solid #fff;
+}
+
+#voting-booth p {
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+/* Styling the Slider to look like a fashion runway */
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 5px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    margin-top: -6px;
+    box-shadow: 0 0 10px var(--gold);
+}
+
+/* =========================================
+   💬 GOSSIP ROOM (CHAT)
+   ========================================= */
+#chat-box {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg-chat);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.msg {
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border-bottom-left-radius: 2px;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    word-wrap: break-word;
+}
+
+.msg b { color: var(--accent-pink); }
+
+@keyframes popIn {
+    0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* =========================================
+   🎛️ BUTTONS & INPUTS
+   ========================================= */
+.input-group {
+    display: flex;
+    gap: 8px;
+}
+
+input[type="text"], input[type="password"] {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-family: inherit;
+    transition: 0.3s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+button {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    font-family: inherit;
+    font-size: 1em;
+    background: var(--accent-pink);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-transform: uppercase;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+button:hover {
+    transform: translateY(-2px) scale(1.05) rotate(-2deg);
+    background: var(--accent-hot);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+}
+
+button:active {
+    transform: translateY(2px) scale(0.95);
+    box-shadow: 0 0 0 rgba(0,0,0,0.3);
+}
+
+/* =========================================
+   🔐 LOGIN SCREEN SPECIFIC
+   ========================================= */
+.login-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, var(--bg-panel), var(--bg-deep));
+}
+
+.login-card {
+    background: var(--bg-panel);
+    padding: 40px;
+    border-radius: 15px;
+    border: 2px solid var(--accent-pink);
+    box-shadow: 0 0 30px rgba(233, 69, 96, 0.5);
+    text-align: center;
+    width: 350px;
+}
+
+.login-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}

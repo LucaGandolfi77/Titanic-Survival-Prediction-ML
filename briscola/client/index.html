@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Briscola</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🃏 Briscola</h1>
+    <button id="btn-new-game" onclick="newGame()">New Game</button>
+  </header>
+
+  <!-- Score bar -->
+  <div id="scorebar">
+    <div class="score-block">
+      <span class="score-label">🤖 AI</span>
+      <span id="score-ai" class="score-value">0</span>
+      <span class="score-sub" id="cap-ai">0 cards</span>
+    </div>
+    <div id="deck-area">
+      <div id="deck-pile">
+        <div class="card back" id="deck-count-label">–</div>
+        <div id="briscola-display" class="card briscola-card"></div>
+      </div>
+    </div>
+    <div class="score-block">
+      <span class="score-label">🧑 You</span>
+      <span id="score-player" class="score-value">0</span>
+      <span class="score-sub" id="cap-player">0 cards</span>
+    </div>
+  </div>
+
+  <!-- AI hand -->
+  <section id="ai-section">
+    <h2>AI Hand</h2>
+    <div id="ai-hand"></div>
+  </section>
+
+  <!-- Table -->
+  <section id="table-section">
+    <div id="table">
+      <div class="table-slot">
+        <p class="slot-label">AI played</p>
+        <div id="table-ai"></div>
+      </div>
+      <div id="last-trick-banner"></div>
+      <div class="table-slot">
+        <p class="slot-label">You played</p>
+        <div id="table-player"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Message bar -->
+  <div id="message-bar">
+    <p id="message-text">Press "New Game" to start.</p>
+  </div>
+
+  <!-- Player hand -->
+  <section id="player-section">
+    <h2>Your Hand</h2>
+    <div id="player-hand"></div>
+  </section>
+
+  <!-- Game over overlay -->
+  <div id="overlay" class="hidden">
+    <div id="overlay-box">
+      <div id="overlay-icon"></div>
+      <h2 id="overlay-title"></h2>
+      <p id="overlay-score"></p>
+      <button onclick="newGame()">Play Again</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

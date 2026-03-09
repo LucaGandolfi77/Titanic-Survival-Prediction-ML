@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exploding Kittens Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<canvas id="particles"></canvas>
+
+<!-- HOME SCREEN -->
+<div id="screen-home" class="screen active">
+  <div class="bomb-hero">💣</div>
+  <h1>Exploding<br/>Kittens</h1>
+  <p class="tagline">A card game of strategy, luck, and survival.</p>
+  <div class="home-form">
+    <input id="player-name" type="text" maxlength="20" placeholder="Your name…" autocomplete="off"/>
+    <button class="btn-primary big" onclick="createRoom()">🏠 Create Room</button>
+    <div class="divider">— or join —</div>
+    <div class="join-row">
+      <input id="room-code-input" type="text" maxlength="5"
+             placeholder="Room code" autocomplete="off" style="text-transform:uppercase"/>
+      <button class="btn-secondary" onclick="joinRoom()">Join →</button>
+    </div>
+    <div id="home-error" class="error-msg hidden"></div>
+  </div>
+</div>
+
+<!-- LOBBY SCREEN -->
+<div id="screen-lobby" class="screen">
+  <h2>Game Lobby</h2>
+  <div class="room-code-display">
+    Room Code: <span id="lobby-room-code">—</span>
+    <button class="btn-tiny" onclick="copyRoomCode()">📋 Copy</button>
+  </div>
+  <p class="lobby-hint">Share the room code with friends (2–4 players)</p>
+  <div id="lobby-players"></div>
+  <button id="btn-start" class="btn-primary big hidden" onclick="startGame()">
+    ▶ Start Game
+  </button>
+  <p id="waiting-msg" class="muted">Waiting for host to start…</p>
+  <div id="lobby-error" class="error-msg hidden"></div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="screen-game" class="screen">
+
+  <!-- Top HUD -->
+  <header id="game-hud">
+    <div id="hud-left">
+      <span id="hud-room">—</span>
+      <span id="hud-state-badge">Playing</span>
+    </div>
+    <div id="hud-center">
+      <div id="deck-area">
+        <div id="deck-pile">
+          <div class="card-back deck-card">🂠</div>
+          <div id="deck-count-lbl">52</div>
+        </div>
+        <div id="discard-pile">
+          <div id="discard-top-card" class="card-small"></div>
+          <div class="pile-label">Discard</div>
+        </div>
+      </div>
+    </div>
+    <div id="hud-right">
+      <span id="hud-turn">—'s turn</span>
+    </div>
+  </header>
+
+  <!-- Opponents -->
+  <div id="opponents-bar"></div>
+
+  <!-- Table / Special UIs -->
+  <div id="table-area">
+
+    <!-- See Future overlay -->
+    <div id="see-future-panel" class="panel-overlay hidden">
+      <h3>🔮 Top 3 Cards (only you can see this)</h3>
+      <div id="see-future-cards"></div>
+      <button class="btn-secondary" onclick="dismissSeeFuture()">Got it!</button>
+    </div>
+
+    <!-- Defuse bomb insert UI -->
+    <div id="defuse-panel" class="panel-overlay hidden">
+      <h3>🔧 Defused! Choose where to reinsert the Bomb</h3>
+      <p id="defuse-hint">Deck has <span id="defuse-deck-size">?</span> cards</p>
+      <div id="defuse-slider-wrap">
+        <input type="range" id="defuse-slider" min="0" max="20" value="0"/>
+        <div id="defuse-position-lbl">Position: 0 (top)</div>
+      </div>
+      <button class="btn-danger" onclick="insertBomb()">💣 Insert Here</button>
+    </div>
+
+    <!-- Favor UI -->
+    <div id="favor-panel" class="panel-overlay hidden">
+      <h3>🙏 Favor Request — choose a card to give away</h3>
+      <p id="favor-hint"></p>
+      <div id="favor-hand"></div>
+    </div>
+
+    <!-- NOPE window -->
+    <div id="nope-window" class="panel-overlay nope-overlay hidden">
+      <div id="nope-action-desc"></div>
+      <div id="nope-countdown">4</div>
+      <button id="btn-nope" class="btn-nope" onclick="playNope()">
+        🚫 NOPE!
+      </button>
+      <div id="nope-status"></div>
+    </div>
+
+    <!-- Normal table info -->
+    <div id="table-info">
+      <div id="turn-indicator"></div>
+    </div>
+  </div>
+
+  <!-- Game log -->
+  <div id="game-log">
+    <div class="log-title">📜 Game Log</div>
+    <div id="log-entries"></div>
+  </div>
+
+  <!-- Player hand -->
+  <div id="hand-section">
+    <div id="hand-header">
+      <span id="hand-title">Your Hand</span>
+      <span id="selected-info"></span>
+    </div>
+    <div id="player-hand"></div>
+  </div>
+
+  <!-- Action bar -->
+  <div id="action-bar">
+    <button id="btn-draw" class="btn-draw" onclick="drawCard()">
+      🃏 Draw Card
+    </button>
+    <button id="btn-play" class="btn-play" onclick="playSelected()">
+      ▶ Play Selected (<span id="play-count">0</span>)
+    </button>
+    <div id="target-selector" class="hidden">
+      <span>Target:</span>
+      <select id="target-select"></select>
+    </div>
+  </div>
+
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div id="screen-gameover" class="screen">
+  <div id="gameover-icon">🏆</div>
+  <h2 id="gameover-title">Winner!</h2>
+  <div id="gameover-log"></div>
+  <button class="btn-primary big" onclick="goHome()">🏠 Back to Home</button>
+</div>
+
+<div id="floaters"></div>
+<script src="game.js"></script>
+</body>
+</html>

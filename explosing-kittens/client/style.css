@@ -1,0 +1,91 @@
+/* ── Hand cards ── */
+.hand-card{width:88px;min-height:130px;border-radius:10px;border:2px solid;
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  padding:8px 5px;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;
+  user-select:none}
+.hand-card:hover{transform:translateY(-10px) scale(1.05)}
+.hc-emoji{font-size:2rem;line-height:1}
+.hc-label{font-size:.7rem;font-weight:700;text-align:center;letter-spacing:.5px}
+.hc-desc{font-size:.55rem;color:rgba(255,255,255,.6);text-align:center;line-height:1.3}
+#player-hand{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px}
+
+/* ── See Future panel ── */
+.sf-card{width:90px;border-radius:10px;border:2px solid;padding:10px 6px;
+  display:flex;flex-direction:column;align-items:center;gap:4px}
+.sf-pos{font-size:.65rem;color:rgba(255,255,255,.6)}
+.sf-emoji{font-size:2rem}
+.sf-label{font-size:.75rem;font-weight:700;text-align:center}
+#see-future-cards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ── Favor cards ── */
+.favor-card{width:80px;border-radius:10px;border:2px solid;padding:10px 6px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;transition:transform .15s,filter .15s}
+.favor-card:hover{transform:scale(1.1);filter:brightness(1.2)}
+#favor-hand{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ── Overlays ── */
+.panel-overlay{position:fixed;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:50;padding:20px}
+.panel-overlay h3{font-size:1.4rem;color:var(--gold);text-align:center}
+.nope-overlay{background:rgba(80,0,30,.92)}
+
+/* NOPE window */
+#nope-countdown{font-family:var(--font-h);font-size:5rem;color:var(--nope);
+  text-shadow:0 0 30px var(--nope);line-height:1}
+#nope-action-desc{font-size:1.1rem;text-align:center;line-height:1.6}
+.action-badge{background:var(--panel);border:1px solid var(--border);
+  border-radius:6px;padding:2px 10px;font-weight:700}
+#nope-status{font-size:.9rem;color:var(--muted)}
+
+/* Defuse slider */
+#defuse-slider-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;width:80%;max-width:380px}
+#defuse-slider{width:100%;accent-color:var(--green)}
+#defuse-position-lbl{font-size:.85rem;color:var(--muted)}
+
+/* Log */
+#game-log{width:100%;max-width:860px;padding:6px 14px;max-height:130px;overflow-y:auto}
+.log-title{font-size:.7rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.log-entry{font-size:.82rem;color:rgba(255,255,255,.8);padding:3px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);line-height:1.4}
+
+/* Action bar */
+#action-bar{width:100%;padding:10px 14px;display:flex;gap:10px;align-items:center;
+  background:rgba(0,0,0,.5);border-top:1px solid var(--border);flex-wrap:wrap}
+.btn-draw{background:linear-gradient(135deg,#1d3557,#2a4a6e);color:#fff;
+  border:none;border-radius:var(--radius);padding:12px 22px;font-size:1rem;
+  font-weight:700;cursor:pointer;transition:transform .12s,opacity .2s}
+.btn-draw:hover:not(:disabled){transform:scale(1.04)}
+.btn-play{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  border:none;border-radius:var(--radius);padding:12px 22px;font-size:1rem;
+  font-weight:700;cursor:pointer;transition:transform .12s,opacity .2s}
+.btn-play:hover:not(:disabled){transform:scale(1.04)}
+#target-selector{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)}
+#target-select{background:var(--panel);border:1px solid var(--border);
+  color:var(--white);border-radius:8px;padding:8px 12px;font-size:.9rem;outline:none}
+#hand-header{display:flex;justify-content:space-between;align-items:center;
+  padding:6px 14px;background:rgba(0,0,0,.3);border-top:1px solid var(--border)}
+#hand-title{font-size:.85rem;color:var(--muted);letter-spacing:1px}
+#selected-info{font-size:.85rem;color:var(--gold);font-weight:600}
+
+/* Opponent cards */
+.opp-turns{background:var(--red);color:#fff;border-radius:4px;
+  font-size:.65rem;padding:1px 5px;font-weight:700}
+.opp-dead{color:var(--red);font-size:.75rem;font-weight:700}
+.opp-count{font-size:.7rem;color:var(--muted)}
+
+/* Game over */
+#screen-gameover{gap:20px}
+#gameover-icon{font-size:6rem;animation:float 2s ease-in-out infinite}
+#screen-gameover h2{font-family:var(--font-h);font-size:3rem;color:var(--gold)}
+#gameover-log{max-width:480px;width:100%;background:var(--panel);
+  border:1px solid var(--border);border-radius:var(--radius);padding:14px;max-height:200px;overflow-y:auto}
+
+/* Floater */
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(1.3)}}
+@keyframes screen-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes nope-pulse{0%,100%{box-shadow:0 0 20px rgba(255,0,110,.5)}50%{box-shadow:0 0 40px rgba(255,0,110,.9)}}
+.muted{color:var(--muted);font-size:.9rem}
+.hidden{display:none!important}

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>🧬 Tamagotchi Social</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════ AUTH SCREEN ═══════════════ -->
+<div id="auth-screen" class="screen">
+  <div class="auth-card">
+    <div class="logo-anim">
+      <span class="logo-pet">🧬</span>
+      <h1>Tamagotchi Social</h1>
+      <p class="tagline">Raise. Evolve. Connect.</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="tab-btn active" onclick="showTab('login')">Login</button>
+      <button class="tab-btn"        onclick="showTab('register')">Register</button>
+    </div>
+    <div id="tab-login" class="tab-content">
+      <input id="login-username" type="text"     placeholder="Username" autocomplete="username"/>
+      <input id="login-password" type="password" placeholder="Password" autocomplete="current-password"/>
+      <button class="btn-primary" onclick="doLogin()">Sign In ✨</button>
+    </div>
+    <div id="tab-register" class="tab-content hidden">
+      <input id="reg-username" type="text"     placeholder="Choose a username"/>
+      <input id="reg-password" type="password" placeholder="Password (min 6 chars)"/>
+      <button class="btn-primary" onclick="doRegister()">Create Account 🚀</button>
+    </div>
+    <div id="auth-msg" class="msg-box hidden"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div id="app-screen" class="screen hidden">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <span class="topbar-logo">🧬 Tamagotchi Social</span>
+    <span class="topbar-user">👤 <span id="hdr-username"></span></span>
+    <button class="btn-sm" onclick="doLogout()">Logout</button>
+  </header>
+
+  <!-- Tab nav -->
+  <nav class="main-nav">
+    <button class="nav-btn active" onclick="switchTab('pet',this)">🐾 My Pet</button>
+    <button class="nav-btn"       onclick="switchTab('social',this)">👥 Social</button>
+    <button class="nav-btn"       onclick="switchTab('leaderboard',this)">🏆 Rankings</button>
+  </nav>
+
+  <!-- PET TAB -->
+  <div id="tab-pet" class="main-tab">
+    <!-- Create pet panel -->
+    <div id="create-pet-panel" class="card hidden">
+      <h2>🥚 Welcome! Create your first pet</h2>
+      <input id="new-pet-name" type="text" placeholder="Pet name" maxlength="20"/>
+      <div class="species-grid" id="species-selector">
+        <div class="species-card selected" data-species="blob"   onclick="selectSpecies(this)">
+          <span>🫧</span><p>Blob</p>
+        </div>
+        <div class="species-card" data-species="cat"    onclick="selectSpecies(this)">
+          <span>🐱</span><p>Cat</p>
+        </div>
+        <div class="species-card" data-species="dragon" onclick="selectSpecies(this)">
+          <span>🐲</span><p>Dragon</p>
+        </div>
+        <div class="species-card" data-species="bunny"  onclick="selectSpecies(this)">
+          <span>🐰</span><p>Bunny</p>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="createPet()">Hatch! 🥚</button>
+    </div>
+
+    <!-- Pet dashboard -->
+    <div id="pet-dashboard" class="hidden">
+      <div class="pet-grid">
+        <!-- Left: visual -->
+        <div class="card pet-display-card">
+          <div class="pet-scene" id="pet-scene">
+            <div class="pet-character" id="pet-character">
+              <div class="pet-body" id="pet-body">
+                <div class="eye left"  id="eye-l"></div>
+                <div class="eye right" id="eye-r"></div>
+                <div class="mouth"     id="pet-mouth"></div>
+                <div class="cheeks"    id="pet-cheeks"></div>
+              </div>
+              <div class="pet-shadow"></div>
+            </div>
+            <div class="zzz-container" id="zzz-container"></div>
+            <div class="hearts-container" id="hearts-container"></div>
+            <div class="sick-particles" id="sick-particles"></div>
+          </div>
+          <div class="pet-info">
+            <span class="pet-name" id="pet-name-disp">—</span>
+            <span class="pet-badge" id="pet-evo-badge">Egg</span>
+          </div>
+          <div class="pet-meta">
+            <span>⭐ Lv.<span id="pet-level">1</span></span>
+            <span>📅 Age: <span id="pet-age">0</span>d</span>
+            <span>🏆 <span id="pet-wins">0</span>W / <span id="pet-losses">0</span>L</span>
+          </div>
+          <div class="xp-bar-wrap">
+            <div class="xp-bar" id="xp-bar"></div>
+          </div>
+          <p class="xp-label">XP <span id="xp-val">0</span>/100 → Next Level</p>
+          <div id="pet-mood-label" class="mood-label">😊</div>
+        </div>
+
+        <!-- Right: stats + actions -->
+        <div class="pet-right">
+          <div class="card stats-card">
+            <h3>📊 Stats</h3>
+            <div class="stat-row">
+              <span>🍎 Hunger</span>
+              <div class="stat-bar-wrap"><div class="stat-bar hunger-bar" id="bar-hunger"></div></div>
+              <span id="val-hunger" class="stat-val">—</span>
+            </div>
+            <div class="stat-row">
+              <span>😊 Happiness</span>
+              <div class="stat-bar-wrap"><div class="stat-bar happy-bar" id="bar-happy"></div></div>
+              <span id="val-happy" class="stat-val">—</span>
+            </div>
+            <div class="stat-row">
+              <span>⚡ Energy</span>
+              <div class="stat-bar-wrap"><div class="stat-bar energy-bar" id="bar-energy"></div></div>
+              <span id="val-energy" class="stat-val">—</span>
+            </div>
+            <div class="stat-row">
+              <span>❤️ Health</span>
+              <div class="stat-bar-wrap"><div class="stat-bar health-bar" id="bar-health"></div></div>
+              <span id="val-health" class="stat-val">—</span>
+            </div>
+          </div>
+
+          <div class="card actions-card">
+            <h3>🎮 Actions</h3>
+            <div class="action-grid">
+              <button class="action-btn feed-btn"  onclick="petAction('feed')">
+                🍎<span>Feed</span>
+              </button>
+              <button class="action-btn play-btn"  onclick="petAction('play')">
+                🎮<span>Play</span>
+              </button>
+              <button class="action-btn sleep-btn" onclick="petAction('sleep')">
+                💤<span id="sleep-lbl">Sleep</span>
+              </button>
+              <button class="action-btn heal-btn"  onclick="petAction('heal')">
+                💊<span>Heal</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card log-card">
+            <h3>📝 Activity Log</h3>
+            <ul id="activity-log" class="activity-log"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dead panel -->
+      <div id="dead-panel" class="card dead-panel hidden">
+        <div class="dead-emoji">💀</div>
+        <h2>Your pet has passed away…</h2>
+        <p>Take better care next time!</p>
+        <button class="btn-primary" onclick="revivePet()">Create New Pet 🥚</button>
+      </div>
+    </div>
+  </div><!-- /tab-pet -->
+
+  <!-- SOCIAL TAB -->
+  <div id="tab-social" class="main-tab hidden">
+    <div class="social-grid">
+
+      <!-- Friends -->
+      <div class="card">
+        <h3>🤝 Friends</h3>
+        <div id="friends-list" class="friends-list"></div>
+      </div>
+
+      <!-- Friend requests -->
+      <div class="card">
+        <h3>📩 Friend Requests</h3>
+        <div id="friend-requests-list"></div>
+      </div>
+
+      <!-- Discover -->
+      <div class="card">
+        <h3>🌍 Discover Trainers</h3>
+        <div id="users-list"></div>
+      </div>
+
+      <!-- Challenges -->
+      <div class="card">
+        <h3>⚔️ Challenges</h3>
+        <div id="challenges-incoming">
+          <h4>Incoming</h4>
+          <div id="ch-incoming"></div>
+        </div>
+        <div id="challenges-outgoing">
+          <h4>Outgoing</h4>
+          <div id="ch-outgoing"></div>
+        </div>
+        <div id="challenges-completed">
+          <h4>Recent Battles</h4>
+          <div id="ch-completed"></div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tab-social -->
+
+  <!-- LEADERBOARD TAB -->
+  <div id="tab-leaderboard" class="main-tab hidden">
+    <div class="card">
+      <h3>🏆 Global Rankings</h3>
+      <table class="leaderboard-table" id="lb-table">
+        <thead>
+          <tr><th>#</th><th>Owner</th><th>Pet</th><th>Species</th><th>Stage</th><th>Lv</th><th>Wins</th></tr>
+        </thead>
+        <tbody id="lb-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /app-screen -->
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

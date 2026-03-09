@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Higher or Lower</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- Particle canvas -->
+  <canvas id="particles"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">🃏 Higher or Lower</div>
+    <div class="header-stats">
+      <div class="stat-pill" id="pill-score">
+        <span class="stat-icon">⭐</span>
+        <span id="hud-score">0</span>
+      </div>
+      <div class="stat-pill fire" id="pill-streak">
+        <span class="stat-icon">🔥</span>
+        <span id="hud-streak">0</span>
+      </div>
+      <div class="stat-pill gold" id="pill-multi">
+        <span class="stat-icon">✕</span>
+        <span id="hud-multi">1</span>
+      </div>
+    </div>
+    <button class="btn-ghost" onclick="showLeaderboard()">🏆 Leaderboard</button>
+  </header>
+
+  <!-- Main game area -->
+  <main id="main">
+
+    <!-- Start screen -->
+    <div id="screen-start" class="screen active">
+      <div class="start-card-demo">🃏</div>
+      <h1>Higher or Lower</h1>
+      <p class="subtitle">Guess if the next card is higher or lower.<br/>
+         Build streaks, multiply your score, beat the board!</p>
+      <button class="btn-primary big" onclick="startGame()">▶ Play Now</button>
+      <button class="btn-ghost" onclick="showLeaderboard()">🏆 View Leaderboard</button>
+    </div>
+
+    <!-- Game screen -->
+    <div id="screen-game" class="screen">
+
+      <div id="deck-counter">🂠 <span id="deck-count">52</span> cards left</div>
+
+      <!-- Card stage -->
+      <div id="card-stage">
+        <!-- Previous card (fades out on correct) -->
+        <div id="card-prev-wrap" class="card-wrap hidden"></div>
+
+        <!-- Current card -->
+        <div id="card-current-wrap" class="card-wrap">
+          <div id="card-current" class="playing-card"></div>
+        </div>
+
+        <!-- Next card (revealed on guess) -->
+        <div id="card-next-wrap" class="card-wrap hidden">
+          <div id="card-next" class="playing-card"></div>
+        </div>
+
+        <!-- Result badge -->
+        <div id="result-badge" class="hidden"></div>
+      </div>
+
+      <!-- Multiplier bar -->
+      <div id="multi-bar">
+        <div class="multi-label">MULTIPLIER</div>
+        <div class="multi-pips" id="multi-pips">
+          <div class="pip active"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+          <div class="pip"></div>
+        </div>
+        <div class="multi-next">×<span id="multi-next-val">1</span></div>
+      </div>
+
+      <!-- Streak progress (next 5 steps) -->
+      <div id="streak-bar">
+        <div class="streak-progress" id="streak-progress"></div>
+        <div class="streak-label">
+          🔥 Streak <span id="streak-val">0</span>
+          — next ×up in <span id="streak-to-next">5</span>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div id="guess-buttons">
+        <button id="btn-lower" class="guess-btn lower" onclick="guess('lower')">
+          <span class="arrow">↓</span>
+          <span class="label">Lower</span>
+        </button>
+        <button id="btn-higher" class="guess-btn higher" onclick="guess('higher')">
+          <span class="arrow">↑</span>
+          <span class="label">Higher</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Game over screen -->
+    <div id="screen-over" class="screen">
+      <div id="over-result-icon"></div>
+      <h2 id="over-title">Game Over</h2>
+      <div class="over-stats">
+        <div class="over-stat">
+          <div class="over-stat-val" id="over-score">0</div>
+          <div class="over-stat-label">SCORE</div>
+        </div>
+        <div class="over-stat">
+          <div class="over-stat-val" id="over-streak">0</div>
+          <div class="over-stat-label">STREAK</div>
+        </div>
+        <div class="over-stat">
+          <div class="over-stat-val" id="over-multi">×1</div>
+          <div class="over-stat-label">PEAK MULT</div>
+        </div>
+      </div>
+      <div id="save-form">
+        <input id="name-input" type="text" maxlength="20"
+               placeholder="Enter your name…" autocomplete="off"/>
+        <button class="btn-primary" onclick="saveScore()">💾 Save Score</button>
+      </div>
+      <div id="save-msg" class="hidden">✅ Score saved!</div>
+      <div class="over-actions">
+        <button class="btn-primary big" onclick="startGame()">🔄 Play Again</button>
+        <button class="btn-ghost" onclick="showLeaderboard()">🏆 Leaderboard</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Leaderboard modal -->
+  <div id="lb-modal" class="modal hidden">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeLeaderboard()">✕</button>
+      <h2>🏆 Leaderboard</h2>
+      <table id="lb-table">
+        <thead>
+          <tr><th>#</th><th>Name</th><th>Score</th><th>Streak</th></tr>
+        </thead>
+        <tbody id="lb-body"></tbody>
+      </table>
+      <button class="btn-primary" onclick="closeLeaderboard()">Close</button>
+    </div>
+  </div>
+
+  <!-- Floating +pts labels -->
+  <div id="floaters"></div>
+
+  <script src="game.js"></script>
+</body>
+</html>

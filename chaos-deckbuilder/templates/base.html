@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Chaos Deckbuilder{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% block content %}{% endblock %}
+
+  <script>
+    {% if daily is defined %}
+    window.DAILY = {{ daily|tojson }};
+    {% else %}
+    window.DAILY = null;
+    {% endif %}
+  </script>
+</body>
+</html>

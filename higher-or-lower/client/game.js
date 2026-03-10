@@ -3,6 +3,14 @@ const SUIT_ICON  = { H: '♥', D: '♦', C: '♣', S: '♠' };
 const SUIT_RED   = new Set(['H', 'D']);
 const RANK_LABEL = { J: 'J', Q: 'Q', K: 'K', A: 'A' };
 
+// Base URL for API calls. In some remote previews (github.dev / preview) POST
+// requests are not proxied to the local Flask server — force localhost.
+const API_BASE = (function(){
+  const host = window.location.hostname || '';
+  if (host.includes('github.dev') || host.includes('preview')) return 'http://localhost:5000';
+  return '';
+})();
+
 let busy = false;
 let peakMulti = 1;
 
@@ -341,8 +349,19 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function api(path, method = 'GET', body = null) {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(path, opts);
-  return res.json();
+  const url = API_BASE + path;
+  const res = await fetch(url, opts);
+
+  // Read raw text first to avoid json() throwing on empty/non-JSON responses
+  const text = await res.text();
+  if (!text) {
+    return { error: `Empty response (status ${res.status})` };
+  }
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    return { error: 'Invalid JSON response', status: res.status, body: text };
+  }
 }
 
 // ── Keyboard shortcuts ────────────────────────────────────────────────────────

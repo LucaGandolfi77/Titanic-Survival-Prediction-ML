@@ -1,10 +1,13 @@
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, Response
+import os, json
 from flask_cors import CORS
 import random, time, uuid
 import logging
 
 app = Flask(__name__, static_folder='client', static_url_path='')
 CORS(app)
+# gunicorn expects a WSGI callable named `server` in some setups — alias it
+server = app
 
 # Basic logging to console
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -545,3 +548,16 @@ def give_favor():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
+
+@app.route('/config.js')
+def config_js():
+    """Return a small JS snippet setting window.EK_API_BASE from env var.
+
+    This allows the frontend to pick up a server-configured API base URL
+    without templating the HTML file.
+    """
+    base = os.environ.get('EK_API_BASE', '')
+    # JSON-encode to safely quote the string
+    js = f"window.EK_API_BASE = {json.dumps(base)};"
+    return Response(js, mimetype='application/javascript')

@@ -59,6 +59,16 @@ let S = {
   serverLogTimer: null,
 };
 
+// ── Configurable backend host ─────────────────────────────────────────────────
+// Priority: `window.EK_API_BASE` -> <meta name="api-base" content="..."> -> auto-detect
+const BACKEND_BASE = (function() {
+  if (window.EK_API_BASE) return window.EK_API_BASE;
+  const m = document.querySelector('meta[name="api-base"]');
+  if (m && m.content && m.content.trim()) return m.content.trim();
+  // default behavior: when dev server serves static on port 5000 use relative paths
+  return (location.port === '5000') ? '' : 'http://127.0.0.1:5000';
+})();
+
 // ── Particle system ───────────────────────────────────────────────────────────
 const cvs = document.getElementById('particles');
 const ctx = cvs.getContext('2d');
@@ -147,9 +157,8 @@ function floater(text, color = '#ffd700') {
 async function api(path, method = 'GET', body = null) {
   resumeAC();
   try {
-    // When using Live Server (different port), route /api calls to Flask backend
-    const backendBase = (location.port === '5000') ? '' : 'http://127.0.0.1:5000';
-    const url = path.startsWith('/api') ? backendBase + path : path;
+    // Use configurable backend base for API calls
+    const url = path.startsWith('/api') ? BACKEND_BASE + path : path;
     const opts = { method, headers: { 'Content-Type': 'application/json' } };
     if (body) opts.body = JSON.stringify(body);
     const res = await fetch(url, opts);

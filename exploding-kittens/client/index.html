@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- OPTIONAL: set backend API base here, or via window.EK_API_BASE in another script -->
+  <meta name="api-base" content="" />
   <title>Exploding Kittens Online</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
@@ -162,6 +164,8 @@
 </div>
 
 <div id="floaters"></div>
+<!-- Config from server (sets window.EK_API_BASE if EK_API_BASE env var is set) -->
+<script src="/config.js"></script>
 <script src="game.js"></script>
 </body>
 </html>

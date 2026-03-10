@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Briscola 🃏</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, serif;
+      background: radial-gradient(ellipse at center, #1a6b35 0%, #0d3d1e 100%);
+      min-height: 100vh; color: #fff; padding: 16px;
+    }
+    h1 { text-align: center; font-size: 2em; margin-bottom: 12px; letter-spacing: 2px; }
+    .info-bar {
+      display: flex; justify-content: space-around; align-items: center;
+      background: rgba(0,0,0,0.35); border-radius: 12px; padding: 12px;
+      margin-bottom: 14px; backdrop-filter: blur(6px);
+    }
+    .score-box { text-align: center; }
+    .score-box .lbl { font-size: .78em; opacity: .75; }
+    .score-box .val { font-size: 2em; font-weight: bold; }
+    .card {
+      display: inline-flex; flex-direction: column;
+      justify-content: space-between;
+      background: #fff8ee; border-radius: 10px;
+      border: 2px solid #c8a96e;
+      width: 72px; height: 105px; padding: 6px;
+      box-shadow: 3px 3px 10px rgba(0,0,0,.5);
+    }
+    .card.red { color: #c00; }
+    .card.black { color: #111; }
+    .card .top { font-size: .82em; font-weight: bold; }
+    .card .mid { text-align: center; font-size: 1.7em; margin: auto; }
+    .card .bot { font-size: .82em; font-weight: bold; text-align: right; }
+    .card.briscola-highlight { border: 3px solid gold; }
+    .deck-lbl { text-align: center; font-size: .78em; opacity: .75; margin-top: 4px; }
+    .card-btn {
+      background: none; border: none; cursor: pointer; padding: 4px;
+      transition: transform .15s;
+    }
+    .card-btn:hover .card {
+      transform: translateY(-12px);
+      border-color: gold;
+      box-shadow: 0 14px 24px rgba(0,0,0,.55);
+    }
+    .area {
+      background: rgba(0,0,0,0.22); border-radius: 12px;
+      padding: 14px; margin-bottom: 14px;
+      backdrop-filter: blur(4px);
+    }
+    .lbl-section { font-size: .75em; text-transform: uppercase; opacity: .65; margin-bottom: 8px; }
+    .hand-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+    .msg {
+      background: rgba(0,0,0,.4); border-radius: 10px; padding: 12px 16px;
+      text-align: center; font-size: 1.1em; margin-bottom: 14px;
+    }
+    .trick-row { display: flex; gap: 28px; justify-content: center; align-items: flex-start; }
+    .trick-player { text-align: center; }
+    .trick-player .name { font-size: .78em; opacity: .8; margin-bottom: 4px; }
+    .badge {
+      display: inline-block; background: gold; color: #333;
+      border-radius: 20px; padding: 2px 10px; font-size: .72em; margin-top: 5px;
+    }
+    .vs { font-size: 1.6em; align-self: center; }
+    .card-back {
+      width: 72px; height: 105px; border-radius: 10px;
+      background: repeating-linear-gradient(45deg, #8b0000, #8b0000 6px, #a00 6px, #a00 12px);
+      border: 2px solid #c8a96e; display: flex; align-items: center;
+      justify-content: center; font-size: 1.4em; box-shadow: 3px 3px 10px rgba(0,0,0,.5);
+    }
+    .ai-lead-row { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .btn {
+      display: block; width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #d4a017, #b8860b);
+      color: #fff; border: none; border-radius: 12px;
+      font-size: 1.15em; font-family: Georgia, serif; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: opacity .15s;
+    }
+    .btn:hover { opacity: .88; }
+    .welcome { text-align: center; padding: 48px 16px; }
+    .welcome p { font-size: 1.1em; opacity: .85; margin-bottom: 24px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<h1>🃏 Briscola</h1>
+
+{% macro draw_card(c, extra_class='') %}
+  {% set is_red = c.suit in ['Coppe','Denari'] %}
+  <div class="card {{ 'red' if is_red else 'black' }} {{ extra_class }}">
+    <div class="top">{{ rank_names[c.rank] }}</div>
+    <div class="mid">{{ suit_symbols[c.suit] }}</div>
+    <div class="bot">{{ suit_symbols[c.suit] }}</div>
+  </div>
+{% endmacro %}
+
+{% if game is none %}
+  <div class="welcome">
+    <p>Benvenuto a Briscola!<br>Sfida l'AI in una partita a carte.</p>
+    <form method="post" action="/new_game">
+      <button class="btn">🃏 Inizia Partita</button>
+    </form>
+  </div>
+
+{% else %}
+
+  <!-- Barra punteggi + briscola -->
+  <div class="info-bar">
+    <div class="score-box">
+      <div class="lbl">👤 Tu</div>
+      <div class="val">{{ game.player_score }}</div>
+    </div>
+    <div>
+      <div class="lbl-section" style="text-align:center">Briscola</div>
+      {{ draw_card(game.briscola, 'briscola-highlight') }}
+      <div class="deck-lbl">Mazzo: {{ game.deck|length }} carte</div>
+    </div>
+    <div class="score-box">
+      <div class="lbl">🤖 AI</div>
+      <div class="val">{{ game.ai_score }}</div>
+    </div>
+  </div>
+
+  <!-- Messaggio stato -->
+  <div class="msg">{{ game.message }}</div>
+
+  <!-- Ultima mano giocata -->
+  {% if game.last_trick %}
+  <div class="area">
+    <div class="lbl-section">Ultima mano</div>
+    <div class="trick-row">
+      <div class="trick-player">
+        <div class="name">👤 Tu</div>
+        {{ draw_card(game.last_trick.player) }}
+        {% if game.last_trick.winner == 'player' %}<div class="badge">✓ Vince</div>{% endif %}
+      </div>
+      <div class="vs">⚔️</div>
+      <div class="trick-player">
+        <div class="name">🤖 AI</div>
+        {{ draw_card(game.last_trick.ai) }}
+        {% if game.last_trick.winner == 'ai' %}<div class="badge">✓ Vince</div>{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Carta aperta dall'AI (quando tocca all'AI aprire) -->
+  {% if not game.player_first and game.ai_lead %}
+  <div class="area">
+    <div class="lbl-section">L'AI ha aperto con</div>
+    <div class="ai-lead-row">
+      <div class="card-back">🂠</div>
+      {{ draw_card(game.ai_lead) }}
+      <span style="font-size:.95em; opacity:.85">← Scegli come rispondere!</span>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Mano del giocatore -->
+  {% if not game.game_over %}
+  <div class="area">
+    <div class="lbl-section">La tua mano ({{ game.player_hand|length }} carte) — clicca per giocare</div>
+    <div class="hand-row">
+      {% for card in game.player_hand %}
+        {% set is_red = card.suit in ['Coppe','Denari'] %}
+        <form method="post" action="/play/{{ loop.index0 }}">
+          <button type="submit" class="card-btn">
+            <div class="card {{ 'red' if is_red else 'black' }}">
+              <div class="top">{{ rank_names[card.rank] }}</div>
+              <div class="mid">{{ suit_symbols[card.suit] }}</div>
+              <div class="bot">{{ suit_symbols[card.suit] }}</div>
+            </div>
+          </button>
+        </form>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Nuova partita -->
+  <form method="post" action="/new_game">
+    <button class="btn">🔄 Nuova Partita</button>
+  </form>
+
+{% endif %}
+</body>
+</html>

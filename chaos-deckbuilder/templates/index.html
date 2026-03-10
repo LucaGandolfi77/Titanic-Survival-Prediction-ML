@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Chaos Deckbuilder{% endblock %}
+{% block content %}
+<div class="hero">
+  <div class="glass">
+    <p class="eyebrow">Minimal Flask Deckbuilder</p>
+    <h1>Chaos Deckbuilder</h1>
+    <p class="lead">
+      Buy cards between rounds, build an increasingly ridiculous deck, chase secret missions,
+      flex pointless cosmetics, and survive today's global nonsense.
+    </p>
+
+    <div class="daily-banner">
+      <strong>Daily Modifier:</strong> {{ daily.name }} — {{ daily.desc }}
+    </div>
+
+    <div class="forms">
+      <form action="/create" method="post" class="panel">
+        <h2>Create Room</h2>
+        <input name="username" placeholder="Your name" required>
+        <button type="submit">Create Match</button>
+      </form>
+
+      <form action="/join" method="post" class="panel">
+        <h2>Join Room</h2>
+        <input name="username" placeholder="Your name" required>
+        <input name="room_code" placeholder="Room code" maxlength="5" required>
+        <button type="submit">Join Match</button>
+      </form>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature">Secret mission reward card</div>
+      <div class="feature">Daily world rules</div>
+      <div class="feature">Tiny live PvP rooms</div>
+      <div class="feature">Ridiculous achievements</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

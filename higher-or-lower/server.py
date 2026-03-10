@@ -153,4 +153,4 @@ def leaderboard():
     return jsonify([{'name': r[0], 'streak': r[1], 'score': r[2]} for r in rows])
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5500)

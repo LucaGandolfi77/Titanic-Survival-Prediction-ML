@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Room {{ room_code }}{% endblock %}
+{% block content %}
+<div id="game-root"
+     data-room="{{ room_code }}"
+     data-username="{{ username }}">
+  <header class="topbar glass">
+    <div>
+      <div class="eyebrow">Room</div>
+      <h1>{{ room_code }}</h1>
+    </div>
+    <div class="daily-chip">
+      <span id="daily-name">Loading...</span>
+    </div>
+  </header>
+
+  <main class="game-layout">
+    <section class="left-col">
+      <div class="glass section">
+        <h2>You</h2>
+        <div id="you-stats" class="stats"></div>
+      </div>
+
+      <div class="glass section">
+        <h2>Opponent</h2>
+        <div id="opponents"></div>
+      </div>
+
+      <div class="glass section">
+        <h2>Secret Mission</h2>
+        <div id="mission-box"></div>
+      </div>
+
+      <div class="glass section">
+        <h2>Achievements</h2>
+        <div id="achievements"></div>
+      </div>
+    </section>
+
+    <section class="center-col">
+      <div class="glass section">
+        <div class="section-row">
+          <h2>Market</h2>
+          <div id="phase-badge" class="badge">Lobby</div>
+        </div>
+        <div id="market" class="card-grid"></div>
+      </div>
+
+      <div class="glass section">
+        <div class="section-row">
+          <h2>Your Hand</h2>
+          <button id="submit-btn" class="action">Lock In Cards</button>
+        </div>
+        <div class="help">Select up to 3 cards for this round.</div>
+        <div id="hand" class="hand-grid"></div>
+      </div>
+
+      <div class="glass section">
+        <h2>Battle Log</h2>
+        <div id="battle-log" class="log"></div>
+      </div>
+    </section>
+
+    <section class="right-col">
+      <div class="glass section">
+        <h2>Cosmetic Shop</h2>
+        <div class="help">Totally useless. Extremely important.</div>
+
+        <div class="cosmetic-group">
+          <h3>Tables</h3>
+          <div id="tables-options" class="pill-list"></div>
+        </div>
+
+        <div class="cosmetic-group">
+          <h3>Card Backs</h3>
+          <div id="backs-options" class="pill-list"></div>
+        </div>
+
+        <div class="cosmetic-group">
+          <h3>Particles</h3>
+          <div id="particles-options" class="pill-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}

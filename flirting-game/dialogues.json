@@ -1,0 +1,238 @@
+{
+"meta": {
+    "title": "Speed Crush",
+    "timerSeconds": 8,
+    "fastThreshold": 0.65,
+    "streakNeeded": 2
+  },
+  "characters": {
+    "female": [
+      {
+        "id": "ivy",
+        "name": "Ivy",
+        "tagline": "Street artist · fearless smile",
+        "palette": ["#ff4fa3", "#4df3ff"],
+        "chapters": {
+          "start": {
+            "id": "f_start",
+            "chapter": 1,
+            "text": "Ivy leans against a neon mural and grins. \"You have exactly one sentence to prove you're more interesting than this wall.\"",
+            "choices": [
+              {"text": "Then I'll be brief: you already made the city look jealous.", "score": 4, "next": "f_arcade"},
+              {"text": "Easy. I can tell you collect moments, not things.", "score": 3, "next": "f_arcade"},
+              {"text": "I brought confidence and dangerously good timing.", "score": 2, "next": "f_arcade"},
+              {"text": "I was actually going to ask about the wall.", "score": 1, "next": "f_arcade"}
+            ]
+          },
+          "arcade": {
+            "id": "f_arcade",
+            "chapter": 2,
+            "text": "She pulls you into a retro arcade. \"Beat me at air hockey or impress me with a comeback. Your choice.\"",
+            "choices": [
+              {"text": "If I lose, I still win because I get to hear you celebrate.", "score": 4, "next": "f_rooftop"},
+              {"text": "Let's call it teamwork and pretend the sparks are from the machine.", "score": 3, "next": "f_rooftop"},
+              {"text": "I play better when my opponent smiles like that.", "score": 3, "next": "f_rooftop"},
+              {"text": "I'm competitive, but I'm willing to be distracted.", "score": 2, "next": "f_rooftop"}
+            ],
+            "secret": {
+              "condition": {"streakAtLeast": 2},
+              "next": "f_secret"
+            }
+          },
+          "secret": {
+            "id": "f_secret",
+            "chapter": 2,
+            "text": "Because you answered so quickly, Ivy laughs and tugs you into a hidden photo booth. \"Okay, speedster. One candid truth before we go back out.\"",
+            "choices": [
+              {"text": "I like people who make chaos feel like music.", "score": 4, "next": "f_rooftop", "secretBoost": 1},
+              {"text": "I stop acting cool around people with magnetic energy.", "score": 3, "next": "f_rooftop", "secretBoost": 1},
+              {"text": "I'm trying not to remember every detail about this moment.", "score": 3, "next": "f_rooftop", "secretBoost": 1},
+              {"text": "You are making this suspiciously easy to enjoy.", "score": 2, "next": "f_rooftop", "secretBoost": 1}
+            ]
+          },
+          "rooftop": {
+            "id": "f_rooftop",
+            "chapter": 3,
+            "text": "On a rooftop lit by string lights, Ivy nudges your shoulder. \"Last question. Why should I make this a second date?\"",
+            "choices": [
+              {"text": "Because with you, every place upgrades into a story worth repeating.", "score": 5, "ending": "great"},
+              {"text": "Because I'm fun, present, and clearly excellent at choosing company.", "score": 4, "ending": "good"},
+              {"text": "Because I want to keep learning what makes you light up.", "score": 4, "ending": "great"},
+              {"text": "Because this feels promising, and I'm not pretending otherwise.", "score": 3, "ending": "good"}
+            ]
+          }
+        }
+      },
+      {
+        "id": "lena",
+        "name": "Lena",
+        "tagline": "Indie singer · warm confidence",
+        "palette": ["#ffd44d", "#ff4fa3"],
+        "chapters": {
+          "start": {
+            "id": "lf_start",
+            "chapter": 1,
+            "text": "Lena adjusts the mic after rehearsal and smiles. \"You're late for the encore. Tell me something worth staying for.\"",
+            "choices": [
+              {"text": "I was hoping for a private setlist, starting with your smile.", "score": 4, "next": "lf_cafe"},
+              {"text": "I only need one song, if it's the one that gets your attention.", "score": 3, "next": "lf_cafe"},
+              {"text": "I figured a great night deserved a better conversation partner.", "score": 3, "next": "lf_cafe"},
+              {"text": "Maybe I can earn one extra minute first.", "score": 2, "next": "lf_cafe"}
+            ]
+          },
+          "arcade": {
+            "id": "lf_cafe",
+            "chapter": 2,
+            "text": "At an after-hours cafe, Lena traces circles on her cup. \"What's your most dangerous quality on a date?\"",
+            "choices": [
+              {"text": "I pay attention too well, and suddenly nothing small stays unnoticed.", "score": 4, "next": "lf_rooftop"},
+              {"text": "I make people laugh right before they try to stay mysterious.", "score": 3, "next": "lf_rooftop"},
+              {"text": "I remember exact details, especially the beautiful ones.", "score": 4, "next": "lf_rooftop"},
+              {"text": "I get honest fast when the chemistry is real.", "score": 3, "next": "lf_rooftop"}
+            ],
+            "secret": {
+              "condition": {"streakAtLeast": 2},
+              "next": "lf_secret"
+            }
+          },
+          "secret": {
+            "id": "lf_secret",
+            "chapter": 2,
+            "text": "Lena taps the table with a grin. \"Fast answer. Bonus round. Finish this lyric: tonight could become...\"",
+            "choices": [
+              {"text": "...the reason tomorrow feels overrated.", "score": 4, "next": "lf_rooftop", "secretBoost": 1},
+              {"text": "...my favorite mistake if you keep smiling like that.", "score": 3, "next": "lf_rooftop", "secretBoost": 1},
+              {"text": "...a chorus I don't want to end yet.", "score": 4, "next": "lf_rooftop", "secretBoost": 1},
+              {"text": "...dangerous for anyone trying to stay cool.", "score": 3, "next": "lf_rooftop", "secretBoost": 1}
+            ]
+          },
+          "rooftop": {
+            "id": "lf_rooftop",
+            "chapter": 3,
+            "text": "Outside the venue, the night finally cools down. Lena steps closer. \"So, was this chemistry or just good lighting?\"",
+            "choices": [
+              {"text": "Lighting helped, but chemistry did all the heavy lifting.", "score": 5, "ending": "great"},
+              {"text": "If it were just lighting, I wouldn't still be leaning toward you.", "score": 4, "ending": "great"},
+              {"text": "Let's test it on a second date and call it research.", "score": 4, "ending": "good"},
+              {"text": "Strong chemistry, excellent soundtrack, very convincing evidence.", "score": 3, "ending": "good"}
+            ]
+          }
+        }
+      }
+    ],
+    "male": [
+      {
+        "id": "kai",
+        "name": "Kai",
+        "tagline": "Game designer · charming trouble",
+        "palette": ["#4df3ff", "#8cff77"],
+        "chapters": {
+          "start": {
+            "id": "m_start",
+            "chapter": 1,
+            "text": "Kai looks up from a sketchbook and smirks. \"Convince me you're not the distraction I'm about to absolutely enjoy.\"",
+            "choices": [
+              {"text": "Too late. I was aiming for unforgettable, not subtle.", "score": 4, "next": "m_river"},
+              {"text": "I can be both the distraction and the best part of your evening.", "score": 4, "next": "m_river"},
+              {"text": "Depends. Do I get points for confidence and timing?", "score": 3, "next": "m_river"},
+              {"text": "I can start over if you want a slower first impression.", "score": 2, "next": "m_river"}
+            ]
+          },
+          "river": {
+            "id": "m_river",
+            "chapter": 2,
+            "text": "Kai walks with you along the riverfront, neon reflections dancing across the water. \"So tell me, are you always this smooth, or am I getting the deluxe edition?\"",
+            "choices": [
+              {"text": "This is the premium version. It only unlocks around dangerous smiles.", "score": 4, "next": "m_skyline"},
+              {"text": "Honestly? You're pulling the good lines out of me on purpose.", "score": 3, "next": "m_skyline"},
+              {"text": "I'd say natural talent, but chemistry deserves some credit.", "score": 3, "next": "m_skyline"},
+              {"text": "I could get even smoother if you moved a little closer.", "score": 4, "next": "m_skyline"}
+            ],
+            "secret": {
+              "condition": {"streakAtLeast": 2},
+              "next": "m_secret"
+            }
+          },
+          "secret": {
+            "id": "m_secret",
+            "chapter": 2,
+            "text": "Kai stops under a flickering sign and laughs. \"Fast answers? That's unfairly attractive. Secret level, then: tell me one thing you'd ruin your sleep schedule for.\"",
+            "choices": [
+              {"text": "A midnight conversation with the right kind of trouble.", "score": 4, "next": "m_skyline", "secretBoost": 1},
+              {"text": "Someone who makes time feel optional.", "score": 4, "next": "m_skyline", "secretBoost": 1},
+              {"text": "A kiss that clearly started as a bad decision.", "score": 5, "next": "m_skyline", "secretBoost": 1},
+              {"text": "The exact moment a spark turns impossible to ignore.", "score": 3, "next": "m_skyline", "secretBoost": 1}
+            ]
+          },
+          "rooftop": {
+            "id": "m_skyline",
+            "chapter": 3,
+            "text": "At the skyline overlook, Kai leans on the rail and looks at you like the rest of the city has been politely dismissed. \"Final round. Why should I text you tomorrow instead of spending all night wondering?\"",
+            "choices": [
+              {"text": "Because wondering is fun, but seeing me again is obviously the better sequel.", "score": 5, "ending": "great"},
+              {"text": "Because this vibe deserves a part two with fewer witnesses.", "score": 4, "ending": "great"},
+              {"text": "Because we'd be annoyingly good at this with one more night.", "score": 4, "ending": "good"},
+              {"text": "Because I like where this is going, and I think you do too.", "score": 3, "ending": "good"}
+            ]
+          }
+        }
+      },
+      {
+        "id": "lucien",
+        "name": "Lucien",
+        "tagline": "French photographer · velvet mischief",
+        "palette": ["#7a5cff", "#ff8fb7"],
+        "chapters": {
+          "start": {
+            "id": "fr_start",
+            "chapter": 1,
+            "text": "Lucien lowers his camera, studies you for one dangerous second, and smiles. \"Bonsoir, mon coeur. Are you always this distracting, or is Paris secretly following you around?\"",
+            "choices": [
+              {"text": "Only when someone looks at me like I'm already a favorite memory.", "score": 4, "next": "fr_cafe"},
+              {"text": "If Paris is here, it's probably hiding in your accent.", "score": 4, "next": "fr_cafe"},
+              {"text": "I was fine until you turned this into a scene worth ruining my composure for.", "score": 3, "next": "fr_cafe"},
+              {"text": "Say that again slower and I might fall in love irresponsibly.", "score": 5, "next": "fr_cafe"}
+            ]
+          },
+          "arcade": {
+            "id": "fr_cafe",
+            "chapter": 2,
+            "text": "At a tiny candlelit cafe, Lucien swirls his espresso and murmurs, \"Tell me something reckless, cheri. I adore honesty when it arrives overdressed.\"",
+            "choices": [
+              {"text": "I could absolutely behave tonight, but that feels like a waste of chemistry.", "score": 4, "next": "fr_bridge"},
+              {"text": "I like eye contact that feels one second away from trouble.", "score": 4, "next": "fr_bridge"},
+              {"text": "I act calm when I'm interested. It's my most transparent lie.", "score": 3, "next": "fr_bridge"},
+              {"text": "You make romance feel like a competitive sport, and I intend to win.", "score": 5, "next": "fr_bridge"}
+            ],
+            "secret": {
+              "condition": {"streakAtLeast": 2},
+              "next": "fr_secret"
+            }
+          },
+          "secret": {
+            "id": "fr_secret",
+            "chapter": 2,
+            "text": "Lucien laughs softly and reaches across the table. \"Tres bien. Bonus scene. Finish this for me: ce soir, toi et moi...\"",
+            "choices": [
+              {"text": "...turn one flirt into a story neither of us will downplay tomorrow.", "score": 5, "next": "fr_bridge", "secretBoost": 1},
+              {"text": "...become exactly the kind of bad idea that deserves a second date.", "score": 4, "next": "fr_bridge", "secretBoost": 1},
+              {"text": "...make the night jealous of how well we're wearing it.", "score": 4, "next": "fr_bridge", "secretBoost": 1},
+              {"text": "...stop pretending this is casual and enjoy the view.", "score": 3, "next": "fr_bridge", "secretBoost": 1}
+            ]
+          },
+          "rooftop": {
+            "id": "fr_bridge",
+            "chapter": 3,
+            "text": "On a moonlit bridge, Lucien brushes your hand with his and smiles like he already knows the answer. \"Derniere question, mon coeur. Is this only attraction, or are we about to become a very beautiful problem?\"",
+            "choices": [
+              {"text": "A beautiful problem. The kind people write songs about and regret nothing.", "score": 5, "ending": "great"},
+              {"text": "Attraction started it, but you made it impossible to stay light about this.", "score": 4, "ending": "great"},
+              {"text": "Let's call it danger with excellent taste and schedule a second date.", "score": 4, "ending": "good"},
+              {"text": "If this is trouble, then at least it's dressed impeccably.", "score": 3, "ending": "good"}
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

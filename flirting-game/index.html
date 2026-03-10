@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speed Crush</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-orb orb-a"></div>
+  <div class="bg-orb orb-b"></div>
+  <div class="bg-orb orb-c"></div>
+
+  <main class="app-shell">
+    <section class="panel hero-panel active" id="setup-screen">
+      <div class="badge">Interactive Story</div>
+      <h1>Speed Crush</h1>
+      <p class="lead">Pick your vibe, answer fast, and unlock extra flirty scenes before the moment slips away.</p>
+
+      <div class="setup-grid">
+        <label class="field">
+          <span>Your character</span>
+          <select id="player-gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>You want to date</span>
+          <select id="interest-gender">
+            <option value="female">Women</option>
+            <option value="male">Men</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="stats-row intro-stats">
+        <div class="stat-card">
+          <span class="stat-label">Goal</span>
+          <strong>Reach chapter 3</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Bonus</span>
+          <strong>Fast choices unlock secrets</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Style</span>
+          <strong>Bright, playful, dynamic</strong>
+        </div>
+      </div>
+
+      <button class="primary-btn" id="start-btn">Start the story</button>
+    </section>
+
+    <section class="panel game-panel" id="game-screen">
+      <div class="topbar">
+        <div>
+          <div class="badge" id="chapter-label">Chapter 1</div>
+          <h2 id="character-name">Character</h2>
+        </div>
+        <button class="ghost-btn" id="restart-btn">Restart</button>
+      </div>
+
+      <div class="character-card">
+        <div class="avatar-wrap">
+          <div class="avatar" id="avatar">A</div>
+          <div class="spark spark-1"></div>
+          <div class="spark spark-2"></div>
+        </div>
+        <div>
+          <p class="character-meta" id="character-meta">City lights · Mystery energy</p>
+          <p class="dialogue-text" id="dialogue-text">Loading story...</p>
+        </div>
+      </div>
+
+      <div class="timer-block">
+        <div class="timer-copy">
+          <span>Reaction boost</span>
+          <strong id="timer-text">8.0s</strong>
+        </div>
+        <div class="timer-track">
+          <div class="timer-fill" id="timer-fill"></div>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label">Charm</span>
+          <strong id="score-value">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Fast streak</span>
+          <strong id="streak-value">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Secret scenes</span>
+          <strong id="secret-value">0</strong>
+        </div>
+      </div>
+
+      <div class="choices" id="choices"></div>
+    </section>
+
+    <section class="panel end-panel" id="end-screen">
+      <div class="badge" id="end-badge">Ending</div>
+      <h2 id="end-title">You made it</h2>
+      <p class="lead" id="end-text"></p>
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label">Final charm</span>
+          <strong id="final-score">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Best streak</span>
+          <strong id="final-streak">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Unlocked scenes</span>
+          <strong id="final-secret">0</strong>
+        </div>
+      </div>
+      <button class="primary-btn" id="play-again-btn">Play again</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

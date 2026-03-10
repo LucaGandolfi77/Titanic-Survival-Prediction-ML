@@ -85,5 +85,10 @@
   </main>
 </div>
 
+<audio id="sfx-buy" preload="auto" src="{{ url_for('static', filename='sounds/buy.mp3') }}"></audio>
+<audio id="sfx-lock" preload="auto" src="{{ url_for('static', filename='sounds/lock.mp3') }}"></audio>
+<audio id="sfx-hit" preload="auto" src="{{ url_for('static', filename='sounds/hit.mp3') }}"></audio>
+<audio id="sfx-win" preload="auto" src="{{ url_for('static', filename='sounds/win.mp3') }}"></audio>
+<audio id="sfx-rare" preload="auto" src="{{ url_for('static', filename='sounds/rare.mp3') }}"></audio>
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 {% endblock %}

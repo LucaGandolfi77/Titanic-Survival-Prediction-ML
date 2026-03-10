@@ -218,3 +218,67 @@ button, .action {
 @media (max-width: 1080px) {
   .game-layout { grid-template-columns: 1fr; }
 }
+
+/* Rarity styles */
+.rarity {
+  text-transform: uppercase;
+  font-size: .74rem;
+  letter-spacing: .08em;
+}
+.rarity-common { color: #cbd5e1; }
+.rarity-uncommon { color: #34d399; }
+.rarity-rare { color: #60a5fa; }
+.rarity-epic { color: #c084fc; }
+.rarity-legendary { color: #f59e0b; }
+
+.tribe-line {
+  color: var(--muted);
+  font-size: .82rem;
+  margin-bottom: 6px;
+}
+
+/* Card animations and flair */
+.game-card {
+  animation: fadeUp .28s ease;
+}
+
+.game-card[data-rarity="rare"],
+.game-card[data-rarity="epic"],
+.game-card[data-rarity="legendary"] {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 24px rgba(139,92,246,.18);
+}
+
+.game-card.selected {
+  animation: pulseSelect .5s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulseSelect {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Cosmetic particle flair */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.08) 0 2px, transparent 3px),
+    radial-gradient(circle at 70% 20%, rgba(34,211,238,.10) 0 2px, transparent 3px),
+    radial-gradient(circle at 60% 80%, rgba(139,92,246,.09) 0 2px, transparent 3px);
+  animation: drift 12s linear infinite;
+  opacity: .45;
+}
+
+@keyframes drift {
+  from { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  to { transform: translateY(0px); }
+}

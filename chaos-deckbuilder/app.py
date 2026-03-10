@@ -4,6 +4,7 @@ from datetime import date
 import random
 import string
 import copy
+import time
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "chaos-deckbuilder-secret"
@@ -14,20 +15,54 @@ STARTING_COINS = 4
 HAND_SIZE = 5
 ROOMS = {}
 
+BOT_WAIT_SECONDS = 12
+RARITY_WEIGHTS = {
+    "common": 60,
+    "uncommon": 25,
+    "rare": 10,
+    "epic": 4,
+    "legendary": 1
+}
+
 CARD_POOL = [
-    {"id": "strike", "name": "Strike", "cost": 1, "color": "red", "power": 2, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+2 power"},
-    {"id": "guard", "name": "Guard", "cost": 1, "color": "blue", "power": 0, "shield": 2, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+2 shield"},
-    {"id": "spark", "name": "Spark", "cost": 2, "color": "yellow", "power": 1, "shield": 0, "heal": 0, "draw": 1, "gold": 0, "poison": 0, "text": "+1 power, +1 draw next round"},
-    {"id": "medic", "name": "Medic", "cost": 2, "color": "green", "power": 0, "shield": 0, "heal": 2, "draw": 0, "gold": 0, "poison": 0, "text": "Heal 2"},
-    {"id": "venom", "name": "Venom Pin", "cost": 2, "color": "purple", "power": 0, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 2, "text": "Deal 2 poison"},
-    {"id": "crush", "name": "Crush", "cost": 3, "color": "red", "power": 4, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+4 power"},
-    {"id": "wall", "name": "Wall", "cost": 3, "color": "blue", "power": 0, "shield": 5, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+5 shield"},
-    {"id": "tide", "name": "Tidal Jab", "cost": 3, "color": "blue", "power": 2, "shield": 2, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+2 power, +2 shield"},
-    {"id": "greed", "name": "Greed Coin", "cost": 2, "color": "gold", "power": 0, "shield": 0, "heal": 0, "draw": 0, "gold": 2, "poison": 0, "text": "+2 coins next round"},
-    {"id": "wild", "name": "Wild Echo", "cost": 4, "color": "yellow", "power": 3, "shield": 0, "heal": 0, "draw": 1, "gold": 1, "poison": 0, "text": "+3 power, +1 draw, +1 coin"},
-    {"id": "feast", "name": "Royal Feast", "cost": 4, "color": "green", "power": 0, "shield": 2, "heal": 4, "draw": 0, "gold": 0, "poison": 0, "text": "Heal 4, +2 shield"},
-    {"id": "chaos", "name": "Chaos Crown", "cost": 0, "color": "legendary", "power": 5, "shield": 5, "heal": 0, "draw": 1, "gold": 1, "poison": 1, "text": "Mission reward. Everything at once."},
+    {"id": "strike", "name": "Strike", "cost": 1, "color": "red", "rarity": "common", "tribe": "warrior", "power": 2, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+2 power"},
+    {"id": "guard", "name": "Guard", "cost": 1, "color": "blue", "rarity": "common", "tribe": "warrior", "power": 0, "shield": 2, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+2 shield"},
+    {"id": "spark", "name": "Spark", "cost": 2, "color": "yellow", "rarity": "uncommon", "tribe": "machine", "power": 1, "shield": 0, "heal": 0, "draw": 1, "gold": 0, "poison": 0, "text": "+1 power, +1 draw next round"},
+    {"id": "medic", "name": "Medic", "cost": 2, "color": "green", "rarity": "common", "tribe": "cult", "power": 0, "shield": 0, "heal": 2, "draw": 0, "gold": 0, "poison": 0, "text": "Heal 2"},
+    {"id": "venom", "name": "Venom Pin", "cost": 2, "color": "purple", "rarity": "uncommon", "tribe": "cursed", "power": 0, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 2, "text": "Deal 2 poison"},
+    {"id": "crush", "name": "Crush", "cost": 3, "color": "red", "rarity": "uncommon", "tribe": "warrior", "power": 4, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+4 power"},
+    {"id": "wall", "name": "Wall", "cost": 3, "color": "blue", "rarity": "rare", "tribe": "ocean", "power": 0, "shield": 5, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+5 shield"},
+    {"id": "tide", "name": "Tidal Jab", "cost": 3, "color": "blue", "rarity": "uncommon", "tribe": "ocean", "power": 2, "shield": 2, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "+2 power, +2 shield"},
+    {"id": "greed", "name": "Greed Coin", "cost": 2, "color": "gold", "rarity": "uncommon", "tribe": "trickster", "power": 0, "shield": 0, "heal": 0, "draw": 0, "gold": 2, "poison": 0, "text": "+2 coins next round"},
+    {"id": "wild", "name": "Wild Echo", "cost": 4, "color": "yellow", "rarity": "rare", "tribe": "machine", "power": 3, "shield": 0, "heal": 0, "draw": 1, "gold": 1, "poison": 0, "text": "+3 power, +1 draw, +1 coin"},
+    {"id": "feast", "name": "Royal Feast", "cost": 4, "color": "green", "rarity": "rare", "tribe": "cult", "power": 0, "shield": 2, "heal": 4, "draw": 0, "gold": 0, "poison": 0, "text": "Heal 4, +2 shield"},
+    {"id": "chaos", "name": "Chaos Crown", "cost": 0, "color": "legendary", "rarity": "legendary", "tribe": "chaos", "power": 5, "shield": 5, "heal": 0, "draw": 1, "gold": 1, "poison": 1, "text": "Mission reward. Everything at once."},
 ]
+
+EXTRA_CARDS = [
+    {"id": "fang_scout", "name": "Fang Scout", "cost": 1, "color": "purple", "rarity": "common", "tribe": "beast", "power": 1, "shield": 0, "heal": 0, "draw": 1, "gold": 0, "poison": 0, "text": "Beast cantrip opener"},
+    {"id": "fang_alpha", "name": "Fang Alpha", "cost": 3, "color": "purple", "rarity": "uncommon", "tribe": "beast", "power": 4, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 1, "text": "Gets nasty with more Beasts"},
+    {"id": "barnacle_knight", "name": "Barnacle Knight", "cost": 2, "color": "blue", "rarity": "common", "tribe": "ocean", "power": 1, "shield": 3, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "Ocean defender"},
+    {"id": "deep_oracle", "name": "Deep Oracle", "cost": 4, "color": "blue", "rarity": "rare", "tribe": "ocean", "power": 1, "shield": 1, "heal": 0, "draw": 2, "gold": 1, "poison": 0, "text": "Ocean engine card"},
+    {"id": "gear_rat", "name": "Gear Rat", "cost": 1, "color": "yellow", "rarity": "common", "tribe": "machine", "power": 1, "shield": 1, "heal": 0, "draw": 0, "gold": 1, "poison": 0, "text": "Tiny value machine"},
+    {"id": "scrap_colossus", "name": "Scrap Colossus", "cost": 5, "color": "yellow", "rarity": "epic", "tribe": "machine", "power": 6, "shield": 3, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "Heavy finisher"},
+    {"id": "moon_acolyte", "name": "Moon Acolyte", "cost": 2, "color": "green", "rarity": "common", "tribe": "cult", "power": 0, "shield": 1, "heal": 2, "draw": 0, "gold": 0, "poison": 1, "text": "Weird support"},
+    {"id": "eclipse_choir", "name": "Eclipse Choir", "cost": 4, "color": "green", "rarity": "rare", "tribe": "cult", "power": 2, "shield": 2, "heal": 3, "draw": 1, "gold": 0, "poison": 0, "text": "Cult payoff"},
+    {"id": "goblin_coupon", "name": "Goblin Coupon", "cost": 1, "color": "gold", "rarity": "common", "tribe": "trickster", "power": 0, "shield": 0, "heal": 0, "draw": 1, "gold": 2, "poison": 0, "text": "Shop combo card"},
+    {"id": "gremlin_auctioneer", "name": "Gremlin Auctioneer", "cost": 3, "color": "gold", "rarity": "uncommon", "tribe": "trickster", "power": 1, "shield": 0, "heal": 0, "draw": 1, "gold": 3, "poison": 0, "text": "Economy spike"},
+    {"id": "doom_seed", "name": "Doom Seed", "cost": 2, "color": "red", "rarity": "uncommon", "tribe": "cursed", "power": 5, "shield": 0, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "Big hit, hurts later"},
+    {"id": "hex_mirror", "name": "Hex Mirror", "cost": 3, "color": "purple", "rarity": "rare", "tribe": "cursed", "power": 0, "shield": 0, "heal": 0, "draw": 2, "gold": 0, "poison": 2, "text": "Cursed value"},
+    {"id": "saint_of_debt", "name": "Saint of Debt", "cost": 4, "color": "gold", "rarity": "epic", "tribe": "cursed", "power": 3, "shield": 0, "heal": 4, "draw": 0, "gold": 0, "poison": 0, "text": "Looks legal, isn't"},
+    {"id": "reef_ambush", "name": "Reef Ambush", "cost": 2, "color": "blue", "rarity": "common", "tribe": "ocean", "power": 3, "shield": 1, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "Solid ocean tempo"},
+    {"id": "kraken_receipt", "name": "Kraken Receipt", "cost": 3, "color": "blue", "rarity": "rare", "tribe": "ocean", "power": 2, "shield": 4, "heal": 0, "draw": 1, "gold": 0, "poison": 0, "text": "Ocean premium"},
+    {"id": "drum_raider", "name": "Drum Raider", "cost": 2, "color": "red", "rarity": "common", "tribe": "warrior", "power": 3, "shield": 0, "heal": 0, "draw": 0, "gold": 1, "poison": 0, "text": "Aggro warrior"},
+    {"id": "banner_lord", "name": "Banner Lord", "cost": 4, "color": "red", "rarity": "rare", "tribe": "warrior", "power": 5, "shield": 2, "heal": 0, "draw": 0, "gold": 0, "poison": 0, "text": "Warrior payoff"},
+    {"id": "patchwork_angel", "name": "Patchwork Angel", "cost": 4, "color": "green", "rarity": "epic", "tribe": "machine", "power": 2, "shield": 3, "heal": 3, "draw": 0, "gold": 0, "poison": 0, "text": "Machine sustain"},
+    {"id": "coin_piranha", "name": "Coin Piranha", "cost": 2, "color": "gold", "rarity": "uncommon", "tribe": "beast", "power": 2, "shield": 0, "heal": 0, "draw": 0, "gold": 2, "poison": 1, "text": "Greedy beast"},
+    {"id": "confetti_cannon", "name": "Confetti Cannon", "cost": 3, "color": "yellow", "rarity": "uncommon", "tribe": "machine", "power": 3, "shield": 1, "heal": 0, "draw": 1, "gold": 0, "poison": 0, "text": "Chaotic machine"}
+]
+
+CARD_POOL.extend(EXTRA_CARDS)
 
 MISSIONS = [
     {"id": "blue_buyer", "name": "Underwater Collector", "desc": "Buy 3 blue cards.", "goal": 3},
@@ -97,9 +132,14 @@ def card_by_id(card_id):
             return copy.deepcopy(c)
     return None
 
+def weighted_shop_card():
+    pool = [c for c in CARD_POOL if c["id"] != "chaos"]
+    weights = [RARITY_WEIGHTS.get(c.get("rarity", "common"), 1) for c in pool]
+    return copy.deepcopy(random.choices(pool, weights=weights, k=1)[0])
+
+
 def random_shop():
-    base = [c for c in CARD_POOL if c["id"] != "chaos"]
-    return [copy.deepcopy(random.choice(base)) for _ in range(5)]
+    return [weighted_shop_card() for _ in range(5)]
 
 def make_starter_deck():
     return ["strike", "strike", "guard", "guard", "spark", "medic", "greed", "venom"]
@@ -193,6 +233,44 @@ def compute_bundle(cards, room):
         if room["daily"]["id"] == "gravity" and card["draw"] > 0:
             bundle["draw"] -= 1
 
+    # Tribal synergies and cursed combos
+    tribes = {}
+    card_ids = set()
+
+    for card in cards:
+        tribes[card.get("tribe")] = tribes.get(card.get("tribe"), 0) + 1
+        card_ids.add(card["id"])
+
+    if tribes.get("beast", 0) >= 2:
+        bundle["power"] += 2
+
+    if tribes.get("ocean", 0) >= 2:
+        bundle["shield"] += 2
+
+    if tribes.get("machine", 0) >= 2:
+        bundle["gold"] += 1
+
+    if tribes.get("cult", 0) >= 2:
+        bundle["heal"] += 2
+
+    if tribes.get("warrior", 0) >= 2:
+        bundle["power"] += 1
+        bundle["shield"] += 1
+
+    if tribes.get("cursed", 0) >= 2:
+        bundle["power"] += 3
+        bundle["poison"] += 1
+        bundle["heal"] = max(0, bundle["heal"] - 1)
+
+    if "doom_seed" in card_ids and "saint_of_debt" in card_ids:
+        bundle["power"] += 4
+
+    if "hex_mirror" in card_ids and "venom" in card_ids:
+        bundle["poison"] += 2
+
+    if "deep_oracle" in card_ids and "kraken_receipt" in card_ids:
+        bundle["draw"] += 1
+
     for k in bundle:
         bundle[k] = max(0, bundle[k])
     return bundle
@@ -210,6 +288,84 @@ def maybe_complete_mission(player):
 def give_achievement(player, key):
     if key not in player["achievements"]:
         player["achievements"].append(key)
+
+
+def add_bot_to_room(room_code):
+    room = ROOMS.get(room_code)
+    if not room or room["phase"] != "lobby" or len(room["players"]) != 1:
+        return
+
+    bot_sid = f"bot-{room_code}"
+    room["players"][bot_sid] = new_player("Bot Bart")
+    start_match(room)
+    broadcast_state(room_code)
+
+
+def maybe_spawn_bot_later(room_code):
+    socketio.sleep(BOT_WAIT_SECONDS)
+    room = ROOMS.get(room_code)
+    if room and room["phase"] == "lobby" and len(room["players"]) == 1:
+        add_bot_to_room(room_code)
+
+
+def bot_buy_choice(player, market, room):
+    affordable = [(i, c) for i, c in enumerate(market) if effective_cost(c, room) <= player["coins"]]
+    if not affordable:
+        return None
+    affordable.sort(key=lambda x: (
+        0 if x[1].get("tribe") == player["mission"].get("preferred_tribe") else 1,
+        x[1].get("rarity") not in ("rare", "epic", "legendary"),
+        effective_cost(x[1], room)
+    ))
+    return affordable[0][0]
+
+
+def bot_pick_cards(player):
+    scored = []
+    for cid in player["hand"]:
+        c = card_by_id(cid)
+        score = c["power"] * 2 + c["shield"] * 1.5 + c["heal"] * 1.4 + c["draw"] * 1.6 + c["gold"] * 1.1 + c["poison"] * 1.8
+        if c.get("tribe") == "cursed":
+            score += 0.6
+        scored.append((score, cid))
+    scored.sort(reverse=True)
+    return [cid for _, cid in scored[:3]]
+
+
+def maybe_play_bot_turn(room_code):
+    room = ROOMS.get(room_code)
+    if not room or len(room["players"]) < 2:
+        return
+
+    bots = [(sid, p) for sid, p in room["players"].items() if p.get("is_bot")]
+    if not bots or room["phase"] == "game_over":
+        return
+
+    for sid, bot in bots:
+        if room["phase"] == "shop" and not bot["bought"]:
+            idx = bot_buy_choice(bot, room["market"], room)
+            if idx is not None:
+                card = room["market"][idx]
+                bot["coins"] -= effective_cost(card, room)
+                bot["discard"].append(card["id"])
+                bot["bought"] = True
+                room["market"][idx] = weighted_shop_card()
+
+        if room["phase"] in ("shop", "battle") and not bot["submitted"]:
+            bot["submitted"] = bot_pick_cards(bot)
+
+    if len(room["players"]) == 2 and all(len(p["submitted"]) > 0 for p in room["players"].values()):
+        for p in room["players"].values():
+            for cid in p["submitted"]:
+                if cid in p["hand"]:
+                    p["hand"].remove(cid)
+                    p["discard"].append(cid)
+            leftovers = p["hand"][:]
+            p["discard"].extend(leftovers)
+            p["hand"] = []
+        resolve_round(room)
+
+    broadcast_state(room_code)
 
 def resolve_round(room):
     sids = list(room["players"].keys())
@@ -382,6 +538,7 @@ def create_room():
         "round": 1,
         "log": []
     }
+    socketio.start_background_task(maybe_spawn_bot_later, code)
     return redirect(url_for("room_view", room_code=code, username=username))
 
 @app.route("/join", methods=["POST"])
@@ -423,6 +580,7 @@ def on_join_game(data):
         start_match(room)
 
     broadcast_state(room_code)
+    maybe_play_bot_turn(room_code)
 
 @socketio.on("buy_card")
 def on_buy_card(data):
@@ -456,9 +614,10 @@ def on_buy_card(data):
             give_achievement(player, "underwater_addict")
 
     maybe_complete_mission(player)
-    room["market"][idx] = copy.deepcopy(random.choice([c for c in CARD_POOL if c["id"] != "chaos"]))
+    room["market"][idx] = weighted_shop_card()
     room["log"].append(f"{player['username']} bought {card['name']}.")
     broadcast_state(room["code"])
+    maybe_play_bot_turn(room["code"])
 
 @socketio.on("submit_cards")
 def on_submit_cards(data):
@@ -495,6 +654,7 @@ def on_submit_cards(data):
         resolve_round(room)
 
     broadcast_state(room["code"])
+    maybe_play_bot_turn(room["code"])
 
 @socketio.on("set_cosmetic")
 def on_set_cosmetic(data):

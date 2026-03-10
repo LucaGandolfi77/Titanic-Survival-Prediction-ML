@@ -25,6 +25,12 @@ A minimal real-time 1v1 deckbuilder built with Flask, Flask-SocketIO, and vanill
 - Silly achievements
 - Responsive UI
 - In-memory game state for super fast prototyping
+ - AI bot fallback after 12 seconds if no second player joins
+ - Weighted rarity system: common, uncommon, rare, epic, legendary
+ - Tribal synergies: beast, ocean, machine, cult, warrior, cursed
+ - Cursed combo cards with extra payoff
+ - Sound effects and card reveal animations
+ - 20+ additional cards
 
 ## Daily modifiers included
 
@@ -55,6 +61,13 @@ When a mission is completed, the player gains a **Chaos Crown** card.
 - Flask-SocketIO
 - Vanilla JavaScript
 - HTML / CSS
+
+## How to play
+
+- If nobody joins your room after a short wait, a bot will automatically enter.
+- Rare cards appear less often in the market.
+- Building around tribes creates synergy bonuses during round resolution.
+- Cursed cards are stronger but usually come with awkward tradeoffs.
 
 ## Local run
 

@@ -7,6 +7,23 @@ const username = root.dataset.username;
 
 let state = null;
 let selected = [];
+let lastLogLine = "";
+
+const sfx = {
+  buy: document.getElementById("sfx-buy"),
+  lock: document.getElementById("sfx-lock"),
+  hit: document.getElementById("sfx-hit"),
+  win: document.getElementById("sfx-win"),
+  rare: document.getElementById("sfx-rare")
+};
+
+function playSound(name, volume = 0.7) {
+  const el = sfx[name];
+  if (!el) return;
+  el.currentTime = 0;
+  el.volume = volume;
+  el.play().catch(() => {});
+}
 
 const els = {
   dailyName: document.getElementById("daily-name"),
@@ -26,13 +43,14 @@ const els = {
 
 function cardHTML(card, showBuy = false) {
   return `
-    <div class="game-card" data-card-id="${card.id}">
+    <div class="game-card" data-card-id="${card.id}" data-rarity="${card.rarity || "common"}">
       <div class="meta">
         <span class="cost">Cost: ${card.effective_cost ?? card.cost}</span>
-        <span>${card.color}</span>
+        <span class="rarity rarity-${card.rarity || "common"}">${card.rarity || "common"}</span>
       </div>
       <div>
         <h3>${card.name}</h3>
+        <div class="tribe-line">${card.tribe || "neutral"} tribe</div>
         <div class="text">${card.text}</div>
       </div>
       <div class="meta">
@@ -113,6 +131,10 @@ function renderMarket() {
 
   els.market.querySelectorAll("[data-buy-index]").forEach(btn => {
     btn.addEventListener("click", () => {
+      playSound("buy", 0.6);
+      if (["rare", "epic", "legendary"].includes(state.market[Number(btn.dataset.buyIndex)].rarity)) {
+        playSound("rare", 0.75);
+      }
       socket.emit("buy_card", { room, index: Number(btn.dataset.buyIndex) });
     });
   });
@@ -120,13 +142,14 @@ function renderMarket() {
 
 function renderHand() {
   els.hand.innerHTML = state.you.hand.map(card => `
-    <div class="game-card ${selected.includes(card.id) ? "selected" : ""}" data-select-id="${card.id}">
+    <div class="game-card ${selected.includes(card.id) ? "selected" : ""}" data-rarity="${card.rarity || "common"}" data-card-id="${card.id}" data-select-id="${card.id}">
       <div class="meta">
         <span>${card.color}</span>
         <span>${selected.includes(card.id) ? "Selected" : "Ready"}</span>
       </div>
       <div>
         <h3>${card.name}</h3>
+        <div class="tribe-line">${card.tribe || "neutral"} tribe</div>
         <div class="text">${card.text}</div>
       </div>
       <div class="meta">
@@ -209,6 +232,7 @@ function renderAll() {
 
 els.submitBtn.addEventListener("click", () => {
   if (!selected.length) return;
+  playSound("lock", 0.6);
   socket.emit("submit_cards", { room, cards: selected });
   selected = [];
 });
@@ -218,6 +242,13 @@ socket.on("connect", () => {
 });
 
 socket.on("state", (nextState) => {
+  const newest = nextState.log?.[nextState.log.length - 1] || "";
+  if (newest && newest !== lastLogLine) {
+    if (newest.includes("wins the game")) playSound("win", 0.8);
+    else if (newest.includes("dealt")) playSound("hit", 0.55);
+    lastLogLine = newest;
+  }
+
   state = nextState;
   selected = selected.filter(id => state.you.hand.some(c => c.id === id));
   renderAll();

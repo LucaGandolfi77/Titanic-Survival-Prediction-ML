@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="Texas Hold'em Poker Odds Calculator PWA" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Poker Odds Calculator</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Installable PWA</p>
+        <h1>Poker Odds Calculator</h1>
+        <p class="subtext">
+          Texas Hold’em odds, showdown equity, and final hand distribution.
+        </p>
+      </div>
+      <button id="installBtn" class="secondary hidden" aria-label="Install app">
+        Install
+      </button>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>Your hand</h2>
+        <div class="slot-row" id="heroSlots"></div>
+        <div class="actions-row">
+          <button id="openHeroPicker" class="primary">Pick hole cards</button>
+          <button id="randomHeroBtn" class="secondary">Random hand</button>
+        </div>
+
+        <div class="manual-entry">
+          <label for="heroText">Manual input</label>
+          <div class="inline-form">
+            <input
+              id="heroText"
+              type="text"
+              placeholder="Example: As Kh"
+              aria-label="Hero hole cards text input"
+            />
+            <button id="applyHeroText" class="secondary">Apply</button>
+          </div>
+          <small>Accepted format: As Kh, 10d 10c, Qs Jh</small>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Board</h2>
+        <div class="street-presets" role="group" aria-label="Street presets">
+          <button class="secondary street-btn" data-street="preflop">Preflop</button>
+          <button class="secondary street-btn" data-street="flop">Flop</button>
+          <button class="secondary street-btn" data-street="turn">Turn</button>
+          <button class="secondary street-btn" data-street="river">River</button>
+        </div>
+
+        <div class="slot-row" id="boardSlots"></div>
+        <div class="actions-row">
+          <button id="openBoardPicker" class="primary">Pick board cards</button>
+          <button id="clearBoardBtn" class="secondary">Clear board</button>
+        </div>
+
+        <div class="manual-entry">
+          <label for="boardText">Manual board input</label>
+          <div class="inline-form">
+            <input
+              id="boardText"
+              type="text"
+              placeholder="Example: Qs Jh Th"
+              aria-label="Board cards text input"
+            />
+            <button id="applyBoardText" class="secondary">Apply</button>
+          </div>
+          <small>Enter 0 to 5 cards. Flop = 3, turn = 4, river = 5.</small>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Simulation</h2>
+
+        <div class="form-grid">
+          <label>
+            Total players
+            <select id="playerCount" aria-label="Total number of players">
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+            </select>
+          </label>
+
+          <label>
+            Accuracy
+            <select id="iterationCount" aria-label="Simulation iterations">
+              <option value="10000">10,000</option>
+              <option value="50000" selected>50,000</option>
+              <option value="100000">100,000</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <button id="calculateBtn" class="primary">Calculate odds</button>
+          <button id="resetBtn" class="secondary">Reset</button>
+        </div>
+
+        <div id="status" class="status" aria-live="polite">
+          Select your two hole cards to begin.
+        </div>
+
+        <div id="loading" class="loading hidden" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>Running simulation…</span>
+        </div>
+
+        <div class="helper-box">
+          <p><strong>Win %</strong> estimates how often your hand wins at showdown against random opponent hands.</p>
+          <p>Hand probabilities estimate how often your final 7-card result becomes each poker category.</p>
+        </div>
+      </section>
+
+      <section class="panel wide">
+        <h2>Results</h2>
+
+        <div class="result-cards">
+          <article class="stat-card">
+            <span>Win</span>
+            <strong id="winPct">0.00%</strong>
+            <div class="bar"><div id="winBar"></div></div>
+          </article>
+          <article class="stat-card">
+            <span>Tie</span>
+            <strong id="tiePct">0.00%</strong>
+            <div class="bar"><div id="tieBar"></div></div>
+          </article>
+          <article class="stat-card">
+            <span>Loss</span>
+            <strong id="lossPct">0.00%</strong>
+            <div class="bar"><div id="lossBar"></div></div>
+          </article>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <span>Best current hand</span>
+            <strong id="bestCurrentHand">—</strong>
+          </div>
+          <div class="summary-box">
+            <span>Simulations</span>
+            <strong id="simCount">0</strong>
+          </div>
+          <div class="summary-box">
+            <span>Elapsed time</span>
+            <strong id="elapsedTime">0 ms</strong>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Final hand</th>
+                <th>Probability</th>
+              </tr>
+            </thead>
+            <tbody id="handProbTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="pickerModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="pickerTitle">Card Picker</h3>
+        <button id="closePicker" class="secondary" aria-label="Close card picker">Close</button>
+      </div>
+      <p id="pickerHint" class="subtext"></p>
+      <div class="deck-grid" id="deckGrid"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

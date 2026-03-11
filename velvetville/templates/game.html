@@ -19,7 +19,7 @@
 <body>
     <div id="game-container">
         <!-- Three.js will inject the canvas here -->
-        <h2 style="position: absolute; top: 10px; left: 10px;" class="glowing-text">
+        <h2 class="glowing-text event-header">
             Event: {{ event.name }} (Bonus: x{{ event.multiplier }})
         </h2>
     </div>
@@ -35,28 +35,39 @@
             <p>Wearing: <i id="target-outfit">Nothing</i></p>
             
             <input type="range" id="score-slider" min="1" max="10" value="5" 
-                   oninput="document.getElementById('score-display').innerText = this.value"
-                   style="width: 100%; margin: 10px 0;">
-                   
-            <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">
+                   oninput="document.getElementById('score-display').innerText = this.value">
+
+            <div class="score-display-wrap">
                 <span id="score-display">5</span>/10
             </div>
-            
-            <button onclick="submitVote()" style="background: #1a1a2e; width: 45%;">Slay/Nay? 💅</button>
-            <button onclick="nextModel()" style="background: #0f3460; width: 45%;">Skip ⏭️</button>
-            
-            <div id="vote-feedback" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
+
+            <button onclick="submitVote()" class="vote-btn slay">Slay/Nay? 💅</button>
+            <button onclick="nextModel()" class="vote-btn skip">Skip ⏭️</button>
+
+            <div id="vote-feedback"></div>
         </div>
         <!-- End Voting Booth Snippet -->
 
         <h1 class="glowing-text">?? Gossip Room</h1>
         <div id="chat-box"></div>
         <div style="display: flex; gap: 5px;">
-            <input type="text" id="chat-input" placeholder="Type something sassy..." style="flex: 1;">
+            <input type="text" id="chat-input" placeholder="Type something sassy...">
             <button onclick="sendMessage()">Send ??</button>
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='game.js') }}"></script>
+    <script>
+        // Dynamically load game.js. If this template was rendered by Flask
+        // the Jinja expression will be replaced by a real path. If the file
+        // is opened directly (Live Server / file://) the string will still
+        // contain "{{" so we fall back to the relative static path.
+        (function(){
+            var candidate = "{{ url_for('static', filename='game.js') }}";
+            var src = candidate && candidate.indexOf("{{") === -1 ? candidate : '../static/game.js';
+            var s = document.createElement('script');
+            s.src = src; s.defer = true;
+            document.head.appendChild(s);
+        })();
+    </script>
 </body>
 </html>

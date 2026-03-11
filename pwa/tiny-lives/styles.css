@@ -1,0 +1,382 @@
+/* =============================================
+   🏡 TINY LIVES — Global Styles
+   ============================================= */
+:root {
+    --bg: #e8f4f8;
+    --panel-bg: #ffffffee;
+    --toolbar-bg: #4a90d9;
+    --toolbar-text: #fff;
+    --accent: #ff7eb3;
+    --accent2: #7ec8e3;
+    --text: #2c3e50;
+    --text-light: #6b7c93;
+    --bar-bg: #dfe6e9;
+    --success: #00b894;
+    --warning: #fdcb6e;
+    --danger: #e17055;
+    --radius: 14px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* =============================================
+   Toolbar
+   ============================================= */
+#toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 48px;
+    background: var(--toolbar-bg);
+    color: var(--toolbar-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.game-logo {
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+}
+
+.clock {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    background: rgba(255,255,255,0.15);
+    padding: 3px 10px;
+    border-radius: 8px;
+}
+
+.toolbar-right {
+    display: flex;
+    gap: 6px;
+}
+
+.toolbar-right button {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.toolbar-right button:hover:not(:disabled) {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.08);
+}
+
+.toolbar-right button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* =============================================
+   Scene Container
+   ============================================= */
+#scene-container {
+    position: fixed;
+    top: 48px; left: 0; right: 0; bottom: 0;
+}
+
+#scene-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* =============================================
+   Profile Panel
+   ============================================= */
+.panel {
+    position: fixed;
+    top: 56px;
+    right: 8px;
+    width: 340px;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+    background: var(--panel-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    z-index: 200;
+    transition: transform 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+    backdrop-filter: blur(12px);
+}
+
+.panel.hidden {
+    transform: translateX(360px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px; right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.2s;
+}
+
+.close-btn:hover { color: var(--danger); }
+
+.panel-header {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.header-info h2 {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+.panel-age {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-right: 8px;
+}
+
+.panel-action {
+    font-size: 0.75rem;
+    background: var(--accent2);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.panel-mood {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    background: #fef9ef;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.panel-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.trait-badge {
+    background: #ede7f6;
+    color: #5e35b1;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.panel-bio {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.45;
+    margin-bottom: 16px;
+    font-style: italic;
+}
+
+h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    margin-top: 4px;
+}
+
+/* Need bars */
+.needs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.need-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.need-label {
+    width: 65px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.need-bar {
+    flex: 1;
+    height: 14px;
+    background: var(--bar-bg);
+    border-radius: 7px;
+    overflow: hidden;
+    position: relative;
+}
+
+.need-fill {
+    height: 100%;
+    border-radius: 7px;
+    transition: width 0.5s ease, background 0.5s;
+    min-width: 2px;
+}
+
+.need-value {
+    width: 32px;
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+/* Relationship list */
+.rel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 8px;
+}
+
+.rel-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: #f7f9fc;
+    border-radius: 8px;
+}
+
+.rel-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.rel-stage {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.rel-stranger { background: #dfe6e9; color: #636e72; }
+.rel-acquaintance { background: #dfe6fd; color: #2d3ba8; }
+.rel-friend { background: #d4f8d4; color: #1e8449; }
+.rel-closefriend { background: #ffe0ec; color: #c0392b; }
+
+/* =============================================
+   Speech Bubbles (CSS2D overlay)
+   ============================================= */
+.speech-bubble {
+    position: absolute;
+    background: #fff;
+    border-radius: 12px 12px 12px 2px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    pointer-events: none;
+    white-space: nowrap;
+    animation: bubblePop 0.3s ease-out;
+    z-index: 50;
+}
+
+@keyframes bubblePop {
+    0% { transform: scale(0.5) translateY(8px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* =============================================
+   Toast Notifications
+   ============================================= */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2c3e50ee;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    z-index: 300;
+    transition: opacity 0.4s, transform 0.4s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.toast.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    pointer-events: none;
+}
+
+/* =============================================
+   Scrollbar
+   ============================================= */
+.panel::-webkit-scrollbar { width: 6px; }
+.panel::-webkit-scrollbar-track { background: transparent; }
+.panel::-webkit-scrollbar-thumb { background: #c0c8d4; border-radius: 3px; }
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 600px) {
+    .panel {
+        width: calc(100vw - 16px);
+        right: 8px;
+        left: 8px;
+        max-height: 55vh;
+        bottom: 8px;
+        top: auto;
+        transform-origin: bottom center;
+    }
+    .panel.hidden {
+        transform: translateY(100%);
+    }
+    .game-logo { font-size: 1rem; }
+    .clock { display: none; }
+}

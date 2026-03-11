@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4a90d9">
+    <meta name="description" content="A cozy 3D life-simulation game in your browser">
+    <title>Tiny Lives</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top toolbar -->
+    <div id="toolbar">
+        <div class="toolbar-left">
+            <span class="game-logo">🏡 Tiny Lives</span>
+            <span id="clock" class="clock">Day 1 — 8:00 AM</span>
+        </div>
+        <div class="toolbar-right">
+            <button id="btnPause" title="Pause">⏸️</button>
+            <button id="btnResume" title="Resume" disabled>▶️</button>
+            <button id="btnSpeed" title="Speed">1×</button>
+            <button id="btnReset" title="Reset">🔄</button>
+        </div>
+    </div>
+
+    <!-- 3D canvas container -->
+    <div id="scene-container"></div>
+
+    <!-- Character profile panel -->
+    <div id="profile-panel" class="panel hidden">
+        <button id="closePanel" class="close-btn">✕</button>
+        <div class="panel-header">
+            <div class="avatar" id="panelAvatar">😊</div>
+            <div class="header-info">
+                <h2 id="panelName">Name</h2>
+                <span class="panel-age" id="panelAge">Age 25</span>
+                <span class="panel-action" id="panelAction">Idle</span>
+            </div>
+        </div>
+        <div class="panel-mood" id="panelMood">😊 Happy</div>
+        <div class="panel-traits" id="panelTraits"></div>
+        <p class="panel-bio" id="panelBio">Bio text here.</p>
+
+        <h3>Needs</h3>
+        <div class="needs-list" id="panelNeeds"></div>
+
+        <h3>Relationships</h3>
+        <div class="rel-list" id="panelRels"></div>
+    </div>
+
+    <!-- Notification toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

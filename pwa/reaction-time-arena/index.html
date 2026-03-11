@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1e293b">
+    <meta name="description" content="Test your reflexes with fast-paced mini-games">
+    <title>Reaction Time Arena</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUmVhY3Rpb24gVGltZSBBcmVuYSIsInNob3J0X25hbWUiOiJSZWFjdGlvbiIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMWUyOTNiIiwidGhlbWVfY29sb3IiOiIjMWUyOTNiIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCclM0UlM0NyZWN0IGZpbGw9JyUyMzM4YmRmOCcgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnLyUzRSUzQy9zdmclM0UiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--bg-tertiary);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: var(--accent);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .game-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .game-card {
+            background: var(--bg-secondary);
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--bg-tertiary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .game-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
+        }
+
+        .game-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        #gameArea {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            min-height: 400px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-tertiary);
+            position: relative;
+        }
+
+        #gameArea.active {
+            display: flex;
+        }
+
+        .game-content {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .color-option {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 3px solid transparent;
+        }
+
+        .color-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin: 2rem 0;
+        }
+
+        .pattern-cell {
+            aspect-ratio: 1;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pattern-cell.active {
+            background: var(--accent);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .pattern-cell:active {
+            transform: scale(0.95);
+        }
+
+        .math-question {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 2rem 0;
+            color: var(--accent);
+        }
+
+        .answer-input {
+            width: 200px;
+            padding: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--bg-tertiary);
+            border-radius: 8px;
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .shapes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .shape-option {
+            aspect-ratio: 1;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border: 3px solid transparent;
+        }
+
+        .shape-option:hover {
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        canvas {
+            border-radius: 8px;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--warning);
+            margin: 1rem 0;
+        }
+
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 700;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .feedback.show {
+            opacity: 1;
+            animation: feedbackPulse 0.5s ease-out;
+        }
+
+        @keyframes feedbackPulse {
+            0% { transform: translate(-50%, -50%) scale(0.5); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #475569;
+        }
+
+        .prompt {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            color: var(--text-primary);
+        }
+
+        .reaction-time {
+            font-size: 1.25rem;
+            color: var(--success);
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        /* moved from inline creation */
+        .submit-btn { margin-top: 1rem; }
+        .target-canvas { margin: 1rem auto; display: block; }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 1.5rem; }
+            .stats { grid-template-columns: 1fr; }
+            .game-menu { grid-template-columns: 1fr; }
+            .color-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+            .shapes-grid { gap: 0.75rem; }
+            .math-question { font-size: 2rem; }
+            #gameArea { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Reaction Time Arena</h1>
+            <p class="subtitle">Test your reflexes with fast-paced challenges</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">High Score</div>
+                <div class="stat-value" id="highScore">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Reaction</div>
+                <div class="stat-value" id="avgReaction">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Best Streak</div>
+                <div class="stat-value" id="bestStreak">0</div>
+            </div>
+        </div>
+
+        <div class="game-menu" id="gameMenu">
+            <div class="game-card" data-game="color">
+                <div class="game-icon">🎨</div>
+                <div class="game-title">Color Match</div>
+                <div class="game-desc">Click the correct color as fast as you can</div>
+            </div>
+            <div class="game-card" data-game="pattern">
+                <div class="game-icon">🧩</div>
+                <div class="game-title">Pattern Memory</div>
+                <div class="game-desc">Remember and repeat the sequence</div>
+            </div>
+            <div class="game-card" data-game="math">
+                <div class="game-icon">🔢</div>
+                <div class="game-title">Quick Math</div>
+                <div class="game-desc">Solve equations under pressure</div>
+            </div>
+            <div class="game-card" data-game="shapes">
+                <div class="game-icon">⬡</div>
+                <div class="game-title">Shape Match</div>
+                <div class="game-desc">Find the matching shape quickly</div>
+            </div>
+        </div>
+
+        <div id="gameArea">
+            <button class="back-btn" id="backBtn">← Back</button>
+            <div class="game-content" id="gameContent"></div>
+        </div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        // Game state
+        const state = {
+            currentGame: null,
+            score: 0,
+            streak: 0,
+            reactionTimes: [],
+            startTime: 0,
+            difficulty: 1,
+            round: 0,
+            highScore: parseInt(localStorage.getItem('highScore') || '0'),
+            bestStreak: parseInt(localStorage.getItem('bestStreak') || '0'),
+            pattern: [],
+            userPattern: [],
+            mathAnswer: 0,
+            targetShape: null
+        };
+
+        const colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+        const colorNames = ['Red', 'Orange', 'Green', 'Blue', 'Purple', 'Pink'];
+        const shapes = ['circle', 'square', 'triangle', 'pentagon', 'hexagon', 'star'];
+
+        // Initialize
+        document.getElementById('highScore').textContent = state.highScore;
+        document.getElementById('bestStreak').textContent = state.bestStreak;
+
+        // Event listeners
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', () => startGame(card.dataset.game));
+        });
+
+        document.getElementById('backBtn').addEventListener('click', endGame);
+
+        function startGame(gameType) {
+            state.currentGame = gameType;
+            state.score = 0;
+            state.streak = 0;
+            state.reactionTimes = [];
+            state.difficulty = 1;
+            state.round = 0;
+            
+            document.getElementById('gameMenu').style.display = 'none';
+            document.getElementById('gameArea').classList.add('active');
+            
+            nextRound();
+        }
+
+        function nextRound() {
+            state.round++;
+            const content = document.getElementById('gameContent');
+            content.innerHTML = '';
+            
+            // Increase difficulty every 5 rounds
+            if (state.round % 5 === 0) {
+                state.difficulty = Math.min(state.difficulty + 0.2, 3);
+            }
+
+            switch(state.currentGame) {
+                case 'color':
+                    startColorMatch(content);
+                    break;
+                case 'pattern':
+                    startPatternMemory(content);
+                    break;
+                case 'math':
+                    startQuickMath(content);
+                    break;
+                case 'shapes':
+                    startShapeMatch(content);
+                    break;
+            }
+        }
+
+        function startColorMatch(content) {
+            const targetColor = Math.floor(Math.random() * colors.length);
+            
+            const prompt = document.createElement('div');
+            prompt.className = 'prompt';
+            prompt.textContent = `Click ${colorNames[targetColor]}!`;
+            content.appendChild(prompt);
+
+            const grid = document.createElement('div');
+            grid.className = 'color-grid';
+            
+            const shuffled = [...colors].sort(() => Math.random() - 0.5);
+            
+            state.startTime = Date.now();
+            
+            shuffled.forEach(color => {
+                const option = document.createElement('div');
+                option.className = 'color-option';
+                option.style.background = color;
+                option.addEventListener('click', () => {
+                    handleColorAnswer(color === colors[targetColor]);
+                });
+                grid.appendChild(option);
+            });
+            
+            content.appendChild(grid);
+        }
+
+        function handleColorAnswer(correct) {
+            const reactionTime = Date.now() - state.startTime;
+            processAnswer(correct, reactionTime);
+        }
+
+        function startPatternMemory(content) {
+            const length = Math.min(3 + Math.floor(state.difficulty), 8);
+            state.pattern = [];
+            state.userPattern = [];
+            
+            for (let i = 0; i < length; i++) {
+                state.pattern.push(Math.floor(Math.random() * 9));
+            }
+
+            const prompt = document.createElement('div');
+            prompt.className = 'prompt';
+            prompt.textContent = 'Watch the pattern...';
+            content.appendChild(prompt);
+
+            const grid = document.createElement('div');
+            grid.className = 'pattern-grid';
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'pattern-cell';
+                cell.dataset.index = i;
+                grid.appendChild(cell);
+            }
+            
+            content.appendChild(grid);
+
+            // Show pattern
+            let step = 0;
+            const interval = setInterval(() => {
+                if (step < state.pattern.length) {
+                    const cell = grid.children[state.pattern[step]];
+                    cell.classList.add('active');
+                    setTimeout(() => cell.classList.remove('active'), 400);
+                    step++;
+                } else {
+                    clearInterval(interval);
+                    prompt.textContent = 'Repeat the pattern!';
+                    state.startTime = Date.now();
+                    
+                    // Enable clicking
+                    Array.from(grid.children).forEach(cell => {
+                        cell.addEventListener('click', () => {
+                            const index = parseInt(cell.dataset.index);
+                            cell.classList.add('active');
+                            setTimeout(() => cell.classList.remove('active'), 200);
+                            state.userPattern.push(index);
+                            
+                            if (state.userPattern.length === state.pattern.length) {
+                                const correct = state.userPattern.every((val, i) => val === state.pattern[i]);
+                                const reactionTime = Date.now() - state.startTime;
+                                processAnswer(correct, reactionTime);
+                            }
+                        });
+                    });
+                }
+            }, 600);
+        }
+
+        function startQuickMath(content) {
+            const maxNum = Math.floor(10 + state.difficulty * 10);
+            const a = Math.floor(Math.random() * maxNum) + 1;
+            const b = Math.floor(Math.random() * maxNum) + 1;
+            const ops = ['+', '-', '×'];
+            const op = ops[Math.floor(Math.random() * ops.length)];
+            
+            let answer;
+            switch(op) {
+                case '+': answer = a + b; break;
+                case '-': answer = a - b; break;
+                case '×': answer = a * b; break;
+            }
+            
+            state.mathAnswer = answer;
+
+            const question = document.createElement('div');
+            question.className = 'math-question';
+            question.textContent = `${a} ${op} ${b} = ?`;
+            content.appendChild(question);
+
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'answer-input';
+            input.placeholder = '?';
+            content.appendChild(input);
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn submit-btn';
+            submitBtn.textContent = 'Submit';
+            content.appendChild(submitBtn);
+
+            state.startTime = Date.now();
+            
+            const checkAnswer = () => {
+                const userAnswer = parseInt(input.value);
+                const reactionTime = Date.now() - state.startTime;
+                processAnswer(userAnswer === state.mathAnswer, reactionTime);
+            };
+
+            submitBtn.addEventListener('click', checkAnswer);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkAnswer();
+            });
+            
+            input.focus();
+        }
+
+        function startShapeMatch(content) {
+            const targetIndex = Math.floor(Math.random() * shapes.length);
+            state.targetShape = shapes[targetIndex];
+
+            const prompt = document.createElement('div');
+            prompt.className = 'prompt';
+            prompt.textContent = 'Find the matching shape!';
+            content.appendChild(prompt);
+
+            const targetCanvas = document.createElement('canvas');
+            targetCanvas.width = 150;
+            targetCanvas.height = 150;
+            targetCanvas.className = 'target-canvas';
+            drawShape(targetCanvas, state.targetShape, '#38bdf8');
+            content.appendChild(targetCanvas);
+
+            const grid = document.createElement('div');
+            grid.className = 'shapes-grid';
+            
+            const shuffled = [...shapes].sort(() => Math.random() - 0.5).slice(0, 6);
+            if (!shuffled.includes(state.targetShape)) {
+                shuffled[0] = state.targetShape;
+                shuffled.sort(() => Math.random() - 0.5);
+            }
+
+            state.startTime = Date.now();
+
+            shuffled.forEach(shape => {
+                const option = document.createElement('div');
+                option.className = 'shape-option';
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = 80;
+                canvas.height = 80;
+                drawShape(canvas, shape, '#cbd5e1');
+                option.appendChild(canvas);
+                
+                option.addEventListener('click', () => {
+                    const reactionTime = Date.now() - state.startTime;
+                    processAnswer(shape === state.targetShape, reactionTime);
+                });
+                
+                grid.appendChild(option);
+            });
+
+            content.appendChild(grid);
+        }
+
+        function drawShape(canvas, shape, color) {
+            const ctx = canvas.getContext('2d');
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const size = Math.min(canvas.width, canvas.height) * 0.35;
+
+            ctx.fillStyle = color;
+            ctx.beginPath();
+
+            switch(shape) {
+                case 'circle':
+                    ctx.arc(cx, cy, size, 0, Math.PI * 2);
+                    break;
+                case 'square':
+                    ctx.rect(cx - size, cy - size, size * 2, size * 2);
+                    break;
+                case 'triangle':
+                    ctx.moveTo(cx, cy - size);
+                    ctx.lineTo(cx + size, cy + size);
+                    ctx.lineTo(cx - size, cy + size);
+                    ctx.closePath();
+                    break;
+                case 'pentagon':
+                    drawPolygon(ctx, cx, cy, size, 5);
+                    break;
+                case 'hexagon':
+                    drawPolygon(ctx, cx, cy, size, 6);
+                    break;
+                case 'star':
+                    drawStar(ctx, cx, cy, size, 5);
+                    break;
+            }
+
+            ctx.fill();
+        }
+
+        function drawPolygon(ctx, x, y, radius, sides) {
+            const angle = (Math.PI * 2) / sides;
+            ctx.moveTo(x + radius * Math.cos(0), y + radius * Math.sin(0));
+            for (let i = 1; i <= sides; i++) {
+                ctx.lineTo(x + radius * Math.cos(angle * i), y + radius * Math.sin(angle * i));
+            }
+            ctx.closePath();
+        }
+
+        function drawStar(ctx, x, y, radius, points) {
+            const angle = (Math.PI * 2) / (points * 2);
+            for (let i = 0; i < points * 2; i++) {
+                const r = i % 2 === 0 ? radius : radius * 0.5;
+                const xPos = x + r * Math.cos(angle * i - Math.PI / 2);
+                const yPos = y + r * Math.sin(angle * i - Math.PI / 2);
+                if (i === 0) ctx.moveTo(xPos, yPos);
+                else ctx.lineTo(xPos, yPos);
+            }
+            ctx.closePath();
+        }
+
+        function processAnswer(correct, reactionTime) {
+            if (correct) {
+                state.score += Math.max(1, Math.floor(100 - reactionTime / 20));
+                state.streak++;
+                state.reactionTimes.push(reactionTime);
+                showFeedback('✓', '#10b981');
+                
+                setTimeout(() => nextRound(), 500);
+            } else {
+                // record best streak before resetting
+                if (state.streak > state.bestStreak) {
+                    state.bestStreak = state.streak;
+                    localStorage.setItem('bestStreak', state.bestStreak);
+                    document.getElementById('bestStreak').textContent = state.bestStreak;
+                }
+                state.streak = 0;
+                showFeedback('✗', '#ef4444');
+                
+                setTimeout(() => endGame(), 1000);
+            }
+        }
+
+        function showFeedback(text, color) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = text;
+            feedback.style.color = color;
+            feedback.classList.add('show');
+            setTimeout(() => feedback.classList.remove('show'), 500);
+        }
+
+        function endGame() {
+            if (state.score > state.highScore) {
+                state.highScore = state.score;
+                localStorage.setItem('highScore', state.highScore);
+                document.getElementById('highScore').textContent = state.highScore;
+            }
+
+            if (state.streak > state.bestStreak) {
+                state.bestStreak = state.streak;
+                localStorage.setItem('bestStreak', state.bestStreak);
+                document.getElementById('bestStreak').textContent = state.bestStreak;
+            }
+
+            if (state.reactionTimes.length > 0) {
+                const avg = Math.round(state.reactionTimes.reduce((a, b) => a + b, 0) / state.reactionTimes.length);
+                document.getElementById('avgReaction').textContent = `${avg}ms`;
+            }
+
+            document.getElementById('gameArea').classList.remove('active');
+            document.getElementById('gameMenu').style.display = 'grid';
+        }
+
+        // Service Worker registration: try a static ./sw.js first, fall back to inline blob if not available
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    await navigator.serviceWorker.register('./sw.js');
+                    console.log('Service worker registered: ./sw.js');
+                } catch (err) {
+                    console.warn('sw.js registration failed, falling back to inline worker', err);
+                    const swCode = `
+                        const CACHE_NAME = 'reaction-arena-v1';
+                        const CORE = ['./', './index.html'];
+                        self.addEventListener('install', (e) => {
+                            e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(CORE)));
+                        });
+                        self.addEventListener('fetch', (e) => {
+                            e.respondWith(caches.match(e.request).then(response => response || fetch(e.request)));
+                        });
+                    `;
+                    const blob = new Blob([swCode], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+                    navigator.serviceWorker.register(swUrl).then(() => console.log('Inline SW registered'));
+                }
+            });
+        }
+    </script>
+</body>
+</html>

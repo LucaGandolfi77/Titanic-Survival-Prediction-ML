@@ -250,3 +250,40 @@ button:active {
     gap: 15px;
     margin-top: 20px;
 }
+
+/* =========================================
+   Styles moved from inline attributes in game.html
+   ========================================= */
+.event-header {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+#score-slider {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.score-display-wrap {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#voting-booth .vote-btn {
+    width: 45%;
+    margin: 0 3%;
+    padding: 10px 8px;
+}
+
+#voting-booth .vote-btn.slay { background: #1a1a2e; }
+#voting-booth .vote-btn.skip { background: #0f3460; }
+
+#vote-feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    height: 20px;
+}
+
+#chat-input { flex: 1; padding: 10px; }

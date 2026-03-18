@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyWeka – Machine Learning Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-icon">&#x2697;&#xFE0F;</span>
+      <div>
+        <h1>PyWeka</h1>
+        <span class="subtitle">Machine Learning Explorer</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="lbl">Samples:</span>
+      <button class="btn-sm" onclick="app.loadSample('iris')">Iris</button>
+      <button class="btn-sm" onclick="app.loadSample('wine')">Wine</button>
+      <button class="btn-sm" onclick="app.loadSample('diabetes')">Diabetes</button>
+      <span class="sep"></span>
+      <button class="btn-sm" onclick="app.undo()">&#8617; Undo</button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════ TABS ═══════════════════ -->
+  <nav class="tab-nav" id="tab-nav">
+    <button class="tab-btn active" data-tab="preprocess">Preprocess</button>
+    <button class="tab-btn" data-tab="classify">Classify</button>
+    <button class="tab-btn" data-tab="regression">Regression</button>
+    <button class="tab-btn" data-tab="cluster">Cluster</button>
+    <button class="tab-btn" data-tab="visualize">Visualize</button>
+    <button class="tab-btn" data-tab="select">Select Attributes</button>
+  </nav>
+
+  <!-- ═══════════════════ MAIN ═══════════════════ -->
+  <main class="app-main">
+
+    <!-- ────────────── PREPROCESS ────────────── -->
+    <section id="tab-preprocess" class="tab-panel active">
+      <div class="upload-zone" id="drop-zone">
+        <div class="upload-icon">&#128193;</div>
+        <p>Drag &amp; drop a CSV file here, or <label for="file-input" class="file-link">browse</label></p>
+        <input type="file" id="file-input" accept=".csv,.tsv,.txt" hidden>
+        <p class="upload-hint">Supports CSV and TSV files &middot; or try a sample dataset above</p>
+      </div>
+
+      <div id="preprocess-content" class="hidden">
+        <div class="summary-cards">
+          <div class="stat-card"><span id="sum-rows">0</span><label>Rows</label></div>
+          <div class="stat-card"><span id="sum-cols">0</span><label>Columns</label></div>
+          <div class="stat-card"><span id="sum-numeric">0</span><label>Numeric</label></div>
+          <div class="stat-card"><span id="sum-cat">0</span><label>Categorical</label></div>
+          <div class="stat-card"><span id="sum-missing">0</span><label>Missing</label></div>
+        </div>
+
+        <div class="split-panel">
+          <div class="panel-box">
+            <div class="panel-header">Attributes</div>
+            <div class="attr-scroll" id="attr-list"></div>
+          </div>
+          <div class="panel-box">
+            <div class="panel-header">Column Details</div>
+            <div class="details-content" id="attr-details">Click an attribute to inspect.</div>
+          </div>
+        </div>
+
+        <div class="ops-bar">
+          <div class="ops-row">
+            <label>Column:</label>
+            <select id="ops-column" style="width:auto;min-width:140px"></select>
+          </div>
+          <div class="ops-row">
+            <label>Missing:</label>
+            <button onclick="app.fillMissing('mean')">Mean</button>
+            <button onclick="app.fillMissing('median')">Median</button>
+            <button onclick="app.fillMissing('mode')">Mode</button>
+            <button onclick="app.fillMissing('zero')">Zero</button>
+            <button onclick="app.fillMissing('drop')">Drop Col NaN</button>
+            <button onclick="app.dropAllMissing()">Drop All NaN Rows</button>
+          </div>
+          <div class="ops-row">
+            <label>Encode:</label>
+            <button onclick="app.labelEncode()">Label Encode</button>
+            <button onclick="app.oneHotEncode()">One-Hot Encode</button>
+          </div>
+          <div class="ops-row">
+            <label>Scale:</label>
+            <button onclick="app.standardize()">Standardize (Z)</button>
+            <button onclick="app.normalize()">Normalize (0-1)</button>
+            <span class="sep"></span>
+            <button onclick="app.removeColumn()">Remove Column</button>
+            <button onclick="app.removeOutliers()">Remove Outliers</button>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <div class="panel-header">Data Preview (first 100 rows)</div>
+          <div class="table-scroll">
+            <table id="data-table"><thead></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────── CLASSIFY ────────────── -->
+    <section id="tab-classify" class="tab-panel">
+      <div class="ml-layout">
+        <aside class="ml-sidebar">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Target Variable</label>
+            <select id="clf-target"></select>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Algorithms</label>
+            <div class="algo-scroll" id="clf-algo-list"></div>
+            <div class="btn-row">
+              <button class="btn-xs" onclick="app.toggleAlgos('clf',true)">All</button>
+              <button class="btn-xs" onclick="app.toggleAlgos('clf',false)">None</button>
+            </div>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Evaluation</label>
+            <label class="radio-label"><input type="radio" name="clf-eval" value="split" checked> % Split</label>
+            <label class="radio-label"><input type="radio" name="clf-eval" value="cv"> Cross-Validation</label>
+            <label class="radio-label"><input type="radio" name="clf-eval" value="train"> Training Set</label>
+            <div class="param-row">
+              <label>Test %<input type="number" id="clf-test" value="20" min="5" max="50" class="input-sm"></label>
+              <label>Folds<input type="number" id="clf-folds" value="5" min="2" max="20" class="input-sm"></label>
+            </div>
+            <label class="check-label"><input type="checkbox" id="clf-scale" checked> Scale Features</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" id="clf-start" onclick="app.runClassify()">&#9654; Start</button>
+            <button class="btn-sm" onclick="app.clearResults('clf')">Clear</button>
+          </div>
+        </aside>
+        <div class="ml-main">
+          <div id="clf-results" class="results-box">Load a dataset, choose a target, and click Start.</div>
+          <div id="clf-chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────── REGRESSION ────────────── -->
+    <section id="tab-regression" class="tab-panel">
+      <div class="ml-layout">
+        <aside class="ml-sidebar">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Target Variable (numeric)</label>
+            <select id="reg-target"></select>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Algorithms</label>
+            <div class="algo-scroll" id="reg-algo-list"></div>
+            <div class="btn-row">
+              <button class="btn-xs" onclick="app.toggleAlgos('reg',true)">All</button>
+              <button class="btn-xs" onclick="app.toggleAlgos('reg',false)">None</button>
+            </div>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Evaluation</label>
+            <label class="radio-label"><input type="radio" name="reg-eval" value="split" checked> % Split</label>
+            <label class="radio-label"><input type="radio" name="reg-eval" value="cv"> Cross-Validation</label>
+            <label class="radio-label"><input type="radio" name="reg-eval" value="train"> Training Set</label>
+            <div class="param-row">
+              <label>Test %<input type="number" id="reg-test" value="20" min="5" max="50" class="input-sm"></label>
+              <label>Folds<input type="number" id="reg-folds" value="5" min="2" max="20" class="input-sm"></label>
+            </div>
+            <label class="check-label"><input type="checkbox" id="reg-scale" checked> Scale Features</label>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" id="reg-start" onclick="app.runRegression()">&#9654; Start</button>
+            <button class="btn-sm" onclick="app.clearResults('reg')">Clear</button>
+          </div>
+        </aside>
+        <div class="ml-main">
+          <div id="reg-results" class="results-box">Load a dataset, choose a numeric target, and click Start.</div>
+          <div id="reg-chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────── CLUSTER ────────────── -->
+    <section id="tab-cluster" class="tab-panel">
+      <div class="ml-layout">
+        <aside class="ml-sidebar">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Algorithm</label>
+            <select id="clu-algo">
+              <option value="kmeans">K-Means</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Parameters</label>
+            <div class="param-row">
+              <label>Clusters (k)<input type="number" id="clu-k" value="3" min="2" max="20" class="input-sm"></label>
+            </div>
+            <label class="check-label"><input type="checkbox" id="clu-scale" checked> Scale Features</label>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Features (numeric)</label>
+            <div class="algo-scroll" id="clu-feat-list"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="app.runClustering()">&#9654; Run</button>
+            <button class="btn-sm" onclick="app.runElbow()">Elbow Plot</button>
+            <button class="btn-sm" onclick="app.clearResults('clu')">Clear</button>
+          </div>
+        </aside>
+        <div class="ml-main">
+          <div id="clu-results" class="results-box">Select features and click Run.</div>
+          <div id="clu-chart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────── VISUALIZE ────────────── -->
+    <section id="tab-visualize" class="tab-panel">
+      <div class="viz-controls">
+        <label>Type:
+          <select id="viz-type">
+            <option value="histogram">Histogram</option>
+            <option value="scatter">Scatter Plot</option>
+            <option value="box">Box Plot</option>
+            <option value="heatmap">Correlation Heatmap</option>
+            <option value="bar">Bar Chart</option>
+            <option value="dist-grid">Distribution Grid</option>
+          </select>
+        </label>
+        <label>X: <select id="viz-x"></select></label>
+        <label>Y: <select id="viz-y"></select></label>
+        <label>Hue: <select id="viz-hue"><option value="">(none)</option></select></label>
+        <button class="btn-primary" onclick="app.plotViz()">Plot</button>
+      </div>
+      <div id="viz-chart" class="viz-chart-area"></div>
+    </section>
+
+    <!-- ────────────── SELECT ATTRIBUTES ────────────── -->
+    <section id="tab-select" class="tab-panel">
+      <div class="ml-layout">
+        <aside class="ml-sidebar">
+          <div class="ctrl-group">
+            <label class="ctrl-label">Target</label>
+            <select id="sel-target"></select>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Task</label>
+            <label class="radio-label"><input type="radio" name="sel-task" value="classification" checked> Classification</label>
+            <label class="radio-label"><input type="radio" name="sel-task" value="regression"> Regression</label>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Method</label>
+            <select id="sel-method">
+              <option value="correlation">Correlation</option>
+              <option value="variance">Variance</option>
+              <option value="importance">RF Importance</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <label class="ctrl-label">Top K</label>
+            <input type="number" id="sel-k" value="10" min="1" max="50" class="input-sm">
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="app.runSelection()">&#9654; Run</button>
+            <button class="btn-sm" onclick="app.clearResults('sel')">Clear</button>
+          </div>
+        </aside>
+        <div class="ml-main">
+          <div id="sel-results" class="results-box">Select a target and method, then click Run.</div>
+          <div id="sel-chart"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════ STATUS BAR ═══════════════════ -->
+  <footer class="status-bar">
+    <span id="status-text">Ready &ndash; Load a dataset or try a sample</span>
+    <span id="dataset-info"></span>
+  </footer>
+
+  <!-- ═══════════════════ CDN ═══════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

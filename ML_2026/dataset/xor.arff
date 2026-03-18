@@ -1,0 +1,11 @@
+@relation xor-classification
+@attribute A real
+@attribute B real
+@attribute aXORb {0,1}
+
+
+@data
+0,0,0
+0,1,1
+1,0,1
+1,1,0

@@ -1,0 +1,302 @@
+/* ============================================================
+   Daisy Field — Stylesheet
+   Nature-inspired palette, responsive, accessible.
+   ============================================================ */
+
+/* ---- CSS Custom Properties ---- */
+:root {
+  --meadow-dark:       #2E7D32;
+  --meadow-mid:        #43A047;
+  --meadow-light:      #A5D6A7;
+  --daisy-petal:       #FFFDE7;
+  --daisy-center:      #FDD835;
+  --daisy-center-deep: #F9A825;
+  --stem:              #388E3C;
+  --pink-daisy:        #F48FB1;
+  --sky:               #E3F2FD;
+  --ribbon:            #FF80AB;
+  --text-light:        #FFFFFF;
+  --accent:            #FF6F00;
+  --pill-bg:           rgba(0, 0, 0, 0.30);
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  color: var(--text-light);
+  background: var(--meadow-dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   Screens — common layout
+   ============================================================ */
+.screen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease;
+  z-index: 1;
+}
+.screen.active { opacity: 1; pointer-events: auto; z-index: 10; }
+
+/* ============================================================
+   Screen 1 — Timer Setup
+   ============================================================ */
+#setup-screen {
+  background: linear-gradient(165deg, var(--sky) 0%, var(--meadow-light) 35%, var(--meadow-mid) 100%);
+}
+
+.setup-card {
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  padding: 2rem;
+}
+
+.setup-card h1 {
+  font-weight: 800;
+  font-size: clamp(2rem, 6vw, 3rem);
+  letter-spacing: -0.5px;
+  color: var(--meadow-dark);
+  margin-bottom: .25rem;
+}
+
+.setup-card .subtitle {
+  font-size: 1rem;
+  color: var(--meadow-dark);
+  opacity: .75;
+  margin-bottom: 2rem;
+}
+
+/* Dial */
+.dial-wrapper {
+  position: relative;
+  width: 220px; height: 220px;
+  margin: 0 auto 1.5rem;
+}
+
+.dial-ring {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 12px solid var(--meadow-light);
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.25);
+  backdrop-filter: blur(4px);
+}
+
+.dial-value {
+  font-weight: 800;
+  font-size: 3.5rem;
+  color: var(--meadow-dark);
+  line-height: 1;
+}
+.dial-value span {
+  font-size: 1.1rem;
+  display: block;
+  font-weight: 600;
+  margin-top: .25rem;
+  opacity: .7;
+}
+
+/* Range input styled */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80%;
+  max-width: 340px;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--meadow-light);
+  outline: none;
+  margin-bottom: 2rem;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+/* CTA button */
+.btn-start {
+  display: inline-block;
+  padding: 1rem 2.4rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255,111,0,.35);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-start:hover, .btn-start:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255,111,0,.45);
+}
+.btn-start:active { transform: translateY(0); }
+
+/* ============================================================
+   Screen 2 — Meadow (growing timer)
+   ============================================================ */
+#meadow-screen {
+  background: linear-gradient(180deg,
+    var(--sky) 0%,
+    var(--meadow-light) 18%,
+    var(--meadow-mid) 45%,
+    var(--meadow-dark) 100%);
+  overflow: hidden;
+}
+
+/* Animated meadow gradient darkens slightly as it fills */
+#meadow-screen.filling {
+  animation: meadowShift 60s linear forwards;
+}
+@keyframes meadowShift {
+  to {
+    background: linear-gradient(180deg,
+      #C8E6C9 0%,
+      var(--meadow-mid) 20%,
+      var(--meadow-dark) 55%,
+      #1B5E20 100%);
+  }
+}
+
+/* Daisy container */
+#meadow {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+
+/* Individual daisy wrapper */
+.daisy {
+  position: absolute;
+  transform-origin: bottom center;
+  will-change: transform;
+}
+
+/* Bloom-in handled by GSAP, sway by CSS */
+.daisy svg { display: block; }
+
+.daisy.sway {
+  animation: sway var(--sway-dur, 4s) ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+}
+
+@keyframes sway {
+  0%   { transform: rotate(calc(var(--base-rot, 0deg) - 4deg)); }
+  100% { transform: rotate(calc(var(--base-rot, 0deg) + 4deg)); }
+}
+
+/* Timer pill */
+.timer-pill {
+  position: fixed;
+  top: env(safe-area-inset-top, 16px);
+  left: 50%; transform: translateX(-50%);
+  padding: .45rem 1.4rem;
+  background: var(--pill-bg);
+  backdrop-filter: blur(8px);
+  border-radius: 60px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  z-index: 100;
+  margin-top: 16px;
+}
+
+.timer-pill.pulse {
+  animation: pillPulse 1s ease-in-out infinite;
+}
+@keyframes pillPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50%      { transform: translateX(-50%) scale(1.08); opacity: .8; }
+}
+
+/* ============================================================
+   Screen 3 — Reward
+   ============================================================ */
+#reward-screen {
+  background: linear-gradient(180deg, var(--sky) 0%, var(--meadow-light) 45%, var(--meadow-mid) 100%);
+  z-index: 50;
+  text-align: center;
+  padding: 2rem;
+}
+
+.reward-message {
+  font-weight: 800;
+  font-size: clamp(1.5rem, 5vw, 2.4rem);
+  letter-spacing: -0.5px;
+  color: var(--meadow-dark);
+  margin-bottom: 1rem;
+  max-width: 400px;
+}
+
+.reward-submessage {
+  font-size: 1rem;
+  color: var(--meadow-dark);
+  opacity: .75;
+  margin-bottom: 2rem;
+}
+
+#bouquet-container {
+  width: 240px;
+  height: 320px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+}
+
+.btn-collect {
+  display: inline-block;
+  padding: 1rem 2.4rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255,111,0,.35);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-collect:hover, .btn-collect:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255,111,0,.45);
+}
+
+/* ============================================================
+   Confetti canvas
+   ============================================================ */
+#confetti-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 200;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (min-width: 768px) {
+  .setup-card { padding: 3rem; }
+  .dial-wrapper { width: 260px; height: 260px; }
+  .dial-value { font-size: 4rem; }
+}

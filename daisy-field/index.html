@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#4CAF50"/>
+  <meta name="description" content="Daisy Field — a mindfulness timer that fills your screen with daisies while you stay away from your phone."/>
+  <title>Daisy Field</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json"/>
+
+  <!-- Google Fonts: Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ========================================================
+       Screen 1 — Timer Setup
+       ======================================================== -->
+  <section id="setup-screen" class="screen active" aria-label="Timer setup">
+    <div class="setup-card">
+      <h1>Daisy Field</h1>
+      <p class="subtitle">Put your phone down and let the flowers grow 🌼</p>
+
+      <div class="dial-wrapper">
+        <div class="dial-ring">
+          <div id="time-display" class="dial-value" aria-live="polite">5<span>minutes</span></div>
+        </div>
+      </div>
+
+      <input
+        id="time-slider"
+        type="range"
+        min="1" max="60" value="5"
+        aria-label="Select timer duration in minutes"
+      />
+
+      <br/>
+      <button id="btn-start" class="btn-start" aria-label="Start timer and put down your phone">
+        Start &amp; Put Down
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       Screen 2 — Growing Meadow
+       ======================================================== -->
+  <section id="meadow-screen" class="screen" aria-label="Growing meadow timer">
+    <div id="meadow"></div>
+    <div id="timer-pill" class="timer-pill" aria-live="polite" aria-label="Time remaining">00:00</div>
+  </section>
+
+  <!-- ========================================================
+       Screen 3 — Bouquet Reward
+       ======================================================== -->
+  <section id="reward-screen" class="screen" aria-label="Timer complete reward">
+    <div id="bouquet-container" aria-hidden="true"></div>
+    <p id="reward-message" class="reward-message" aria-live="polite"></p>
+    <p class="reward-submessage">Your meadow is in full bloom!</p>
+    <button id="btn-collect" class="btn-collect" aria-label="Collect bouquet and start a new timer">
+      Collect Bouquet 💐
+    </button>
+  </section>
+
+  <!-- Confetti overlay -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- GSAP from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+
+  <!-- App modules (order matters: factories before app logic) -->
+  <script src="daisy.js" defer></script>
+  <script src="confetti.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>

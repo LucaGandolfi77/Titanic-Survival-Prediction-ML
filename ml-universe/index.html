@@ -1128,68 +1128,68 @@ model.<span class="fn">fit</span>(X, y)
       </div>
     </section>
 
-  </main>
+    <!-- ============================================================
+         VARIOUS TOOLS & EXPERIMENTS
+         ============================================================ -->
+    <section id="misc-tools" class="section" aria-labelledby="misc-tools-title">
+      <div class="container">
+        <span class="section-label">Laboratorio</span>
+        <h2 class="section-title" id="misc-tools-title">Strumenti Vari ed Esperimenti</h2>
+        <p>Una raccolta di utility ed esperimenti client-side: dall'elaborazione audio/video alla computer vision, funzionanti direttamente nel browser.</p>
 
-  <!-- ============================================================
-       SRT Generator / Video->Audio Reference
-       ============================================================ -->
-  <section id="srt-generator" class="section" aria-labelledby="srt-title">
-    <div class="container">
-      <span class="section-label">Strumenti</span>
-      <h2 class="section-title" id="srt-title">Generatore SRT & Estrattore Audio</h2>
-      <p>Strumenti client-side per trascrivere audio e per estrarre audio da video — funzionano direttamente nel browser senza server.</p>
+        <div class="bento-grid">
+          <article class="bento-card card card--glass" data-accent="cyan">
+            <h3>Audio → SRT</h3>
+            <p>Trascrive file audio in formato SRT usando Whisper (Transformers.js). Provalo direttamente nel browser.</p>
+            <a class="btn btn-secondary" href="../srt-generator/audio_to_srt_free.html">Apri Audio → SRT</a>
+          </article>
 
-      <div class="bento-grid">
-        <article class="bento-card card card--glass" data-accent="cyan">
-          <h3>Audio → SRT</h3>
-          <p>Trascrive file audio in formato SRT usando Whisper (Transformers.js). Provalo direttamente nel browser.</p>
-          <a class="btn btn-secondary" href="../srt-generator/audio_to_srt_free.html">Apri Audio → SRT</a>
-        </article>
+          <article class="bento-card card card--glass" data-accent="indigo">
+            <h3>Video → Audio</h3>
+            <p>Estrai tracce audio da video e salva come WAV, MP3, M4A, OGG o FLAC usando ffmpeg.wasm.</p>
+            <a class="btn btn-secondary" href="../srt-generator/video_to_audio.html">Apri Video → Audio</a>
+          </article>
 
-        <article class="bento-card card card--glass" data-accent="indigo">
-          <h3>Video → Audio</h3>
-          <p>Estrai tracce audio da video e salva come WAV, MP3, M4A, OGG o FLAC usando ffmpeg.wasm.</p>
-          <a class="btn btn-secondary" href="../srt-generator/video_to_audio.html">Apri Video → Audio</a>
-        </article>
+          <article class="bento-card card card--glass" data-accent="emerald">
+            <h3>Video con Sottotitoli</h3>
+            <p>Carica video e file SRT, personalizza lo stile dei sottotitoli e incorpora i sottotitoli nel video.</p>
+            <a class="btn btn-secondary" href="../srt-generator/video_with_subs.html">Apri Video con Sottotitoli</a>
+          </article>
 
-        <article class="bento-card card card--glass" data-accent="emerald">
-          <h3>Video con Sottotitoli</h3>
-          <p>Carica video e file SRT, personalizza lo stile dei sottotitoli e incorpora i sottotitoli nel video.</p>
-          <a class="btn btn-secondary" href="../srt-generator/video_with_subs.html">Apri Video con Sottotitoli</a>
-        </article>
+          <article class="bento-card card card--glass" data-accent="amber">
+            <h3>Editor SRT</h3>
+            <p>Editor grafico per SRT con timeline, drag & resize e esportazione del file modificato.</p>
+            <a class="btn btn-secondary" href="../srt-generator/srt_editor.html">Apri Editor SRT</a>
+          </article>
 
-        <article class="bento-card card card--glass" data-accent="amber">
-          <h3>Editor SRT</h3>
-          <p>Editor grafico per SRT con timeline, drag & resize e esportazione del file modificato.</p>
-          <a class="btn btn-secondary" href="../srt-generator/srt_editor.html">Apri Editor SRT</a>
-        </article>
+          <article class="bento-card card card--glass" data-accent="pink">
+            <h3>Editor Video</h3>
+            <p>Taglia, unisci e ricomponi clip nel browser; esporta il video finale senza server.</p>
+            <a class="btn btn-secondary" href="../srt-generator/video_editor.html">Apri Video Editor</a>
+          </article>
 
-        <article class="bento-card card card--glass" data-accent="pink">
-          <h3>Editor Video</h3>
-          <p>Taglia, unisci e ricomponi clip nel browser; esporta il video finale senza server.</p>
-          <a class="btn btn-secondary" href="../srt-generator/video_editor.html">Apri Video Editor</a>
-        </article>
+          <article class="bento-card card card--glass" data-accent="violet">
+            <h3>Image Generator</h3>
+            <p>Generatore di immagini vettoriali (SVG) da prompt — scarica SVG, PNG o HTML.</p>
+            <a class="btn btn-secondary" href="../image_generator/index.html">Apri Image Generator</a>
+          </article>
+          
+          <article class="bento-card card card--glass" data-accent="cyan">
+            <h3>AI Camera</h3>
+            <p>Anteprima live con effetti, rilevamento oggetti, volti e segmentazione del corpo — scatta e scarica foto.</p>
+            <a class="btn btn-secondary" href="../ai-camera/index.html">Apri AI Camera</a>
+          </article>
 
-        <article class="bento-card card card--glass" data-accent="violet">
-          <h3>Image Generator</h3>
-          <p>Generatore di immagini vettoriali (SVG) da prompt — scarica SVG, PNG o HTML.</p>
-          <a class="btn btn-secondary" href="../image_generator/index.html">Apri Image Generator</a>
-        </article>
-        
-        <article class="bento-card card card--glass" data-accent="cyan">
-          <h3>AI Camera</h3>
-          <p>Anteprima live con effetti, rilevamento oggetti, volti e segmentazione del corpo — scatta e scarica foto.</p>
-          <a class="btn btn-secondary" href="../ai-camera/index.html">Apri AI Camera</a>
-        </article>
-
-        <article class="bento-card card card--glass" data-accent="cyan">
-          <h3>Daisy Field</h3>
-          <p>Metti giù il telefono e lascia crescere i fiori 🌼</p>
-          <a class="btn btn-secondary" href="../daisy-field/index.html">Apri Daisy Field</a>
-        </article>
+          <article class="bento-card card card--glass" data-accent="cyan">
+            <h3>Daisy Field</h3>
+            <p>Metti giù il telefono e lascia crescere i fiori 🌼</p>
+            <a class="btn btn-secondary" href="../daisy-field/index.html">Apri Daisy Field</a>
+          </article>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+  </main>
 
   <!-- ============================================================
        FOOTER

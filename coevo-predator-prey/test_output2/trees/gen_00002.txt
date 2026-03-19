@@ -1,0 +1,7 @@
+=== Generation 2 ===
+
+Best prey  (fitness=27.3520):
+  add(if_then_else(protected_div(max2(and_(PRED_E, FOOD_S), max2(PRED_N, 0.257)), sub(min2(FOOD_W, PREY_W), and_(FOOD_N, PREY_E))), not_(add(and_(-0.534, FOOD_S), mul(PRED_N, PRED_W))), sub(or_(sub(PRED_S, FOOD_W), add(PREY_W, PREY_E)), and_(min2(PREY_E, FOOD_E), max2(PREY_W, FOOD_W)))), PREY_E)
+
+Best pred  (fitness=-1.0960):
+  sub(PRED_S, -0.116)

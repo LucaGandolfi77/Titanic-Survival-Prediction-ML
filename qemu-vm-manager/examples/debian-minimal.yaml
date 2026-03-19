@@ -1,0 +1,25 @@
+# Example: minimal Debian VM
+# Copy this file to ~/.vms/debian-minimal.yaml and adjust disk_image.
+
+name: "vm-debian"
+arch: "x86_64"
+cpu: "host"
+cores: 2
+ram_mb: 512
+disk_image: "/var/vms/debian.qcow2"
+
+# Optional kernel boot (omit for normal disk boot)
+kernel: null
+initrd: null
+kernel_args: "console=ttyS0"
+
+network:
+  type: "user"
+  hostfwd:
+    - "tcp::2222-:22"
+    - "tcp::8080-:80"
+
+serial: "stdio"
+monitor: "telnet::4444,server,nowait"
+
+extra_args: []

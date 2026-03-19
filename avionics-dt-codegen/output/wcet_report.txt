@@ -1,0 +1,39 @@
+========================================
+  WCET ANALYSIS REPORT
+========================================
+
+Tree Structure
+  Total nodes      : 13
+  Internal nodes   : 6
+  Leaf nodes       : 7
+  Tree depth       : 4
+  Features         : 8
+  Classes          : 4
+
+Comparison Count (root-to-leaf paths)
+  Worst case       : 4
+  Best case        : 2
+  Average          : 3
+
+Estimated Cycle Count (ARM Cortex-M4)
+  Worst case       : 24 cycles
+  Best case        : 16 cycles
+  Average          : 20 cycles
+
+Features:
+  [0] T_exhaust
+  [1] P_inlet
+  [2] RPM
+  [3] vibration_x
+  [4] vibration_y
+  [5] oil_temp
+  [6] fuel_flow
+  [7] EGT
+
+Classes:
+  [0] NOMINAL
+  [1] WARN_VIBRATION
+  [2] WARN_THERMAL
+  [3] FAULT_CRITICAL
+
+========================================

@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -DNDEBUG CMakeFiles/unit_tests.dir/tests/test_main.cpp.o -o unit_tests  libavionics_dt_lib.a 

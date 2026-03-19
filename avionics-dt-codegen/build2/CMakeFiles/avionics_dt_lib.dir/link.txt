@@ -1,0 +1,2 @@
+/usr/bin/ar qc libavionics_dt_lib.a CMakeFiles/avionics_dt_lib.dir/src/tree_parser.cpp.o CMakeFiles/avionics_dt_lib.dir/src/codegen.cpp.o CMakeFiles/avionics_dt_lib.dir/src/wcet_analyzer.cpp.o
+/usr/bin/ranlib libavionics_dt_lib.a

@@ -1,0 +1,7 @@
+=== Generation 0 ===
+
+Best prey  (fitness=24.2500):
+  add(FOOD_W, FOOD_W)
+
+Best pred  (fitness=-3.5440):
+  min2(max2(and_(mul(ENERGY_LOW, PREY_W), add(PREY_N, PRED_E)), if_then_else(max2(CLOSEST_PREY_DIR, 0.439), not_(PRED_S), mul(PREY_S, 0.842))), min2(sub(and_(PRED_N, CLOSEST_PREY_DIR), add(-0.183, PRED_E)), add(max2(PREY_E, PREY_W), mul(0.881, 0.496))))

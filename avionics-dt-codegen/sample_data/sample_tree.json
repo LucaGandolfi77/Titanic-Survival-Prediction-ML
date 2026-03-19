@@ -1,0 +1,84 @@
+{
+  "n_features": 8,
+  "feature_names": [
+    "T_exhaust",
+    "P_inlet",
+    "RPM",
+    "vibration_x",
+    "vibration_y",
+    "oil_temp",
+    "fuel_flow",
+    "EGT"
+  ],
+  "classes": [
+    "NOMINAL",
+    "WARN_VIBRATION",
+    "WARN_THERMAL",
+    "FAULT_CRITICAL"
+  ],
+  "tree": {
+    "node_id": 0,
+    "feature": "T_exhaust",
+    "threshold": 650.5,
+    "left": {
+      "node_id": 1,
+      "feature": "RPM",
+      "threshold": 8200.0,
+      "left": {
+        "node_id": 3,
+        "feature": "vibration_x",
+        "threshold": 2.5,
+        "left": {
+          "node_id": 5,
+          "leaf": true,
+          "class": "NOMINAL"
+        },
+        "right": {
+          "node_id": 6,
+          "feature": "oil_temp",
+          "threshold": 120.0,
+          "left": {
+            "node_id": 9,
+            "leaf": true,
+            "class": "WARN_VIBRATION"
+          },
+          "right": {
+            "node_id": 10,
+            "leaf": true,
+            "class": "FAULT_CRITICAL"
+          }
+        }
+      },
+      "right": {
+        "node_id": 4,
+        "feature": "EGT",
+        "threshold": 850.0,
+        "left": {
+          "node_id": 7,
+          "leaf": true,
+          "class": "WARN_VIBRATION"
+        },
+        "right": {
+          "node_id": 8,
+          "leaf": true,
+          "class": "FAULT_CRITICAL"
+        }
+      }
+    },
+    "right": {
+      "node_id": 2,
+      "feature": "EGT",
+      "threshold": 900.0,
+      "left": {
+        "node_id": 11,
+        "leaf": true,
+        "class": "WARN_THERMAL"
+      },
+      "right": {
+        "node_id": 12,
+        "leaf": true,
+        "class": "FAULT_CRITICAL"
+      }
+    }
+  }
+}

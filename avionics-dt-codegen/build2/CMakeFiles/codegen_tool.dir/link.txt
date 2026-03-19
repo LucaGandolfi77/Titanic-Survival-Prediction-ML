@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -DNDEBUG CMakeFiles/codegen_tool.dir/src/main_codegen.cpp.o -o codegen_tool  libavionics_dt_lib.a 

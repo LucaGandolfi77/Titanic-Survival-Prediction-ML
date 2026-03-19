@@ -1,0 +1,44 @@
+[
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/include -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2/_deps/nlohmann_json-src/include -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/avionics_dt_lib.dir/src/tree_parser.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/tree_parser.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/tree_parser.cpp",
+  "output": "CMakeFiles/avionics_dt_lib.dir/src/tree_parser.cpp.o"
+},
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/include -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2/_deps/nlohmann_json-src/include -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/avionics_dt_lib.dir/src/codegen.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/codegen.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/codegen.cpp",
+  "output": "CMakeFiles/avionics_dt_lib.dir/src/codegen.cpp.o"
+},
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/include -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2/_deps/nlohmann_json-src/include -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/avionics_dt_lib.dir/src/wcet_analyzer.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/wcet_analyzer.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/wcet_analyzer.cpp",
+  "output": "CMakeFiles/avionics_dt_lib.dir/src/wcet_analyzer.cpp.o"
+},
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/include -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2/_deps/nlohmann_json-src/include -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/codegen_tool.dir/src/main_codegen.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/main_codegen.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/main_codegen.cpp",
+  "output": "CMakeFiles/codegen_tool.dir/src/main_codegen.cpp.o"
+},
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/include -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2/_deps/nlohmann_json-src/include -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/unit_tests.dir/tests/test_main.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/tests/test_main.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/tests/test_main.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_main.cpp.o"
+},
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/output -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/validation_harness.dir/src/validation_harness.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/validation_harness.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/src/validation_harness.cpp",
+  "output": "CMakeFiles/validation_harness.dir/src/validation_harness.cpp.o"
+},
+{
+  "directory": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/build2",
+  "command": "/usr/bin/c++  -I/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/output -O2 -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wold-style-cast -Wnon-virtual-dtor -o CMakeFiles/validation_harness.dir/output/generated_classifier.cpp.o -c /workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/output/generated_classifier.cpp",
+  "file": "/workspaces/Titanic-Survival-Prediction-ML/avionics-dt-codegen/output/generated_classifier.cpp",
+  "output": "CMakeFiles/validation_harness.dir/output/generated_classifier.cpp.o"
+}
+]

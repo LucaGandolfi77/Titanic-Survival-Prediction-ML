@@ -1,0 +1,6 @@
+# Required
+pyyaml>=6.0
+
+# Optional — enhanced CLI (the project works without these)
+# rich>=13.0       # optional: richer console output
+# click>=8.0       # optional: alternative CLI framework (argparse used by default)

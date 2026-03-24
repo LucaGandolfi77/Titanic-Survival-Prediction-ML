@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+      <div class="login-card">
+        <h1>🏢 ERP System</h1>
+        <div id="login-error" class="error-msg hidden"></div>
+        <div id="default-pw-warning" class="warning-banner hidden">
+          ⚠️ You are using the default admin password. Please change it in Settings.
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main App Shell -->
+    <div id="app-shell" class="app-shell hidden">
+      <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h2 id="sidebar-brand">🏢 ERP</h2>
+          <button id="sidebar-toggle" class="sidebar-toggle">☰</button>
+        </div>
+        <ul class="nav-list">
+          <li><a href="#dashboard" data-module="dashboard">📊 Dashboard</a></li>
+          <li><a href="#inventory" data-module="inventory">📦 Inventory</a></li>
+          <li><a href="#customers" data-module="customers">👥 Customers</a></li>
+          <li><a href="#suppliers" data-module="suppliers">🏭 Suppliers</a></li>
+          <li><a href="#purchase-orders" data-module="purchase-orders">🛒 Purchase Orders</a></li>
+          <li><a href="#sales-orders" data-module="sales-orders">💼 Sales Orders</a></li>
+          <li><a href="#invoices" data-module="invoices">🧾 Invoices</a></li>
+          <li><a href="#accounting" data-module="accounting">📒 Accounting</a></li>
+          <li><a href="#hr" data-module="hr">👔 HR</a></li>
+          <li><a href="#settings" data-module="settings">⚙️ Settings</a></li>
+        </ul>
+        <div class="sidebar-footer">
+          <div id="user-info" class="user-info"></div>
+          <a href="#" id="logout-btn" class="logout-btn">🚪 Logout</a>
+        </div>
+      </nav>
+      <main id="main-content" class="main-content"></main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Modal Container -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal" class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button id="modal-close" class="modal-close">&times;</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-footer" class="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <div id="confirm-overlay" class="modal-overlay hidden">
+    <div class="modal confirm-dialog">
+      <div class="modal-header">
+        <h3 id="confirm-title">Confirm</h3>
+      </div>
+      <div id="confirm-body" class="modal-body"></div>
+      <div class="modal-footer">
+        <button id="confirm-cancel" class="btn btn-secondary">Cancel</button>
+        <button id="confirm-ok" class="btn btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

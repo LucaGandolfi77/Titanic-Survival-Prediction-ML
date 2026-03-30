@@ -1,0 +1,38 @@
+[
+  {
+    "generation": 0,
+    "best_fitness": -1.3196582357577364,
+    "mean_fitness": -1.5248091419324037,
+    "std_fitness": 0.11614630341040066,
+    "diversity_index": 0.8,
+    "best_description": "MLP[37] act=selu bn=False do=0.58 opt=sgd lr=1.3e-03 wd=7.6e-05 bs=256",
+    "surrogate_spearman_rho": 0.0,
+    "n_real_evals": 5,
+    "n_surrogate_evals": 0,
+    "elapsed_seconds": 218.0506601029997
+  },
+  {
+    "generation": 1,
+    "best_fitness": -1.3196582357577364,
+    "mean_fitness": -1.4321145379168378,
+    "std_fitness": 0.1184301945666643,
+    "diversity_index": 0.8,
+    "best_description": "MLP[37] act=selu bn=False do=0.58 opt=sgd lr=1.3e-03 wd=7.6e-05 bs=256",
+    "surrogate_spearman_rho": 0.0,
+    "n_real_evals": 5,
+    "n_surrogate_evals": 0,
+    "elapsed_seconds": 256.5265914729998
+  },
+  {
+    "generation": 2,
+    "best_fitness": -1.3163582357577361,
+    "mean_fitness": -1.3463155322939113,
+    "std_fitness": 0.04228823999474377,
+    "diversity_index": 0.7,
+    "best_description": "MLP[37] act=selu bn=False do=0.58 opt=sgd lr=1.3e-03 wd=7.6e-05 bs=256",
+    "surrogate_spearman_rho": 0.0,
+    "n_real_evals": 5,
+    "n_surrogate_evals": 0,
+    "elapsed_seconds": 339.1632585559996
+  }
+]

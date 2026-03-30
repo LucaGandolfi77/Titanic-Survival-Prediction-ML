@@ -1,0 +1,13 @@
+*.pyc
+__pycache__/*
+baseline_models/__pycache__/*
+baselines/__pycache__/*
+evaluation/__pycache__/*
+evoluation/__pycache__/*
+experiments/__pycache__/*
+fitness/__pycache__/*
+genome/__pycache__/*
+search_space/__pycache__/*
+tests/__pycache__/*
+visualization/__pycache__/*
+evolutionary_automl/__pycache__/*

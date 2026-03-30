@@ -1,0 +1,347 @@
+{
+  "iris": {
+    "seeds": {
+      "42": {
+        "pareto_front": [
+          {
+            "chromosome": [
+              0.82276161327083,
+              0.44341419882733113,
+              0.2272387217847769,
+              0.5545847870158348,
+              0.06381725610417532,
+              0.8276311719925821,
+              0.6316643991220648,
+              0.5540644486593794,
+              0.35452596812986836,
+              0.9706980243949033,
+              0.626065014006036,
+              0.7783834970737619,
+              0.19463870785196757
+            ],
+            "f1": 0.9798486114275586,
+            "training_time": 0.022703134000039427,
+            "description": "Scaler=minmax \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=decision_tree(max_depth=25, min_samples_split=26, min_samples_leaf=12, criterion=gini)"
+          },
+          {
+            "chromosome": [
+              0.67,
+              0.0,
+              0.5,
+              0.0,
+              0.67,
+              0.14,
+              1.0,
+              0.0,
+              0.1941272985448077,
+              0.5,
+              0.5049274040318149,
+              0.8048656146955656,
+              0.5
+            ],
+            "f1": 0.953216374269006,
+            "training_time": 0.01735659299993131,
+            "description": "Scaler=minmax \u2192 FeatureSel=none \u2192 DimRed=none \u2192 Clf=knn(n_neighbors=5, weights=distance, metric=euclidean, p=2)"
+          }
+        ],
+        "best_f1_individual": {
+          "chromosome": [
+            0.82276161327083,
+            0.44341419882733113,
+            0.2272387217847769,
+            0.5545847870158348,
+            0.06381725610417532,
+            0.8276311719925821,
+            0.6316643991220648,
+            0.5540644486593794,
+            0.35452596812986836,
+            0.9706980243949033,
+            0.626065014006036,
+            0.7783834970737619,
+            0.19463870785196757
+          ],
+          "f1": 0.9798486114275586,
+          "training_time": 0.022703134000039427,
+          "description": "Scaler=minmax \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=decision_tree(max_depth=25, min_samples_split=26, min_samples_leaf=12, criterion=gini)"
+        },
+        "history": [
+          {
+            "generation": 0,
+            "best_fitness": 0.9798486114275586,
+            "mean_fitness": 0.8219318516818467,
+            "std_fitness": 0.2925126029857077,
+            "min_fitness": 0.0,
+            "median_fitness": 0.953182451077188,
+            "diversity": 1.0,
+            "elapsed_time": 13.534912429000087,
+            "best_description": ""
+          },
+          {
+            "generation": 1,
+            "best_fitness": 0.9798486114275586,
+            "mean_fitness": 0.9535249234196602,
+            "std_fitness": 0.03589141848337342,
+            "min_fitness": 0.8465831244778613,
+            "median_fitness": 0.9599331662489557,
+            "diversity": 0.9,
+            "elapsed_time": 19.414422032999937,
+            "best_description": ""
+          },
+          {
+            "generation": 2,
+            "best_fitness": 0.9798486114275586,
+            "mean_fitness": 0.9491672615883141,
+            "std_fitness": 0.04321339587822277,
+            "min_fitness": 0.8465831244778613,
+            "median_fitness": 0.9598658261816158,
+            "diversity": 0.9,
+            "elapsed_time": 22.39125603399998,
+            "best_description": ""
+          }
+        ],
+        "eval_count": 49,
+        "cache_stats": "FitnessCache(size=49, hits=2, misses=49, hit_rate=3.92%)",
+        "n_features": 4
+      },
+      "7": {
+        "pareto_front": [
+          {
+            "chromosome": [
+              0.15446108106143985,
+              0.26759930456378545,
+              0.8803321539808286,
+              0.5097908098684232,
+              0.8471502463658693,
+              0.6397171669425262,
+              0.7417709473618571,
+              0.09149560506304566,
+              0.5411438213764888,
+              0.50777223630035,
+              0.8713393766928806,
+              0.3612640590141576,
+              0.5981840672072131
+            ],
+            "f1": 0.9666165413533834,
+            "training_time": 0.03327737299969158,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=logistic_regression(C=3.6213347137882343, solver=liblinear, max_iter=182, penalty=l1)"
+          },
+          {
+            "chromosome": [
+              0.15446108106143985,
+              0.26759930456378545,
+              0.8803321539808286,
+              0.5097908098684232,
+              0.8471502463658693,
+              0.6397171669425262,
+              0.7417709473618571,
+              0.09149560506304566,
+              0.5411438213764888,
+              0.50777223630035,
+              0.8713393766928806,
+              0.3612640590141576,
+              0.5981840672072131
+            ],
+            "f1": 0.9666165413533834,
+            "training_time": 0.03327737299969158,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=logistic_regression(C=3.6213347137882343, solver=liblinear, max_iter=182, penalty=l1)"
+          },
+          {
+            "chromosome": [
+              0.15446108106143985,
+              0.26759930456378545,
+              0.8803321539808286,
+              0.5097908098684232,
+              0.8471502463658693,
+              0.6397171669425262,
+              0.7417709473618571,
+              0.09149560506304566,
+              0.5411438213764888,
+              0.50777223630035,
+              0.8713393766928806,
+              0.3612640590141576,
+              0.5981840672072131
+            ],
+            "f1": 0.9666165413533834,
+            "training_time": 0.03327737299969158,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=logistic_regression(C=3.6213347137882343, solver=liblinear, max_iter=182, penalty=l1)"
+          },
+          {
+            "chromosome": [
+              0.15446108106143985,
+              0.26759930456378545,
+              0.8803321539808286,
+              0.5097908098684232,
+              0.8471502463658693,
+              0.6397171669425262,
+              0.7417709473618571,
+              0.09149560506304566,
+              0.5411438213764888,
+              0.50777223630035,
+              0.8713393766928806,
+              0.3612640590141576,
+              0.5981840672072131
+            ],
+            "f1": 0.9666165413533834,
+            "training_time": 0.03327737299969158,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=logistic_regression(C=3.6213347137882343, solver=liblinear, max_iter=182, penalty=l1)"
+          },
+          {
+            "chromosome": [
+              0.15446108106143985,
+              0.26759930456378545,
+              0.8803321539808286,
+              0.5097908098684232,
+              0.67,
+              0.10681501762039458,
+              0.9598877962262146,
+              0.0458753752016656,
+              0.4819811909948738,
+              0.50777223630035,
+              0.8713393766928806,
+              0.3612640590141576,
+              0.553409758593964
+            ],
+            "f1": 0.9666165413533833,
+            "training_time": 0.022016553999947064,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=knn(n_neighbors=4, weights=distance, metric=euclidean, p=3)"
+          },
+          {
+            "chromosome": [
+              0.13676405154258153,
+              0.41890365091318515,
+              0.8152562779950456,
+              0.014271189684610608,
+              0.6284619478662907,
+              0.7930236580980341,
+              0.5130035828222085,
+              0.7258494205510871,
+              0.22642348269714407,
+              0.19852114799267284,
+              0.3631269505503516,
+              0.17940602756714652,
+              0.34606143911247844
+            ],
+            "f1": 0.9665831244778612,
+            "training_time": 0.01995441999997638,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=none \u2192 Clf=knn(n_neighbors=24, weights=distance, metric=manhattan, p=2)"
+          },
+          {
+            "chromosome": [
+              0.13676405154258153,
+              0.41890365091318515,
+              0.8152562779950456,
+              0.014271189684610608,
+              0.6284619478662907,
+              0.7930236580980341,
+              0.5130035828222085,
+              0.7258494205510871,
+              0.22642348269714407,
+              0.19852114799267284,
+              0.3631269505503516,
+              0.17940602756714652,
+              0.34606143911247844
+            ],
+            "f1": 0.9665831244778612,
+            "training_time": 0.01995441999997638,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=none \u2192 Clf=knn(n_neighbors=24, weights=distance, metric=manhattan, p=2)"
+          },
+          {
+            "chromosome": [
+              0.13676405154258153,
+              0.41890365091318515,
+              0.8152562779950456,
+              0.014271189684610608,
+              0.6284619478662907,
+              0.7594915339975474,
+              0.5130035828222085,
+              0.7258494205510871,
+              0.29347328946392226,
+              0.19852114799267284,
+              0.3631269505503516,
+              0.1137985512525769,
+              0.34606143911247844
+            ],
+            "f1": 0.9598997493734336,
+            "training_time": 0.019807853000202158,
+            "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=none \u2192 Clf=knn(n_neighbors=23, weights=distance, metric=manhattan, p=2)"
+          }
+        ],
+        "best_f1_individual": {
+          "chromosome": [
+            0.15446108106143985,
+            0.26759930456378545,
+            0.8803321539808286,
+            0.5097908098684232,
+            0.8471502463658693,
+            0.6397171669425262,
+            0.7417709473618571,
+            0.09149560506304566,
+            0.5411438213764888,
+            0.50777223630035,
+            0.8713393766928806,
+            0.3612640590141576,
+            0.5981840672072131
+          ],
+          "f1": 0.9666165413533834,
+          "training_time": 0.03327737299969158,
+          "description": "Scaler=none \u2192 FeatureSel=select_k_best \u2192 DimRed=pca \u2192 Clf=logistic_regression(C=3.6213347137882343, solver=liblinear, max_iter=182, penalty=l1)"
+        },
+        "history": [
+          {
+            "generation": 0,
+            "best_fitness": 0.9666165413533834,
+            "mean_fitness": 0.7995815329666577,
+            "std_fitness": 0.2897234039154506,
+            "min_fitness": 0.0,
+            "median_fitness": 0.9362349737528092,
+            "diversity": 1.0,
+            "elapsed_time": 9.74072114899991,
+            "best_description": ""
+          },
+          {
+            "generation": 1,
+            "best_fitness": 0.9666165413533834,
+            "mean_fitness": 0.934545646818424,
+            "std_fitness": 0.10455479353029207,
+            "min_fitness": 0.48736393106957826,
+            "median_fitness": 0.9598997493734336,
+            "diversity": 0.95,
+            "elapsed_time": 17.480526113999986,
+            "best_description": ""
+          },
+          {
+            "generation": 2,
+            "best_fitness": 0.9666165413533834,
+            "mean_fitness": 0.9639146350725296,
+            "std_fitness": 0.004943851765916496,
+            "min_fitness": 0.9464317359054201,
+            "median_fitness": 0.9665998329156222,
+            "diversity": 0.6,
+            "elapsed_time": 21.438169793999805,
+            "best_description": ""
+          }
+        ],
+        "eval_count": 45,
+        "cache_stats": "FitnessCache(size=45, hits=4, misses=45, hit_rate=8.16%)",
+        "n_features": 4
+      }
+    },
+    "best_f1_scores": [
+      0.9798486114275586,
+      0.9666165413533834
+    ],
+    "summary": {
+      "mean_f1": 0.973232576390471,
+      "std_f1": 0.00935648647858491,
+      "median_f1": 0.973232576390471
+    }
+  },
+  "_meta": {
+    "method": "nsga2",
+    "total_time_seconds": 44.56446061999986,
+    "pop_size": 20,
+    "n_gen": 2,
+    "n_runs": 2,
+    "dry_run": true
+  }
+}

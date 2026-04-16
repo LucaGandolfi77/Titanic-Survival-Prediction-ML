@@ -1,0 +1,34 @@
+{
+  "title": "Neon Frost: The Silicon Shroud",
+  "genre": "Cyberpunk / Tech-Noir",
+  "premise": "In 2088, Tokyo is locked in a perpetual volcanic winter, covered in ash and neon. When Dr. Aris Thorne, the pioneer of 'Ghost-Mapping' (uploading memories into synthetic bodies), disappears from his high-security lab in Akihabara, freelance retrieval specialist Kaelen 'Kai' Reed is hired to find him. The only clues: a fractured memory-drive containing the digital soul of a dead rebel and a bloody message on the lab's glass wall: 'The machine never forgets'.",
+  "characters": [
+    {
+      "name": "Kaelen 'Kai' Reed",
+      "role": "protagonist",
+      "description": "An ex-corporate enforcer turned freelance 'memory-hunter'. He has a cybernetic eye that sees data streams but suffers from 'glitch-head'—migraines caused by overwritten memories."
+    },
+    {
+      "name": "Dr. Aris Thorne",
+      "role": "missing person / key figure",
+      "description": "A visionary neuro-engineer who went rogue. He was rumored to be working on 'Project Lazarus', a way to bring back the consciousness of those lost during the Great Freeze."
+    },
+    {
+      "name": "Unit 7 (Emi)",
+      "role": "witness / synthetic",
+      "description": "A state-of-the-art android servant found at the crime scene. Her logic core is damaged, and she speaks in poetic riddles, hiding a core memory Dr. Thorne entrusted to her."
+    },
+    {
+      "name": "Sato Ishii",
+      "role": "antagonist",
+      "description": "The CEO of Kuro-Tech Industries. A transhumanist extremist who believes physical bodies are obsolete and wants Thorne’s research to force a global digital migration."
+    },
+    {
+      "name": "Nova",
+      "role": "ally / informant",
+      "description": "A legendary underground hacker living in the ruins of the old subway tunnels. She specializes in 'data-archaeology' and knows the dark secrets of Kuro-Tech’s server farms."
+    }
+  ],
+  "setting": "Neo-Tokyo — 2088. A vertical city of steel and glass where the rich live above the toxic ash clouds in 'Sky-Spires' and the poor survive in the frozen, neon-lit gutters of the Lower Districts.",
+  "tone": "Gritty, cold, and philosophical. It explores the blurred line between digital immortality and human extinction."
+}

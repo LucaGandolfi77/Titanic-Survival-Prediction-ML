@@ -1,0 +1,34 @@
+{
+  "title": "The Last Light of Venice",
+  "genre": "Noir / Science Fiction",
+  "premise": "In 2042, Venice is slowly sinking beneath rising waters. When renowned glass artist Elena Ferro vanishes from her Murano workshop during a catastrophic acqua alta, detective Marco Vianello is drawn into a labyrinth of art forgery, ancient smuggling tunnels beneath the lagoon, and a conspiracy that connects Venice's drowning future to secrets buried in its past. The only clues: a half-finished phoenix sculpture and a cryptic note reading 'The lagoon remembers'.",
+  "characters": [
+    {
+      "name": "Marco Vianello",
+      "role": "protagonist",
+      "description": "A weary Venetian detective in his 50s, haunted by the rising waters that are slowly swallowing his city. Stubborn, perceptive, drinks too much grappa."
+    },
+    {
+      "name": "Elena Ferro",
+      "role": "missing person / key figure",
+      "description": "A brilliant but secretive glass artist in her 40s, known for her sculptures that seem to capture light itself. She discovered something dangerous in the old tunnels."
+    },
+    {
+      "name": "Tomás",
+      "role": "witness / apprentice",
+      "description": "Elena's young apprentice from Lisbon, talented but anxious. He clearly knows more than he lets on, torn between loyalty and fear."
+    },
+    {
+      "name": "Contessa Morosini",
+      "role": "antagonist",
+      "description": "A wealthy art collector from an old Venetian family, elegant and ruthless. She will stop at nothing to possess Elena's final masterpiece."
+    },
+    {
+      "name": "Luca Daminato",
+      "role": "ally / informant",
+      "description": "A grizzled lagoon fisherman in his 60s who knows every hidden canal and tunnel. He was Elena's friend and holds a piece of the puzzle."
+    }
+  ],
+  "setting": "Venice, Italy — 2042. The city is half-submerged, with elevated walkways, floating markets, and underwater ruins. Murano's glass workshops still operate on the upper floors.",
+  "tone": "Atmospheric noir with melancholic beauty. The sinking city mirrors the characters' sense of loss and urgency."
+}

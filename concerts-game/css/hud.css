@@ -1,0 +1,30 @@
+/* hud.css — Top HUD bar */
+#hud {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  display: flex; align-items: center; justify-content: space-around;
+  flex-wrap: nowrap; /* prevent 2-row wrapping */
+  background: linear-gradient(180deg, rgba(13,13,26,0.98), rgba(13,13,26,0.85));
+  padding: max(8px, env(safe-area-inset-top)) 8px 8px;
+  padding-left: max(8px, env(safe-area-inset-left));
+  padding-right: max(52px, calc(env(safe-area-inset-right) + 48px)); /* room for mute btn */
+  gap: 4px; backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.hud-item {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1; min-width: 0; /* allow shrinking */
+}
+.hud-label {
+  font-size: 0.55rem; color: var(--gray);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.hud-item span:last-child {
+  font-weight: 700; font-size: 0.85rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+}
+#hud-points { color: var(--gold); }
+#hud-budget { color: var(--teal); }
+#hud-attended { color: var(--pink); }
+#hud-date { color: var(--white); }
+#hud-next { color: var(--gray-light); font-size: 0.7rem; }

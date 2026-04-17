@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storyline MCP — Debug Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    h1 { color: #00f5d4; margin-bottom: 20px; font-size: 1.5rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 900px;
+    }
+    .card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #2a2a4a;
+    }
+    .card h2 { color: #ffd700; font-size: 1rem; margin-bottom: 12px; }
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .status.ok { background: #00f5d422; color: #00f5d4; }
+    .status.err { background: #ff2d7822; color: #ff2d78; }
+    input, button, select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #3a3a5a;
+      background: #0d0d1a;
+      color: #e0e0e0;
+      font-size: 0.9rem;
+      margin: 4px 0;
+    }
+    button {
+      background: #00f5d4;
+      color: #0d0d1a;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover { opacity: 0.85; }
+    .row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    #log {
+      background: #0d0d1a;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      grid-column: span 2;
+    }
+    .log-entry { margin-bottom: 4px; }
+    .log-ok { color: #00f5d4; }
+    .log-err { color: #ff2d78; }
+    .log-info { color: #ffd700; }
+  </style>
+</head>
+<body>
+
+<h1>🎛️ Storyline MCP — Debug Dashboard</h1>
+
+<div class="grid">
+
+  <!-- Status -->
+  <div class="card">
+    <h2>Stato Connessione</h2>
+    <p>Bridge: <span id="bridgeStatus" class="status err">checking...</span></p>
+    <p style="margin-top:8px">Storyline: <span id="slStatus" class="status err">checking...</span></p>
+    <button onclick="checkStatus()" style="margin-top:12px">🔄 Aggiorna</button>
+  </div>
+
+  <!-- Get/Set Variable -->
+  <div class="card">
+    <h2>Variabili</h2>
+    <div class="row">
+      <input id="varName" placeholder="Nome variabile" style="flex:1">
+      <button onclick="getVar()">GET</button>
+    </div>
+    <div class="row">
+      <input id="varValue" placeholder="Valore" style="flex:1">
+      <button onclick="setVar()">SET</button>
+    </div>
+    <p style="margin-top:8px;font-size:0.85rem">Risultato: <span id="varResult">—</span></p>
+  </div>
+
+  <!-- Navigation -->
+  <div class="card">
+    <h2>Navigazione Slide</h2>
+    <div class="row">
+      <input id="slideIdx" type="number" min="1" value="1" style="width:80px">
+      <button onclick="jumpSlide()">Vai a Slide</button>
+    </div>
+    <div class="row">
+      <button onclick="navSlide('prev')">⬅ Precedente</button>
+      <button onclick="navSlide('next')">Successiva ➡</button>
+    </div>
+  </div>
+
+  <!-- Animate -->
+  <div class="card">
+    <h2>Animazione</h2>
+    <div class="row">
+      <input id="objName" placeholder="Nome oggetto" style="flex:1">
+    </div>
+    <div class="row">
+      <input id="animProps" placeholder='{"x":100,"duration":1}' style="flex:1">
+      <button onclick="animate()">Anima</button>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div id="log"></div>
+
+</div>
+
+<script>
+  const BRIDGE = "http://localhost:8765";
+
+  function log(msg, type = "info") {
+    const el = document.getElementById("log");
+    const time = new Date().toLocaleTimeString();
+    el.innerHTML += `<div class="log-entry log-${type}">[${time}] ${msg}</div>`;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  async function checkStatus() {
+    try {
+      const r = await fetch(`${BRIDGE}/health`);
+      const d = await r.json();
+      document.getElementById("bridgeStatus").className = "status ok";
+      document.getElementById("bridgeStatus").textContent = "✅ Attivo";
+      document.getElementById("slStatus").className = d.storylineConnected ? "status ok" : "status err";
+      document.getElementById("slStatus").textContent = d.storylineConnected ? "✅ Connesso" : "❌ Non connesso";
+      log(`Bridge OK — Storyline: ${d.storylineConnected ? "connesso" : "non connesso"} — Uptime: ${d.uptime?.toFixed(0)}s`, "ok");
+    } catch (e) {
+      document.getElementById("bridgeStatus").className = "status err";
+      document.getElementById("bridgeStatus").textContent = "❌ Offline";
+      document.getElementById("slStatus").className = "status err";
+      document.getElementById("slStatus").textContent = "❌ N/A";
+      log(`Bridge non raggiungibile: ${e.message}`, "err");
+    }
+  }
+
+  async function getVar() {
+    const name = document.getElementById("varName").value;
+    if (!name) return;
+    try {
+      const r = await fetch(`${BRIDGE}/get_var?name=${encodeURIComponent(name)}`);
+      const d = await r.json();
+      document.getElementById("varResult").textContent = JSON.stringify(d.value ?? d.error);
+      log(`GET ${name} = ${JSON.stringify(d.value)}`, d.error ? "err" : "ok");
+    } catch (e) { log(`GET errore: ${e.message}`, "err"); }
+  }
+
+  async function setVar() {
+    const name = document.getElementById("varName").value;
+    const value = document.getElementById("varValue").value;
+    if (!name) return;
+    try {
+      const r = await fetch(`${BRIDGE}/set_var`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, value })
+      });
+      const d = await r.json();
+      document.getElementById("varResult").textContent = d.status;
+      log(`SET ${name} = ${value} → ${d.status}`, d.error ? "err" : "ok");
+    } catch (e) { log(`SET errore: ${e.message}`, "err"); }
+  }
+
+  async function jumpSlide() {
+    const idx = parseInt(document.getElementById("slideIdx").value);
+    try {
+      const r = await fetch(`${BRIDGE}/jump_slide`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slideIndex: idx })
+      });
+      const d = await r.json();
+      log(`JUMP slide ${idx} → ${d.status}`, d.error ? "err" : "ok");
+    } catch (e) { log(`JUMP errore: ${e.message}`, "err"); }
+  }
+
+  async function navSlide(dir) {
+    try {
+      const r = await fetch(`${BRIDGE}/${dir}_slide`, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+      const d = await r.json();
+      log(`${dir.toUpperCase()} slide → ${d.status}`, d.error ? "err" : "ok");
+    } catch (e) { log(`NAV errore: ${e.message}`, "err"); }
+  }
+
+  async function animate() {
+    const objectName = document.getElementById("objName").value;
+    const props = document.getElementById("animProps").value;
+    if (!objectName) return;
+    try {
+      const r = await fetch(`${BRIDGE}/animate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ objectName, props: JSON.parse(props || "{}") })
+      });
+      const d = await r.json();
+      log(`ANIMATE ${objectName} → ${d.status}`, d.error ? "err" : "ok");
+    } catch (e) { log(`ANIMATE errore: ${e.message}`, "err"); }
+  }
+
+  // Auto-check on load
+  checkStatus();
+  setInterval(checkStatus, 10000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* minigames.css — Discovery + Concert minigame styles */
+
+/* ===== SHARED ===== */
+.mg-container, .cg-container {
+  max-width: 650px; margin: 0 auto; width: 100%; text-align: center;
+}
+.mg-timer, .cg-timer {
+  font-size: 2rem; font-weight: 700; color: var(--gold); margin: 8px 0;
+}
+.mg-title, .cg-title { font-size: 1.3rem; margin-bottom: 8px; color: var(--teal); }
+.mg-subtitle, .cg-subtitle { color: var(--gray-light); margin-bottom: 14px; font-size: 0.85rem; }
+.cg-score { font-size: 1rem; color: var(--gold); margin: 8px 0; }
+.cg-instruction { color: var(--gray-light); font-size: 0.85rem; margin: 8px 0; }
+
+/* ===== GOSSIP FEED ===== */
+.gossip-feed {
+  height: 340px; overflow: hidden; position: relative;
+  background: var(--bg-card); border-radius: var(--radius); padding: 8px;
+}
+.gossip-post {
+  padding: 10px 14px; margin: 6px 0; border-radius: var(--radius-sm);
+  background: #222244; cursor: pointer; text-align: left; font-size: 0.8rem;
+  transition: var(--transition); border: 2px solid transparent;
+}
+.gossip-post:hover { background: #2a2a55; }
+.gossip-post.tapped-correct { border-color: var(--success); background: rgba(68,255,136,0.1); pointer-events: none; }
+.gossip-post.tapped-wrong { border-color: var(--danger); background: rgba(255,68,68,0.1); pointer-events: none; }
+.gossip-post .gp-user { color: var(--teal); font-weight: 600; font-size: 0.7rem; display: block; margin-bottom: 2px; }
+
+/* ===== CIPHER ===== */
+.cipher-target {
+  font-size: 1.1rem; color: var(--gold); margin: 10px 0;
+  min-height: 36px; letter-spacing: 2px; font-weight: 600;
+}
+.cipher-letters {
+  display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 12px 0;
+}
+.cipher-letter {
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card); border: 2px solid var(--teal); border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 700; font-size: 0.95rem; transition: var(--transition);
+  user-select: none;
+}
+.cipher-letter:hover { background: var(--teal); color: var(--bg); }
+.cipher-letter.used { opacity: 0.25; pointer-events: none; }
+.cipher-input {
+  font-size: 1.1rem; color: var(--pink); margin: 8px 0;
+  min-height: 36px; letter-spacing: 2px; font-weight: 600;
+}
+
+/* ===== AUCTION ===== */
+.auction-price { font-size: 2.5rem; font-weight: 800; color: var(--gold); margin: 14px 0; }
+.auction-range { color: var(--gray-light); margin-bottom: 14px; font-size: 0.9rem; }
+.auction-input {
+  display: flex; gap: 10px; justify-content: center; align-items: center; margin: 16px 0;
+}
+.auction-input input {
+  width: 130px; padding: 10px; text-align: center; font-size: 1.1rem;
+  font-family: var(--font); background: var(--bg-card);
+  border: 2px solid var(--teal); border-radius: var(--radius-sm);
+  color: var(--white); font-weight: 700;
+}
+.auction-msg { font-size: 0.9rem; margin-top: 8px; min-height: 24px; }
+
+/* ===== PUZZLE ===== */
+.puzzle-grid {
+  display: grid; grid-template-columns: repeat(3, 76px); grid-template-rows: repeat(3, 76px);
+  gap: 4px; justify-content: center; margin: 16px auto;
+}
+.puzzle-tile {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--teal); color: var(--bg); font-size: 1.4rem; font-weight: 700;
+  border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition);
+  user-select: none;
+}
+.puzzle-tile:hover { filter: brightness(1.2); }
+.puzzle-tile.empty { background: transparent; cursor: default; pointer-events: none; }
+
+/* ===== CONCERT: Simon Says (Harry Styles) ===== */
+.simon-grid {
+  display: flex; gap: 12px; justify-content: center; margin: 20px 0; flex-wrap: wrap;
+}
+.simon-btn {
+  width: 68px; height: 68px; border-radius: var(--radius-sm);
+  border: 2px solid var(--gray-dark); background: var(--bg-card);
+  color: var(--white); font-size: 1.7rem; cursor: pointer;
+  transition: 0.15s ease; display: flex; align-items: center; justify-content: center;
+}
+.simon-btn.lit {
+  background: var(--teal); color: var(--bg); border-color: var(--teal);
+  box-shadow: 0 0 20px var(--teal);
+}
+.simon-btn:hover { border-color: var(--white); }
+.simon-btn[disabled] { opacity: 0.5; pointer-events: none; }
+
+/* ===== CONCERT: Formation (Beyoncé) ===== */
+.formation-grid {
+  display: grid; grid-template-columns: repeat(4, 58px); grid-template-rows: repeat(4, 58px);
+  gap: 6px; justify-content: center; margin: 16px auto;
+}
+.formation-cell {
+  border-radius: var(--radius-sm); background: var(--bg-card);
+  border: 2px solid var(--gray-dark); cursor: pointer; transition: 0.15s ease;
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+}
+.formation-cell.lit {
+  background: var(--pink); border-color: var(--pink);
+  box-shadow: 0 0 12px var(--pink);
+}
+.formation-cell.selected { border-color: var(--teal); background: rgba(0,245,212,0.15); }
+.formation-cell.correct { background: var(--success); border-color: var(--success); }
+.formation-cell.wrong { background: var(--danger); border-color: var(--danger); }
+
+/* ===== CONCERT: Canvas wrapper ===== */
+.cg-canvas-wrap { display: flex; justify-content: center; margin: 12px 0; }
+.cg-canvas-wrap canvas { border-radius: var(--radius); background: #111; max-width: 100%; }

@@ -1,0 +1,37 @@
+<!-- ============================================================
+     mcp-connector-minimal.js — Versione minimale
+     ============================================================
+     Usa questa versione se hai problemi con la versione completa.
+     Include solo setVar, getVar e jumpSlide (i comandi base).
+     ============================================================ -->
+
+<!-- INCOLLA IN STORYLINE: Execute JavaScript trigger → Timeline starts -->
+
+<script>
+(function(){
+  if(window._slMcp) return;
+  window._slMcp = true;
+  var p = GetPlayer();
+  var ws;
+  function c(){
+    ws = new WebSocket("ws://localhost:8765");
+    ws.onopen = function(){ console.log("[MCP] OK"); };
+    ws.onclose = function(){ setTimeout(c, 3000); };
+    ws.onmessage = function(e){
+      var m = JSON.parse(e.data);
+      var r = { id: m.id, status: "ok" };
+      try {
+        if(m.cmd==="setVar") p.SetVar(m.name, m.value);
+        else if(m.cmd==="getVar") r.value = p.GetVar(m.name);
+        else if(m.cmd==="jumpSlide"){
+          var s = p.slides();
+          if(s && s[m.slideIndex-1]) s[m.slideIndex-1].jumpTo();
+          else { r.status="error"; r.error="Invalid slide"; }
+        } else { r.status="error"; r.error="Unknown: "+m.cmd; }
+      } catch(x){ r.status="error"; r.error=x.message; }
+      ws.send(JSON.stringify(r));
+    };
+  }
+  c();
+})();
+</script>

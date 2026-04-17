@@ -1,0 +1,20 @@
+/* variables.css — Theme tokens */
+:root {
+  --bg: #0d0d1a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #252545;
+  --pink: #ff2d78;
+  --teal: #00f5d4;
+  --gold: #ffd700;
+  --white: #ffffff;
+  --gray: #888;
+  --gray-light: #aaa;
+  --gray-dark: #333;
+  --danger: #ff4444;
+  --success: #44ff88;
+  --font: 'Outfit', sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.5);
+  --transition: 0.3s ease;
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Concerts Chase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/minigames.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container"></div>
+
+  <!-- MUTE BUTTON -->
+  <button id="mute-btn" onclick="G.toggleMute()" title="Toggle Sound">🔊</button>
+
+  <!-- HUD -->
+  <div id="hud" style="display:none">
+    <div class="hud-item"><span class="hud-label">Points</span><span id="hud-points">0</span></div>
+    <div class="hud-item"><span class="hud-label">Budget</span><span id="hud-budget">€5,000</span></div>
+    <div class="hud-item"><span class="hud-label">Attended</span><span id="hud-attended">0/26</span></div>
+    <div class="hud-item"><span class="hud-label">Date</span><span id="hud-date">Jan 1, 2026</span></div>
+    <div class="hud-item"><span class="hud-label">Next</span><span id="hud-next">—</span></div>
+  </div>
+
+  <!-- MAIN MENU -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-bg"></div>
+    <div class="menu-content">
+      <h1 class="game-title">🎵 Concerts Chase</h1>
+      <p class="game-subtitle">Hunt concerts · Book flights · Rock out</p>
+      <button class="btn btn-primary" onclick="G.startGame()">New Game</button>
+      <button class="btn btn-secondary" onclick="G.showHowToPlay()">How to Play</button>
+    </div>
+  </div>
+
+  <!-- WORLD MAP -->
+  <div id="screen-map" class="screen">
+    <div class="map-header">
+      <h2>🌍 World Tour Map</h2>
+      <div class="map-actions">
+        <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-calendar')">📅 Calendar</button>
+        <button class="btn btn-sm btn-gold" onclick="G.showOrganise()">🎤 Organise</button>
+      </div>
+    </div>
+    <div id="map-container"></div>
+    <div id="map-tooltip" class="tooltip"></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="screen-calendar" class="screen">
+    <div class="screen-header">
+      <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-map')">← Back</button>
+      <h2>📅 Concert Calendar</h2>
+      <div class="calendar-nav">
+        <button class="btn btn-sm" onclick="G.calPrev()">◀</button>
+        <span id="cal-month-label"></span>
+        <button class="btn btn-sm" onclick="G.calNext()">▶</button>
+      </div>
+    </div>
+    <div id="calendar-grid"></div>
+  </div>
+
+  <!-- DISCOVERY MINIGAME -->
+  <div id="screen-discovery" class="screen">
+    <div id="discovery-content"></div>
+  </div>
+
+  <!-- BOOKING PANEL -->
+  <div id="screen-booking" class="screen">
+    <div id="booking-content"></div>
+  </div>
+
+  <!-- CONCERT MINIGAME -->
+  <div id="screen-concert" class="screen">
+    <div id="concert-content"></div>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div id="screen-result" class="screen">
+    <div id="result-content"></div>
+  </div>
+
+  <!-- ORGANISE CONCERT -->
+  <div id="screen-organise" class="screen">
+    <div class="screen-header">
+      <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-map')">← Back</button>
+      <h2>🎤 Organise Your Concert</h2>
+    </div>
+    <div id="organise-content"></div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="screen-gameover" class="screen">
+    <div id="gameover-content"></div>
+  </div>
+
+  <!-- HOW TO PLAY MODAL -->
+  <div id="modal-howto" class="modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="G.closeModal('modal-howto')">✕</button>
+      <h2>How to Play</h2>
+      <div class="howto-text">
+        <p><strong>🎯 Goal:</strong> Discover hidden concert dates, book travel, attend concerts, and earn the highest score!</p>
+        <p><strong>🔍 Discover:</strong> Click ❓ dots on the map to play minigames and reveal concert dates.</p>
+        <p><strong>✈️ Book:</strong> Once discovered, book a flight and hotel. Earlier booking = cheaper prices!</p>
+        <p><strong>🎶 Attend:</strong> When the concert date arrives, play the artist's unique minigame. Score 90%+ to get on stage!</p>
+        <p><strong>🎤 Organise:</strong> Create your own concerts with fictional friends to earn extra budget.</p>
+        <p><strong>💰 Budget:</strong> You start with €5,000. Manage wisely — running out of money limits your options!</p>
+        <p><strong>📅 Time:</strong> Each action advances the in-game calendar by a few days. Don't miss concert dates!</p>
+        <p><strong>🏆 Scoring:</strong> &lt;40% = No entry · 40-69% = Seated · 70-89% = Parterre · 90%+ = On Stage!</p>
+        <p><strong>🎉 Festival Month:</strong> Attend 3+ concerts in the same month for a ×1.5 score multiplier!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS (load order matters) -->
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/screens.js"></script>
+  <script src="js/hud.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/mg-gossip.js"></script>
+  <script src="js/mg-cipher.js"></script>
+  <script src="js/mg-auction.js"></script>
+  <script src="js/mg-puzzle.js"></script>
+  <script src="js/booking.js"></script>
+  <script src="js/cg-swift.js"></script>
+  <script src="js/cg-styles.js"></script>
+  <script src="js/cg-maneskin.js"></script>
+  <script src="js/cg-eilish.js"></script>
+  <script src="js/cg-beyonce.js"></script>
+  <script src="js/concert.js"></script>
+  <script src="js/organise.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

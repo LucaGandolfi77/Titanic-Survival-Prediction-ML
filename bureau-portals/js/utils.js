@@ -32,7 +32,7 @@ export class MathUtils {
 
   // Quaternion normalization
   static quatNormalize(q) {
-    let len = Math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+    const len = Math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
     if (len === 0) return q;
     return new THREE.Quaternion(q.x / len, q.y / len, q.z / len, q.w / len);
   }
@@ -51,19 +51,26 @@ export class MathUtils {
 
   // Check if point is in AABB
   static checkPointInAABB(point, boxMin, boxMax) {
-    return point.x >= boxMin.x && point.x <= boxMax.x &&
-           point.y >= boxMin.y && point.y <= boxMax.y &&
-           point.z >= boxMin.z && point.z <= boxMax.z;
+    return (
+      point.x >= boxMin.x &&
+      point.x <= boxMax.x &&
+      point.y >= boxMin.y &&
+      point.y <= boxMax.y &&
+      point.z >= boxMin.z &&
+      point.z <= boxMax.z
+    );
   }
 
   // Check AABB collision
   static checkAABBCollision(pos1, size1, pos2, size2) {
-    return pos1.x - size1.x < pos2.x + size2.x &&
-           pos1.x + size1.x > pos2.x - size2.x &&
-           pos1.y - size1.y < pos2.y + size2.y &&
-           pos1.y + size1.y > pos2.y - size2.y &&
-           pos1.z - size1.z < pos2.z + size2.z &&
-           pos1.z + size1.z > pos2.z - size2.z;
+    return (
+      pos1.x - size1.x < pos2.x + size2.x &&
+      pos1.x + size1.x > pos2.x - size2.x &&
+      pos1.y - size1.y < pos2.y + size2.y &&
+      pos1.y + size1.y > pos2.y - size2.y &&
+      pos1.z - size1.z < pos2.z + size2.z &&
+      pos1.z + size1.z > pos2.z - size2.z
+    );
   }
 
   // Point to plane distance
@@ -87,34 +94,15 @@ export class StencilUtils {
       minFilter: THREE.NearestFilter,
       magFilter: THREE.NearestFilter,
       stencilBuffer: true,
-      format: THREE.RGBFormat,
+      format: THREE.RGBAFormat,
       type: THREE.UnsignedByteType
     });
-  }
-
-  static setupStencilPass(renderer, id) {
-    renderer.state.setStencilTest(true);
-    renderer.state.setStencilFunc(THREE.AlwaysStencilFunc, id, 0xff);
-    renderer.state.setStencilOp(THREE.ReplaceStencilOp, THREE.ReplaceStencilOp, THREE.ReplaceStencilOp);
-    renderer.state.setColorWrite(false);
-    renderer.state.setDepthTest(false);
-  }
-
-  static setupStencilTestPass(renderer, id) {
-    renderer.state.setStencilTest(true);
-    renderer.state.setStencilFunc(THREE.EqualStencilFunc, id, 0xff);
-    renderer.state.setColorWrite(true);
-    renderer.state.setDepthTest(true);
-  }
-
-  static disableStencil(renderer) {
-    renderer.state.setStencilTest(false);
   }
 }
 
 // Random string/ID generation
 export function generateID() {
-  return Math.random().toString(36).substr(2, 9);
+  return Math.random().toString(36).substring(2, 11);
 }
 
 // Clamp angle to 0-2PI
@@ -145,14 +133,22 @@ export class EventBus {
     this.listeners[event].push(callback);
   }
 
+  once(event, callback) {
+    const wrapper = (data) => {
+      this.off(event, wrapper);
+      callback(data);
+    };
+    this.on(event, wrapper);
+  }
+
   off(event, callback) {
     if (!this.listeners[event]) return;
-    this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
+    this.listeners[event] = this.listeners[event].filter((cb) => cb !== callback);
   }
 
   emit(event, data) {
     if (!this.listeners[event]) return;
-    this.listeners[event].forEach(cb => cb(data));
+    this.listeners[event].forEach((cb) => cb(data));
   }
 
   clear() {

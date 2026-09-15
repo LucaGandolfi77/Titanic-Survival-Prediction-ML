@@ -2,7 +2,7 @@ export class UIManager {
   constructor(game) {
     this.game = game;
     this.currentScreen = 'menu';
-    
+
     // Bind button listeners
     this.setupMenuListeners();
     this.setupSettingsListeners();
@@ -15,6 +15,8 @@ export class UIManager {
     const btnHowtoBack = document.getElementById('btn-howto-back');
     const btnSetBack = document.getElementById('btn-set-back');
     const btnResume = document.getElementById('btn-resume');
+    const btnSave = document.getElementById('btn-save');
+    const btnLoad = document.getElementById('btn-load');
     const btnRestart = document.getElementById('btn-restart');
     const btnPauseMenu = document.getElementById('btn-pause-menu');
     const btnPlayAgain = document.getElementById('btn-play-again');
@@ -29,6 +31,8 @@ export class UIManager {
     if (btnHowtoBack) btnHowtoBack.addEventListener('click', () => this.showMenu());
     if (btnSetBack) btnSetBack.addEventListener('click', () => this.showMenu());
     if (btnResume) btnResume.addEventListener('click', () => this.resumeGame());
+    if (btnSave) btnSave.addEventListener('click', () => this.saveGame());
+    if (btnLoad) btnLoad.addEventListener('click', () => this.loadGame());
     if (btnRestart) btnRestart.addEventListener('click', () => this.restartGame());
     if (btnPauseMenu) btnPauseMenu.addEventListener('click', () => this.showMenu());
     if (btnPlayAgain) btnPlayAgain.addEventListener('click', () => this.restartGame());
@@ -86,6 +90,14 @@ export class UIManager {
     this.game.restartGame();
   }
 
+  saveGame() {
+    this.game.saveGame();
+  }
+
+  loadGame() {
+    this.game.loadGame();
+  }
+
   showMenu() {
     this.hideAllScreens();
     this.showScreen('screen-menu');
@@ -134,7 +146,7 @@ export class UIManager {
 
   hideAllScreens() {
     const screens = document.querySelectorAll('.screen');
-    screens.forEach(s => s.classList.add('hidden'));
+    screens.forEach((s) => s.classList.add('hidden'));
   }
 
   showScreen(id) {
@@ -204,14 +216,14 @@ export class UIManager {
   populateWinScreen(stats) {
     const statsEl = document.getElementById('win-stats');
     const msgEl = document.getElementById('win-message');
-    
+
     statsEl.innerHTML = `
       <p>Employee #4471-B</p>
       <p>Sanity Remaining: ${Math.round(this.game.player.sanity)}</p>
       <p>Rooms Explored: ${this.game.puzzle.completedObjectives.length} / 12</p>
       <p>Items Collected: ${this.game.puzzle.inventory.length} / 8</p>
     `;
-    
+
     const hasSecret = this.game.puzzle.hasSecretEnding();
     if (hasSecret) {
       msgEl.innerHTML = `
@@ -248,8 +260,88 @@ export class UIManager {
     setTimeout(() => notif.remove(), 2500);
   }
 
+  showCoffeeMeter() {
+    const el = document.getElementById('coffee-meter');
+    if (el) el.classList.remove('hidden');
+  }
+
+  hideCoffeeMeter() {
+    const el = document.getElementById('coffee-meter');
+    if (el) el.classList.add('hidden');
+  }
+
+  updateCoffeeMeter(round, value) {
+    const bar = document.getElementById('coffee-bar-fill');
+    const indicator = document.getElementById('coffee-indicator');
+    const roundEl = document.getElementById('coffee-round');
+    if (bar) bar.style.height = `${value}%`;
+    if (indicator) indicator.style.bottom = `${value}%`;
+    if (roundEl) roundEl.textContent = `ROUND ${round}/3`;
+  }
+
+  showExitForm(fields) {
+    const el = document.getElementById('exit-form');
+    if (el) el.classList.remove('hidden');
+    this.updateExitForm(fields);
+  }
+
+  hideExitForm() {
+    const el = document.getElementById('exit-form');
+    if (el) el.classList.add('hidden');
+  }
+
+  updateExitForm(fields) {
+    const stamp = document.getElementById('form-stamp-status');
+    const signature = document.getElementById('form-signature-status');
+    const submit = document.getElementById('form-submit');
+    if (stamp) {
+      stamp.textContent = fields.stamp ? '✓ FILLED' : '✗ EMPTY';
+      stamp.style.color = fields.stamp ? 'var(--sanity-good)' : 'var(--sanity-bad)';
+    }
+    if (signature) {
+      signature.textContent = fields.signature ? '✓ FILLED' : '✗ EMPTY';
+      signature.style.color = fields.signature ? 'var(--sanity-good)' : 'var(--sanity-bad)';
+    }
+    if (submit) {
+      const complete = Object.values(fields).every((v) => v);
+      submit.textContent = complete ? 'SUBMIT FORM' : 'FORM INCOMPLETE';
+      submit.disabled = !complete;
+      submit.style.opacity = complete ? '1' : '0.5';
+    }
+  }
+
+  showFaxKeypad() {
+    const el = document.getElementById('fax-keypad');
+    if (el) el.classList.remove('hidden');
+  }
+
+  hideFaxKeypad() {
+    const el = document.getElementById('fax-keypad');
+    if (el) el.classList.add('hidden');
+  }
+
+  updateFaxDisplay(digits, input) {
+    const timerEl = document.getElementById('fax-timer');
+    const displayEl = document.getElementById('fax-display');
+    if (timerEl && this.game)
+      timerEl.textContent = String(Math.max(0, Math.ceil(this.game.faxTimer)));
+    if (!displayEl) return;
+    let html = '';
+    for (let i = 0; i < 10; i++) {
+      const target = digits[i];
+      const entered = input[i];
+      if (entered === null) {
+        html += '<span class="fax-slot">_</span>';
+      } else if (entered === target) {
+        html += '<span class="fax-slot fax-correct">' + entered + '</span>';
+      } else {
+        html += '<span class="fax-slot fax-wrong">' + entered + '</span>';
+      }
+    }
+    displayEl.innerHTML = html;
+  }
+
   showNPCDialog(position, text) {
-    // Could show NPC speech bubbles overlaid on screen
     this.showNotification('NPC: ' + text, 'warning');
   }
 
@@ -258,5 +350,139 @@ export class UIManager {
     this.showScreen('screen-note');
     document.getElementById('note-title').textContent = item.type.toUpperCase();
     document.getElementById('note-body').textContent = item.getDescription();
+  }
+
+  showPhotocopierOverlay() {
+    const el = document.getElementById('photocopier-overlay');
+    if (el) el.classList.remove('hidden');
+  }
+
+  hidePhotocopierOverlay() {
+    const el = document.getElementById('photocopier-overlay');
+    if (el) el.classList.add('hidden');
+  }
+
+  updatePhotocopierDisplay(idx) {
+    const copiesEl = document.getElementById('photo-copies');
+    if (!copiesEl) return;
+    let html = '';
+    for (let i = 0; i < 3; i++) {
+      const active = i === idx ? ' active' : '';
+      const icons = ['👤', '👤', '👤'];
+      html += '<div class="photo-copy' + active + '">' + icons[i] + '</div>';
+    }
+    copiesEl.innerHTML = html;
+  }
+
+  updatePhotocopierTimer(timer) {
+    const el = document.getElementById('photo-timer');
+    if (el) el.textContent = Math.max(0, Math.ceil(timer)) + 's';
+  }
+
+  showGossipBoard(messages) {
+    const el = document.getElementById('gossip-board');
+    if (el) el.classList.remove('hidden');
+    this.updateGossipBoard(messages);
+  }
+
+  hideGossipBoard() {
+    const el = document.getElementById('gossip-board');
+    if (el) el.classList.add('hidden');
+  }
+
+  updateGossipBoard(messages) {
+    const listEl = document.getElementById('gossip-list');
+    if (!listEl) return;
+    listEl.innerHTML = messages.map((m) => '<div class="gossip-item">📎 ' + m + '</div>').join('');
+  }
+
+  showTimeClockOverlay(timer, misses) {
+    const el = document.getElementById('timeclock-overlay');
+    if (el) el.classList.remove('hidden');
+    this.updateTimeClockTimer(timer);
+    const missesEl = document.getElementById('tc-misses');
+    if (missesEl) missesEl.textContent = 'Misses: ' + misses + '/3';
+  }
+
+  updateTimeClockTimer(timer) {
+    const el = document.getElementById('tc-timer');
+    if (el) el.textContent = Math.max(0, timer).toFixed(1) + 's';
+  }
+
+  hideTimeClockOverlay() {
+    const el = document.getElementById('timeclock-overlay');
+    if (el) el.classList.add('hidden');
+  }
+
+  showLunchOverlay(timer, eaten) {
+    const el = document.getElementById('lunch-overlay');
+    if (el) el.classList.remove('hidden');
+    this.updateLunchTimer(timer, eaten);
+  }
+
+  updateLunchTimer(timer, eaten) {
+    const timerEl = document.getElementById('lunch-timer');
+    const hungerEl = document.getElementById('lunch-hunger');
+    if (timerEl) timerEl.textContent = Math.max(0, Math.ceil(timer)) + 's';
+    if (hungerEl) {
+      hungerEl.textContent = eaten ? 'APPLE: EATEN ✓' : 'APPLE: NOT FOUND';
+      hungerEl.style.color = eaten ? 'var(--sanity-good)' : 'var(--sanity-bad)';
+    }
+  }
+
+  hideLunchOverlay() {
+    const el = document.getElementById('lunch-overlay');
+    if (el) el.classList.add('hidden');
+  }
+
+  showReviewQuestion(question, score) {
+    const el = document.getElementById('review-overlay');
+    if (el) el.classList.remove('hidden');
+    const qEl = document.getElementById('review-question');
+    if (qEl) qEl.textContent = question.q;
+    const optsEl = document.getElementById('review-options');
+    if (optsEl) {
+      optsEl.innerHTML = question.options
+        .map(
+          (opt, idx) =>
+            '<div class="review-option" data-idx="' + idx + '">' + (idx + 1) + '. ' + opt + '</div>'
+        )
+        .join('');
+    }
+    const scoreEl = document.getElementById('review-score');
+    if (scoreEl) scoreEl.textContent = 'Score: ' + score;
+  }
+
+  hideReviewOverlay() {
+    const el = document.getElementById('review-overlay');
+    if (el) el.classList.add('hidden');
+  }
+
+  showFireDrillOverlay(timer, doors) {
+    const el = document.getElementById('firedrill-overlay');
+    if (el) el.classList.remove('hidden');
+    this.updateFireDrill(timer, doors);
+  }
+
+  updateFireDrill(timer, doors) {
+    const timerEl = document.getElementById('drill-timer');
+    const doorsEl = document.getElementById('drill-doors');
+    if (timerEl) timerEl.textContent = Math.max(0, Math.ceil(timer)) + 's';
+    if (doorsEl) doorsEl.textContent = 'Doors sealed: ' + doors + '/12';
+  }
+
+  hideFireDrillOverlay() {
+    const el = document.getElementById('firedrill-overlay');
+    if (el) el.classList.add('hidden');
+  }
+
+  showTelecommuteOverlay() {
+    const el = document.getElementById('telecommute-overlay');
+    if (el) el.classList.remove('hidden');
+  }
+
+  hideTelecommuteOverlay() {
+    const el = document.getElementById('telecommute-overlay');
+    if (el) el.classList.add('hidden');
   }
 }

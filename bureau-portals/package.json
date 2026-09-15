@@ -1,0 +1,1 @@
+{"name": "bureau-portals", "version": "1.0.0", "type": "module", "scripts": {"lint": "eslint js/ --ext .js", "lint:fix": "eslint js/ --ext .js --fix", "format": "prettier --write \"js/**/*.js\" \"css/**/*.css\" \"*.html\"", "format:check": "prettier --check \"js/**/*.js\" \"css/**/*.css\" \"*.html\""}, "devDependencies": {"eslint": "^9.0.0", "prettier": "^3.0.0"}}

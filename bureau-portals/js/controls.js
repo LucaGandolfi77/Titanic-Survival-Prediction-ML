@@ -1,38 +1,60 @@
+import { bus } from './event-bus.js';
+import { MathUtils } from './utils.js';
+
 export class Controls {
-  constructor(player) {
+  constructor(player, bus) {
     this.player = player;
+    this.bus = bus;
     this.enabled = false;
+
+    // Store handler references for cleanup
+    this._onKeyDown = null;
+    this._onKeyUp = null;
+    this._onPointerLockChange = null;
+    this._onClick = null;
+
     this.setupEventListeners();
   }
 
   setupEventListeners() {
     // Keyboard
-    document.addEventListener('keydown', (e) => {
+    this._onKeyDown = (e) => {
       if (!this.enabled) return;
       this.handleKeyDown(e);
-    });
+    };
 
-    document.addEventListener('keyup', (e) => {
+    this._onKeyUp = (e) => {
       if (!this.enabled) return;
       this.handleKeyUp(e);
-    });
+    };
 
-    // Mouse move handled in Player class via pointer lock
-    
     // Pointer lock
-    document.addEventListener('pointerlockchange', () => {
-      this.enabled = document.pointerLockElement === document.documentElement;
-    });
+    this._onPointerLockChange = () => {
+      this.enabled = document.pointerLockElement === document.body;
+    };
 
     // Click to request pointer lock
-    document.documentElement.addEventListener('click', () => {
+    this._onClick = () => {
       if (!document.pointerLockElement) {
-        document.documentElement.requestPointerLock();
+        document.body.requestPointerLock();
       }
-    });
+    };
+
+    document.addEventListener('keydown', this._onKeyDown);
+    document.addEventListener('keyup', this._onKeyUp);
+    document.addEventListener('pointerlockchange', this._onPointerLockChange);
+    document.documentElement.addEventListener('click', this._onClick);
 
     // Mobile controls
     this.setupMobileControls();
+  }
+
+  destroy() {
+    if (this._onKeyDown) document.removeEventListener('keydown', this._onKeyDown);
+    if (this._onKeyUp) document.removeEventListener('keyup', this._onKeyUp);
+    if (this._onPointerLockChange)
+      document.removeEventListener('pointerlockchange', this._onPointerLockChange);
+    if (this._onClick) document.removeEventListener('click', this._onClick);
   }
 
   handleKeyDown(event) {
@@ -67,7 +89,7 @@ export class Controls {
     const canvas = document.getElementById('game-canvas');
     if (!canvas) return;
 
-    let touchStart = { x: 0, y: 0 };
+    const touchStart = { x: 0, y: 0 };
     let isTouching = false;
 
     canvas.addEventListener('touchstart', (e) => {
@@ -117,20 +139,7 @@ export class Controls {
   }
 
   tryInteract() {
-    if (window.game && window.game.puzzle) {
-      const item = window.game.itemManager.checkInteraction(
-        this.player.position,
-        2.0
-      );
-      
-      if (item) {
-        window.game.puzzle.addItemToInventory(item);
-        window.game.itemManager.collectItem(item);
-        if (window.game.audio) {
-          window.game.audio.playPickup();
-        }
-      }
-    }
+    this.bus.emit('input:interact', { position: this.player.position });
   }
 
   toggleFlashlight() {
@@ -140,15 +149,11 @@ export class Controls {
   }
 
   toggleInventory() {
-    if (window.game && window.game.hud) {
-      window.game.hud.toggleInventoryView();
-    }
+    this.bus.emit('ui:toggle-inventory');
   }
 
   togglePause() {
-    if (window.game) {
-      window.game.togglePause();
-    }
+    this.bus.emit('input:pause');
   }
 
   setEnabled(enabled) {

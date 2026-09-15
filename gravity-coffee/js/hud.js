@@ -36,11 +36,15 @@ export class HUD {
     updateGravityDisplay(vector, name, timeRemaining, maxTime) {
         this.gravityStateName.innerText = name;
         
-        // Simplistic vector to arrow rotation (assuming looking top-down on X/Y plane for HUD)
-        let angle = Math.atan2(vector.x, -vector.y) * 180 / Math.PI;
-        if(vector.z < -5) angle = 180; // Forward
-        if(vector.z > 5) angle = 0;   // Backward
-        if(vector.length() < 1) angle = 0; // ZeroG
+        // Proper gravity vector to arrow rotation
+        let angle;
+        if(vector.length() < 0.1) {
+            angle = 0; // ZeroG
+        } else {
+            angle = Math.atan2(vector.x, -vector.y) * 180 / Math.PI;
+            if(vector.z < -0.1) angle = 180; // Forward gravity
+            if(vector.z > 0.1) angle = 0;   // Backward gravity
+        }
         
         this.gravityArrow.style.transform = `rotate(${angle}deg)`;
         
@@ -96,6 +100,17 @@ export class HUD {
         }
     }
     
+    updateSpeedrun(time, splits) {
+        let el = document.getElementById('hud-speedrun');
+        if(!el) return;
+        const mins = Math.floor(time / 60);
+        const secs = Math.floor(time % 60);
+        const ms = Math.floor((time % 1) * 100);
+        let text = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
+        if(splits.length > 1) text += ` (${splits.length-1} splits)`;
+        el.textContent = text;
+    }
+
     showPourMeter(show, currentFill = 0, targetFill = 0.8) {
         if(show) {
             this.pourMeter.classList.remove('hidden');

@@ -9,6 +9,88 @@ export class AudioSystem {
         // Base nodes to keep active
         this.pourNoise = null;
         this.pourGain = null;
+
+        // Music system
+        this.musicPlaying = false;
+        this.musicNodes = [];
+        this.musicGain = null;
+        this.musicOscs = [];
+    }
+
+    startMusic() {
+        if(this.musicPlaying) return;
+        this.resume();
+        this.musicPlaying = true;
+        
+        this.musicGain = this.ctx.createGain();
+        this.musicGain.gain.value = 0.08;
+        this.musicGain.connect(this.masterGain);
+        
+        // Create 4 oscillators in a chord (C major)
+        const freqs = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+        const types = ['sine', 'sine', 'sine', 'triangle'];
+        
+        for(let i = 0; i < freqs.length; i++) {
+            const osc = this.ctx.createOscillator();
+            osc.type = types[i];
+            osc.frequency.value = freqs[i];
+            osc.connect(this.musicGain);
+            osc.start();
+            this.musicOscs.push(osc);
+            this.musicNodes.push(osc);
+        }
+        
+        // Start arpeggio
+        this.musicInterval = setInterval(() => this.updateMusicArpeggio(), 400);
+        this.musicPatternStep = 0;
+    }
+
+    updateMusicArpeggio() {
+        if(!this.musicPlaying) return;
+        const t = this.ctx.currentTime;
+        const step = this.musicPatternStep % 4;
+        
+        // Adjust based on gravity state
+        let multiplier = 1;
+        if(window.gameEngine && window.gameEngine.gravity) {
+            const g = window.gameEngine.gravity.currentVector;
+            if(g.y > 0) multiplier = 1.5; // reversed
+            else if(g.x !== 0 || g.z !== 0) multiplier = 1.2; // diagonal
+        }
+        
+        // Play note with gentle envelope
+        const noteGain = this.ctx.createGain();
+        noteGain.gain.setValueAtTime(0, t);
+        noteGain.gain.linearRampToValueAtTime(0.15, t + 0.05);
+        noteGain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        noteGain.connect(this.musicGain);
+        
+        // Re-trigger oscillator for envelope
+        this.musicOscs[step].disconnect();
+        this.musicOscs[step].connect(noteGain);
+        noteGain.connect(this.musicGain);
+        
+        this.musicPatternStep++;
+    }
+
+    stopMusic() {
+        this.musicPlaying = false;
+        if(this.musicInterval) clearInterval(this.musicInterval);
+        this.musicOscs.forEach(osc => {
+            try { osc.stop(); } catch(e) {}
+        });
+        this.musicOscs = [];
+    }
+
+    playMusicChord(stressMode = false) {
+        if(!this.musicPlaying) return;
+        // Change chord for stress/different gravity
+        if(stressMode) {
+            const freqs = [207.65, 261.63, 311.13, 415.30]; // tense chord
+            this.musicOscs.forEach((osc, i) => {
+                osc.frequency.linearRampToValueAtTime(freqs[i % freqs.length], this.ctx.currentTime + 1);
+            });
+        }
     }
 
     resume() {
@@ -179,13 +261,18 @@ export class AudioSystem {
             this.pourNoise.start();
         } else if (!isPouring && this.pourNoise) {
             this.pourGain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+            const nodesToCleanup = { noise: this.pourNoise, gain: this.pourGain };
             setTimeout(() => {
-                if(this.pourNoise) {
-                    this.pourNoise.stop();
-                    this.pourNoise.disconnect();
+                try {
+                    nodesToCleanup.noise.stop();
+                    nodesToCleanup.noise.disconnect();
+                    nodesToCleanup.gain.disconnect();
+                } catch(e) {}
+                if(this.pourNoise === nodesToCleanup.noise) {
                     this.pourNoise = null;
+                    this.pourGain = null;
                 }
-            }, 100);
+            }, 150);
         }
     }
 }

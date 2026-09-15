@@ -184,6 +184,8 @@ def new_player(username):
         },
         "submitted": [],
         "bought": False,
+        "is_bot": False,
+        "is_spectator": False,
     }
 
 def ensure_draw(player, n):
@@ -406,9 +408,19 @@ def resolve_round(room):
         p2["mission_progress"] = 1
 
     if p1["mission"]["id"] == "healer":
-        p1["mission_progress"] = p1["stats"]["heal_total"]
+        p1["mission_progress"] = min(p1["stats"]["heal_total"], p1["mission"]["goal"])
     if p2["mission"]["id"] == "healer":
-        p2["mission_progress"] = p2["stats"]["heal_total"]
+        p2["mission_progress"] = min(p2["stats"]["heal_total"], p2["mission"]["goal"])
+
+    if "round_history" not in room:
+        room["round_history"] = []
+    room["round_history"].append({
+        "round": room["round"],
+        "p1_damage": damage_to_p2, "p1_shield": b1["shield"],
+        "p1_heal": b1["heal"], "p1_poison": b1["poison"],
+        "p2_damage": damage_to_p1, "p2_shield": b2["shield"],
+        "p2_heal": b2["heal"], "p2_poison": b2["poison"],
+    })
 
     log_line = (
         f"Round {room['round']}: {p1['username']} dealt {damage_to_p2} / blocked {b1['shield']} / healed {b1['heal']} "
@@ -459,8 +471,10 @@ def resolve_round(room):
             if winner["hp"] == 1:
                 give_achievement(winner, "exactly_one")
             room["log"].append(f"{winner['username']} wins the game.")
-        else:
-            room["log"].append("The game ends in a dramatic tie.")
+
+    if p1["hp"] <= 0 and p2["hp"] <= 0:
+        room["phase"] = "game_over"
+        room["log"].append("The game ends in a dramatic tie.")
 
 def serialize_card_for_client(card, room):
     item = copy.deepcopy(card)
@@ -491,6 +505,7 @@ def serialize_state(room, sid):
         "market": [serialize_card_for_client(c, room) for c in room["market"]],
         "you": {
             "username": you["username"],
+            "is_spectator": you.get("is_spectator", False),
             "hp": you["hp"],
             "coins": you["coins"],
             "deck_count": len(you["deck"]),
@@ -510,6 +525,7 @@ def serialize_state(room, sid):
         },
         "opponents": opponents,
         "players_in_room": len(room["players"]),
+        "round_history": room.get("round_history", []),
         "log": room["log"][-8:],
         "cosmetics_catalog": COSMETICS,
     }
@@ -536,7 +552,9 @@ def create_room():
         "players": {},
         "phase": "lobby",
         "round": 1,
-        "log": []
+        "log": [],
+        "round_history": [],
+        "is_daily": False,
     }
     socketio.start_background_task(maybe_spawn_bot_later, code)
     return redirect(url_for("room_view", room_code=code, username=username))
@@ -572,7 +590,10 @@ def on_join_game(data):
         return
 
     if request.sid not in room["players"]:
-        room["players"][request.sid] = new_player(username)
+        p = new_player(username)
+        p["is_spectator"] = data.get("spectator", False)
+        p["is_bot"] = False
+        room["players"][request.sid] = p
 
     join_room(room_code)
 
@@ -678,5 +699,81 @@ def on_set_cosmetic(data):
 
     broadcast_state(room["code"])
 
+
+@socketio.on("send_emote")
+def on_send_emote(data):
+    room = ROOMS.get(data["room"])
+    if not room or request.sid not in room["players"]:
+        return
+    player = room["players"][request.sid]
+    emote = data.get("emote", "GG!")
+    valid = ["GG!", "Wow!", "Sick!", "RNG!", "Nope!", "gg", "wow", "sick", "rng", "nope"]
+    if emote not in valid:
+        return
+    room["log"].append(f"{player['username']}: {emote}")
+    emit("emote_received", {"username": player["username"], "emote": emote}, to=data["room"])
+
+@app.route("/daily", methods=["POST"])
+def daily_challenge():
+    username = request.form.get("username", "Player").strip()
+    today = date.today().strftime("%Y%m%d")
+    code = "DAILY" + today[-4:]
+    if code not in ROOMS:
+        seed_rng = random.Random(int(today))
+        daily_mod = seed_rng.choice(DAILY_MODIFIERS)
+        market = [weighted_shop_card() for _ in range(5)]
+        ROOMS[code] = {
+            "code": code,
+            "daily": daily_mod,
+            "market": market,
+            "players": {},
+            "phase": "lobby",
+            "round": 1,
+            "log": [],
+            "round_history": [],
+            "is_daily": True,
+        }
+    socketio.start_background_task(maybe_spawn_bot_later, code)
+    return redirect(url_for("room_view", room_code=code, username=username))
+
+@socketio.on("boss_rush")
+def on_boss_rush(data):
+    room = ROOMS.get(data["room"])
+    if not room or request.sid not in room["players"]:
+        return
+    for sid, p in room["players"].items():
+        if p.get("is_bot"):
+            p["username"] = "The Auditor"
+            p["hp"] = 40
+            p["deck"] = ["crush","crush","wall","wall","tide","tide","hex_mirror","saint_of_debt","banner_lord"]
+            p["bought"] = False
+            p["submitted"] = []
+    room["log"].append("BOSS RUSH STARTED - The Auditor enters!")
+    broadcast_state(room["code"])
+
+@socketio.on("trade_request")
+def on_trade_request(data):
+    room = ROOMS.get(data["room"])
+    if not room or request.sid not in room["players"]:
+        return
+    target_sid = [s for s in room["players"].keys() if s != request.sid][0]
+    target = room["players"][target_sid]
+    if not target["hand"]:
+        emit("trade_response", {"room": data["room"], "success": False, "message": "Opponent has no cards."})
+        return
+    player = room["players"][request.sid]
+    if player["bought"]:
+        emit("trade_response", {"room": data["room"], "success": False, "message": "Already bought this round."})
+        return
+    trade_card = random.choice(target["hand"])
+    target["hand"].remove(trade_card)
+    target["discard"].append(trade_card)
+    player["discard"].append(trade_card)
+    new_card = card_by_id(trade_card)
+    if new_card:
+        player["hand"].append(trade_card)
+    emit("trade_response", {"room": data["room"], "success": True, "card": new_card, "from": target["username"]})
+    room["log"].append(f"{player['username']} traded for {new_card['name']} from {target['username']}!")
+    broadcast_state(room["code"])
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)

@@ -47,7 +47,9 @@
   height: 100%;
   width: 100%;
   background: var(--sanity-good);
-  transition: width 0.3s ease, background-color 0.5s ease;
+  transition:
+    width 0.3s ease,
+    background-color 0.5s ease;
   box-shadow: 0 0 10px currentColor;
 }
 
@@ -235,7 +237,9 @@
   height: 100%;
   width: 100%;
   background: var(--sanity-good);
-  transition: width 0.3s ease, background-color 0.2s ease;
+  transition:
+    width 0.3s ease,
+    background-color 0.2s ease;
   box-shadow: 0 0 8px currentColor;
 }
 
@@ -277,7 +281,9 @@
 }
 
 @keyframes portalSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Interaction Hint */
@@ -377,7 +383,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+  background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.7) 100%);
   z-index: 45;
   pointer-events: none;
 }
@@ -388,7 +394,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255,0,0,0.2);
+  background: rgba(255, 0, 0, 0.2);
   border: 3px solid var(--accent-stamp);
   color: var(--accent-stamp);
   padding: 1.5rem 2rem;
@@ -401,6 +407,655 @@
 }
 
 @keyframes voidPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Coffee Mini-Game Meter */
+#coffee-meter {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  pointer-events: none;
+  font-family: var(--font-hud);
+}
+
+#coffee-meter.hidden {
+  display: none;
+}
+
+.coffee-label {
+  color: var(--sanity-good);
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.coffee-container {
+  position: relative;
+  width: 30px;
+  height: 200px;
+  background: #1a1a1a;
+  border: 2px solid var(--hud-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+#coffee-bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: var(--sanity-good);
+  transition: height 0.05s linear;
+  z-index: 1;
+}
+
+#coffee-indicator {
+  position: absolute;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: 3px;
+  background: var(--text-primary);
+  box-shadow: 0 0 6px var(--text-primary);
+  z-index: 2;
+  animation: coffeePulse 0.5s ease-in-out infinite;
+}
+
+@keyframes coffeePulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+#coffee-round {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Exit Form 27-Γ */
+#exit-form {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  background: var(--bg-office);
+  border: 2px solid var(--accent-govt);
+  padding: 1.5rem;
+  width: 320px;
+  font-family: var(--font-bureaucrat);
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+
+#exit-form.hidden {
+  display: none;
+}
+
+.form-memo {
+  background: var(--accent-govt);
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+
+.form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--hud-border);
+}
+
+.form-label {
+  font-weight: bold;
+  color: var(--text-govt);
+  flex: 1;
+}
+
+.form-value {
+  color: var(--text-govt);
+  flex: 1;
+  text-align: center;
+}
+
+.form-status {
+  font-weight: bold;
+  flex: 0 0 60px;
+  text-align: right;
+  font-family: var(--font-hud);
+}
+
+.form-actions {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+#form-submit {
+  width: 100%;
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+#form-submit:not(:disabled) {
+  opacity: 1;
+}
+
+/* Telecommuting Dimension */
+#telecommute-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  background: var(--bg-office);
+  border: 2px solid var(--accent-govt);
+  padding: 1.5rem;
+  width: 400px;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+}
+
+#telecommute-overlay.hidden {
+  display: none;
+}
+
+.tele-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--accent-govt);
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+#tele-something-wrong {
+  color: var(--text-govt);
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: teleFlicker 3s ease-in-out infinite;
+}
+
+@keyframes teleFlicker {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.7; }
+  52% { opacity: 1; }
+  70% { opacity: 0.8; }
+}
+
+.tele-instruction {
+  color: var(--sanity-warn);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Fax Machine */
+#fax-keypad {
+  position: fixed;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  background: var(--bg-office);
+  border: 2px solid var(--accent-govt);
+  padding: 1rem;
+  width: 200px;
+  font-family: var(--font-bureaucrat);
+  pointer-events: auto;
+}
+
+#fax-keypad.hidden {
+  display: none;
+}
+
+.fax-title {
+  font-size: 0.8rem;
+  color: var(--accent-govt);
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.fax-display {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.fax-slot {
+  display: inline-block;
+  width: 18px;
+  height: 24px;
+  background: #111;
+  border: 1px solid #555;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 24px;
+}
+
+.fax-correct {
+  color: var(--sanity-good);
+  border-color: var(--sanity-good);
+}
+
+.fax-wrong {
+  color: var(--sanity-bad);
+  border-color: var(--sanity-bad);
+}
+
+.fax-timer {
+  font-size: 1.5rem;
+  color: var(--sanity-warn);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.fax-keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.fax-key {
+  background: #333;
+  color: var(--text-primary);
+  border: 1px solid #666;
+  padding: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+
+.fax-key-zero {
+  grid-column: 2;
+}
+
+.fax-instruction {
+  font-size: 0.65rem;
+  color: #888;
+  text-align: center;
+}
+
+/* Photocopier */
+#photocopier-overlay {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  background: var(--bg-office);
+  border: 2px solid var(--accent-govt);
+  padding: 1rem;
+  width: 220px;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+}
+
+#photocopier-overlay.hidden {
+  display: none;
+}
+
+.photo-title {
+  font-size: 0.8rem;
+  color: var(--accent-govt);
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.photo-copies {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.photo-copy {
+  width: 50px;
+  height: 60px;
+  border: 2px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.photo-copy.active {
+  border-color: var(--portal-blue);
+  box-shadow: 0 0 10px var(--portal-blue);
+}
+
+.photo-timer {
+  font-size: 1.2rem;
+  color: var(--sanity-warn);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.photo-instruction {
+  font-size: 0.65rem;
+  color: #888;
+  text-align: center;
+}
+
+/* Water Cooler Gossip */
+#gossip-board {
+  position: fixed;
+  left: 30px;
+  bottom: 80px;
+  z-index: 200;
+  background: var(--bg-office);
+  border: 2px solid var(--accent-govt);
+  padding: 0.8rem;
+  width: 300px;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#gossip-board.hidden {
+  display: none;
+}
+
+.gossip-title {
+  font-size: 0.75rem;
+  color: var(--accent-govt);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.gossip-item {
+  font-size: 0.7rem;
+  color: var(--text-govt);
+  padding: 0.2rem 0;
+  border-bottom: 1px dotted #333;
+}
+
+/* Time Clock */
+#timeclock-overlay {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 300;
+  background: var(--bg-office);
+  border: 3px solid var(--sanity-warn);
+  padding: 1.5rem 2rem;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+  text-align: center;
+}
+
+#timeclock-overlay.hidden {
+  display: none;
+}
+
+.tc-title {
+  font-size: 1.2rem;
+  color: var(--sanity-warn);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.tc-timer {
+  font-size: 2.5rem;
+  color: var(--sanity-bad);
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.tc-misses {
+  font-size: 0.85rem;
+  color: var(--text-govt);
+  margin-bottom: 0.5rem;
+}
+
+.tc-instruction {
+  font-size: 0.9rem;
+  color: var(--sanity-good);
+  animation: tcPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes tcPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Lunch Hour */
+#lunch-overlay {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  background: var(--bg-office);
+  border: 3px solid var(--sanity-bad);
+  padding: 1.5rem 2rem;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+  text-align: center;
+}
+
+#lunch-overlay.hidden {
+  display: none;
+}
+
+.lunch-title {
+  font-size: 1.1rem;
+  color: var(--sanity-bad);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.lunch-timer {
+  font-size: 2rem;
+  color: var(--sanity-warn);
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.lunch-hunger {
+  font-size: 0.85rem;
+  color: var(--text-govt);
+  margin-bottom: 0.5rem;
+}
+
+.lunch-instruction {
+  font-size: 0.9rem;
+  color: var(--sanity-good);
+}
+
+/* Quarterly Review */
+#review-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 300;
+  background: var(--bg-office);
+  border: 3px solid var(--accent-govt);
+  padding: 1.5rem 2rem;
+  width: 450px;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+  text-align: center;
+}
+
+#review-overlay.hidden {
+  display: none;
+}
+
+.review-title {
+  font-size: 1.1rem;
+  color: var(--accent-govt);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.review-question {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+}
+
+.review-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-option {
+  font-size: 0.85rem;
+  color: var(--text-govt);
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+.review-option:hover {
+  background: var(--accent-govt);
+  color: white;
+}
+
+.review-score {
+  font-size: 0.85rem;
+  color: var(--sanity-good);
+  font-weight: bold;
+}
+
+/* Fire Drill */
+#firedrill-overlay {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 300;
+  background: rgba(180, 0, 0, 0.9);
+  border: 3px solid #ff4444;
+  padding: 1.5rem 2rem;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+  text-align: center;
+}
+
+#firedrill-overlay.hidden {
+  display: none;
+}
+
+.drill-title {
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  animation: drillFlash 0.5s ease-in-out infinite;
+}
+
+@keyframes drillFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.drill-timer {
+  font-size: 2.5rem;
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.drill-doors {
+  font-size: 0.9rem;
+  color: #ffcccc;
+}
+
+/* Office Newspaper */
+#newspaper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  background: var(--bg-office);
+  border: 3px solid var(--accent-govt);
+  padding: 1.5rem 2rem;
+  width: 400px;
+  font-family: var(--font-bureaucrat);
+  pointer-events: none;
+}
+
+#newspaper.hidden {
+  display: none;
+}
+
+.news-masthead {
+  border-bottom: 3px solid var(--accent-govt);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.news-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--accent-govt);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.news-date {
+  font-size: 0.75rem;
+  color: var(--text-govt);
+  margin-top: 0.2rem;
+}
+
+.news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.news-item {
+  font-size: 0.85rem;
+  color: var(--text-govt);
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--hud-border);
+}
+
+.news-status {
+  font-weight: bold;
+  font-family: var(--font-hud);
 }

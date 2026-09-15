@@ -12,6 +12,9 @@ export class Controls {
         this.sensitivity = 0.002;
         
         this.isLocked = false;
+        this.spectatorMode = false;
+        this.spectatorTarget = null;
+        this.keys = {};
         
         this.raycaster = new THREE.Raycaster();
         this.highlightMesh = null;
@@ -23,6 +26,10 @@ export class Controls {
         
         this.initEventListeners();
         this.createHighlightMesh();
+        
+        // Track keys for spectator
+        document.addEventListener('keydown', (e) => { this.keys[e.key.toLowerCase()] = true; });
+        document.addEventListener('keyup', (e) => { this.keys[e.key.toLowerCase()] = false; });
     }
     
     createHighlightMesh() {
@@ -43,13 +50,61 @@ export class Controls {
         document.addEventListener('mousedown', (e) => this.onMouseDown(e));
         document.addEventListener('mouseup', (e) => this.onMouseUp(e));
         document.addEventListener('wheel', (e) => this.onWheel(e), {passive: false});
-        
+
+        document.addEventListener('touchstart', (e) => this.onTouchStart(e), {passive: false});
+        document.addEventListener('touchmove', (e) => this.onTouchMove(e), {passive: false});
+        document.addEventListener('touchend', (e) => this.onTouchEnd(e));
+
         document.addEventListener('pointerlockchange', () => {
             this.isLocked = document.pointerLockElement === document.body;
             if(!this.isLocked && window.gameEngine && window.gameEngine.state === 'playing') {
                 window.gameEngine.pauseGame();
             }
         });
+    }
+
+    onTouchStart(e) {
+        if (!this.isLocked) return;
+        if (e.target.closest('#btn-grab')) {
+            e.preventDefault();
+            if (this.grabbedBody) this.dropObject();
+            else if (this.hoveredBody) this.grabObject(this.hoveredBody);
+        }
+        if (e.target.closest('#btn-tilt')) {
+            e.preventDefault();
+            if (this.grabbedBody) this.isTilting = true;
+        }
+    }
+
+    onTouchMove(e) {
+        if (!this.isLocked) return;
+        if (e.target.closest('#btn-tilt') && this.grabbedBody) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            this.tiltAngle += touch.clientY * 0.005;
+            this.tiltAngle = Math.max(0, Math.min(Math.PI, this.tiltAngle));
+        }
+        if (e.target.closest('#left-joystick-zone')) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const zone = document.getElementById('left-outer');
+            const rect = zone.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = (touch.clientX - cx) * 0.002;
+            const dy = (touch.clientY - cy) * 0.002;
+            this.yaw -= dx;
+            this.pitch -= dy;
+            this.pitch = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, this.pitch));
+            this.cameraObj.rotation.y = this.yaw;
+            this.camera.rotation.x = this.pitch;
+        }
+    }
+
+    onTouchEnd(e) {
+        if (e.target.closest('#btn-tilt')) {
+            this.isTilting = false;
+        }
     }
     
     lock() {
@@ -60,6 +115,52 @@ export class Controls {
         document.exitPointerLock();
     }
     
+    startSpectator() {
+        this.isLocked = false;
+        this.spectatorMode = true;
+        this.spectatorTarget = 'player';
+        if(document.pointerLockElement) document.exitPointerLock();
+        if(window.gameEngine) window.gameEngine.hudManager.showMessage("Spectator Mode - WASD move, Q/E up/down, 2=Player");
+    }
+
+    startPlayerMode() {
+        this.spectatorMode = false;
+        this.spectatorTarget = null;
+        if(window.gameEngine) {
+            window.gameEngine.controls.lock();
+            window.gameEngine.hudManager.showMessage("Player Mode");
+        }
+    }
+
+    updateSpectator(dt) {
+        if(!this.spectatorMode || !window.gameEngine) return;
+        const speed = 5 * dt;
+        const cam = this.cameraObj;
+        
+        const dir = new THREE.Vector3();
+        cam.getWorldDirection(dir);
+        dir.y = 0;
+        dir.normalize();
+        
+        const right = new THREE.Vector3();
+        right.crossVectors(dir, cam.up).normalize();
+        
+        if(this.keys['w']) cam.position.addScaledVector(dir, speed);
+        if(this.keys['s']) cam.position.addScaledVector(dir, -speed);
+        if(this.keys['a']) cam.position.addScaledVector(right, -speed);
+        if(this.keys['d']) cam.position.addScaledVector(right, speed);
+        if(this.keys['q']) cam.position.y += speed;
+        if(this.keys['e']) cam.position.y -= speed;
+
+        if(this.spectatorTarget === 'player' && window.gameEngine.controls) {
+            const playerCam = window.gameEngine.controls.cameraObj;
+            if(playerCam) {
+                cam.position.lerp(playerCam.position, 0.05);
+                cam.rotation.copy(playerCam.rotation);
+            }
+        }
+    }
+
     onMouseMove(e) {
         if (!this.isLocked) return;
         
@@ -109,12 +210,14 @@ export class Controls {
         }
     }
     
-    update(dt) {
+    update(dt, paused = false) {
+        if(paused && !this.spectatorMode) return;
+        this.updateSpectator(dt);
         if(!this.isLocked) return;
         
         // Raycast for hover
         if(!this.grabbedBody) {
-            const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraObj.quaternion).applyQuaternion(this.camera.quaternion);
+            const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraObj.quaternion);
             this.raycaster.set(this.cameraObj.position, dir);
             
             let closest = null;
@@ -148,7 +251,7 @@ export class Controls {
             this.highlightMesh.visible = false;
             
             // Hold mechanics
-            const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraObj.quaternion).applyQuaternion(this.camera.quaternion);
+            const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(this.cameraObj.quaternion);
             const right = new THREE.Vector3(1, 0, 0).applyQuaternion(this.cameraObj.quaternion);
             
             // Position in front of camera

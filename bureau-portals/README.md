@@ -297,6 +297,44 @@ But first, you have to navigate 12 rooms of warped space and convince a bureaucr
 - Collect coffee early and use it near bureaucrats to offset dialog penalties
 - Use correct portals (rare) whenever available
 
+## FEATURES ROADMAP
+
+### Phase 7 — Immediate Impact
+- [ ] **Dynamic Lighting Reactions** — Lights flicker, dim, and die based on sanity level
+- [ ] **Pulsing Fog** — Room fog breathes and pulses with sanity (organic atmosphere)
+- [ ] **Sticky Note Trail** — Yellow breadcrumbs on floor showing visited rooms
+
+### Phase 8 — Gameplay Expansion
+- [x] **The Ringing Phone** — Answer for quests/bonus items, miss for sanity penalty
+- [x] **Coffee Mini-Game** — Timing challenge at coffee machine, restores sanity
+- [x] **NPC Memory** — NPCs remember interactions, change dialogue and behavior
+
+### Phase 9 — Signature Features
+- [x] **Portal Echo** (DONE) — Ghost replay of yourself through portals, delay scales with low sanity
+- [x] **Interactive Form 27-Γ** — Fill out exit form with stamp and signature
+- [x] **Paper Airplane Scout** — Throw paper through portals to scout destinations
+
+### Phase 10 — Narrative Depth
+- [x] **Office Newspaper** — Dynamic newspaper updating with your performance and discoveries
+
+### Phase 11 — Chaos & Absurdity
+- [x] **Fax Machine Madness** — Dial a 10-digit number in 10 seconds. Fail and the fax explodes.
+- [ ] **Photocopier Multiverse** — Photocopier clones you in 3 copies. Manage 3 versions of yourself to solve puzzles.
+- [ ] **Elevator of Wrong Floors** — Elevator that always goes to the wrong floor. Each stop changes gravity.
+
+### Phase 12 — Social Engineering
+- [ ] **Water Cooler Gossip AI** — Gossip system that spreads lies about you. The more you run, the wilder the rumors.
+- [ ] **Employee of the Month** — Vote for yourself. Win = +10 sanity + secret item. Lose = -10 and mockery.
+- [ ] **Time Clock Punch** — Every 5 minutes, punch the clock within 2 seconds. Miss 3x = unpaid overtime, -15 sanity.
+
+### Phase 13 — Existential Depth
+- [ ] **Lunch Hour at the Void** — Lunch break teleports you to Void Office. Eat your apple to survive 30 seconds.
+- [ ] **Quarterly Performance Review** — Auditor interrogates you with multiple-choice questions. Answer wrong = -20 sanity. Answer "42" = secret room.
+- [ ] **Office Fire Drill** — Evacuate in 60 seconds through 12 rooms. Each door you pass becomes void. First to Exit Desk wins.
+- [ ] **Telecommuting Dimension** — Work from home dimension. Everything identical but slightly wrong. Destroy the monitor to return.
+
+---
+
 ## CREDITS
 
 Designed and built as an exercise in non-Euclidean game design, variable gravity mechanics, particle systems, and Web Audio synthesis.

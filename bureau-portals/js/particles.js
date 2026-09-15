@@ -7,24 +7,45 @@ export class Particle {
     this.lifetime = lifetime;
     this.age = 0;
     this.type = type;
-    
+
     this.mesh = this.createMesh();
   }
 
   createMesh() {
     let geo, mat;
-    
+
     if (this.type === 'dust') {
-      geo = new THREE.SphereGeometry(0.05, 4, 4);
-      mat = new THREE.MeshBasicMaterial({ color: 0x999999, transparent: true });
+      if (!Particle._dustGeo) {
+        Particle._dustGeo = new THREE.SphereGeometry(0.05, 4, 4);
+        Particle._dustMat = new THREE.MeshBasicMaterial({
+          color: 0x999999,
+          transparent: true
+        });
+      }
+      geo = Particle._dustGeo;
+      mat = Particle._dustMat;
     } else if (this.type === 'spark') {
-      geo = new THREE.BoxGeometry(0.02, 0.02, 0.02);
-      mat = new THREE.MeshBasicMaterial({ color: 0xffff00, emissive: 0xff8800 });
+      if (!Particle._sparkGeo) {
+        Particle._sparkGeo = new THREE.BoxGeometry(0.02, 0.02, 0.02);
+        Particle._sparkMat = new THREE.MeshStandardMaterial({
+          color: 0xffff00,
+          emissive: 0xffff00,
+          emissiveIntensity: 0.5,
+          roughness: 0.3,
+          metalness: 0.1
+        });
+      }
+      geo = Particle._sparkGeo;
+      mat = Particle._sparkMat;
     } else if (this.type === 'note') {
-      geo = new THREE.PlaneGeometry(0.1, 0.1);
-      mat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      if (!Particle._noteGeo) {
+        Particle._noteGeo = new THREE.PlaneGeometry(0.1, 0.1);
+        Particle._noteMat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      }
+      geo = Particle._noteGeo;
+      mat = Particle._noteMat;
     }
-    
+
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.copy(this.position);
     return mesh;
@@ -33,24 +54,24 @@ export class Particle {
   update(dt) {
     this.age += dt;
     const progress = this.age / this.lifetime;
-    
+
     if (progress >= 1) {
       return false; // Dead
     }
-    
+
     // Apply physics
     this.velocity.y -= 9.8 * dt; // Gravity
     this.position.add(this.velocity.clone().multiplyScalar(dt));
-    
+
     this.mesh.position.copy(this.position);
-    
+
     // Fade out
     this.mesh.material.opacity = 1 - progress;
-    
+
     // Rotation
     this.mesh.rotation.x += this.velocity.x * dt * 0.1;
     this.mesh.rotation.y += this.velocity.z * dt * 0.1;
-    
+
     return true; // Still alive
   }
 }
@@ -77,7 +98,7 @@ export class ParticleSystem {
         Math.random() * 5,
         Math.sin(angle) * speed
       );
-      
+
       this.emit(position, vel, 1 + Math.random(), type);
     }
   }
@@ -93,7 +114,7 @@ export class ParticleSystem {
   }
 
   clear() {
-    this.particles.forEach(p => this.scene.remove(p.mesh));
+    this.particles.forEach((p) => this.scene.remove(p.mesh));
     this.particles = [];
   }
 }
@@ -108,13 +129,14 @@ export class FloatingNote {
       Math.random() * 5 + 2,
       (Math.random() - 0.5) * 10
     );
-    
+    this.baseY = this.position.y;
+
     this.group = new THREE.Group();
     this.group.position.copy(this.position);
-    
+
     this.buildMesh();
     scene.add(this.group);
-    
+
     this.floatSpeed = Math.random() * 2 + 1;
     this.time = 0;
   }
@@ -124,28 +146,28 @@ export class FloatingNote {
     canvas.width = 256;
     canvas.height = 256;
     const ctx = canvas.getContext('2d');
-    
+
     ctx.fillStyle = '#ffff00';
     ctx.fillRect(0, 0, 256, 256);
     ctx.fillStyle = '#000000';
     ctx.font = '20px Arial';
     ctx.fillText(this.text, 10, 128);
-    
+
     const texture = new THREE.CanvasTexture(canvas);
     const material = new THREE.MeshBasicMaterial({ map: texture });
     const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.01);
-    
+
     const mesh = new THREE.Mesh(geometry, material);
     this.group.add(mesh);
   }
 
   update(dt) {
     this.time += dt;
-    
-    // Gentle floating motion
-    this.group.position.y += Math.sin(this.time * this.floatSpeed) * 0.1;
+
+    // Gentle floating motion (absolute positioning to prevent drift)
+    this.group.position.y = this.baseY + Math.sin(this.time * this.floatSpeed) * 0.1;
     this.group.rotation.z += dt * 0.5;
-    
+
     return true;
   }
 
@@ -166,14 +188,14 @@ export class PrinterSparks {
 
   update(dt, particleSystem) {
     if (!this.active) return;
-    
+
     this.time += dt;
-    
+
     if (this.time > this.duration) {
       this.active = false;
       return;
     }
-    
+
     // Emit random sparks
     if (Math.random() < 0.3) {
       const vel = new THREE.Vector3(

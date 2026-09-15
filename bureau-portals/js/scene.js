@@ -4,7 +4,7 @@ export class SceneManager {
   constructor() {
     this.canvas = document.getElementById('game-canvas');
     this.scene = new THREE.Scene();
-    
+
     // Setup renderer with stencil buffer
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -13,11 +13,15 @@ export class SceneManager {
       alpha: false
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.autoClear = false;
     this.renderer.setClearColor(0x0a0a14, 1);
+
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.0;
 
     // Setup camera
     this.camera = new THREE.PerspectiveCamera(
@@ -39,20 +43,27 @@ export class SceneManager {
 
     // Stencil state
     this.currentStencilID = 0;
+
+    // Post-processing (set up later via setupPostProcessing)
+    this.postProcessing = null;
   }
 
   setupLighting() {
-    // Ambient light
-    const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+    // Ambient light for PBR (increased from 0.4)
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
     this.scene.add(ambient);
 
+    // Hemisphere light for ambient fill (PBR needs this)
+    const hemi = new THREE.HemisphereLight(0x444466, 0x222211, 0.3);
+    this.scene.add(hemi);
+
     // Directional light (simulating sun/ceiling)
-    const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+    const dir = new THREE.DirectionalLight(0xffffff, 1.2);
     dir.position.set(10, 15, 10);
     dir.target.position.set(0, 0, 0);
     dir.castShadow = true;
-    dir.shadow.mapSize.width = 2048;
-    dir.shadow.mapSize.height = 2048;
+    dir.shadow.mapSize.width = 1024;
+    dir.shadow.mapSize.height = 1024;
     dir.shadow.camera.near = 0.5;
     dir.shadow.camera.far = 50;
     dir.shadow.camera.left = -30;
@@ -66,18 +77,14 @@ export class SceneManager {
     // Fluorescent tube lights (multiple points)
     const fluorColors = [0xffffff, 0xfffacd]; // white, light yellow
     for (let i = -2; i <= 2; i++) {
-      const point = new THREE.PointLight(
-        fluorColors[Math.abs(i) % fluorColors.length],
-        0.5,
-        20
-      );
+      const point = new THREE.PointLight(fluorColors[Math.abs(i) % fluorColors.length], 0.8, 25);
       point.position.set(i * 6, 10, 0);
-      point.castShadow = true;
+      point.castShadow = false;
       this.scene.add(point);
     }
 
     // Store lights for flickering
-    this.pointLights = this.scene.children.filter(child => child instanceof THREE.PointLight);
+    this.pointLights = this.scene.children.filter((child) => child instanceof THREE.PointLight);
   }
 
   onWindowResize() {
@@ -86,6 +93,9 @@ export class SceneManager {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
+    if (this.postProcessing) {
+      this.postProcessing.composer.setSize(width, height);
+    }
   }
 
   // Render the scene
@@ -103,11 +113,11 @@ export class SceneManager {
   updateLighting(time) {
     // Occasional flicker
     if (Math.random() < 0.03) {
-      this.pointLights.forEach(light => {
-        light.intensity *= (0.8 + Math.random() * 0.4);
+      this.pointLights.forEach((light) => {
+        light.intensity *= 0.8 + Math.random() * 0.4;
       });
     }
-    
+
     // Directional light subtle flicker
     this.directionalLight.intensity = 0.8 + Math.sin(time * 3) * 0.05;
   }

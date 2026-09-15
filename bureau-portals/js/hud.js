@@ -1,8 +1,15 @@
 export class HUDManager {
-  constructor(player, puzzle) {
+  constructor(player, puzzle, game) {
     this.player = player;
     this.puzzle = puzzle;
-    
+    this.game = game;
+
+    // Dirty tracking to avoid unnecessary DOM updates
+    this._inventoryDirty = true;
+    this._lastInventoryKey = '';
+    this._lastSanity = -999;
+    this._lastBattery = -999;
+
     this.hudElement = document.getElementById('hud');
     this.sanityBar = document.getElementById('sanity-bar-inner');
     this.sanityValue = document.getElementById('sanity-value');
@@ -17,13 +24,13 @@ export class HUDManager {
     this.eventNotifications = document.getElementById('event-notifications');
     this.crosshair = document.getElementById('crosshair');
     this.interactionHint = document.getElementById('interaction-hint');
-    
+
     this.hintKey = document.getElementById('hint-key');
     this.hintText = document.getElementById('hint-text');
-    
+
     this.mapCtx = this.mapCanvas.getContext('2d');
     this.roomLayout = this.buildRoomLayout();
-    
+
     this.updateInterval = 0.1;
     this.timeSinceUpdate = 0;
   }
@@ -68,6 +75,8 @@ export class HUDManager {
   }
 
   updateSanity(value) {
+    if (Math.abs(value - this._lastSanity) < 1) return;
+    this._lastSanity = value;
     const percentage = Math.max(0, Math.min(100, (value + 100) / 2)); // Remap -100 to 100 as 0 to 100
     this.sanityBar.style.width = `${percentage}%`;
     this.sanityValue.textContent = `${Math.round(value)} / 100`;
@@ -114,36 +123,42 @@ export class HUDManager {
   }
 
   updateInventory() {
+    // Generate a key to detect changes
+    const invKey = this.puzzle.inventory.map((i) => i.type).join(',');
+    if (invKey === this._lastInventoryKey && !this._inventoryDirty) return;
+    this._lastInventoryKey = invKey;
+    this._inventoryDirty = false;
+
     this.inventorySlots.innerHTML = '';
-    
+
     for (let i = 0; i < 6; i++) {
       const slot = document.createElement('div');
       slot.className = 'inventory-slot';
-      
+
       if (i < this.puzzle.inventory.length) {
         const item = this.puzzle.inventory[i];
         const icon = this.getItemIcon(item.type);
         slot.textContent = icon;
         slot.title = item.type;
-        
+
         const tooltip = document.createElement('div');
         tooltip.className = 'inventory-slot-tooltip';
         tooltip.textContent = item.type;
         slot.appendChild(tooltip);
       }
-      
+
       this.inventorySlots.appendChild(slot);
     }
   }
 
   updateObjectives() {
-    const currentObj = this.puzzle.objectives.find(o => !o.completed);
+    const currentObj = this.puzzle.objectives.find((o) => !o.completed);
     if (currentObj) {
       this.objectiveText.textContent = currentObj.text;
     }
 
     this.objectiveStamps.innerHTML = '';
-    for (let completed of this.puzzle.completedObjectives) {
+    for (const completed of this.puzzle.completedObjectives) {
       const stamp = document.createElement('div');
       stamp.className = 'objective-stamp';
       stamp.textContent = '✓';
@@ -153,24 +168,24 @@ export class HUDManager {
 
   updateMap(currentRoom) {
     this.mapCtx.clearRect(0, 0, this.mapCanvas.width, this.mapCanvas.height);
-    
+
     // Background
     this.mapCtx.fillStyle = '#1a1a2e';
     this.mapCtx.fillRect(0, 0, this.mapCanvas.width, this.mapCanvas.height);
 
     // Draw rooms
-    for (let roomId in this.roomLayout) {
+    for (const roomId in this.roomLayout) {
       const room = this.roomLayout[roomId];
       const size = 6;
-      
+
       this.mapCtx.fillStyle = room.color;
-      this.mapCtx.fillRect(room.x - size/2, room.y - size/2, size, size);
+      this.mapCtx.fillRect(room.x - size / 2, room.y - size / 2, size, size);
 
       // Current room highlight
       if (currentRoom && currentRoom.id === parseInt(roomId)) {
         this.mapCtx.strokeStyle = '#ffff00';
         this.mapCtx.lineWidth = 2;
-        this.mapCtx.strokeRect(room.x - size/2 - 2, room.y - size/2 - 2, size + 4, size + 4);
+        this.mapCtx.strokeRect(room.x - size / 2 - 2, room.y - size / 2 - 2, size + 4, size + 4);
       }
     }
 
@@ -191,11 +206,19 @@ export class HUDManager {
     }
 
     // Check for nearby interactions
-    if (window.game) {
-      const item = window.game.itemManager?.checkInteraction(this.player.position, 2.0);
+    if (this.game && this.game.items) {
+      const item = this.game.items.checkInteraction(this.player.position, 2.0);
       if (item) {
         this.crosshair.classList.add('interact');
         this.showInteractionHint('[E] Pick up ' + item.type);
+      } else if (
+        this.game.coffeePosition &&
+        !this.game.coffeeActive &&
+        this.game.coffeeCooldown <= 0 &&
+        this.player.position.distanceTo(this.game.coffeePosition) < 1.5
+      ) {
+        this.crosshair.classList.add('interact');
+        this.showInteractionHint('[E] Brew Coffee');
       } else {
         this.crosshair.classList.remove('interact');
         this.hideInteractionHint();
@@ -216,7 +239,7 @@ export class HUDManager {
     const notif = document.createElement('div');
     notif.className = `event-notification ${type}`;
     notif.textContent = message;
-    
+
     this.eventNotifications.appendChild(notif);
 
     setTimeout(() => {
@@ -226,14 +249,14 @@ export class HUDManager {
 
   getItemIcon(type) {
     const icons = {
-      'form': '📄',
-      'key': '🔑',
-      'stamp': '🔴',
-      'coffee': '☕',
-      'minutes': '📋',
-      'battery': '🔋',
-      'note': '📝',
-      'calibration': '⚙️'
+      form: '📄',
+      key: '🔑',
+      stamp: '🔴',
+      coffee: '☕',
+      minutes: '📋',
+      battery: '🔋',
+      note: '📝',
+      calibration: '⚙️'
     };
     return icons[type] || '?';
   }

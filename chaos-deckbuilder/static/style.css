@@ -282,3 +282,152 @@ body::after {
   50% { transform: translateY(-8px); }
   to { transform: translateY(0px); }
 }
+
+
+/* === A2: Card Reveal === */
+.reveal-card {
+  animation: cardReveal 0.5s ease-out;
+}
+
+@keyframes cardReveal {
+  0% { opacity: 0; transform: perspective(600px) rotateY(90deg) scale(0.8); }
+  60% { opacity: 1; transform: perspective(600px) rotateY(-5deg) scale(1.02); }
+  100% { opacity: 1; transform: perspective(600px) rotateY(0deg) scale(1); }
+}
+
+@keyframes legendaryPulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(245,158,11,0.35); }
+  50% { box-shadow: 0 0 28px rgba(245,158,11,0.55); }
+}
+
+.game-card[data-rarity="legendary"] {
+  animation: legendaryPulse 2s ease-in-out infinite, cardReveal 0.5s ease-out;
+}
+
+/* === A3: Emote Bubbles === */
+.emote-bubble {
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(139,92,246,0.9);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  z-index: 1000;
+  animation: emoteFloat 3s ease-out forwards;
+  pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+@keyframes emoteFloat {
+  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-80px); }
+}
+
+/* === B2: Post-Game Stats === */
+.postgame-stats {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+}
+
+.postgame-stats h3 {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: var(--accent2);
+}
+
+.stats-chart {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  height: 120px;
+  padding: 8px 0;
+  overflow-x: auto;
+}
+
+.stat-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 40px;
+}
+
+.stat-bar {
+  width: 14px;
+  border-radius: 3px 3px 0 0;
+  min-height: 2px;
+  transition: height 0.3s ease;
+}
+
+.stat-bar-label {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+/* === B3: Archetype === */
+.archetype-badge {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 14px;
+  animation: legendaryPulse 2s ease-in-out infinite;
+}
+
+/* === B4: Tutorial === */
+#tutorial-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  background: var(--bg2);
+  border: 2px solid var(--accent);
+  padding: 2rem;
+  width: 480px;
+  max-width: 90vw;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+#tutorial-modal.hidden { display: none; }
+
+.tutorial-step {
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+}
+
+.tutorial-step strong { color: var(--accent2); }
+
+.tutorial-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* === A4: Mission bar === */
+.mission-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.mission-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}

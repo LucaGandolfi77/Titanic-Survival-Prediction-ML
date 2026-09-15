@@ -1,186 +1,301 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bureau of Misplaced Portals</title>
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/ui.css">
-  <link rel="stylesheet" href="css/hud.css">
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.158.0/build/three.module.js"
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bureau of Misplaced Portals</title>
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/ui.css" />
+    <link rel="stylesheet" href="css/hud.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+        }
       }
-    }
-  </script>
-</head>
-<body>
+    </script>
+  </head>
+  <body>
+    <canvas id="game-canvas"></canvas>
 
-  <canvas id="game-canvas"></canvas>
-
-  <!-- HUD -->
-  <div id="hud" class="hidden">
-    <div id="hud-sanity">
-      <div class="hud-label">SANITY LEVEL (Form S-1)</div>
-      <div id="sanity-bar-outer">
-        <div id="sanity-bar-inner"></div>
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div id="hud-sanity">
+        <div class="hud-label">SANITY LEVEL (Form S-1)</div>
+        <div id="sanity-bar-outer">
+          <div id="sanity-bar-inner"></div>
+        </div>
+        <span id="sanity-value">100 / 100</span>
+        <span id="sanity-status">ACCEPTABLE</span>
       </div>
-      <span id="sanity-value">100 / 100</span>
-      <span id="sanity-status">ACCEPTABLE</span>
-    </div>
 
-    <div id="hud-inventory">
-      <div class="hud-label">INVENTORY</div>
-      <div id="inventory-slots"></div>
-    </div>
-
-    <div id="hud-portal-map">
-      <div class="hud-label">BUILDING SCHEMATIC</div>
-      <canvas id="map-canvas" width="140" height="140"></canvas>
-      <div id="current-room-label">ROOM: LOBBY</div>
-    </div>
-
-    <div id="hud-objective">
-      <div class="hud-label">CURRENT TASK:</div>
-      <div id="objective-text">Report to Records Department</div>
-      <div id="objective-stamps"></div>
-    </div>
-
-    <div id="hud-flashlight">
-      <span>🔦</span>
-      <div id="battery-bar-outer">
-        <div id="battery-bar-inner"></div>
+      <div id="hud-inventory">
+        <div class="hud-label">INVENTORY</div>
+        <div id="inventory-slots"></div>
       </div>
-      <span id="battery-value">100%</span>
-    </div>
 
-    <div id="crosshair">
-      <div id="crosshair-dot"></div>
-    </div>
-
-    <div id="interaction-hint" class="hidden">
-      <span id="hint-key">[E]</span>
-      <span id="hint-text">Examine</span>
-    </div>
-
-    <div id="event-notifications"></div>
-    <div id="screen-distortion"></div>
-    <div id="void-vignette" class="hidden"></div>
-
-    <div id="void-warning" class="hidden">
-      ⚠ VOID PROXIMITY — DO NOT ENTER PORTAL #13
-    </div>
-  </div>
-
-  <!-- Screens -->
-  <div id="screen-menu" class="screen active">
-    <div class="menu-letterhead">
-      <div class="letterhead-top">
-        BUREAU OF ADMINISTRATIVE CONTINUITY
+      <div id="hud-portal-map">
+        <div class="hud-label">BUILDING SCHEMATIC</div>
+        <canvas id="map-canvas" width="140" height="140"></canvas>
+        <div id="current-room-label">ROOM: LOBBY</div>
       </div>
-      <div class="letterhead-sub">
-        DEPARTMENT OF PORTAL MANAGEMENT (MISPLACED DIVISION)
+
+      <div id="hud-objective">
+        <div class="hud-label">CURRENT TASK:</div>
+        <div id="objective-text">Report to Records Department</div>
+        <div id="objective-stamps"></div>
+      </div>
+
+      <div id="hud-flashlight">
+        <span>🔦</span>
+        <div id="battery-bar-outer">
+          <div id="battery-bar-inner"></div>
+        </div>
+        <span id="battery-value">100%</span>
+      </div>
+
+      <div id="crosshair">
+        <div id="crosshair-dot"></div>
+      </div>
+
+      <div id="interaction-hint" class="hidden">
+        <span id="hint-key">[E]</span>
+        <span id="hint-text">Examine</span>
+      </div>
+
+      <div id="event-notifications"></div>
+      <div id="screen-distortion"></div>
+      <div id="void-vignette" class="hidden"></div>
+
+      <div id="void-warning" class="hidden">⚠ VOID PROXIMITY — DO NOT ENTER PORTAL #13</div>
+
+      <!-- Coffee Mini-Game Meter -->
+      <div id="coffee-meter" class="hidden">
+        <div class="coffee-label">COFFEE QUALITY</div>
+        <div class="coffee-container">
+          <div id="coffee-bar-fill"></div>
+          <div id="coffee-indicator"></div>
+        </div>
+        <div id="coffee-round">ROUND 1/3</div>
       </div>
     </div>
-    <div class="menu-stamp-decoration">OFFICIAL</div>
-    <h1>BUREAU OF<br>MISPLACED PORTALS</h1>
-    <p class="menu-subtitle">
-      "All portals installed by certified professionals.*"<br>
-      <small>*Greg is not a certified professional.</small>
-    </p>
-    <button id="btn-play" class="menu-btn primary">▶ BEGIN EMPLOYMENT</button>
-    <button id="btn-howto" class="menu-btn">📋 EMPLOYEE HANDBOOK</button>
-    <button id="btn-scores" class="menu-btn">🏆 PERSONNEL FILES</button>
-    <button id="btn-settings" class="menu-btn">⚙️ REGULATIONS</button>
-    <div class="menu-footer-note">
-      Form 27-Γ required for exit. You do not have Form 27-Γ.
-    </div>
-  </div>
 
-  <div id="screen-howto" class="screen hidden">
-    <div class="memo-header">
-      MEMORANDUM — RE: Portal Navigation Policy Update
+    <!-- Screens -->
+    <div id="screen-menu" class="screen active">
+      <div class="menu-letterhead">
+        <div class="letterhead-top">BUREAU OF ADMINISTRATIVE CONTINUITY</div>
+        <div class="letterhead-sub">DEPARTMENT OF PORTAL MANAGEMENT (MISPLACED DIVISION)</div>
+      </div>
+      <div class="menu-stamp-decoration">OFFICIAL</div>
+      <h1>BUREAU OF<br />MISPLACED PORTALS</h1>
+      <p class="menu-subtitle">
+        "All portals installed by certified professionals.*"<br />
+        <small>*Greg is not a certified professional.</small>
+      </p>
+      <button id="btn-play" class="menu-btn primary">▶ BEGIN EMPLOYMENT</button>
+      <button id="btn-howto" class="menu-btn">📋 EMPLOYEE HANDBOOK</button>
+      <button id="btn-scores" class="menu-btn">🏆 PERSONNEL FILES</button>
+      <button id="btn-settings" class="menu-btn">⚙️ REGULATIONS</button>
+      <div class="menu-footer-note">Form 27-Γ required for exit. You do not have Form 27-Γ.</div>
     </div>
-    <div id="howto-content"></div>
-    <button id="btn-howto-back" class="menu-btn">← DISCARD MEMO</button>
-  </div>
 
-  <div id="screen-pause" class="screen hidden">
-    <div class="memo-header">⏸ WORK SUSPENDED</div>
-    <div id="pause-room-info"></div>
-    <button id="btn-resume" class="menu-btn primary">▶ RESUME DUTIES</button>
-    <button id="btn-restart" class="menu-btn">🔄 RESTART SHIFT</button>
-    <button id="btn-pause-menu" class="menu-btn">🏠 ABANDON POST</button>
-  </div>
+    <div id="screen-howto" class="screen hidden">
+      <div class="memo-header">MEMORANDUM — RE: Portal Navigation Policy Update</div>
+      <div id="howto-content"></div>
+      <button id="btn-howto-back" class="menu-btn">← DISCARD MEMO</button>
+    </div>
 
-  <div id="screen-note" class="screen hidden">
-    <div id="note-paper">
-      <div id="note-title"></div>
-      <div id="note-body"></div>
-      <button id="btn-close-note" class="menu-btn">[E] CLOSE NOTE</button>
+    <div id="screen-pause" class="screen hidden">
+      <div class="memo-header">⏸ WORK SUSPENDED</div>
+      <div id="pause-room-info"></div>
+      <button id="btn-resume" class="menu-btn primary">▶ RESUME DUTIES</button>
+      <button id="btn-save" class="menu-btn">💾 SAVE</button>
+      <button id="btn-load" class="menu-btn">📂 LOAD</button>
+      <button id="btn-restart" class="menu-btn">🔄 RESTART SHIFT</button>
+      <button id="btn-pause-menu" class="menu-btn">🏠 ABANDON POST</button>
     </div>
-  </div>
 
-  <div id="screen-win" class="screen hidden">
-    <div class="memo-header">
-      ✅ FORM 27-Γ APPROVED — EXIT GRANTED
+    <div id="screen-note" class="screen hidden">
+      <div id="note-paper">
+        <div id="note-title"></div>
+        <div id="note-body"></div>
+        <button id="btn-close-note" class="menu-btn">[E] CLOSE NOTE</button>
+      </div>
     </div>
-    <div id="win-stats"></div>
-    <div id="win-message"></div>
-    <button id="btn-play-again" class="menu-btn primary">
-      ▶ NEW EMPLOYMENT
-    </button>
-    <button id="btn-win-menu" class="menu-btn">🏠 MAIN MENU</button>
-  </div>
 
-  <div id="screen-gameover" class="screen hidden">
-    <div class="memo-header">RE: EMPLOYEE STATUS CHANGE</div>
-    <div id="gameover-content"></div>
-    <button id="btn-tryagain" class="menu-btn primary">
-      ▶ APPEAL DECISION
-    </button>
-    <button id="btn-go-menu" class="menu-btn">🏠 MAIN MENU</button>
-  </div>
+    <div id="screen-win" class="screen hidden">
+      <div class="memo-header">✅ FORM 27-Γ APPROVED — EXIT GRANTED</div>
+      <div id="win-stats"></div>
+      <div id="win-message"></div>
+      <button id="btn-play-again" class="menu-btn primary">▶ NEW EMPLOYMENT</button>
+      <button id="btn-win-menu" class="menu-btn">🏠 MAIN MENU</button>
+    </div>
 
-  <div id="screen-settings" class="screen hidden">
-    <div class="memo-header">⚙️ OPERATIONAL PARAMETERS</div>
-    <div class="setting-row">
-      <label>Mouse Sensitivity</label>
-      <input id="sens-slider" type="range" min="1" max="10" value="5">
+    <div id="screen-gameover" class="screen hidden">
+      <div class="memo-header">RE: EMPLOYEE STATUS CHANGE</div>
+      <div id="gameover-content"></div>
+      <button id="btn-tryagain" class="menu-btn primary">▶ APPEAL DECISION</button>
+      <button id="btn-go-menu" class="menu-btn">🏠 MAIN MENU</button>
     </div>
-    <div class="setting-row">
-      <label for="sanity-fx">Sanity Effects Intensity</label>
-      <select id="sanity-fx" title="Sanity Effects Intensity">
-        <option>Mild</option><option selected>Standard</option>
-        <option>Maximum Suffering</option>
-      </select>
-    </div>
-    <div class="setting-row">
-      <label for="flashlight-mode">Flashlight</label>
-      <select id="flashlight-mode" title="Flashlight Mode">
-        <option selected>Battery Drain</option>
-        <option>Infinite</option><option>Off</option>
-      </select>
-    </div>
-    <div class="setting-row">
-      <label>Sound</label>
-      <button id="btn-sound" class="toggle-btn active">ON</button>
-    </div>
-    <div class="setting-row">
-      <label>Hitbox Debug</label>
-      <button id="btn-debug" class="toggle-btn">OFF</button>
-    </div>
-    <button id="btn-set-back" class="menu-btn">← BACK</button>
-  </div>
 
-  <div id="toast-container" aria-live="polite"></div>
-  <div id="item-examine-overlay" class="hidden">
-    <div id="item-examine-content"></div>
-  </div>
+    <div id="screen-settings" class="screen hidden">
+      <div class="memo-header">⚙️ OPERATIONAL PARAMETERS</div>
+      <div class="setting-row">
+        <label>Mouse Sensitivity</label>
+        <input id="sens-slider" type="range" min="1" max="10" value="5" />
+      </div>
+      <div class="setting-row">
+        <label for="sanity-fx">Sanity Effects Intensity</label>
+        <select id="sanity-fx" title="Sanity Effects Intensity">
+          <option>Mild</option>
+          <option selected>Standard</option>
+          <option>Maximum Suffering</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label for="flashlight-mode">Flashlight</label>
+        <select id="flashlight-mode" title="Flashlight Mode">
+          <option selected>Battery Drain</option>
+          <option>Infinite</option>
+          <option>Off</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label>Sound</label>
+        <button id="btn-sound" class="toggle-btn active">ON</button>
+      </div>
+      <div class="setting-row">
+        <label>Hitbox Debug</label>
+        <button id="btn-debug" class="toggle-btn">OFF</button>
+      </div>
+      <button id="btn-set-back" class="menu-btn">← BACK</button>
+    </div>
 
-  <script type="module" src="js/main.js"></script>
-</body>
+    <div id="toast-container" aria-live="polite"></div>
+    <div id="item-examine-overlay" class="hidden">
+      <div id="item-examine-content"></div>
+    </div>
+
+    <!-- Office Newspaper -->
+    <div id="newspaper" class="hidden">
+      <div class="news-masthead">
+        <div class="news-title">BUREAU GAZETTE</div>
+        <div class="news-date" id="news-date"></div>
+      </div>
+      <div class="news-content">
+        <div class="news-item"><strong>Rooms Explored:</strong> <span id="news-rooms"></span></div>
+        <div class="news-item"><strong>Items Collected:</strong> <span id="news-items"></span></div>
+        <div class="news-item"><strong>Sanity:</strong> <span id="news-sanity"></span></div>
+        <div class="news-item"><strong>Status:</strong> <span id="news-status" class="news-status"></span></div>
+      </div>
+    </div>
+    <!-- Fax Machine Keypad -->
+    <div id="fax-keypad" class="hidden">
+      <div class="fax-title">FAX MACHINE — ENTRY 001</div>
+      <div id="fax-display" class="fax-display"></div>
+      <div id="fax-timer" class="fax-timer">15</div>
+      <div class="fax-keypad-grid">
+        <button class="fax-key" data-key="1">1</button>
+        <button class="fax-key" data-key="2">2</button>
+        <button class="fax-key" data-key="3">3</button>
+        <button class="fax-key" data-key="4">4</button>
+        <button class="fax-key" data-key="5">5</button>
+        <button class="fax-key" data-key="6">6</button>
+        <button class="fax-key" data-key="7">7</button>
+        <button class="fax-key" data-key="8">8</button>
+        <button class="fax-key" data-key="9">9</button>
+        <button class="fax-key fax-key-zero" data-key="0">0</button>
+      </div>
+      <div class="fax-instruction">Enter 10-digit code. Press number keys.</div>
+    </div>
+
+    <!-- Photocopier Multiverse -->
+    <div id="photocopier-overlay" class="hidden">
+      <div class="photo-title">PHOTOCOPIER — MULTIVERSE EDITION</div>
+      <div id="photo-copies" class="photo-copies"></div>
+      <div id="photo-timer" class="photo-timer">30s</div>
+      <div class="photo-instruction">Press 1/2/3 to control a copy</div>
+    </div>
+
+    <!-- Water Cooler Gossip -->
+    <div id="gossip-board" class="hidden">
+      <div class="gossip-title">WATER COOLER GAZETTE</div>
+      <div id="gossip-list" class="gossip-list"></div>
+    </div>
+
+    <!-- Time Clock Punch -->
+    <div id="timeclock-overlay" class="hidden">
+      <div class="tc-title">TIME CLOCK — PUNCH NOW</div>
+      <div id="tc-timer" class="tc-timer">2s</div>
+      <div id="tc-misses" class="tc-misses">Misses: 0/3</div>
+      <div class="tc-instruction">Press E to punch the clock!</div>
+    </div>
+
+    <!-- Lunch Hour at Void -->
+    <div id="lunch-overlay" class="hidden">
+      <div class="lunch-title">LUNCH HOUR — DON'T BE LATE</div>
+      <div id="lunch-timer" class="lunch-timer">30s</div>
+      <div id="lunch-hunger" class="lunch-hunger">APPLE: NOT FOUND</div>
+      <div class="lunch-instruction">Find the apple in the Void Office!</div>
+    </div>
+
+    <!-- Quarterly Review -->
+    <div id="review-overlay" class="hidden">
+      <div class="review-title">QUARTERLY PERFORMANCE REVIEW</div>
+      <div id="review-question" class="review-question"></div>
+      <div id="review-options" class="review-options"></div>
+      <div id="review-score" class="review-score">Score: 0</div>
+    </div>
+
+    <!-- Office Fire Drill -->
+    <div id="firedrill-overlay" class="hidden">
+      <div class="drill-title">FIRE DRILL — EVACUATE!</div>
+      <div id="drill-timer" class="drill-timer">60s</div>
+      <div id="drill-doors" class="drill-doors">Doors sealed: 0/12</div>
+    </div>
+
+    <!-- Telecommuting Dimension -->
+    <div id="telecommute-overlay" class="hidden">
+      <div class="tele-title">HOME OFFICE — REMOTE WORK</div>
+      <div id="tele-something-wrong" class="tele-something-wrong">Everything looks slightly wrong...</div>
+      <div class="tele-instruction">Destroy the monitor to return</div>
+    </div>
+
+    <!-- Exit Form 27-Γ -->
+    <div id="exit-form" class="hidden">
+      <div class="form-memo">FORM 27-Γ — EMPLOYMENT TERMINATION</div>
+      <div class="form-field">
+        <span class="form-label">EMPLOYEE NAME</span>
+        <span class="form-value">EMPLOYEE #4471-B</span>
+        <span class="form-status">✓ FILLED</span>
+      </div>
+      <div class="form-field">
+        <span class="form-label">DEPARTMENT</span>
+        <span class="form-value">PORTAL MGMT (MISPLACED DIV)</span>
+        <span class="form-status">✓ FILLED</span>
+      </div>
+      <div class="form-field">
+        <span class="form-label">OFFICIAL STAMP</span>
+        <span class="form-status" id="form-stamp-status">✗ EMPTY</span>
+      </div>
+      <div class="form-field">
+        <span class="form-label">SUPERVISOR SIGNATURE</span>
+        <span class="form-status" id="form-signature-status">✗ EMPTY</span>
+      </div>
+      <div class="form-field">
+        <span class="form-label">DATE</span>
+        <span class="form-value" id="form-date"></span>
+        <span class="form-status">✓ FILLED</span>
+      </div>
+      <div class="form-actions">
+        <button id="form-submit" class="menu-btn primary" disabled>FORM INCOMPLETE</button>
+      </div>
+    </div>
+  </body>
 </html>

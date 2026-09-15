@@ -1,0 +1,36 @@
+export default [
+  {
+    files: ['js/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly',
+        requestAnimationFrame: 'readonly',
+        performance: 'readonly',
+        Math: 'readonly',
+        JSON: 'readonly',
+        setInterval: 'readonly',
+        setTimeout: 'readonly',
+      },
+    },
+    rules: {
+      'no-undef': 'error',
+      'no-unused-vars': 'warn',
+      'no-console': 'off',
+      'eqeqeq': 'error',
+      'no-shadow': 'warn',
+      'no-multiple-empty-lines': ['error', { max: 2 }],
+      'semi': ['error', 'always'],
+      'quotes': ['error', 'single', { avoidEscape: true }],
+      'indent': ['error', 2, { SwitchCase: 1 }],
+      'comma-dangle': ['error', 'never'],
+      'no-var': 'error',
+      'object-shorthand': 'warn',
+      'prefer-const': 'warn',
+      'no-param-reassign': 'off',
+    },
+  },
+];

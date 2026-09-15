@@ -81,14 +81,32 @@
           <div id="particles-options" class="pill-list"></div>
         </div>
       </div>
+      <div class="glass section">
+        <h2>Emotes</h2>
+        <div class="help">Quick reactions during matches</div>
+        <div class="pill-list">
+          <button class="pill" data-emote="GG!">GG!</button>
+          <button class="pill" data-emote="Wow!">Wow!</button>
+          <button class="pill" data-emote="Sick!">Sick!</button>
+          <button class="pill" data-emote="RNG!">RNG!</button>
+          <button class="pill" data-emote="Nope!">Nope!</button>
+        </div>
+      </div>
     </section>
   </main>
 </div>
 
-<audio id="sfx-buy" preload="auto" src="{{ url_for('static', filename='sounds/buy.mp3') }}"></audio>
-<audio id="sfx-lock" preload="auto" src="{{ url_for('static', filename='sounds/lock.mp3') }}"></audio>
-<audio id="sfx-hit" preload="auto" src="{{ url_for('static', filename='sounds/hit.mp3') }}"></audio>
-<audio id="sfx-win" preload="auto" src="{{ url_for('static', filename='sounds/win.mp3') }}"></audio>
-<audio id="sfx-rare" preload="auto" src="{{ url_for('static', filename='sounds/rare.mp3') }}"></audio>
+<div id="tutorial-modal" class="hidden">
+  <div class="tutorial-step"><strong>Step 1: Shop</strong> Buy 1 card from the market. Click Buy on a card.</div>
+  <div class="tutorial-step"><strong>Step 2: Hand</strong> Select up to 3 cards from your hand by clicking them.</div>
+  <div class="tutorial-step"><strong>Step 3: Lock In</strong> Click "Lock In Cards" to submit your selections.</div>
+  <div class="tutorial-step"><strong>Step 4: Resolve</strong> Both players reveal simultaneously. Check the Battle Log.</div>
+  <div class="tutorial-step"><strong>Tips:</strong> Tribes give bonuses! Build around a tribe for power. Cursed cards are strong but risky.</div>
+  <div class="tutorial-buttons">
+    <button class="action" data-close-tutorial="1">Got It!</button>
+    <button class="action" data-close-tutorial="1">Skip Tutorial</button>
+  </div>
+</div>
+
 <script src="{{ url_for('static', filename='app.js') }}"></script>
 {% endblock %}

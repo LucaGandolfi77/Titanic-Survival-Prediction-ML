@@ -20,16 +20,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
 </head>
 <body>
+  <div id="loading-screen">
+    <div id="loading-spinner"></div>
+    <p id="loading-text">Loading gravity...</p>
+  </div>
   <canvas id="game-canvas"></canvas>
   <canvas id="postfx-canvas"></canvas>
 
   <div id="hud-wrapper">
     <div id="hud" class="hidden">
       <div id="hud-orders"></div>
-      <div id="hud-stats">
-        <span id="score-display">☕ 0</span>
-        <span id="spills-display">💧 0</span>
-      </div>
+        <div id="hud-stats">
+          <span id="score-display">☕ 0</span>
+          <span id="spills-display">💧 0</span>
+          <span id="hud-speedrun">00:00.00</span>
+        </div>
       <div id="hud-gravity">
         <div id="gravity-arrow-container">
           <div id="gravity-arrow">↓</div>
@@ -146,5 +151,8 @@
   <div id="toast-container" aria-live="polite"></div>
 
   <script type="module" src="js/main.js"></script>
+  <div id="screen-editor" class="screen hidden">
+    <h2>Level Editor</h2>
+  </div>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import { GRAVITY_STATES } from './gravity.js';
+import { domUtils } from './utils.js';
 import { domUtils } from './utils.js';
 
 export class UI {

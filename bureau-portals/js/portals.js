@@ -77,46 +77,45 @@ export class Portal {
   }
 
   buildFrame() {
-    const frameGroup = new THREE.Group();
-    const matFrame = new THREE.MeshLambertMaterial({ color: 0x8a8a8a });
+    this.frameScene = new THREE.Group();
+    const matFrame = new THREE.MeshStandardMaterial({
+      color: 0x8a8a8a,
+      roughness: 0.5,
+      metalness: 0.4
+    });
 
     // Left pillar
-    const leftPillar = new THREE.Mesh(
-      new THREE.BoxGeometry(0.3, 3.5, 0.3),
-      matFrame
-    );
+    const leftPillar = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3.5, 0.3), matFrame);
     leftPillar.position.x = -1.0;
     leftPillar.castShadow = true;
-    frameGroup.add(leftPillar);
+    this.frameScene.add(leftPillar);
 
     // Right pillar
     const rightPillar = leftPillar.clone();
     rightPillar.position.x = 1.0;
     rightPillar.castShadow = true;
-    frameGroup.add(rightPillar);
+    this.frameScene.add(rightPillar);
 
     // Top beam
-    const topBeam = new THREE.Mesh(
-      new THREE.BoxGeometry(2.6, 0.3, 0.3),
-      matFrame
-    );
+    const topBeam = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.3, 0.3), matFrame);
     topBeam.position.y = 1.75;
     topBeam.castShadow = true;
-    frameGroup.add(topBeam);
+    this.frameScene.add(topBeam);
 
     // Attach to portal group for transform inheritance
-    this.group.add(frameGroup);
-    return frameGroup;
+    this.group.add(this.frameScene);
+    return this.frameScene;
   }
 
   buildSurface() {
     const geo = new THREE.PlaneGeometry(2.0, 3.0);
     const material = this.createPortalMaterial();
-    
+
     this.surfaceMesh = new THREE.Mesh(geo, material);
     this.surfaceMesh.position.z = 0.05;
     this.surfaceMesh.userData.isPortal = true;
     this.surfaceMesh.userData.portalType = this.type;
+    this.surfaceScene = this.surfaceMesh;
     this.group.add(this.surfaceMesh);
     return this.surfaceMesh;
   }
@@ -173,50 +172,58 @@ export class Portal {
 
   getDestinationCamera(mainCamera) {
     // Transform main camera through portal to destination
-    const virtualCam = new THREE.PerspectiveCamera(
-      mainCamera.fov,
-      mainCamera.aspect,
-      mainCamera.near,
-      mainCamera.far
-    );
+    if (!this._virtualCam) {
+      this._virtualCam = new THREE.PerspectiveCamera(
+        mainCamera.fov,
+        mainCamera.aspect,
+        mainCamera.near,
+        mainCamera.far
+      );
+      this._localPos = new THREE.Vector3();
+      this._transformedPos = new THREE.Vector3();
+      this._camQuat = new THREE.Quaternion();
+      this._portalQuat = new THREE.Quaternion();
+      this._destQuat = new THREE.Quaternion();
+      this._relQuat = new THREE.Quaternion();
+    }
+
+    this._virtualCam.fov = mainCamera.fov;
+    this._virtualCam.aspect = mainCamera.aspect;
+    this._virtualCam.near = mainCamera.near;
+    this._virtualCam.far = mainCamera.far;
 
     // Convert camera position to portal's local space
-    const localPos = new THREE.Vector3().copy(mainCamera.position);
-    this.group.worldToLocal(localPos);
+    this._localPos.copy(mainCamera.position);
+    this.group.worldToLocal(this._localPos);
 
     // Apply portal transformation based on type
-    const transformedPos = this.applyPortalTransform(localPos);
+    const transformedPos = this.applyPortalTransform(this._localPos);
 
     // Convert back to world space from destination portal
     if (this.destinationPortal) {
       this.destinationPortal.group.localToWorld(transformedPos);
-      virtualCam.position.copy(transformedPos);
+      this._virtualCam.position.copy(transformedPos);
 
       // Calculate orientation
-      const camQuat = new THREE.Quaternion();
-      mainCamera.getWorldQuaternion(camQuat);
-      
-      const portalQuat = new THREE.Quaternion();
-      this.group.getWorldQuaternion(portalQuat);
-      
-      const destQuat = new THREE.Quaternion();
+      mainCamera.getWorldQuaternion(this._camQuat);
+      this.group.getWorldQuaternion(this._portalQuat);
+
       if (this.destinationPortal.group) {
-        this.destinationPortal.group.getWorldQuaternion(destQuat);
+        this.destinationPortal.group.getWorldQuaternion(this._destQuat);
       }
 
-      const relQuat = new THREE.Quaternion();
-      relQuat.multiplyQuaternions(destQuat, portalQuat.invert());
-      relQuat.multiplyQuaternions(relQuat, camQuat);
+      this._relQuat.multiplyQuaternions(this._destQuat, this._portalQuat.invert());
+      this._relQuat.multiplyQuaternions(this._relQuat, this._camQuat);
 
-      virtualCam.quaternion.copy(relQuat);
+      this._virtualCam.quaternion.copy(this._relQuat);
     }
 
-    return virtualCam;
+    return this._virtualCam;
   }
 
   applyPortalTransform(localPos) {
     const result = localPos.clone();
-    
+
     switch (this.type) {
       case PORTAL_TYPES.UPSIDE_DOWN:
         result.y = -result.y;
@@ -237,7 +244,7 @@ export class Portal {
         result.multiplyScalar(0.5);
         break;
     }
-    
+
     return result;
   }
 
@@ -302,7 +309,7 @@ export class PortalManager {
   linkPortals(portal1ID, portal2ID) {
     const p1 = this.portals[portal1ID];
     const p2 = this.portals[portal2ID];
-    
+
     if (p1 && p2) {
       p1.destinationPortal = p2;
       p2.destinationPortal = p1;
@@ -310,7 +317,7 @@ export class PortalManager {
   }
 
   update(time) {
-    this.portals.forEach(p => p.update(time));
+    this.portals.forEach((p) => p.update(time));
   }
 
   // Render scene through portal using stencil buffer

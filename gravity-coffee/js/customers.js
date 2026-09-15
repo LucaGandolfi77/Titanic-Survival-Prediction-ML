@@ -1,9 +1,13 @@
 import * as THREE from 'three';
+import { bus } from './event-bus.js';
 
 const ALIEN_TYPES = [
     { type: 'blob', color: 0x39ff14, desc: "Blob" },
     { type: 'tentacle', color: 0x9c27b0, desc: "Tentacle" },
-    { type: 'crystal', color: 0x00e5ff, desc: "Crystal" }
+    { type: 'crystal', color: 0x00e5ff, desc: "Crystal" },
+    { type: 'jellyfish', color: 0x00ff88, desc: "Jellyfish" },
+    { type: 'robot', color: 0xaaaaaa, desc: "Robot" },
+    { type: 'star', color: 0xffdd00, desc: "Star" }
 ];
 
 export class CustomerSystem {
@@ -23,9 +27,10 @@ export class CustomerSystem {
         ];
     }
     
-    update(dt) {
+    update(dt, stressMode = false) {
+        const maxCustomers = stressMode ? 10 : 2;
         this.spawnTimer -= dt;
-        if(this.spawnTimer <= 0 && this.customers.length < 2) {
+        if(this.spawnTimer <= 0 && this.customers.length < maxCustomers) {
             this.spawnCustomer();
             this.spawnTimer = 15 + Math.random() * 15;
         }
@@ -70,13 +75,42 @@ export class CustomerSystem {
         let geo;
         if(template.type === 'blob') geo = new THREE.SphereGeometry(0.35, 16, 16);
         else if(template.type === 'tentacle') geo = new THREE.CylinderGeometry(0.2, 0.4, 0.8);
-        else geo = new THREE.OctahedronGeometry(0.4);
+        else if(template.type === 'crystal') geo = new THREE.IcosahedronGeometry(0.4, 0);
+        else if(template.type === 'jellyfish') geo = new THREE.SphereGeometry(0.3, 12, 8);
+        else if(template.type === 'robot') geo = new THREE.BoxGeometry(0.5, 0.55, 0.5);
+        else geo = new THREE.OctahedronGeometry(0.45, 0);
         
-        const mat = new THREE.MeshStandardMaterial({ color: template.color });
+        let mat = new THREE.MeshStandardMaterial({
+            color: template.color,
+            emissive: template.color,
+            emissiveIntensity: 0.3,
+            roughness: 0.3,
+            metalness: 0.5
+        });
+
+        // Type-specific material upgrades
+        if(template.type === 'robot') {
+            mat.metalness = 0.9;
+            mat.roughness = 0.2;
+        } else if(template.type === 'crystal') {
+            mat.metalness = 0.3;
+            mat.roughness = 0.1;
+            mat.emissiveIntensity = 0.5;
+        } else if(template.type === 'jellyfish') {
+            mat.transparent = true;
+            mat.opacity = 0.6;
+            mat.emissiveIntensity = 0.5;
+        } else if(template.type === 'star') {
+            mat.emissiveIntensity = 0.6;
+            mat.metalness = 0.7;
+        }
         const mesh = new THREE.Mesh(geo, mat);
+
+        const glowLight = new THREE.PointLight(template.color, 0.8, 3);
+        mesh.add(glowLight);
         
         const pos = this.seats[seatIndex].clone();
-        pos.y = -1.5; // Seat height approx
+        pos.y = 0; // Seat height at floor level
         
         mesh.position.copy(pos);
         this.scene.add(mesh);
@@ -101,7 +135,7 @@ export class CustomerSystem {
             order
         });
         
-        if(window.gameAudio) window.gameAudio.playShift(); // Play generic spawn sound
+        bus.emit("audio:playShift"); // Play generic spawn sound
     }
     
     checkDelivery(cup) {
@@ -116,7 +150,8 @@ export class CustomerSystem {
                 if (fillDiff < 0.15) {
                     // Success!
                     let score = 100;
-                    if(fillDiff < 0.05) score += 50; // Perfect pour bonus
+                    if(cup.scoreMultiplier) score = Math.round(100 * cup.scoreMultiplier);
+                    if(fillDiff < 0.05) score += Math.round(50 * cup.scoreMultiplier);
                     
                     this.removeCustomer(i, true, score);
                     return true;
@@ -136,10 +171,10 @@ export class CustomerSystem {
         
         if(success) {
             if(window.gameEngine) window.gameEngine.addScore(score);
-            if(window.gameAudio) window.gameAudio.playHappy();
+            bus.emit("audio:playHappy");
         } else {
             if(window.gameEngine) window.gameEngine.addSpill(); // mark as fail
-            if(window.gameAudio) window.gameAudio.playAngry();
+            bus.emit("audio:playAngry");
         }
         
         this.customers.splice(index, 1);

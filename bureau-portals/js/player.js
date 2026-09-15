@@ -1,28 +1,29 @@
 import * as THREE from 'three';
 import { MathUtils, rotateVectorAroundAxis } from './utils.js';
+import { bus } from './event-bus.js';
 
 export class Player {
   constructor(camera, world) {
     this.camera = camera;
     this.world = world;
-    
+
     // Position & Physics
     this.position = new THREE.Vector3(0, 1.8, 0);
     this.velocity = new THREE.Vector3();
     this.acceleration = new THREE.Vector3();
     this.onGround = false;
-    
+
     // Gravity (variable)
     this.gravityVector = new THREE.Vector3(0, -1, 0);
     this.targetGravityVector = new THREE.Vector3(0, -1, 0);
     this.gravityMagnitude = 9.8;
-    
+
     // Controls
     this.keys = {};
     this.mouseDelta = { x: 0, y: 0 };
     this.yaw = 0;
     this.pitch = 0;
-    
+
     // Movement params
     this.height = 1.8;
     this.radius = 0.3;
@@ -30,54 +31,82 @@ export class Player {
     this.runSpeed = 9;
     this.jumpForce = 7;
     this.mouseSensitivity = 1 / 500;
-    
+
     // Sanity & State
     this.sanity = 100;
     this.flashlightBattery = 100;
     this.isCrouching = false;
     this.maxHealth = 100;
     this.health = 100;
-    
+
     // Flashlight
     this.hasFlashlight = true;
     this.flashlightRange = 15;
     this.flashlightIntensity = 1.0;
     this.batteryDrainRate = 0.5; // %/sec when on
-    
+
     // Animation state
     this.headBob = 0;
     this.headBobAmount = 0.1;
     this.headBobSpeed = 6;
-    
+
     // Collision channels
     this.currentRoom = null;
-    
+
+    // Cached objects
+    this._raycaster = new THREE.Raycaster();
+    this._prevPosition = new THREE.Vector3();
+    this._up = new THREE.Vector3();
+    this._forward = new THREE.Vector3(0, 0, -1);
+    this._right = new THREE.Vector3(1, 0, 0);
+    this._pitchAxis = new THREE.Vector3();
+    this._input = new THREE.Vector3();
+    this._inputScaled = new THREE.Vector3();
+    this._velocityDt = new THREE.Vector3();
+    this._jumpDir = new THREE.Vector3();
+    this._gravityForce = new THREE.Vector3();
+    this._accelDt = new THREE.Vector3();
+    this._groundCheckPos = new THREE.Vector3();
+    this._localPos = new THREE.Vector3();
+    this._heightOffset = new THREE.Vector3(0, this.height / 2, 0);
+
+    // Event handler references for cleanup
+    this._onKeyDown = null;
+    this._onKeyUp = null;
+    this._onMouseMove = null;
+    this._onClick = null;
+
     this.setupControls();
   }
 
   setupControls() {
-    document.addEventListener('keydown', (e) => {
+    this._onKeyDown = (e) => {
       this.keys[e.key.toLowerCase()] = true;
-    });
-    document.addEventListener('keyup', (e) => {
+    };
+    this._onKeyUp = (e) => {
       this.keys[e.key.toLowerCase()] = false;
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (document.pointerLockElement === document.documentElement) {
+    };
+    this._onMouseMove = (e) => {
+      if (document.pointerLockElement === document.body) {
         this.mouseDelta.x += e.movementX;
         this.mouseDelta.y += e.movementY;
       }
-    });
+    };
+    this._onClick = () => {
+      document.body.requestPointerLock();
+    };
 
-    // Pointer lock
-    document.addEventListener('click', () => {
-      document.documentElement.requestPointerLock();
-    });
+    document.addEventListener('keydown', this._onKeyDown);
+    document.addEventListener('keyup', this._onKeyUp);
+    document.addEventListener('mousemove', this._onMouseMove);
+    document.addEventListener('click', this._onClick);
+  }
 
-    document.addEventListener('pointerlockchange', () => {
-      // Handle lock change
-    });
+  destroy() {
+    if (this._onKeyDown) document.removeEventListener('keydown', this._onKeyDown);
+    if (this._onKeyUp) document.removeEventListener('keyup', this._onKeyUp);
+    if (this._onMouseMove) document.removeEventListener('mousemove', this._onMouseMove);
+    if (this._onClick) document.removeEventListener('click', this._onClick);
   }
 
   update(dt, world, portals) {
@@ -98,7 +127,7 @@ export class Player {
 
     // Update camera position
     this.camera.position.copy(this.position);
-    this.camera.position.add(new THREE.Vector3(0, this.height / 2, 0));
+    this.camera.position.add(this._heightOffset);
 
     // Head bob animation
     this.updateHeadBob(dt);
@@ -118,10 +147,10 @@ export class Player {
     // Mouse look
     this.yaw += this.mouseDelta.x * this.mouseSensitivity;
     this.pitch += this.mouseDelta.y * this.mouseSensitivity;
-    
+
     // Clamp pitch
     this.pitch = MathUtils.clamp(this.pitch, -Math.PI / 2, Math.PI / 2);
-    
+
     // Reset mouse delta
     this.mouseDelta.x = 0;
     this.mouseDelta.y = 0;
@@ -133,89 +162,87 @@ export class Player {
   }
 
   handleMovement(dt, world) {
+    // Get up vector
+    this._up.copy(this.gravityVector).multiplyScalar(-1).normalize();
+
     // Get forward/right vectors relative to gravity
-    const up = this.gravityVector.clone().multiplyScalar(-1).normalize();
-    const forward = new THREE.Vector3(0, 0, -1);
-    const right = new THREE.Vector3(1, 0, 0);
+    this._forward.set(0, 0, -1);
+    this._right.set(1, 0, 0);
 
     // Rotate based on yaw
-    forward.applyAxisAngle(up, this.yaw);
-    right.applyAxisAngle(up, this.yaw);
+    this._forward.applyAxisAngle(this._up, this.yaw);
+    this._right.applyAxisAngle(this._up, this.yaw);
 
     // Also rotate relative to pitch
-    const pitchAxis = right.clone();
-    forward.applyAxisAngle(pitchAxis, this.pitch);
+    this._pitchAxis.copy(this._right);
+    this._forward.applyAxisAngle(this._pitchAxis, this.pitch);
 
     // But movement should be on the "ground" plane, not up/down
-    forward.sub(up.clone().multiplyScalar(forward.dot(up)));
-    forward.normalize();
-    right.sub(up.clone().multiplyScalar(right.dot(up)));
-    right.normalize();
+    this._forward.sub(this._up.clone().multiplyScalar(this._forward.dot(this._up))).normalize();
+    this._right.sub(this._up.clone().multiplyScalar(this._right.dot(this._up))).normalize();
 
     // Input
-    const input = new THREE.Vector3();
-    if (this.keys['w']) input.add(forward);
-    if (this.keys['s']) input.sub(forward);
-    if (this.keys['a']) input.sub(right);
-    if (this.keys['d']) input.add(right);
+    this._input.set(0, 0, 0);
+    if (this.keys['w']) this._input.add(this._forward);
+    if (this.keys['s']) this._input.sub(this._forward);
+    if (this.keys['a']) this._input.sub(this._right);
+    if (this.keys['d']) this._input.add(this._right);
 
-    if (input.lengthSq() > 0) {
-      input.normalize();
+    if (this._input.lengthSq() > 0) {
+      this._input.normalize();
     }
 
     // Speed
     const targetSpeed = this.keys['shift'] ? this.runSpeed : this.walkSpeed;
-    const targetVel = input.clone().multiplyScalar(targetSpeed);
+    this._inputScaled.copy(this._input).multiplyScalar(targetSpeed);
 
     // Move along ground
-    this.velocity.add(input.clone().multiplyScalar(targetSpeed * dt));
+    this.velocity.add(this._inputScaled.multiplyScalar(dt));
     this.velocity.multiplyScalar(0.95); // friction
 
     // Apply velocity
-    this.position.add(this.velocity.clone().multiplyScalar(dt));
+    this.position.add(this._velocityDt.copy(this.velocity).multiplyScalar(dt));
 
     // Jump
     if (this.keys[' '] && this.onGround && !this.isCrouching) {
-      const jumpDir = up.clone().multiplyScalar(this.jumpForce);
-      this.velocity.add(jumpDir);
+      this._jumpDir.copy(this._up).multiplyScalar(this.jumpForce);
+      this.velocity.add(this._jumpDir);
       this.onGround = false;
-      if (window.game && window.game.audio) {
-        window.game.audio.playJump();
-      }
+      bus.emit('audio:play', { type: 'jump' });
     }
 
     // Crouch (for maintenance shaft)
     if (this.keys['c']) {
       this.isCrouching = true;
       this.height = 0.9;
+      this._heightOffset.y = 0.45;
     } else {
       this.isCrouching = false;
       this.height = 1.8;
+      this._heightOffset.y = 0.9;
     }
   }
 
   applyGravity(dt) {
-    const gravityForce = this.gravityVector.clone().multiplyScalar(this.gravityMagnitude);
+    const gravityForce = this._gravityForce
+      .copy(this.gravityVector)
+      .multiplyScalar(this.gravityMagnitude);
     this.acceleration.add(gravityForce.multiplyScalar(dt));
-    this.velocity.add(this.acceleration.clone().multiplyScalar(dt));
+    this.velocity.add(this._accelDt.copy(this.acceleration).multiplyScalar(dt));
     this.acceleration.set(0, 0, 0);
   }
 
   resolveCollisions(world) {
     // Simple AABB collision against room bounds
     const up = this.gravityVector.clone().multiplyScalar(-1);
-    
+
     // Get current room
     let currentRoom = null;
-    for (let room of world.rooms) {
+    for (const room of world.rooms) {
       const localPos = this.position.clone();
       room.group.worldToLocal(localPos);
-      
-      if (MathUtils.checkPointInAABB(
-        localPos,
-        room.bounds.min,
-        room.bounds.max
-      )) {
+
+      if (MathUtils.checkPointInAABB(localPos, room.bounds.min, room.bounds.max)) {
         currentRoom = room;
         break;
       }
@@ -223,11 +250,11 @@ export class Player {
 
     if (currentRoom) {
       this.currentRoom = currentRoom;
-      
+
       // Clamp within room bounds
       const halfW = currentRoom.width / 2 - this.radius;
       const halfD = currentRoom.depth / 2 - this.radius;
-      
+
       this.position.x = MathUtils.clamp(
         this.position.x,
         currentRoom.group.position.x - halfW,
@@ -242,16 +269,21 @@ export class Player {
 
     // Ground detection (based on gravity direction)
     const groundCheckDist = 0.2;
-    const groundCheckPos = this.position.clone().add(
-      this.gravityVector.clone().multiplyScalar(groundCheckDist)
+    const groundCheckPos = this.position
+      .clone()
+      .add(this.gravityVector.clone().multiplyScalar(groundCheckDist));
+
+    const raycaster = this._raycaster.set(
+      this.position,
+      this.gravityVector,
+      0,
+      groundCheckDist * 2
     );
-    
-    const raycaster = new THREE.Raycaster(this.position, this.gravityVector, 0, groundCheckDist * 2);
-    
+
     if (currentRoom) {
       const intersects = raycaster.intersectObjects(currentRoom.group.children, true);
       this.onGround = intersects.length > 0;
-      
+
       if (this.onGround && this.velocity.dot(this.gravityVector) > 0) {
         this.velocity.sub(
           this.gravityVector.clone().multiplyScalar(this.velocity.dot(this.gravityVector))
@@ -269,14 +301,7 @@ export class Player {
   }
 
   checkPortalCrossing(portals) {
-    const prevPos = this.position.clone().sub(this.velocity);
-    
-    for (let portal of portals) {
-      if (portal.checkPlayerCrossing(prevPos, this.position)) {
-        this.teleportThroughPortal(portal);
-        break;
-      }
-    }
+    // Handled in main.js update loop
   }
 
   teleportThroughPortal(portal) {
@@ -284,11 +309,10 @@ export class Player {
     const localPos = this.position.clone();
     portal.group.worldToLocal(localPos);
     const transformedPos = portal.applyPortalTransform(localPos);
-    
+
     if (portal.destinationPortal) {
       portal.destinationPortal.group.localToWorld(transformedPos);
       this.position.copy(transformedPos);
-      
       // Velocity transform
       const localVel = this.velocity.clone();
       const transformedVel = portal.applyPortalTransform(localVel);
@@ -297,32 +321,35 @@ export class Player {
 
     // Gravity change
     this.targetGravityVector.copy(portal.getGravityAfterTransit());
-    
-    // Emit event
-    if (window.game) {
-      window.game.audioManager.playSwoosh();
-      window.game.ui.showNotification('PORTAL TRANSIT', 'success');
-    }
+
+    bus.emit('audio:swoosh');
+    bus.emit('ui:notify', { message: 'PORTAL TRANSIT', type: 'success' });
 
     // Sanity loss for certain portals
-    if (portal.type === 6) { // LOOP
+    if (portal.type === 6) {
+      // LOOP
       this.modifySanity(-5);
-    } else if (portal.type === 10) { // VOID
-      this.gameOver('You entered the void. Game Over.');
+    } else if (portal.type === 10) {
+      // VOID
+      bus.emit('game:over', { reason: 'You entered the void. Game Over.' });
     }
   }
 
   modifySanity(amount) {
     this.sanity = MathUtils.clamp(this.sanity + amount, -100, 100);
-    if (window.game && window.game.hud) {
-      window.game.hud.updateSanity(this.sanity);
+    bus.emit('player:sanity-changed', { value: this.sanity });
+  }
+
+  teleportToRoom(roomIndex) {
+    const room = this.world.rooms[roomIndex];
+    if (room && room.group) {
+      this.position.set(room.group.position.x, 1.8, room.group.position.z);
+      this.currentRoom = room;
     }
   }
 
   gameOver(reason) {
-    if (window.game) {
-      window.game.gameOver(reason);
-    }
+    bus.emit('game:over', { reason });
   }
 
   rechargeFlashlight() {
@@ -337,8 +364,6 @@ export class Player {
   }
 
   collectItem(item) {
-    if (window.game) {
-      window.game.inventory.addItem(item);
-    }
+    bus.emit('inventory:add', { item });
   }
 }

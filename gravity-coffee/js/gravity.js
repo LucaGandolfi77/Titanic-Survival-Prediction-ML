@@ -36,6 +36,8 @@ export class GravityDirector {
         this.availableStates = ["normal"];
         this.chaosMode = false;
         this.chaosTimer = 0;
+        this.stressMode = false;
+        this.stressTimer = 0;
         
         // Setup initial gravity
         this.physicsWorld.gravity.copy(this.currentVector);
@@ -58,7 +60,17 @@ export class GravityDirector {
         }
     }
 
-    update(dt) {
+    update(dt, stressMode = false) {
+        this.stressMode = stressMode;
+        if (this.stressMode) {
+            this.stressTimer += dt;
+            if(this.stressTimer >= 30) {
+                this.stressMode = false;
+                this.stressTimer = 0;
+                if(window.gameEngine && window.gameEngine.hudManager) window.gameEngine.hudManager.showMessage("Stress Mode Ended");
+            }
+        }
+
         if (this.chaosMode) {
             this.updateChaos(dt);
             return;
@@ -79,10 +91,11 @@ export class GravityDirector {
             return;
         }
 
+        const shiftInterval = stressMode ? 5 : this.nextShiftTime;
         this.timer += dt;
-        const timeRemaining = this.nextShiftTime - this.timer;
+        const timeRemaining = shiftInterval - this.timer;
         
-        this.hud.updateGravityDisplay(this.currentVector, GRAVITY_STATES[this.currentStateId].name, timeRemaining, this.nextShiftTime);
+        this.hud.updateGravityDisplay(this.currentVector, GRAVITY_STATES[this.currentStateId].name, timeRemaining, shiftInterval);
 
         // Warning phase
         if (timeRemaining <= 3 && timeRemaining > 0 && !this.isWarning) {
@@ -92,8 +105,8 @@ export class GravityDirector {
         }
 
         // Trigger shift
-        if (Math.ceil(this.timer) >= this.nextShiftTime) {
-            this.triggerShift();
+        if (Math.ceil(this.timer) >= shiftInterval) {
+            this.triggerShift(stressMode);
         }
     }
     
@@ -112,7 +125,7 @@ export class GravityDirector {
         this.hud.showWarning(true);
     }
 
-    triggerShift(isChaos = false) {
+    triggerShift(isChaos = false, stressMode = false) {
         this.timer = 0;
         this.isWarning = false;
         this.hud.showWarning(false);
@@ -125,10 +138,14 @@ export class GravityDirector {
         this.currentStateId = nextState;
         this.targetVector = GRAVITY_STATES[this.currentStateId].vec.clone();
         
+        if(stressMode && !isChaos) {
+            this.targetVector.multiplyScalar(1.5);
+        }
+        
         if(!isChaos) {
             this.isTransitioning = true;
             this.transitionProgress = 0;
-            this.nextShiftTime = MathUtils.randomRange(15, this.maxTime);
+            if(!stressMode) this.nextShiftTime = MathUtils.randomRange(15, this.maxTime);
             if(window.gameAudio) window.gameAudio.playShift();
         }
     }

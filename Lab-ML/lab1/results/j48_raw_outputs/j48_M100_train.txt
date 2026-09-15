@@ -1,0 +1,124 @@
+
+Options: -C 0.25 -M 100 
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+f28 <= 0
+|   f67 <= 0
+|   |   f38 <= 0
+|   |   |   f57 <= 0: 5 (577.0/45.0)
+|   |   |   f57 > 0: 6 (633.0/68.0)
+|   |   f38 > 0
+|   |   |   f44 <= 0
+|   |   |   |   f65 <= 0: 9 (672.0/78.0)
+|   |   |   |   f65 > 0: 0 (503.0/32.0)
+|   |   |   f44 > 0: 8 (645.0/95.0)
+|   f67 > 0
+|   |   f100 <= 0: 7 (143.0/56.0)
+|   |   f100 > 0: 2 (506.0/35.0)
+f28 > 0
+|   f66 <= 0
+|   |   f68 <= 0: 3 (721.0/46.0)
+|   |   f68 > 0: 1 (525.0/58.0)
+|   f66 > 0
+|   |   f77 <= 0: 7 (477.0/51.0)
+|   |   f77 > 0: 4 (622.0/45.0)
+
+Number of Leaves  : 	11
+
+Size of the tree : 	21
+
+
+Time taken to build model: 0.45 seconds
+
+Time taken to test model on training data: 0.08 seconds
+
+=== Error on training data ===
+
+Correctly Classified Instances        5415               89.8904 %
+Incorrectly Classified Instances       609               10.1096 %
+Kappa statistic                          0.8876
+Mean absolute error                      0.0369
+Root mean squared error                  0.1358
+Relative absolute error                 20.5011 %
+Root relative squared error             45.2782 %
+Total Number of Instances             6024     
+
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,846    0,006    0,936      0,846    0,889      0,879    0,975     0,847     0
+                 0,890    0,011    0,890      0,890    0,890      0,879    0,984     0,835     1
+                 0,832    0,006    0,931      0,832    0,879      0,869    0,979     0,861     2
+                 0,913    0,009    0,936      0,913    0,925      0,914    0,982     0,892     3
+                 0,960    0,008    0,928      0,960    0,944      0,937    0,989     0,909     4
+                 0,859    0,008    0,922      0,859    0,890      0,878    0,964     0,837     5
+                 0,943    0,013    0,893      0,943    0,917      0,908    0,984     0,864     6
+                 0,962    0,019    0,827      0,962    0,890      0,881    0,991     0,866     7
+                 0,900    0,018    0,853      0,900    0,876      0,862    0,970     0,804     8
+                 0,881    0,015    0,884      0,881    0,883      0,868    0,967     0,821     9
+Weighted Avg.    0,899    0,011    0,901      0,899    0,899      0,888    0,978     0,854     
+
+
+=== Confusion Matrix ===
+
+   a   b   c   d   e   f   g   h   i   j   <-- classified as
+ 471   2   1   7   0   0  29   3   0  44 |   a = 0
+   0 467   0   4  40   0   0  14   0   0 |   b = 1
+   1  11 471   2   0   0   0  67   9   5 |   c = 2
+   0  11   0 675   2   5   0   0  36  10 |   d = 3
+   1   4   3   4 577   0   1  10   0   1 |   e = 4
+   0   0   1  20   1 532  21   2  28  14 |   f = 5
+   1   2   4   4   0  18 565   4   1   0 |   g = 6
+   1  19   0   0   0   0   0 513   0   0 |   h = 7
+  28   4   3   2   1   2  13   4 550   4 |   i = 8
+   0   5  23   3   1  20   4   3  21 594 |   j = 9
+
+Time taken to test model on test data: 0.08 seconds
+
+=== Error on test data ===
+
+Correctly Classified Instances        5415               89.8904 %
+Incorrectly Classified Instances       609               10.1096 %
+Kappa statistic                          0.8876
+Mean absolute error                      0.0369
+Root mean squared error                  0.1358
+Relative absolute error                 20.5011 %
+Root relative squared error             45.2782 %
+Total Number of Instances             6024     
+
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,846    0,006    0,936      0,846    0,889      0,879    0,975     0,847     0
+                 0,890    0,011    0,890      0,890    0,890      0,879    0,984     0,835     1
+                 0,832    0,006    0,931      0,832    0,879      0,869    0,979     0,861     2
+                 0,913    0,009    0,936      0,913    0,925      0,914    0,982     0,892     3
+                 0,960    0,008    0,928      0,960    0,944      0,937    0,989     0,909     4
+                 0,859    0,008    0,922      0,859    0,890      0,878    0,964     0,837     5
+                 0,943    0,013    0,893      0,943    0,917      0,908    0,984     0,864     6
+                 0,962    0,019    0,827      0,962    0,890      0,881    0,991     0,866     7
+                 0,900    0,018    0,853      0,900    0,876      0,862    0,970     0,804     8
+                 0,881    0,015    0,884      0,881    0,883      0,868    0,967     0,821     9
+Weighted Avg.    0,899    0,011    0,901      0,899    0,899      0,888    0,978     0,854     
+
+
+=== Confusion Matrix ===
+
+   a   b   c   d   e   f   g   h   i   j   <-- classified as
+ 471   2   1   7   0   0  29   3   0  44 |   a = 0
+   0 467   0   4  40   0   0  14   0   0 |   b = 1
+   1  11 471   2   0   0   0  67   9   5 |   c = 2
+   0  11   0 675   2   5   0   0  36  10 |   d = 3
+   1   4   3   4 577   0   1  10   0   1 |   e = 4
+   0   0   1  20   1 532  21   2  28  14 |   f = 5
+   1   2   4   4   0  18 565   4   1   0 |   g = 6
+   1  19   0   0   0   0   0 513   0   0 |   h = 7
+  28   4   3   2   1   2  13   4 550   4 |   i = 8
+   0   5  23   3   1  20   4   3  21 594 |   j = 9
+

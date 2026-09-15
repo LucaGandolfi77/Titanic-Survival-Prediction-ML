@@ -1,0 +1,170 @@
+{
+  "xy|default(pruned,M=2)": {
+    "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.918846\n|   |   |   x <= -0.937157: q (4.0)\n|   |   |   x > -0.937157: c (55.0/3.0)\n|   |   x > 0.918846: q (9.0/1.0)\ny > 0.843849: q (17.0)",
+    "num_leaves": 5,
+    "size_of_tree": 9.0,
+    "test_accuracy": 88.0,
+    "train_accuracy": 96.0,
+    "confusion": [
+      [
+        53,
+        7
+      ],
+      [
+        5,
+        35
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "xy|unpruned(-U,M=1)": {
+    "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.918846\n|   |   |   x <= -0.937157: q (4.0)\n|   |   |   x > -0.937157: c (55.0/3.0)\n|   |   x > 0.918846: q (9.0/1.0)\ny > 0.843849: q (17.0)",
+    "num_leaves": 5,
+    "size_of_tree": 9.0,
+    "test_accuracy": 88.0,
+    "train_accuracy": 96.0,
+    "confusion": [
+      [
+        53,
+        7
+      ],
+      [
+        5,
+        35
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "sq|default(pruned,M=2)": {
+    "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.892868\n|   |   |   x <= -0.910454: q (7.0)\n|   |   |   x > -0.910454: c (51.0)\n|   |   x > 0.892868: q (10.0)\ny > 0.843849: q (17.0)",
+    "num_leaves": 5,
+    "size_of_tree": 9.0,
+    "test_accuracy": 92.0,
+    "train_accuracy": 100.0,
+    "confusion": [
+      [
+        52,
+        3
+      ],
+      [
+        5,
+        40
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "sq|unpruned(-U,M=1)": {
+    "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.892868\n|   |   |   x <= -0.910454: q (7.0)\n|   |   |   x > -0.910454: c (51.0)\n|   |   x > 0.892868: q (10.0)\ny > 0.843849: q (17.0)",
+    "num_leaves": 5,
+    "size_of_tree": 9.0,
+    "test_accuracy": 92.0,
+    "train_accuracy": 100.0,
+    "confusion": [
+      [
+        52,
+        3
+      ],
+      [
+        5,
+        40
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "zt|default(pruned,M=2)": {
+    "tree_text": "------------------\n\nt <= 0.712082\n|   z <= 0.729179: c (49.0/1.0)\n|   z > 0.729179\n|   |   z <= 0.897385\n|   |   |   t <= 0.148856: c (5.0)\n|   |   |   t > 0.148856: q (5.0)\n|   |   z > 0.897385: q (9.0)\nt > 0.712082: q (32.0)",
+    "num_leaves": 5,
+    "size_of_tree": 9.0,
+    "test_accuracy": 88.0,
+    "train_accuracy": 99.0,
+    "confusion": [
+      [
+        50,
+        10
+      ],
+      [
+        2,
+        38
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "zt|unpruned(-U,M=1)": {
+    "tree_text": "------------------\n\nt <= 0.712082\n|   z <= 0.729179: c (49.0/1.0)\n|   z > 0.729179\n|   |   z <= 0.897385\n|   |   |   t <= 0.148856: c (5.0)\n|   |   |   t > 0.148856: q (5.0)\n|   |   z > 0.897385: q (9.0)\nt > 0.712082: q (32.0)",
+    "num_leaves": 5,
+    "size_of_tree": 9.0,
+    "test_accuracy": 88.0,
+    "train_accuracy": 99.0,
+    "confusion": [
+      [
+        50,
+        10
+      ],
+      [
+        2,
+        38
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "u|default(pruned,M=2)": {
+    "tree_text": "------------------\n\nu <= 0.999033: c (53.0)\nu > 0.999033: q (47.0)",
+    "num_leaves": 2,
+    "size_of_tree": 3.0,
+    "test_accuracy": 100.0,
+    "train_accuracy": 100.0,
+    "confusion": [
+      [
+        60,
+        0
+      ],
+      [
+        0,
+        40
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  },
+  "u|unpruned(-U,M=1)": {
+    "tree_text": "------------------\n\nu <= 0.999033: c (53.0)\nu > 0.999033: q (47.0)",
+    "num_leaves": 2,
+    "size_of_tree": 3.0,
+    "test_accuracy": 100.0,
+    "train_accuracy": 100.0,
+    "confusion": [
+      [
+        60,
+        0
+      ],
+      [
+        0,
+        40
+      ]
+    ],
+    "class_labels": [
+      "c",
+      "q"
+    ]
+  }
+}

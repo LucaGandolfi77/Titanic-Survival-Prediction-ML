@@ -1,3 +1,4 @@
 {
-    "python-envs.defaultEnvManager": "ms-python.python:system"
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "cmake.sourceDirectory": "/Users/jessicabottarelli/Desktop/Gandalf/Github/Titanic-Survival-Prediction-ML/avionics-dt-codegen"
 }

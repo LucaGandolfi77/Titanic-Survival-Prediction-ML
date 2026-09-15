@@ -1,0 +1,358 @@
+{
+  "lab": 6,
+  "title": "Scikit-Learn: Machine Learning in Python",
+  "deck_pages": "17-27",
+  "slides_23_25": {
+    "csv_path": "/Users/jessicabottarelli/Desktop/Gandalf/Github/Titanic-Survival-Prediction-ML/Lab-ML/lab1/../lab6/results/pipeline_circle.csv",
+    "n_total": 2601,
+    "shapes": {
+      "train": [
+        1820,
+        2
+      ],
+      "val": [
+        390,
+        2
+      ],
+      "test": [
+        391,
+        2
+      ]
+    },
+    "validation_accuracy": 0.9769230769230769,
+    "test_accuracy": 0.9820971867007673,
+    "confusion_matrix": [
+      [
+        186,
+        2
+      ],
+      [
+        5,
+        198
+      ]
+    ]
+  },
+  "slides_26_27": {
+    "n_samples": 150,
+    "n_features": 4,
+    "feature_names": [
+      "sepal length (cm)",
+      "sepal width (cm)",
+      "petal length (cm)",
+      "petal width (cm)"
+    ],
+    "class_counts": [
+      50,
+      50,
+      50
+    ],
+    "holdout": {
+      "n_train": 105,
+      "n_test": 45
+    },
+    "knn_rows": [
+      {
+        "model": "kNN",
+        "hyperparameter": "k=1",
+        "k_or_depth": 1,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.04988876515698587,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=3",
+        "k_or_depth": 3,
+        "holdout_accuracy": 0.9555555555555556,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.04988876515698587,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=5",
+        "k_or_depth": 5,
+        "holdout_accuracy": 0.9777777777777777,
+        "cv5_mean": 0.9666666666666668,
+        "cv5_std": 0.029814239699997188,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=7",
+        "k_or_depth": 7,
+        "holdout_accuracy": 0.9555555555555556,
+        "cv5_mean": 0.96,
+        "cv5_std": 0.038873012632301994,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=9",
+        "k_or_depth": 9,
+        "holdout_accuracy": 0.9555555555555556,
+        "cv5_mean": 0.96,
+        "cv5_std": 0.024944382578492935,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=11",
+        "k_or_depth": 11,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9733333333333334,
+        "cv5_std": 0.024944382578492935,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=15",
+        "k_or_depth": 15,
+        "holdout_accuracy": 0.9555555555555556,
+        "cv5_mean": 0.9800000000000001,
+        "cv5_std": 0.016329931618554516,
+        "n_leaves": null
+      },
+      {
+        "model": "kNN",
+        "hyperparameter": "k=21",
+        "k_or_depth": 21,
+        "holdout_accuracy": 0.9555555555555556,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.039999999999999994,
+        "n_leaves": null
+      }
+    ],
+    "tree_rows": [
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=1",
+        "k_or_depth": 1,
+        "holdout_accuracy": 0.6666666666666666,
+        "cv5_mean": 0.6666666666666666,
+        "cv5_std": 0.0,
+        "n_leaves": 2
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=2",
+        "k_or_depth": 2,
+        "holdout_accuracy": 0.8888888888888888,
+        "cv5_mean": 0.9400000000000001,
+        "cv5_std": 0.024944382578492935,
+        "n_leaves": 3
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=3",
+        "k_or_depth": 3,
+        "holdout_accuracy": 0.9777777777777777,
+        "cv5_mean": 0.96,
+        "cv5_std": 0.024944382578492935,
+        "n_leaves": 5
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=4",
+        "k_or_depth": 4,
+        "holdout_accuracy": 0.8888888888888888,
+        "cv5_mean": 0.9533333333333335,
+        "cv5_std": 0.03399346342395189,
+        "n_leaves": 7
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=5",
+        "k_or_depth": 5,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9466666666666667,
+        "cv5_std": 0.02666666666666666,
+        "n_leaves": 8
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=6",
+        "k_or_depth": 6,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333335,
+        "cv5_std": 0.03399346342395189,
+        "n_leaves": 8
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=8",
+        "k_or_depth": 8,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333335,
+        "cv5_std": 0.03399346342395189,
+        "n_leaves": 8
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=10",
+        "k_or_depth": 10,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333335,
+        "cv5_std": 0.03399346342395189,
+        "n_leaves": 8
+      },
+      {
+        "model": "DecisionTree",
+        "hyperparameter": "max_depth=None",
+        "k_or_depth": -1,
+        "holdout_accuracy": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333335,
+        "cv5_std": 0.03399346342395189,
+        "n_leaves": 8
+      }
+    ],
+    "best_knn": {
+      "k": 15,
+      "holdout_accuracy": 0.9555555555555556,
+      "cv5_mean": 0.9800000000000001,
+      "confusion": [
+        [
+          15,
+          0,
+          0
+        ],
+        [
+          0,
+          14,
+          1
+        ],
+        [
+          0,
+          1,
+          14
+        ]
+      ]
+    },
+    "best_tree": {
+      "max_depth": 3,
+      "holdout_accuracy": 0.9777777777777777,
+      "cv5_mean": 0.96,
+      "n_leaves": 5,
+      "confusion": [
+        [
+          15,
+          0,
+          0
+        ],
+        [
+          0,
+          14,
+          1
+        ],
+        [
+          0,
+          0,
+          15
+        ]
+      ]
+    },
+    "total_errors": {
+      "knn": 2,
+      "tree": 1
+    },
+    "repeated_cv": {
+      "knn": [
+        {
+          "hyperparameter": "k=1",
+          "value": 1,
+          "mean": 0.9566666666666667,
+          "std": 0.028480012484391762
+        },
+        {
+          "hyperparameter": "k=3",
+          "value": 3,
+          "mean": 0.9586666666666668,
+          "std": 0.030228757463345687
+        },
+        {
+          "hyperparameter": "k=5",
+          "value": 5,
+          "mean": 0.9646666666666667,
+          "std": 0.026170381901854018
+        },
+        {
+          "hyperparameter": "k=7",
+          "value": 7,
+          "mean": 0.9640000000000001,
+          "std": 0.028158282775923825
+        },
+        {
+          "hyperparameter": "k=9",
+          "value": 9,
+          "mean": 0.9640000000000001,
+          "std": 0.029694743268426776
+        },
+        {
+          "hyperparameter": "k=11",
+          "value": 11,
+          "mean": 0.9713333333333334,
+          "std": 0.025828494170414017
+        },
+        {
+          "hyperparameter": "k=15",
+          "value": 15,
+          "mean": 0.9733333333333334,
+          "std": 0.02748737083745106
+        },
+        {
+          "hyperparameter": "k=21",
+          "value": 21,
+          "mean": 0.9593333333333334,
+          "std": 0.03418251664878471
+        }
+      ],
+      "tree": [
+        {
+          "hyperparameter": "max_depth=1",
+          "value": 1,
+          "mean": 0.6666666666666665,
+          "std": 1.1102230246251565e-16
+        },
+        {
+          "hyperparameter": "max_depth=2",
+          "value": 2,
+          "mean": 0.9353333333333335,
+          "std": 0.03490304030055579
+        },
+        {
+          "hyperparameter": "max_depth=3",
+          "value": 3,
+          "mean": 0.9400000000000002,
+          "std": 0.03711842908553348
+        },
+        {
+          "hyperparameter": "max_depth=4",
+          "value": 4,
+          "mean": 0.9406666666666668,
+          "std": 0.03846499129800441
+        },
+        {
+          "hyperparameter": "max_depth=5",
+          "value": 5,
+          "mean": 0.938,
+          "std": 0.038878728831528875
+        },
+        {
+          "hyperparameter": "max_depth=None",
+          "value": -1,
+          "mean": 0.9386666666666666,
+          "std": 0.03964284999284934
+        }
+      ]
+    },
+    "repeated_cv_winners": {
+      "knn": "k=15",
+      "tree": "max_depth=4"
+    },
+    "single_cv_winners": {
+      "knn": "k=15",
+      "tree": "max_depth=3"
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "zt_two_feature": {
+    "sklearn_tree_depth_min_samples_leaf_2": 4,
+    "sklearn_tree_leaves_min_samples_leaf_2": 6,
+    "sklearn_tree_accuracy_test": 0.89,
+    "sklearn_tree_fully_grown_leaves": 7,
+    "single_feature_threshold_search": {
+      "z": {
+        "max_in_class_c": 0.8973845,
+        "min_in_class_q": 0.0045332,
+        "separable_by_single_threshold": false
+      },
+      "t": {
+        "max_in_class_c": 0.7120815,
+        "min_in_class_q": 0.0105299,
+        "separable_by_single_threshold": false
+      },
+      "z + t": {
+        "max_in_class_c": 0.9990330000000001,
+        "min_in_class_q": 1.0002796,
+        "separable_by_single_threshold": true
+      },
+      "z - t": {
+        "max_in_class_c": 0.8947949000000001,
+        "min_in_class_q": -1.4976363000000001,
+        "separable_by_single_threshold": false
+      },
+      "max(z, t)": {
+        "max_in_class_c": 0.8973845,
+        "min_in_class_q": 0.6672294,
+        "separable_by_single_threshold": false
+      },
+      "min(z, t)": {
+        "max_in_class_c": 0.4719013,
+        "min_in_class_q": 0.0045332,
+        "separable_by_single_threshold": false
+      }
+    },
+    "conclusion": "Separating z and t gives a tree of depth 4 with 6 leaves, NOT a one-node stump: a decision tree tests one attribute at a time and cannot evaluate the sum z + t. Only the engineered single feature u = z + t (variant 'u') collapses the tree to 2 leaves."
+  },
+  "per_representation_errors": [
+    {
+      "variant": "xy",
+      "inner_boundary": "circle r=1",
+      "n_grid_errors": 211,
+      "n_points_total": 2601,
+      "n_points_on_boundary": 212,
+      "n_interior_points": 2389,
+      "n_interior_errors": 206,
+      "grid_accuracy": 0.9188773548635141,
+      "grid_accuracy_interior_only": 0.9137714524905818,
+      "n_errors_all_k_equals_1": 0,
+      "errors_within_1_grid_step_of_inner_boundary": 134,
+      "pct_of_errors_near_inner_boundary": 63.507109004739334,
+      "errors_on_outer_square": 0
+    },
+    {
+      "variant": "sq",
+      "inner_boundary": "square |x|,|y|=0.88",
+      "n_grid_errors": 225,
+      "n_points_total": 2601,
+      "n_points_on_boundary": 212,
+      "n_interior_points": 2389,
+      "n_interior_errors": 219,
+      "grid_accuracy": 0.9134948096885813,
+      "grid_accuracy_interior_only": 0.9083298451234826,
+      "n_errors_all_k_equals_1": 0,
+      "errors_within_1_grid_step_of_inner_boundary": 179,
+      "pct_of_errors_near_inner_boundary": 79.55555555555556,
+      "errors_on_outer_square": 0
+    },
+    {
+      "variant": "zt",
+      "inner_boundary": "circle r=1",
+      "n_grid_errors": 180,
+      "n_points_total": 2601,
+      "n_points_on_boundary": 212,
+      "n_interior_points": 2389,
+      "n_interior_errors": 174,
+      "grid_accuracy": 0.9307958477508651,
+      "grid_accuracy_interior_only": 0.9271661783172875,
+      "n_errors_all_k_equals_1": 0,
+      "errors_within_1_grid_step_of_inner_boundary": 108,
+      "pct_of_errors_near_inner_boundary": 60.0,
+      "errors_on_outer_square": 0
+    },
+    {
+      "variant": "u",
+      "inner_boundary": "circle r=1",
+      "n_grid_errors": 6,
+      "n_points_total": 2601,
+      "n_points_on_boundary": 212,
+      "n_interior_points": 2389,
+      "n_interior_errors": 0,
+      "grid_accuracy": 0.9976931949250288,
+      "grid_accuracy_interior_only": 1.0,
+      "n_errors_all_k_equals_1": 6,
+      "errors_within_1_grid_step_of_inner_boundary": 6,
+      "pct_of_errors_near_inner_boundary": 100.0,
+      "errors_on_outer_square": 0
+    }
+  ],
+  "confusion": [
+    {
+      "variant": "xy",
+      "class_labels": "['c', 'q']",
+      "matrix": "[[53, 7], [5, 35]]",
+      "TP_c": 53,
+      "FN_c": 7,
+      "FP_c": 5,
+      "TN_c": 35,
+      "accuracy_from_matrix": 0.88
+    },
+    {
+      "variant": "sq",
+      "class_labels": "['c', 'q']",
+      "matrix": "[[52, 3], [5, 40]]",
+      "TP_c": 52,
+      "FN_c": 3,
+      "FP_c": 5,
+      "TN_c": 40,
+      "accuracy_from_matrix": 0.92
+    },
+    {
+      "variant": "zt",
+      "class_labels": "['c', 'q']",
+      "matrix": "[[50, 10], [2, 38]]",
+      "TP_c": 50,
+      "FN_c": 10,
+      "FP_c": 2,
+      "TN_c": 38,
+      "accuracy_from_matrix": 0.88
+    },
+    {
+      "variant": "u",
+      "class_labels": "['c', 'q']",
+      "matrix": "[[60, 0], [0, 40]]",
+      "TP_c": 60,
+      "FN_c": 0,
+      "FP_c": 0,
+      "TN_c": 40,
+      "accuracy_from_matrix": 1.0
+    }
+  ]
+}

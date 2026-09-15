@@ -1,0 +1,5 @@
+model,accuracy,note
+MLP (784-256-128-10),0.8516,trained on all 60000 images
+Decision tree,0.751,"trained on 6000 images, 2.3s"
+kNN k=1,0.7995,"trained on 6000 images, 0.2s"
+kNN k=5,0.8025,"trained on 6000 images, 0.2s"

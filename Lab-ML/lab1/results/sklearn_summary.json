@@ -1,0 +1,267 @@
+{
+  "knn_agreement": {
+    "all_agree": true,
+    "rows": [
+      {
+        "k": 1,
+        "scratch_acc": 0.91,
+        "sklearn_acc": 0.91,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 3,
+        "scratch_acc": 0.88,
+        "sklearn_acc": 0.88,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 5,
+        "scratch_acc": 0.87,
+        "sklearn_acc": 0.87,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 7,
+        "scratch_acc": 0.84,
+        "sklearn_acc": 0.84,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 9,
+        "scratch_acc": 0.82,
+        "sklearn_acc": 0.82,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 11,
+        "scratch_acc": 0.83,
+        "sklearn_acc": 0.83,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 13,
+        "scratch_acc": 0.86,
+        "sklearn_acc": 0.86,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 15,
+        "scratch_acc": 0.84,
+        "sklearn_acc": 0.84,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 21,
+        "scratch_acc": 0.78,
+        "sklearn_acc": 0.78,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 31,
+        "scratch_acc": 0.67,
+        "sklearn_acc": 0.67,
+        "n_agree": 100,
+        "n_test": 100
+      },
+      {
+        "k": 51,
+        "scratch_acc": 0.6,
+        "sklearn_acc": 0.6,
+        "n_agree": 100,
+        "n_test": 100
+      }
+    ]
+  },
+  "iris": {
+    "n_samples": 150,
+    "n_features": 4,
+    "classes": [
+      "setosa",
+      "versicolor",
+      "virginica"
+    ],
+    "best_knn": {
+      "model": "kNN",
+      "hyperparameter": "k=7",
+      "holdout_acc": 0.9555555555555556,
+      "cv5_mean": 0.9800000000000001,
+      "cv5_std": 0.016329931618554516,
+      "leaves_or_k": 7
+    },
+    "best_tree": {
+      "model": "DecisionTree",
+      "hyperparameter": "max_depth=3",
+      "holdout_acc": 0.9777777777777777,
+      "cv5_mean": 0.9733333333333334,
+      "cv5_std": 0.02494438257849294,
+      "leaves_or_k": 5
+    },
+    "knn_rows": [
+      {
+        "k": 1,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.96,
+        "cv5_std": 0.024944382578492935
+      },
+      {
+        "k": 3,
+        "holdout_acc": 0.9555555555555556,
+        "cv5_mean": 0.9666666666666668,
+        "cv5_std": 0.02108185106778919
+      },
+      {
+        "k": 5,
+        "holdout_acc": 0.9777777777777777,
+        "cv5_mean": 0.9733333333333334,
+        "cv5_std": 0.02494438257849294
+      },
+      {
+        "k": 7,
+        "holdout_acc": 0.9555555555555556,
+        "cv5_mean": 0.9800000000000001,
+        "cv5_std": 0.016329931618554516
+      },
+      {
+        "k": 9,
+        "holdout_acc": 0.9555555555555556,
+        "cv5_mean": 0.9733333333333334,
+        "cv5_std": 0.02494438257849294
+      },
+      {
+        "k": 11,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.9800000000000001,
+        "cv5_std": 0.02666666666666666
+      },
+      {
+        "k": 15,
+        "holdout_acc": 0.9555555555555556,
+        "cv5_mean": 0.9666666666666668,
+        "cv5_std": 0.029814239699997188
+      },
+      {
+        "k": 21,
+        "holdout_acc": 0.9555555555555556,
+        "cv5_mean": 0.9666666666666668,
+        "cv5_std": 0.029814239699997188
+      }
+    ],
+    "tree_rows": [
+      {
+        "max_depth": 1,
+        "holdout_acc": 0.6666666666666666,
+        "cv5_mean": 0.6666666666666666,
+        "cv5_std": 0.0,
+        "leaves": 2
+      },
+      {
+        "max_depth": 2,
+        "holdout_acc": 0.8888888888888888,
+        "cv5_mean": 0.9333333333333332,
+        "cv5_std": 0.04714045207910316,
+        "leaves": 3
+      },
+      {
+        "max_depth": 3,
+        "holdout_acc": 0.9777777777777777,
+        "cv5_mean": 0.9733333333333334,
+        "cv5_std": 0.02494438257849294,
+        "leaves": 5
+      },
+      {
+        "max_depth": 4,
+        "holdout_acc": 0.8888888888888888,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.03399346342395189,
+        "leaves": 7
+      },
+      {
+        "max_depth": 5,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.03399346342395189,
+        "leaves": 8
+      },
+      {
+        "max_depth": 6,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.03399346342395189,
+        "leaves": 8
+      },
+      {
+        "max_depth": 8,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.03399346342395189,
+        "leaves": 8
+      },
+      {
+        "max_depth": 10,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.03399346342395189,
+        "leaves": 8
+      },
+      {
+        "max_depth": -1,
+        "holdout_acc": 0.9333333333333333,
+        "cv5_mean": 0.9533333333333334,
+        "cv5_std": 0.03399346342395189,
+        "leaves": 8
+      }
+    ],
+    "note": "Setosa is linearly separable from the other two species, so both models reach 100% on it; all remaining errors are versicolor vs virginica, which overlap in feature space."
+  },
+  "weka_to_sklearn_mapping": [
+    {
+      "weka": "J48 minNumObj (-M)",
+      "sklearn": "DecisionTreeClassifier(min_samples_leaf=M)",
+      "meaning": "minimum samples per leaf; the capacity knob of Exercise 2b"
+    },
+    {
+      "weka": "J48 confidenceFactor (-C 0.25)",
+      "sklearn": "ccp_alpha (cost-complexity pruning)",
+      "meaning": "both control how much the tree is pruned after growing"
+    },
+    {
+      "weka": "J48 unpruned (-U)",
+      "sklearn": "ccp_alpha=0.0",
+      "meaning": "no post-pruning"
+    },
+    {
+      "weka": "information gain (entropy)",
+      "sklearn": "criterion='entropy'",
+      "meaning": "J48 uses information gain"
+    },
+    {
+      "weka": "J48 default",
+      "sklearn": "criterion='gini'",
+      "meaning": "sklearn's own default is Gini impurity"
+    },
+    {
+      "weka": "IBk -K",
+      "sklearn": "KNeighborsClassifier(n_neighbors=K)",
+      "meaning": "number of neighbours"
+    },
+    {
+      "weka": "IBk -W 0 (no weighting)",
+      "sklearn": "weights='uniform'",
+      "meaning": "plain majority vote"
+    },
+    {
+      "weka": "-split-percentage 66 -s SEED",
+      "sklearn": "train_test_split(test_size=0.34, random_state=SEED)",
+      "meaning": "the random partition; replicated exactly via java.util.Random"
+    }
+  ]
+}

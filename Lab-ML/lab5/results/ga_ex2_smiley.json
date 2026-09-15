@@ -1,0 +1,316 @@
+{
+  "lab": 5,
+  "exercise": 2,
+  "title": "Pattern guessing with a GA",
+  "smiley": {
+    "n_bits": 224,
+    "n_ones": 52,
+    "on_density": 0.23214285714285715,
+    "population": 225,
+    "max_generations": 200,
+    "repetitions": 5,
+    "runs": [
+      {
+        "repetition": 1,
+        "best_fitness": 224,
+        "n_bits": 224,
+        "solved": true,
+        "fitness_invocations": 15258,
+        "proportion_matched": 1.0
+      },
+      {
+        "repetition": 2,
+        "best_fitness": 224,
+        "n_bits": 224,
+        "solved": true,
+        "fitness_invocations": 13086,
+        "proportion_matched": 1.0
+      },
+      {
+        "repetition": 3,
+        "best_fitness": 224,
+        "n_bits": 224,
+        "solved": true,
+        "fitness_invocations": 15131,
+        "proportion_matched": 1.0
+      },
+      {
+        "repetition": 4,
+        "best_fitness": 224,
+        "n_bits": 224,
+        "solved": true,
+        "fitness_invocations": 13817,
+        "proportion_matched": 1.0
+      },
+      {
+        "repetition": 5,
+        "best_fitness": 224,
+        "n_bits": 224,
+        "solved": true,
+        "fitness_invocations": 13355,
+        "proportion_matched": 1.0
+      }
+    ],
+    "n_solved": 5,
+    "mean_Nf_solved": 14129.4,
+    "deck_bound": 225
+  },
+  "scaling": [
+    {
+      "pattern": "8x8",
+      "n_bits": 64,
+      "pop_size": 65,
+      "mean_Nf": 3237.2,
+      "std_Nf": 966.9505468223284,
+      "min_Nf": 2528,
+      "runs_solved": 4,
+      "repetitions": 5,
+      "ratio_Nf_over_n": 50.58125
+    },
+    {
+      "pattern": "12x12",
+      "n_bits": 144,
+      "pop_size": 145,
+      "mean_Nf": 7663.0,
+      "std_Nf": 1397.3864175667375,
+      "min_Nf": 5534,
+      "runs_solved": 5,
+      "repetitions": 5,
+      "ratio_Nf_over_n": 53.21527777777778
+    },
+    {
+      "pattern": "16x16",
+      "n_bits": 256,
+      "pop_size": 257,
+      "mean_Nf": 17185.4,
+      "std_Nf": 1298.8183244780619,
+      "min_Nf": 15530,
+      "runs_solved": 5,
+      "repetitions": 5,
+      "ratio_Nf_over_n": 67.13046875
+    },
+    {
+      "pattern": "20x20",
+      "n_bits": 400,
+      "pop_size": 401,
+      "mean_Nf": 39116.4,
+      "std_Nf": 1662.0347288790329,
+      "min_Nf": 37904,
+      "runs_solved": 5,
+      "repetitions": 5,
+      "ratio_Nf_over_n": 97.791
+    },
+    {
+      "pattern": "24x24",
+      "n_bits": 576,
+      "pop_size": 577,
+      "mean_Nf": 74871.8,
+      "std_Nf": 5049.09027053389,
+      "min_Nf": 68791,
+      "runs_solved": 5,
+      "repetitions": 5,
+      "ratio_Nf_over_n": 129.9857638888889
+    }
+  ],
+  "mutation_sensitivity": [
+    {
+      "indpb": 0.0001,
+      "n_solved": 0,
+      "mean_best_fitness": 216.8,
+      "mean_Nf": 54043.0,
+      "ratio_Nf_over_n": 241.26339285714286
+    },
+    {
+      "indpb": 0.0003,
+      "n_solved": 1,
+      "mean_best_fitness": 222.8,
+      "mean_Nf": 53957.4,
+      "ratio_Nf_over_n": 240.88125
+    },
+    {
+      "indpb": 0.0005,
+      "n_solved": 5,
+      "mean_best_fitness": 224.0,
+      "mean_Nf": 42781.8,
+      "ratio_Nf_over_n": 190.99017857142857
+    },
+    {
+      "indpb": 0.001,
+      "n_solved": 5,
+      "mean_best_fitness": 224.0,
+      "mean_Nf": 24715.8,
+      "ratio_Nf_over_n": 110.33839285714285
+    },
+    {
+      "indpb": 0.002,
+      "n_solved": 5,
+      "mean_best_fitness": 224.0,
+      "mean_Nf": 17726.0,
+      "ratio_Nf_over_n": 79.13392857142857
+    },
+    {
+      "indpb": 0.005,
+      "n_solved": 5,
+      "mean_best_fitness": 224.0,
+      "mean_Nf": 14129.4,
+      "ratio_Nf_over_n": 63.07767857142857
+    },
+    {
+      "indpb": 0.01,
+      "n_solved": 5,
+      "mean_best_fitness": 224.0,
+      "mean_Nf": 13989.0,
+      "ratio_Nf_over_n": 62.450892857142854
+    },
+    {
+      "indpb": 0.05,
+      "n_solved": 0,
+      "mean_best_fitness": 219.4,
+      "mean_Nf": 54043.0,
+      "ratio_Nf_over_n": 241.26339285714286
+    }
+  ],
+  "best_indpb": {
+    "indpb": 0.01,
+    "n_solved": 5,
+    "mean_best_fitness": 224.0,
+    "mean_Nf": 13989.0,
+    "ratio_Nf_over_n": 62.450892857142854
+  },
+  "hillclimber": {
+    "runs": [
+      {
+        "repetition": 1,
+        "solved": true,
+        "fitness_invocations": 1103
+      },
+      {
+        "repetition": 2,
+        "solved": true,
+        "fitness_invocations": 1360
+      },
+      {
+        "repetition": 3,
+        "solved": true,
+        "fitness_invocations": 1294
+      },
+      {
+        "repetition": 4,
+        "solved": true,
+        "fitness_invocations": 758
+      },
+      {
+        "repetition": 5,
+        "solved": true,
+        "fitness_invocations": 1669
+      }
+    ],
+    "mean_Nf_solved": 1236.8
+  },
+  "parameters": [
+    {
+      "pop_size": 50,
+      "max_generations": 50,
+      "mean_Nf": 1545.4,
+      "std_Nf": 19.39690696992693,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 50,
+      "max_generations": 100,
+      "mean_Nf": 3039.8,
+      "std_Nf": 28.84024965217881,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 50,
+      "max_generations": 200,
+      "mean_Nf": 6061.0,
+      "std_Nf": 62.31211760163508,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 100,
+      "max_generations": 50,
+      "mean_Nf": 3101.8,
+      "std_Nf": 29.09570415026933,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 100,
+      "max_generations": 100,
+      "mean_Nf": 6094.2,
+      "std_Nf": 25.285569006846572,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 100,
+      "max_generations": 200,
+      "mean_Nf": 9830.0,
+      "std_Nf": 1103.645414071023,
+      "runs_solved": 5,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 225,
+      "max_generations": 50,
+      "mean_Nf": 6948.8,
+      "std_Nf": 75.15690254394468,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 225,
+      "max_generations": 100,
+      "mean_Nf": 13479.4,
+      "std_Nf": 242.30608741837256,
+      "runs_solved": 2,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 225,
+      "max_generations": 200,
+      "mean_Nf": 14129.4,
+      "std_Nf": 901.4336581246564,
+      "runs_solved": 5,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 400,
+      "max_generations": 50,
+      "mean_Nf": 12363.4,
+      "std_Nf": 77.71898095060176,
+      "runs_solved": 0,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 400,
+      "max_generations": 100,
+      "mean_Nf": 19074.4,
+      "std_Nf": 1141.4167687571442,
+      "runs_solved": 5,
+      "repetitions": 5
+    },
+    {
+      "pop_size": 400,
+      "max_generations": 200,
+      "mean_Nf": 19074.4,
+      "std_Nf": 1141.4167687571442,
+      "runs_solved": 5,
+      "repetitions": 5
+    }
+  ],
+  "best_combination": {
+    "pop_size": 100,
+    "max_generations": 200,
+    "mean_Nf": 9830.0,
+    "std_Nf": 1103.645414071023,
+    "runs_solved": 5,
+    "repetitions": 5
+  }
+}

@@ -1,0 +1,5 @@
+variant,inner_boundary,n_grid_errors,n_points_total,n_points_on_boundary,n_interior_points,n_interior_errors,grid_accuracy,grid_accuracy_interior_only,n_errors_all_k_equals_1,errors_within_1_grid_step_of_inner_boundary,pct_of_errors_near_inner_boundary,errors_on_outer_square
+xy,circle r=1,211,2601,212,2389,206,0.9188773548635141,0.9137714524905818,0,134,63.507109004739334,0
+sq,"square |x|,|y|=0.88",225,2601,212,2389,219,0.9134948096885813,0.9083298451234826,0,179,79.55555555555556,0
+zt,circle r=1,180,2601,212,2389,174,0.9307958477508651,0.9271661783172875,0,108,60.0,0
+u,circle r=1,6,2601,212,2389,0,0.9976931949250288,1.0,6,6,100.0,0

@@ -1,0 +1,35 @@
+# ========================================================================
+# Scikit-Learn pipeline (PDF p.23-25), run on the circle problem
+# ========================================================================
+# Loader: lab1/src/arff_utils.load_arff (ARFF instead of read_csv,
+#         same X / y structure as the deck's example)
+Training set: (70, 2)
+Validation set: (15, 2)
+Test set: (15, 2)
+
+Validation Accuracy: 0.8000
+
+=== Test Set Evaluation ===
+Accuracy: 0.9333
+
+Classification Report:
+              precision    recall  f1-score   support
+
+  c (inside)       1.00      0.88      0.93         8
+    q (ring)       0.88      1.00      0.93         7
+
+    accuracy                           0.93        15
+   macro avg       0.94      0.94      0.93        15
+weighted avg       0.94      0.93      0.93        15
+
+Confusion Matrix:
+[[7 1]
+ [0 7]]
+
+=== External test set (circletest.arff) ===
+Accuracy: 0.8600
+[[50 10]
+ [ 4 36]]
+
+=== Literal p.23-25 path (CSV via pandas.read_csv) ===
+CSV round-trip test accuracy: 0.9333 (shape (100, 2))

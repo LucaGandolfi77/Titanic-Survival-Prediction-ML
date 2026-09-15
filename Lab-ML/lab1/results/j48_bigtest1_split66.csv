@@ -1,0 +1,2 @@
+seed,n_train,n_test,weka_internal_acc,weka_leaves,weka_size,weka_kappa,weka_mae,weka_rmse,weka_bigtest2_acc,sklearn_internal_acc,sklearn_bigtest2_acc
+1,3976,2048,0.967773,83,165.0,0.9641,0.0075,0.0787,0.947106,0.96728515625,0.9461077844311377

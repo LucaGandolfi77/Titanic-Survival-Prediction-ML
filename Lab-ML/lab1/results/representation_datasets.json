@@ -1,0 +1,125 @@
+{
+  "train": {
+    "n_points": 100,
+    "class_counts_original": {
+      "c": 53,
+      "q": 47
+    },
+    "class_counts_square_inner": {
+      "c": 51,
+      "q": 49
+    },
+    "file_labels_vs_circle_rule": {
+      "n_mismatch": 0,
+      "n_mismatch_off_boundary": 0,
+      "n_on_circle": 0,
+      "n_on_outer_square": 0,
+      "max_r2_in_class_c": 0.9990330394925,
+      "min_r2_in_class_q": 1.00027960650025
+    },
+    "relabelled_to_square": {
+      "n_changed": 6,
+      "n_c_to_q": 4,
+      "n_q_to_c": 2,
+      "c_to_q_set_matches_analytic": true,
+      "q_to_c_set_matches_analytic": true,
+      "relabelling_is_pointwise_consistent": true,
+      "all_points_inside_outer_domain": true
+    },
+    "u_feature": {
+      "max_u_in_class_c": 0.9990330394925,
+      "min_u_in_class_q": 1.00027960650025,
+      "perfectly_separable_by_single_threshold": true,
+      "threshold_midpoint": 0.999656322996375,
+      "exactly_equivalent_to_u_le_1": true,
+      "predicted_tree": "u <= 1: c / u > 1: q"
+    },
+    "zt_features": {
+      "max_z_plus_t_in_class_c": 1.998066078985,
+      "min_z_plus_t_in_class_q": 2.0005592130005,
+      "circle_is_exactly_z_plus_t_le_1": false
+    }
+  },
+  "test": {
+    "n_points": 100,
+    "class_counts_original": {
+      "c": 60,
+      "q": 40
+    },
+    "class_counts_square_inner": {
+      "c": 55,
+      "q": 45
+    },
+    "file_labels_vs_circle_rule": {
+      "n_mismatch": 0,
+      "n_mismatch_off_boundary": 0,
+      "n_on_circle": 0,
+      "n_on_outer_square": 0,
+      "max_r2_in_class_c": 0.9953476193004499,
+      "min_r2_in_class_q": 1.02670476725065
+    },
+    "relabelled_to_square": {
+      "n_changed": 13,
+      "n_c_to_q": 9,
+      "n_q_to_c": 4,
+      "c_to_q_set_matches_analytic": true,
+      "q_to_c_set_matches_analytic": true,
+      "relabelling_is_pointwise_consistent": true,
+      "all_points_inside_outer_domain": true
+    },
+    "u_feature": {
+      "max_u_in_class_c": 0.9953476193004499,
+      "min_u_in_class_q": 1.02670476725065,
+      "perfectly_separable_by_single_threshold": true,
+      "threshold_midpoint": 1.01102619327555,
+      "exactly_equivalent_to_u_le_1": true,
+      "predicted_tree": "u <= 1: c / u > 1: q"
+    },
+    "zt_features": {
+      "max_z_plus_t_in_class_c": 1.9906952386008998,
+      "min_z_plus_t_in_class_q": 2.0534095345013,
+      "circle_is_exactly_z_plus_t_le_1": false
+    }
+  },
+  "all": {
+    "n_points": 2601,
+    "class_counts_original": {
+      "c": 1251,
+      "q": 1350
+    },
+    "class_counts_square_inner": {
+      "c": 1225,
+      "q": 1376
+    },
+    "file_labels_vs_circle_rule": {
+      "n_mismatch": 6,
+      "n_mismatch_off_boundary": 0,
+      "n_on_circle": 12,
+      "n_on_outer_square": 200,
+      "max_r2_in_class_c": 1.0,
+      "min_r2_in_class_q": 1.0
+    },
+    "relabelled_to_square": {
+      "n_changed": 218,
+      "n_c_to_q": 122,
+      "n_q_to_c": 96,
+      "c_to_q_set_matches_analytic": true,
+      "q_to_c_set_matches_analytic": true,
+      "relabelling_is_pointwise_consistent": true,
+      "all_points_inside_outer_domain": true
+    },
+    "u_feature": {
+      "max_u_in_class_c": 1.0,
+      "min_u_in_class_q": 1.0,
+      "perfectly_separable_by_single_threshold": true,
+      "threshold_midpoint": 1.0,
+      "exactly_equivalent_to_u_le_1": false,
+      "predicted_tree": "?"
+    },
+    "zt_features": {
+      "max_z_plus_t_in_class_c": 2.0,
+      "min_z_plus_t_in_class_q": 2.0,
+      "circle_is_exactly_z_plus_t_le_1": false
+    }
+  }
+}

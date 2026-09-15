@@ -1,0 +1,7 @@
+model_a,model_b,acc_a,acc_b,delta_pp,n_test,discordant_a_correct,discordant_b_correct,statistic,method,p_value,p_adjusted_holm,significant_05_holm
+J48 xy,J48 sq,0.88,0.87,1.0000000000000009,100,1,0,0.0,exact binomial,1.0,1.0,False
+J48 xy,J48 zt,0.88,0.88,0.0,100,4,4,4.0,exact binomial,1.0,1.0,False
+J48 xy,J48 u,0.88,1.0,-12.0,100,0,12,0.0,exact binomial,0.00048828125,0.00244140625,True
+J48 sq,J48 zt,0.87,0.88,-1.0000000000000009,100,4,5,4.0,exact binomial,1.0,1.0,False
+J48 sq,J48 u,0.87,1.0,-13.0,100,0,13,0.0,exact binomial,0.000244140625,0.00146484375,True
+J48 zt,J48 u,0.88,1.0,-12.0,100,0,12,0.0,exact binomial,0.00048828125,0.00244140625,True

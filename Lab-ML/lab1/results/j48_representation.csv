@@ -1,0 +1,9 @@
+variant,tool,mode,train_acc,test_acc,num_leaves,size_of_tree,status
+xy,weka-J48,"default(pruned,M=2)",0.96,0.88,5,9.0,ok
+xy,weka-J48,"unpruned(-U,M=1)",0.96,0.88,5,9.0,ok
+sq,weka-J48,"default(pruned,M=2)",1.0,0.92,5,9.0,ok
+sq,weka-J48,"unpruned(-U,M=1)",1.0,0.92,5,9.0,ok
+zt,weka-J48,"default(pruned,M=2)",0.99,0.88,5,9.0,ok
+zt,weka-J48,"unpruned(-U,M=1)",0.99,0.88,5,9.0,ok
+u,weka-J48,"default(pruned,M=2)",1.0,1.0,2,3.0,ok
+u,weka-J48,"unpruned(-U,M=1)",1.0,1.0,2,3.0,ok

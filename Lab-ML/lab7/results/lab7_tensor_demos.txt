@@ -1,0 +1,32 @@
+==========================================================================
+DECK SLIDES 46-48: tensors, the core data structure in PyTorch
+==========================================================================
+
+# From Python lists:
+torch.Tensor([[1,2], [3,4]])
+  -> [[1.0, 2.0], [3.0, 4.0]]   dtype=torch.float32  shape=(2, 2)
+# With fixed values:  torch.zeros(2,3)
+  -> shape=(2, 3)  sum=0.0
+# With random values: torch.rand(2,3)
+  -> shape=(2, 3)  values in [0.3829, 0.9593]
+
+# Move to GPU/accelerator: t.to('cuda')  (here: the available device)
+  -> tensor now on 'mps' (device selected for this run: mps)
+# Indexing and slicing: t[2], t[:,0]
+  t3 = [[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]]
+  t3[2]     -> [8, 9, 10, 11]
+  t3[:,0]   -> [0, 4, 8]
+  t3[1,:2]  -> [4, 5]
+# Element-wise ops: x+y, x*y
+  x + y -> [[11.0, 22.0], [33.0, 44.0]]
+  x * y -> [[10.0, 40.0], [90.0, 160.0]]
+# Matrix multiplication: torch.matmul(x, y)
+  matmul(x, y) -> [[70.0, 100.0], [150.0, 220.0]]
+  x @ y        -> [[70.0, 100.0], [150.0, 220.0]]   (identical)
+
+# An RGB image is a 3-D tensor (C, H, W)
+  random RGB image shape = (3, 28, 28) (channels=3, 28x28)
+  one channel shape      = (28, 28)
+
+# Automatic differentiation (slide 45): gradients come for free
+  f(w) = w^2 + 3w at w=2 -> 10.0;  autograd gives df/dw = 7.0  (analytic: 2*2+3 = 7)

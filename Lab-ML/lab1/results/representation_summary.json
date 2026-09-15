@@ -1,0 +1,184 @@
+{
+  "weka_available": true,
+  "weka": [
+    {
+      "variant": "xy",
+      "tool": "weka-J48",
+      "mode": "default(pruned,M=2)",
+      "train_acc": 0.96,
+      "test_acc": 0.88,
+      "num_leaves": 5,
+      "size_of_tree": 9.0,
+      "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.918846\n|   |   |   x <= -0.937157: q (4.0)\n|   |   |   x > -0.937157: c (55.0/3.0)\n|   |   x > 0.918846: q (9.0/1.0)\ny > 0.843849: q (17.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "xy",
+      "tool": "weka-J48",
+      "mode": "unpruned(-U,M=1)",
+      "train_acc": 0.96,
+      "test_acc": 0.88,
+      "num_leaves": 5,
+      "size_of_tree": 9.0,
+      "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.918846\n|   |   |   x <= -0.937157: q (4.0)\n|   |   |   x > -0.937157: c (55.0/3.0)\n|   |   x > 0.918846: q (9.0/1.0)\ny > 0.843849: q (17.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "sq",
+      "tool": "weka-J48",
+      "mode": "default(pruned,M=2)",
+      "train_acc": 1.0,
+      "test_acc": 0.92,
+      "num_leaves": 5,
+      "size_of_tree": 9.0,
+      "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.892868\n|   |   |   x <= -0.910454: q (7.0)\n|   |   |   x > -0.910454: c (51.0)\n|   |   x > 0.892868: q (10.0)\ny > 0.843849: q (17.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "sq",
+      "tool": "weka-J48",
+      "mode": "unpruned(-U,M=1)",
+      "train_acc": 1.0,
+      "test_acc": 0.92,
+      "num_leaves": 5,
+      "size_of_tree": 9.0,
+      "tree_text": "------------------\n\ny <= 0.843849\n|   y <= -0.980568: q (15.0)\n|   y > -0.980568\n|   |   x <= 0.892868\n|   |   |   x <= -0.910454: q (7.0)\n|   |   |   x > -0.910454: c (51.0)\n|   |   x > 0.892868: q (10.0)\ny > 0.843849: q (17.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "zt",
+      "tool": "weka-J48",
+      "mode": "default(pruned,M=2)",
+      "train_acc": 0.99,
+      "test_acc": 0.88,
+      "num_leaves": 5,
+      "size_of_tree": 9.0,
+      "tree_text": "------------------\n\nt <= 0.712082\n|   z <= 0.729179: c (49.0/1.0)\n|   z > 0.729179\n|   |   z <= 0.897385\n|   |   |   t <= 0.148856: c (5.0)\n|   |   |   t > 0.148856: q (5.0)\n|   |   z > 0.897385: q (9.0)\nt > 0.712082: q (32.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "zt",
+      "tool": "weka-J48",
+      "mode": "unpruned(-U,M=1)",
+      "train_acc": 0.99,
+      "test_acc": 0.88,
+      "num_leaves": 5,
+      "size_of_tree": 9.0,
+      "tree_text": "------------------\n\nt <= 0.712082\n|   z <= 0.729179: c (49.0/1.0)\n|   z > 0.729179\n|   |   z <= 0.897385\n|   |   |   t <= 0.148856: c (5.0)\n|   |   |   t > 0.148856: q (5.0)\n|   |   z > 0.897385: q (9.0)\nt > 0.712082: q (32.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "u",
+      "tool": "weka-J48",
+      "mode": "default(pruned,M=2)",
+      "train_acc": 1.0,
+      "test_acc": 1.0,
+      "num_leaves": 2,
+      "size_of_tree": 3.0,
+      "tree_text": "------------------\n\nu <= 0.999033: c (53.0)\nu > 0.999033: q (47.0)",
+      "status": "ok"
+    },
+    {
+      "variant": "u",
+      "tool": "weka-J48",
+      "mode": "unpruned(-U,M=1)",
+      "train_acc": 1.0,
+      "test_acc": 1.0,
+      "num_leaves": 2,
+      "size_of_tree": 3.0,
+      "tree_text": "------------------\n\nu <= 0.999033: c (53.0)\nu > 0.999033: q (47.0)",
+      "status": "ok"
+    }
+  ],
+  "sklearn": [
+    {
+      "variant": "xy",
+      "tool": "sklearn-DT",
+      "mode": "default(min_samples_leaf=2, ccp=0)",
+      "train_acc": 0.98,
+      "test_acc": 0.87,
+      "num_leaves": 9,
+      "size_of_tree": 17,
+      "grid_acc": 0.9188773548635141,
+      "status": "ok"
+    },
+    {
+      "variant": "xy",
+      "tool": "sklearn-DT",
+      "mode": "unpruned(min_samples_leaf=1, ccp=0)",
+      "train_acc": 1.0,
+      "test_acc": 0.85,
+      "num_leaves": 11,
+      "size_of_tree": 21,
+      "grid_acc": 0.9215686274509803,
+      "status": "ok"
+    },
+    {
+      "variant": "sq",
+      "tool": "sklearn-DT",
+      "mode": "default(min_samples_leaf=2, ccp=0)",
+      "train_acc": 1.0,
+      "test_acc": 0.96,
+      "num_leaves": 5,
+      "size_of_tree": 9,
+      "grid_acc": 0.9865436370626682,
+      "status": "ok"
+    },
+    {
+      "variant": "sq",
+      "tool": "sklearn-DT",
+      "mode": "unpruned(min_samples_leaf=1, ccp=0)",
+      "train_acc": 1.0,
+      "test_acc": 0.96,
+      "num_leaves": 5,
+      "size_of_tree": 9,
+      "grid_acc": 0.9865436370626682,
+      "status": "ok"
+    },
+    {
+      "variant": "zt",
+      "tool": "sklearn-DT",
+      "mode": "default(min_samples_leaf=2, ccp=0)",
+      "train_acc": 0.99,
+      "test_acc": 0.89,
+      "num_leaves": 6,
+      "size_of_tree": 11,
+      "grid_acc": 0.9307958477508651,
+      "status": "ok"
+    },
+    {
+      "variant": "zt",
+      "tool": "sklearn-DT",
+      "mode": "unpruned(min_samples_leaf=1, ccp=0)",
+      "train_acc": 1.0,
+      "test_acc": 0.87,
+      "num_leaves": 7,
+      "size_of_tree": 13,
+      "grid_acc": 0.9307958477508651,
+      "status": "ok"
+    },
+    {
+      "variant": "u",
+      "tool": "sklearn-DT",
+      "mode": "default(min_samples_leaf=2, ccp=0)",
+      "train_acc": 1.0,
+      "test_acc": 1.0,
+      "num_leaves": 2,
+      "size_of_tree": 3,
+      "grid_acc": 0.9976931949250288,
+      "status": "ok"
+    },
+    {
+      "variant": "u",
+      "tool": "sklearn-DT",
+      "mode": "unpruned(min_samples_leaf=1, ccp=0)",
+      "train_acc": 1.0,
+      "test_acc": 1.0,
+      "num_leaves": 2,
+      "size_of_tree": 3,
+      "grid_acc": 0.9976931949250288,
+      "status": "ok"
+    }
+  ],
+  "sklearn_hyperparameters_note": "criterion=entropy (J48 uses information gain), min_samples_leaf=2 (WEKA -M 2), ccp_alpha=0 (no pruning), random_state=1 (WEKA -S 1). Exact numerical agreement with WEKA is not expected."
+}

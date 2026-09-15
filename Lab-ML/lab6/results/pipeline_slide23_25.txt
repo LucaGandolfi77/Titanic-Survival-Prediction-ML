@@ -1,0 +1,32 @@
+==========================================================================
+DECK SLIDES 23-25: ml_pipeline_example.py, executed as printed
+==========================================================================
+
+[1] loaded /Users/jessicabottarelli/Desktop/Gandalf/Github/Titanic-Survival-Prediction-ML/Lab-ML/lab1/../lab6/results/pipeline_circle.csv
+    data.shape = (2601, 3); X.shape = (2601, 2); y.shape = (2601,)
+    columns dropped to form X: ['feature1', 'feature2']
+
+Training set: (1820, 2)
+Validation set: (390, 2)
+Test set: (391, 2)
+
+Validation Accuracy: 0.9769230769230769
+
+=== Test Set Evaluation ===
+Accuracy: 0.9820971867007673
+
+Classification Report:
+                   precision    recall  f1-score   support
+
+c (inside circle)       0.97      0.99      0.98       188
+         q (ring)       0.99      0.98      0.98       203
+
+         accuracy                           0.98       391
+        macro avg       0.98      0.98      0.98       391
+     weighted avg       0.98      0.98      0.98       391
+
+Confusion Matrix:
+[[186   2]
+ [  5 198]]
+
+Note on interpretation: the validation and test partitions hold only 390 and 391 of the 2601 grid points, so one misclassification is worth 0.3 percentage points. The same pipeline is run below on the 150-sample Iris set, where the splits are larger.

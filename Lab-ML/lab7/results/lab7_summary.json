@@ -1,0 +1,426 @@
+{
+  "lab": 7,
+  "title": "PyTorch: deep learning in Python",
+  "deck_pages": "44-56",
+  "device": "mps",
+  "torch_version": "2.14.0",
+  "dataset": {
+    "train": 60000,
+    "test": 10000,
+    "batch_size": 32,
+    "n_train_batches": 1875,
+    "classes": [
+      "T-shirt/top",
+      "Trouser",
+      "Pullover",
+      "Dress",
+      "Coat",
+      "Sandal",
+      "Shirt",
+      "Sneaker",
+      "Bag",
+      "Ankle boot"
+    ],
+    "batch_shape": [
+      32,
+      1,
+      28,
+      28
+    ],
+    "tensor_range_raw": [
+      0.0,
+      1.0
+    ],
+    "tensor_range_normalized": [
+      -1.0,
+      1.0
+    ]
+  },
+  "activation_demo": {
+    "input": [
+      -2.0,
+      -0.5,
+      0.0,
+      1.5,
+      3.0
+    ],
+    "relu": [
+      0.0,
+      0.0,
+      0.0,
+      1.5,
+      3.0
+    ],
+    "sigmoid": [
+      0.1192,
+      0.3775,
+      0.5,
+      0.8176,
+      0.9526
+    ]
+  },
+  "mlp": {
+    "architecture": "784-256-128-10",
+    "activation": "relu",
+    "n_params": 235146,
+    "optimizer": "SGD lr=0.01",
+    "epochs": 5,
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 0.7891934944709142,
+        "train_acc": 0.7337333333333333,
+        "test_loss": 0.5497473207950592,
+        "test_acc": 0.802,
+        "elapsed_s": 10.88
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.4769065492709478,
+        "train_acc": 0.8274833333333333,
+        "test_loss": 0.4624392921447754,
+        "test_acc": 0.8343,
+        "elapsed_s": 18.61
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.42650891700585686,
+        "train_acc": 0.8455333333333334,
+        "test_loss": 0.44095782804489136,
+        "test_acc": 0.8436,
+        "elapsed_s": 26.63
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.3963064567724864,
+        "train_acc": 0.8572,
+        "test_loss": 0.42166328284740445,
+        "test_acc": 0.8477,
+        "elapsed_s": 34.61
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.375772834722201,
+        "train_acc": 0.8641166666666666,
+        "test_loss": 0.4117732244491577,
+        "test_acc": 0.8516,
+        "elapsed_s": 42.42
+      }
+    ],
+    "per_class_accuracy": [
+      {
+        "class": "T-shirt/top",
+        "n": 1000,
+        "accuracy": 0.802
+      },
+      {
+        "class": "Trouser",
+        "n": 1000,
+        "accuracy": 0.95
+      },
+      {
+        "class": "Pullover",
+        "n": 1000,
+        "accuracy": 0.662
+      },
+      {
+        "class": "Dress",
+        "n": 1000,
+        "accuracy": 0.905
+      },
+      {
+        "class": "Coat",
+        "n": 1000,
+        "accuracy": 0.83
+      },
+      {
+        "class": "Sandal",
+        "n": 1000,
+        "accuracy": 0.89
+      },
+      {
+        "class": "Shirt",
+        "n": 1000,
+        "accuracy": 0.633
+      },
+      {
+        "class": "Sneaker",
+        "n": 1000,
+        "accuracy": 0.948
+      },
+      {
+        "class": "Bag",
+        "n": 1000,
+        "accuracy": 0.961
+      },
+      {
+        "class": "Ankle boot",
+        "n": 1000,
+        "accuracy": 0.935
+      }
+    ],
+    "test_accuracy": 0.8516,
+    "macro_f1": 0.8505176099760868,
+    "confusion": [
+      [
+        802,
+        1,
+        7,
+        61,
+        2,
+        4,
+        107,
+        1,
+        15,
+        0
+      ],
+      [
+        2,
+        950,
+        5,
+        33,
+        5,
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      [
+        17,
+        2,
+        662,
+        21,
+        193,
+        2,
+        95,
+        1,
+        7,
+        0
+      ],
+      [
+        20,
+        8,
+        3,
+        905,
+        30,
+        2,
+        28,
+        0,
+        4,
+        0
+      ],
+      [
+        0,
+        0,
+        49,
+        39,
+        830,
+        0,
+        74,
+        0,
+        8,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        890,
+        0,
+        74,
+        3,
+        32
+      ],
+      [
+        125,
+        1,
+        71,
+        51,
+        90,
+        4,
+        633,
+        0,
+        25,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        948,
+        0,
+        32
+      ],
+      [
+        3,
+        1,
+        2,
+        7,
+        3,
+        6,
+        11,
+        6,
+        961,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        13,
+        0,
+        51,
+        1,
+        935
+      ]
+    ]
+  },
+  "optimizers": [
+    {
+      "optimizer": "SGD",
+      "lr": 0.01,
+      "momentum": 0.0,
+      "final_test_acc": 0.8533,
+      "final_test_loss": 0.40212606086730956,
+      "epochs_to_90pct": null
+    },
+    {
+      "optimizer": "SGD + momentum 0.9",
+      "lr": 0.01,
+      "momentum": 0.9,
+      "final_test_acc": 0.8745,
+      "final_test_loss": 0.3508075829148293,
+      "epochs_to_90pct": null
+    },
+    {
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "momentum": null,
+      "final_test_acc": 0.8736,
+      "final_test_loss": 0.3553965638935566,
+      "epochs_to_90pct": null
+    }
+  ],
+  "normalization": [
+    {
+      "preprocessing": "ToTensor only",
+      "normalize": false,
+      "epoch1_test_acc": 0.758,
+      "epoch2_test_acc": 0.808,
+      "epoch3_test_acc": 0.8188,
+      "epoch1_train_loss": 1.078516766389211,
+      "epoch2_train_loss": 0.5806767962296804,
+      "epoch3_train_loss": 0.49843276557127636,
+      "final_test_acc": 0.8188
+    },
+    {
+      "preprocessing": "Normalize(0.5,0.5)",
+      "normalize": true,
+      "epoch1_test_acc": 0.8051,
+      "epoch2_test_acc": 0.8247,
+      "epoch3_test_acc": 0.8395,
+      "epoch1_train_loss": 0.7911206608057022,
+      "epoch2_train_loss": 0.4776637679894765,
+      "epoch3_train_loss": 0.42659369114637374,
+      "final_test_acc": 0.8395
+    }
+  ],
+  "classical_vs_mlp": [
+    {
+      "model": "MLP (784-256-128-10)",
+      "accuracy": 0.8516,
+      "note": "trained on all 60000 images"
+    },
+    {
+      "model": "Decision tree",
+      "accuracy": 0.751,
+      "note": "trained on 6000 images, 2.3s"
+    },
+    {
+      "model": "kNN k=1",
+      "accuracy": 0.7995,
+      "note": "trained on 6000 images, 0.2s"
+    },
+    {
+      "model": "kNN k=5",
+      "accuracy": 0.8025,
+      "note": "trained on 6000 images, 0.2s"
+    }
+  ],
+  "classical_subset": {
+    "n_train": 6000,
+    "n_test": 2000
+  },
+  "summary": {
+    "architecture": "Flatten -> Linear(784,256) -> ReLU -> Linear(256,128) -> ReLU -> Linear(128,10)",
+    "n_parameters": 235146,
+    "device": "mps",
+    "epochs": 5,
+    "mlp_test_accuracy": 0.8516,
+    "mlp_macro_f1": 0.8505176099760868,
+    "optimizer_winners": [
+      {
+        "optimizer": "SGD + momentum 0.9",
+        "test_acc": 0.8745
+      },
+      {
+        "optimizer": "Adam",
+        "test_acc": 0.8736
+      },
+      {
+        "optimizer": "SGD",
+        "test_acc": 0.8533
+      }
+    ],
+    "normalization": {
+      "without_final_test_acc": 0.8188,
+      "with_final_test_acc": 0.8395,
+      "without_epoch1_test_acc": 0.758,
+      "with_epoch1_test_acc": 0.8051,
+      "epoch1_gain_pp": 4.710000000000003,
+      "epoch3_gain_pp": 2.070000000000005,
+      "claim_supported": true
+    },
+    "classical_comparison": [
+      {
+        "model": "MLP (784-256-128-10)",
+        "accuracy": 0.8516,
+        "note": "trained on all 60000 images"
+      },
+      {
+        "model": "Decision tree",
+        "accuracy": 0.751,
+        "note": "trained on 6000 images, 2.3s"
+      },
+      {
+        "model": "kNN k=1",
+        "accuracy": 0.7995,
+        "note": "trained on 6000 images, 0.2s"
+      },
+      {
+        "model": "kNN k=5",
+        "accuracy": 0.8025,
+        "note": "trained on 6000 images, 0.2s"
+      }
+    ],
+    "hardest_classes": [
+      "Shirt",
+      "Pullover",
+      "T-shirt/top"
+    ],
+    "easiest_classes": [
+      "Bag",
+      "Trouser",
+      "Sneaker"
+    ]
+  }
+}

@@ -1,0 +1,1649 @@
+{
+  "lab": 5,
+  "exercise": 1,
+  "title": "Function optimisation with a GA",
+  "mutation_sensitivity": [
+    {
+      "representation": "bit",
+      "parameter": "indpb",
+      "value": 0.005,
+      "mean_best": 0.9454757893281169,
+      "std_best": 0.24650317577913303,
+      "min_best": 0.5003435952596446,
+      "runs_within_1pct": 1
+    },
+    {
+      "representation": "bit",
+      "parameter": "indpb",
+      "value": 0.01,
+      "mean_best": 0.8001072278597517,
+      "std_best": 0.2778710310941946,
+      "min_best": 0.5021364026208489,
+      "runs_within_1pct": 1
+    },
+    {
+      "representation": "bit",
+      "parameter": "indpb",
+      "value": 0.02,
+      "mean_best": 0.5471369146266201,
+      "std_best": 0.09361952957648843,
+      "min_best": 0.5000007351865644,
+      "runs_within_1pct": 4
+    },
+    {
+      "representation": "bit",
+      "parameter": "indpb",
+      "value": 0.05,
+      "mean_best": 0.5004023583883546,
+      "std_best": 0.00017397368103164613,
+      "min_best": 0.5002552993049966,
+      "runs_within_1pct": 5
+    },
+    {
+      "representation": "bit",
+      "parameter": "indpb",
+      "value": 0.1,
+      "mean_best": 0.642431359444162,
+      "std_best": 0.24272634482675304,
+      "min_best": 0.5001762293131079,
+      "runs_within_1pct": 2
+    },
+    {
+      "representation": "bit",
+      "parameter": "indpb",
+      "value": 0.2,
+      "mean_best": 0.5855094434480105,
+      "std_best": 0.08916650520742084,
+      "min_best": 0.5072937713170604,
+      "runs_within_1pct": 0
+    },
+    {
+      "representation": "float",
+      "parameter": "sigma",
+      "value": 0.05,
+      "mean_best": 1.8050050267511153,
+      "std_best": 0.8411821234500879,
+      "min_best": 0.5011312971405275,
+      "runs_within_1pct": 1
+    },
+    {
+      "representation": "float",
+      "parameter": "sigma",
+      "value": 0.2,
+      "mean_best": 0.5005008178047755,
+      "std_best": 0.00039016973724270867,
+      "min_best": 0.5001199921262663,
+      "runs_within_1pct": 5
+    },
+    {
+      "representation": "float",
+      "parameter": "sigma",
+      "value": 1.0,
+      "mean_best": 0.5016077552098588,
+      "std_best": 0.0008723133667997585,
+      "min_best": 0.5006852046365415,
+      "runs_within_1pct": 5
+    },
+    {
+      "representation": "float",
+      "parameter": "sigma",
+      "value": 5.0,
+      "mean_best": 0.5051027241494307,
+      "std_best": 0.002670229193781811,
+      "min_best": 0.5020987136494198,
+      "runs_within_1pct": 3
+    }
+  ],
+  "settings": {
+    "pop_size": 300,
+    "generations": 100,
+    "cxpb": 0.5,
+    "mutpb": 0.2,
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "n_bits_per_var": 30,
+    "bounds": [
+      -250.0,
+      250.0
+    ],
+    "analytic_min": 0.5,
+    "analytic_argmin": [
+      20.0,
+      30.0,
+      -1.5707963267948966
+    ]
+  },
+  "results": {
+    "float": [
+      {
+        "seed": 1,
+        "best_fitness": 0.5003733707431188,
+        "x": 19.999952511173127,
+        "y": 29.999255119434025,
+        "z": -127.23391221350224,
+        "fitness_invocations": 18460,
+        "wall_clock_s": 0.3,
+        "gap_to_analytic": 0.00037337074311882823
+      },
+      {
+        "seed": 2,
+        "best_fitness": 0.5001199921262663,
+        "x": 19.999805042049196,
+        "y": 30.00013866370486,
+        "z": 224.6247367864462,
+        "fitness_invocations": 18267,
+        "wall_clock_s": 0.25,
+        "gap_to_analytic": 0.00011999212626634392
+      },
+      {
+        "seed": 3,
+        "best_fitness": 0.5002124209501674,
+        "x": 20.00028227945677,
+        "y": 29.999682628448465,
+        "z": -83.25189048638093,
+        "fitness_invocations": 18380,
+        "wall_clock_s": 0.26,
+        "gap_to_analytic": 0.00021242095016738016
+      },
+      {
+        "seed": 4,
+        "best_fitness": 0.500583417585893,
+        "x": 20.00062448171112,
+        "y": 29.999014995730285,
+        "z": -171.21605546833914,
+        "fitness_invocations": 18330,
+        "wall_clock_s": 0.25,
+        "gap_to_analytic": 0.0005834175858929758
+      },
+      {
+        "seed": 5,
+        "best_fitness": 0.5012148876184316,
+        "x": 20.001643862259684,
+        "y": 29.998248002944866,
+        "z": -39.27512904763973,
+        "fitness_invocations": 18326,
+        "wall_clock_s": 0.25,
+        "gap_to_analytic": 0.0012148876184315816
+      }
+    ],
+    "bit": [
+      {
+        "seed": 1,
+        "best_fitness": 1.125000151529377,
+        "x": 19.999995613470674,
+        "y": 31.250000261934474,
+        "z": 136.6591452496677,
+        "fitness_invocations": 18074,
+        "wall_clock_s": 0.59,
+        "gap_to_analytic": 0.625000151529377
+      },
+      {
+        "seed": 2,
+        "best_fitness": 0.5140243467755009,
+        "x": 20.012158220645176,
+        "y": 29.978109784403898,
+        "z": -133.57187144790953,
+        "fitness_invocations": 18203,
+        "wall_clock_s": 0.59,
+        "gap_to_analytic": 0.014024346775500907
+      },
+      {
+        "seed": 3,
+        "best_fitness": 1.1250001310493563,
+        "x": 19.99998071230948,
+        "y": 31.250000261934474,
+        "z": 155.5088389716193,
+        "fitness_invocations": 18305,
+        "wall_clock_s": 0.59,
+        "gap_to_analytic": 0.6250001310493563
+      },
+      {
+        "seed": 4,
+        "best_fitness": 0.7343751073236758,
+        "x": 19.53124978535925,
+        "y": 30.000000521540642,
+        "z": 174.35839020121693,
+        "fitness_invocations": 18296,
+        "wall_clock_s": 0.59,
+        "gap_to_analytic": 0.23437510732367584
+      },
+      {
+        "seed": 5,
+        "best_fitness": 0.5021364026208489,
+        "x": 20.004272712398574,
+        "y": 30.000001452863273,
+        "z": 42.411804471548464,
+        "fitness_invocations": 18016,
+        "wall_clock_s": 0.58,
+        "gap_to_analytic": 0.0021364026208489095
+      }
+    ]
+  },
+  "convergence_summary": [
+    {
+      "representation": "float",
+      "generation": 0,
+      "best_min_mean": 13.37473017256129,
+      "best_min_std": 4.816711349762681,
+      "best_min_min": 4.356673138274576
+    },
+    {
+      "representation": "float",
+      "generation": 1,
+      "best_min_mean": 11.153871275399442,
+      "best_min_std": 5.607487189260427,
+      "best_min_min": 4.356673138274576
+    },
+    {
+      "representation": "float",
+      "generation": 2,
+      "best_min_mean": 7.816862614360929,
+      "best_min_std": 4.778653435140116,
+      "best_min_min": 2.358441310501031
+    },
+    {
+      "representation": "float",
+      "generation": 3,
+      "best_min_mean": 4.420735286844792,
+      "best_min_std": 1.3539058957768708,
+      "best_min_min": 2.358441310501031
+    },
+    {
+      "representation": "float",
+      "generation": 4,
+      "best_min_mean": 4.100937432698826,
+      "best_min_std": 1.2163280665964489,
+      "best_min_min": 2.206049215268136
+    },
+    {
+      "representation": "float",
+      "generation": 5,
+      "best_min_mean": 3.714510836329552,
+      "best_min_std": 0.8440588044986694,
+      "best_min_min": 2.206049215268136
+    },
+    {
+      "representation": "float",
+      "generation": 6,
+      "best_min_mean": 3.42901945158849,
+      "best_min_std": 0.794674889496324,
+      "best_min_min": 2.1740588330979405
+    },
+    {
+      "representation": "float",
+      "generation": 7,
+      "best_min_mean": 3.266416709269342,
+      "best_min_std": 0.8957038900353149,
+      "best_min_min": 1.9445948656763175
+    },
+    {
+      "representation": "float",
+      "generation": 8,
+      "best_min_mean": 3.2481580505149568,
+      "best_min_std": 0.8820799211976713,
+      "best_min_min": 1.9445948656763175
+    },
+    {
+      "representation": "float",
+      "generation": 9,
+      "best_min_mean": 3.1828690499570094,
+      "best_min_std": 0.8534715757237269,
+      "best_min_min": 1.8945841407422885
+    },
+    {
+      "representation": "float",
+      "generation": 10,
+      "best_min_mean": 3.160709948347459,
+      "best_min_std": 0.8787252436824281,
+      "best_min_min": 1.7994791551439466
+    },
+    {
+      "representation": "float",
+      "generation": 11,
+      "best_min_mean": 3.0400502890500505,
+      "best_min_std": 0.8935703263538284,
+      "best_min_min": 1.7156266499938224
+    },
+    {
+      "representation": "float",
+      "generation": 12,
+      "best_min_mean": 2.9914255200692086,
+      "best_min_std": 0.8602554924155316,
+      "best_min_min": 1.7156266499938224
+    },
+    {
+      "representation": "float",
+      "generation": 13,
+      "best_min_mean": 2.9245087261833707,
+      "best_min_std": 0.9008814500714436,
+      "best_min_min": 1.54474124961204
+    },
+    {
+      "representation": "float",
+      "generation": 14,
+      "best_min_mean": 2.8399788369080166,
+      "best_min_std": 0.8559012714402696,
+      "best_min_min": 1.54474124961204
+    },
+    {
+      "representation": "float",
+      "generation": 15,
+      "best_min_mean": 2.7897906963295687,
+      "best_min_std": 0.8546183241232838,
+      "best_min_min": 1.4855896049684876
+    },
+    {
+      "representation": "float",
+      "generation": 16,
+      "best_min_mean": 2.7484560949754937,
+      "best_min_std": 0.8658900752908898,
+      "best_min_min": 1.4621137006115361
+    },
+    {
+      "representation": "float",
+      "generation": 17,
+      "best_min_mean": 2.661147787677027,
+      "best_min_std": 0.8507109255879687,
+      "best_min_min": 1.3452329010602253
+    },
+    {
+      "representation": "float",
+      "generation": 18,
+      "best_min_mean": 2.6162668376248894,
+      "best_min_std": 0.8574521877156378,
+      "best_min_min": 1.2812390067302704
+    },
+    {
+      "representation": "float",
+      "generation": 19,
+      "best_min_mean": 2.540130579107038,
+      "best_min_std": 0.8293442279898211,
+      "best_min_min": 1.2249060222490868
+    },
+    {
+      "representation": "float",
+      "generation": 20,
+      "best_min_mean": 2.440925166815755,
+      "best_min_std": 0.9043969695628059,
+      "best_min_min": 0.9560067500455338
+    },
+    {
+      "representation": "float",
+      "generation": 21,
+      "best_min_mean": 2.381413525223459,
+      "best_min_std": 0.9286874982922273,
+      "best_min_min": 0.8193676756616133
+    },
+    {
+      "representation": "float",
+      "generation": 22,
+      "best_min_mean": 2.3238184488948908,
+      "best_min_std": 0.931585051284934,
+      "best_min_min": 0.8193676756616133
+    },
+    {
+      "representation": "float",
+      "generation": 23,
+      "best_min_mean": 2.231485812218953,
+      "best_min_std": 0.8968567010559299,
+      "best_min_min": 0.7937408588556256
+    },
+    {
+      "representation": "float",
+      "generation": 24,
+      "best_min_mean": 2.176946688410113,
+      "best_min_std": 0.9328956019650232,
+      "best_min_min": 0.6277843964111882
+    },
+    {
+      "representation": "float",
+      "generation": 25,
+      "best_min_mean": 2.160843339635855,
+      "best_min_std": 0.9282792523366672,
+      "best_min_min": 0.6277843964111882
+    },
+    {
+      "representation": "float",
+      "generation": 26,
+      "best_min_mean": 2.0798301401398054,
+      "best_min_std": 0.9195303758748233,
+      "best_min_min": 0.6205457171996371
+    },
+    {
+      "representation": "float",
+      "generation": 27,
+      "best_min_mean": 2.0247016355255134,
+      "best_min_std": 0.8851808065775586,
+      "best_min_min": 0.5859129603848099
+    },
+    {
+      "representation": "float",
+      "generation": 28,
+      "best_min_mean": 1.98802644418535,
+      "best_min_std": 0.891136689984222,
+      "best_min_min": 0.5626003413054743
+    },
+    {
+      "representation": "float",
+      "generation": 29,
+      "best_min_mean": 1.9376863551268155,
+      "best_min_std": 0.8697885252564722,
+      "best_min_min": 0.550119820419049
+    },
+    {
+      "representation": "float",
+      "generation": 30,
+      "best_min_mean": 1.8901567005804982,
+      "best_min_std": 0.8476785785213724,
+      "best_min_min": 0.5160744642588639
+    },
+    {
+      "representation": "float",
+      "generation": 31,
+      "best_min_mean": 1.8446407362530841,
+      "best_min_std": 0.8287171528064838,
+      "best_min_min": 0.5160744642588639
+    },
+    {
+      "representation": "float",
+      "generation": 32,
+      "best_min_mean": 1.7831781347062492,
+      "best_min_std": 0.8283973780845825,
+      "best_min_min": 0.5144813191423578
+    },
+    {
+      "representation": "float",
+      "generation": 33,
+      "best_min_mean": 1.7392469678044893,
+      "best_min_std": 0.8221752907039267,
+      "best_min_min": 0.51220936453084
+    },
+    {
+      "representation": "float",
+      "generation": 34,
+      "best_min_mean": 1.6626900905355477,
+      "best_min_std": 0.7598265309852926,
+      "best_min_min": 0.5109240272342684
+    },
+    {
+      "representation": "float",
+      "generation": 35,
+      "best_min_mean": 1.610792022111178,
+      "best_min_std": 0.7401600443676016,
+      "best_min_min": 0.5106462200306613
+    },
+    {
+      "representation": "float",
+      "generation": 36,
+      "best_min_mean": 1.5564163481553124,
+      "best_min_std": 0.7071974493196937,
+      "best_min_min": 0.5106462200306613
+    },
+    {
+      "representation": "float",
+      "generation": 37,
+      "best_min_mean": 1.536739272180529,
+      "best_min_std": 0.704586273398707,
+      "best_min_min": 0.5041043309926536
+    },
+    {
+      "representation": "float",
+      "generation": 38,
+      "best_min_mean": 1.4585222353623177,
+      "best_min_std": 0.6572310510771049,
+      "best_min_min": 0.5041043309926536
+    },
+    {
+      "representation": "float",
+      "generation": 39,
+      "best_min_mean": 1.3997612024127624,
+      "best_min_std": 0.6354529680969958,
+      "best_min_min": 0.5041043309926536
+    },
+    {
+      "representation": "float",
+      "generation": 40,
+      "best_min_mean": 1.3382409792353507,
+      "best_min_std": 0.6235125177040903,
+      "best_min_min": 0.5040516560286639
+    },
+    {
+      "representation": "float",
+      "generation": 41,
+      "best_min_mean": 1.3081506351283574,
+      "best_min_std": 0.6182417242695357,
+      "best_min_min": 0.5038157312297863
+    },
+    {
+      "representation": "float",
+      "generation": 42,
+      "best_min_mean": 1.2056918734694002,
+      "best_min_std": 0.5619498893192999,
+      "best_min_min": 0.5026796621478024
+    },
+    {
+      "representation": "float",
+      "generation": 43,
+      "best_min_mean": 1.1605402124261741,
+      "best_min_std": 0.5330133742040047,
+      "best_min_min": 0.5014671264014956
+    },
+    {
+      "representation": "float",
+      "generation": 44,
+      "best_min_mean": 1.1080165888294977,
+      "best_min_std": 0.4933418600619457,
+      "best_min_min": 0.5014671264014956
+    },
+    {
+      "representation": "float",
+      "generation": 45,
+      "best_min_mean": 1.0924083652172905,
+      "best_min_std": 0.4859848285638794,
+      "best_min_min": 0.5014671264014956
+    },
+    {
+      "representation": "float",
+      "generation": 46,
+      "best_min_mean": 1.0147227147830782,
+      "best_min_std": 0.4363721682776101,
+      "best_min_min": 0.5014671264014956
+    },
+    {
+      "representation": "float",
+      "generation": 47,
+      "best_min_mean": 0.9538972170875235,
+      "best_min_std": 0.40002851403541745,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 48,
+      "best_min_mean": 0.9317845241428634,
+      "best_min_std": 0.3767748087008221,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 49,
+      "best_min_mean": 0.8906382604526548,
+      "best_min_std": 0.3459562711040552,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 50,
+      "best_min_mean": 0.8527227659027101,
+      "best_min_std": 0.3173333743410231,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 51,
+      "best_min_mean": 0.7723423603391935,
+      "best_min_std": 0.24996399281906337,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 52,
+      "best_min_mean": 0.7451041966611743,
+      "best_min_std": 0.22518143882771458,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 53,
+      "best_min_mean": 0.7274075926827525,
+      "best_min_std": 0.2302733854358537,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 54,
+      "best_min_mean": 0.7085424851219462,
+      "best_min_std": 0.22262601329542475,
+      "best_min_min": 0.500916694993781
+    },
+    {
+      "representation": "float",
+      "generation": 55,
+      "best_min_mean": 0.6585854135493173,
+      "best_min_std": 0.17085318402748176,
+      "best_min_min": 0.500863501533008
+    },
+    {
+      "representation": "float",
+      "generation": 56,
+      "best_min_mean": 0.6297879767627805,
+      "best_min_std": 0.15198751409985237,
+      "best_min_min": 0.500863501533008
+    },
+    {
+      "representation": "float",
+      "generation": 57,
+      "best_min_mean": 0.6375013829705156,
+      "best_min_std": 0.1600760990949491,
+      "best_min_min": 0.500863501533008
+    },
+    {
+      "representation": "float",
+      "generation": 58,
+      "best_min_mean": 0.6163320465986871,
+      "best_min_std": 0.13259799073695785,
+      "best_min_min": 0.500863501533008
+    },
+    {
+      "representation": "float",
+      "generation": 59,
+      "best_min_mean": 0.5917653480851246,
+      "best_min_std": 0.10568177818907565,
+      "best_min_min": 0.500863501533008
+    },
+    {
+      "representation": "float",
+      "generation": 60,
+      "best_min_mean": 0.5630253061277065,
+      "best_min_std": 0.07240741181867208,
+      "best_min_min": 0.5008628779217708
+    },
+    {
+      "representation": "float",
+      "generation": 61,
+      "best_min_mean": 0.5454938284865964,
+      "best_min_std": 0.05485331231853566,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 62,
+      "best_min_mean": 0.5263572647531184,
+      "best_min_std": 0.03136744112026909,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 63,
+      "best_min_mean": 0.522501220423207,
+      "best_min_std": 0.027084887048524842,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 64,
+      "best_min_mean": 0.5150021661548262,
+      "best_min_std": 0.018223560633210633,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 65,
+      "best_min_mean": 0.5149893149945968,
+      "best_min_std": 0.018233440798993167,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 66,
+      "best_min_mean": 0.508313038918628,
+      "best_min_std": 0.009074739926365016,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 67,
+      "best_min_mean": 0.5057348713350348,
+      "best_min_std": 0.00597150658761939,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 68,
+      "best_min_mean": 0.5059118615935196,
+      "best_min_std": 0.006195555584835197,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 69,
+      "best_min_mean": 0.5036251820179641,
+      "best_min_std": 0.0037628086388388424,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 70,
+      "best_min_mean": 0.5032952042035348,
+      "best_min_std": 0.0036876307299672554,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 71,
+      "best_min_mean": 0.5029277233709266,
+      "best_min_std": 0.003064218276939255,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 72,
+      "best_min_mean": 0.5017661725317227,
+      "best_min_std": 0.0012305133791425968,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 73,
+      "best_min_mean": 0.5016561219063027,
+      "best_min_std": 0.0011760943672126337,
+      "best_min_min": 0.5006043331656791
+    },
+    {
+      "representation": "float",
+      "generation": 74,
+      "best_min_mean": 0.5015279642496977,
+      "best_min_std": 0.0012541052915403328,
+      "best_min_min": 0.5005670800362815
+    },
+    {
+      "representation": "float",
+      "generation": 75,
+      "best_min_mean": 0.5014173645860143,
+      "best_min_std": 0.0012362334331954715,
+      "best_min_min": 0.5005278356097879
+    },
+    {
+      "representation": "float",
+      "generation": 76,
+      "best_min_mean": 0.5013237340213093,
+      "best_min_std": 0.0010581120163797057,
+      "best_min_min": 0.5005278356097879
+    },
+    {
+      "representation": "float",
+      "generation": 77,
+      "best_min_mean": 0.5013237319842938,
+      "best_min_std": 0.0010581132852655619,
+      "best_min_min": 0.5005278356097879
+    },
+    {
+      "representation": "float",
+      "generation": 78,
+      "best_min_mean": 0.5010994833309299,
+      "best_min_std": 0.0010024078362464496,
+      "best_min_min": 0.500294435458252
+    },
+    {
+      "representation": "float",
+      "generation": 79,
+      "best_min_mean": 0.5008467234931532,
+      "best_min_std": 0.0006420047765361089,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 80,
+      "best_min_mean": 0.5008066844722202,
+      "best_min_std": 0.0006286761493654579,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 81,
+      "best_min_mean": 0.5006284816025357,
+      "best_min_std": 0.00033473316495670133,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 82,
+      "best_min_mean": 0.5006232675576963,
+      "best_min_std": 0.00032501774165173567,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 83,
+      "best_min_mean": 0.5006220502803302,
+      "best_min_std": 0.00032449113755909925,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 84,
+      "best_min_mean": 0.5006220502803302,
+      "best_min_std": 0.00032449113755909925,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 85,
+      "best_min_mean": 0.5006220359909895,
+      "best_min_std": 0.0003244919190101932,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 86,
+      "best_min_mean": 0.5006217317764425,
+      "best_min_std": 0.00032392594511542296,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 87,
+      "best_min_mean": 0.5006217317764425,
+      "best_min_std": 0.00032392594511542296,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 88,
+      "best_min_mean": 0.5006217317764425,
+      "best_min_std": 0.00032392594511542296,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 89,
+      "best_min_mean": 0.5006217317764425,
+      "best_min_std": 0.00032392594511542296,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 90,
+      "best_min_mean": 0.5006124009796016,
+      "best_min_std": 0.00033021048071989764,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 91,
+      "best_min_mean": 0.5006124009796016,
+      "best_min_std": 0.00033021048071989764,
+      "best_min_min": 0.5002765795385021
+    },
+    {
+      "representation": "float",
+      "generation": 92,
+      "best_min_mean": 0.5005810834971545,
+      "best_min_std": 0.00036605500212209704,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 93,
+      "best_min_mean": 0.5005027153433931,
+      "best_min_std": 0.00039361105900555856,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 94,
+      "best_min_mean": 0.5005027153433931,
+      "best_min_std": 0.00039361105900555856,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 95,
+      "best_min_mean": 0.5005027153433931,
+      "best_min_std": 0.00039361105900555856,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 96,
+      "best_min_mean": 0.5005027153433931,
+      "best_min_std": 0.00039361105900555856,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 97,
+      "best_min_mean": 0.5005027153433931,
+      "best_min_std": 0.00039361105900555856,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 98,
+      "best_min_mean": 0.5005027153433931,
+      "best_min_std": 0.00039361105900555856,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 99,
+      "best_min_mean": 0.5005008337349671,
+      "best_min_std": 0.0003901645349886497,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "float",
+      "generation": 100,
+      "best_min_mean": 0.5005026994132015,
+      "best_min_std": 0.0003936162918596965,
+      "best_min_min": 0.5001199921262663
+    },
+    {
+      "representation": "bit",
+      "generation": 0,
+      "best_min_mean": 15.186599084832526,
+      "best_min_std": 7.448563961470927,
+      "best_min_min": 6.789434376298618
+    },
+    {
+      "representation": "bit",
+      "generation": 1,
+      "best_min_mean": 11.186415811097167,
+      "best_min_std": 3.9720962519279284,
+      "best_min_min": 4.6981536522580845
+    },
+    {
+      "representation": "bit",
+      "generation": 2,
+      "best_min_mean": 8.885823874118667,
+      "best_min_std": 2.573940911597314,
+      "best_min_min": 4.698081463539351
+    },
+    {
+      "representation": "bit",
+      "generation": 3,
+      "best_min_mean": 5.401679578998122,
+      "best_min_std": 3.1487017997851168,
+      "best_min_min": 1.4816473347398116
+    },
+    {
+      "representation": "bit",
+      "generation": 4,
+      "best_min_mean": 4.054461796103508,
+      "best_min_std": 2.1078174134641876,
+      "best_min_min": 1.4816473347398116
+    },
+    {
+      "representation": "bit",
+      "generation": 5,
+      "best_min_mean": 3.724278837300063,
+      "best_min_std": 2.0588297765402492,
+      "best_min_min": 1.532612695880163
+    },
+    {
+      "representation": "bit",
+      "generation": 6,
+      "best_min_mean": 2.8890749963712974,
+      "best_min_std": 0.9584971733440327,
+      "best_min_min": 1.5406631749114683
+    },
+    {
+      "representation": "bit",
+      "generation": 7,
+      "best_min_mean": 2.6095169679020023,
+      "best_min_std": 0.8953496610726057,
+      "best_min_min": 1.2618688167196883
+    },
+    {
+      "representation": "bit",
+      "generation": 8,
+      "best_min_mean": 1.9903188741266375,
+      "best_min_std": 0.761682142774725,
+      "best_min_min": 0.9480638087192221
+    },
+    {
+      "representation": "bit",
+      "generation": 9,
+      "best_min_mean": 1.8670977188309095,
+      "best_min_std": 0.7481490853583924,
+      "best_min_min": 0.8971704957294593
+    },
+    {
+      "representation": "bit",
+      "generation": 10,
+      "best_min_mean": 1.5210064165078179,
+      "best_min_std": 0.6357525683601349,
+      "best_min_min": 0.9480638087192221
+    },
+    {
+      "representation": "bit",
+      "generation": 11,
+      "best_min_mean": 1.5296779636913098,
+      "best_min_std": 0.6819540300242909,
+      "best_min_min": 0.9480638087192221
+    },
+    {
+      "representation": "bit",
+      "generation": 12,
+      "best_min_mean": 1.3370041806077977,
+      "best_min_std": 0.591707200072172,
+      "best_min_min": 0.8940258484964302
+    },
+    {
+      "representation": "bit",
+      "generation": 13,
+      "best_min_mean": 1.2592954867138535,
+      "best_min_std": 0.6375437472136466,
+      "best_min_min": 0.7526842400162862
+    },
+    {
+      "representation": "bit",
+      "generation": 14,
+      "best_min_mean": 1.0947503402389536,
+      "best_min_std": 0.3792753599083215,
+      "best_min_min": 0.7434634436633373
+    },
+    {
+      "representation": "bit",
+      "generation": 15,
+      "best_min_mean": 1.094353504562332,
+      "best_min_std": 0.37884095212181823,
+      "best_min_min": 0.7467408656665673
+    },
+    {
+      "representation": "bit",
+      "generation": 16,
+      "best_min_mean": 1.0894385425781643,
+      "best_min_std": 0.3800729619778291,
+      "best_min_min": 0.7467408656665673
+    },
+    {
+      "representation": "bit",
+      "generation": 17,
+      "best_min_mean": 1.090503300413628,
+      "best_min_std": 0.3810410246079524,
+      "best_min_min": 0.7416574655050509
+    },
+    {
+      "representation": "bit",
+      "generation": 18,
+      "best_min_mean": 1.0096518021861534,
+      "best_min_std": 0.4141583259042455,
+      "best_min_min": 0.6007777349192467
+    },
+    {
+      "representation": "bit",
+      "generation": 19,
+      "best_min_mean": 0.9504422950847466,
+      "best_min_std": 0.33970155645926015,
+      "best_min_min": 0.555776358790685
+    },
+    {
+      "representation": "bit",
+      "generation": 20,
+      "best_min_mean": 0.9133922551010247,
+      "best_min_std": 0.3583995207641106,
+      "best_min_min": 0.5711322676032373
+    },
+    {
+      "representation": "bit",
+      "generation": 21,
+      "best_min_mean": 0.8600638382631198,
+      "best_min_std": 0.28608770862847277,
+      "best_min_min": 0.5674974095395685
+    },
+    {
+      "representation": "bit",
+      "generation": 22,
+      "best_min_mean": 0.8669938669303822,
+      "best_min_std": 0.29659325570417483,
+      "best_min_min": 0.5669395209063351
+    },
+    {
+      "representation": "bit",
+      "generation": 23,
+      "best_min_mean": 0.8560106884853733,
+      "best_min_std": 0.28784648740611574,
+      "best_min_min": 0.5674974095395685
+    },
+    {
+      "representation": "bit",
+      "generation": 24,
+      "best_min_mean": 0.8517580629077667,
+      "best_min_std": 0.29108786424531213,
+      "best_min_min": 0.5569594023898949
+    },
+    {
+      "representation": "bit",
+      "generation": 25,
+      "best_min_mean": 0.847056576908156,
+      "best_min_std": 0.291287574374108,
+      "best_min_min": 0.5500162819493385
+    },
+    {
+      "representation": "bit",
+      "generation": 26,
+      "best_min_mean": 0.8449184057495241,
+      "best_min_std": 0.2941787459985371,
+      "best_min_min": 0.5502005664225089
+    },
+    {
+      "representation": "bit",
+      "generation": 27,
+      "best_min_mean": 0.8464325975233823,
+      "best_min_std": 0.2923813102464614,
+      "best_min_min": 0.5555094922824722
+    },
+    {
+      "representation": "bit",
+      "generation": 28,
+      "best_min_mean": 0.8233882420067827,
+      "best_min_std": 0.26500793214396107,
+      "best_min_min": 0.5520732681783238
+    },
+    {
+      "representation": "bit",
+      "generation": 29,
+      "best_min_mean": 0.8206506309352501,
+      "best_min_std": 0.2615134786009171,
+      "best_min_min": 0.5520732681783238
+    },
+    {
+      "representation": "bit",
+      "generation": 30,
+      "best_min_mean": 0.8142187679320495,
+      "best_min_std": 0.27288773846305264,
+      "best_min_min": 0.5132763578431854
+    },
+    {
+      "representation": "bit",
+      "generation": 31,
+      "best_min_mean": 0.8062242714382695,
+      "best_min_std": 0.27647369191482013,
+      "best_min_min": 0.5132763578431854
+    },
+    {
+      "representation": "bit",
+      "generation": 32,
+      "best_min_mean": 0.8032638224067823,
+      "best_min_std": 0.27696658877892294,
+      "best_min_min": 0.505961823996741
+    },
+    {
+      "representation": "bit",
+      "generation": 33,
+      "best_min_mean": 0.8022805936209041,
+      "best_min_std": 0.2762905325452712,
+      "best_min_min": 0.5057186605886511
+    },
+    {
+      "representation": "bit",
+      "generation": 34,
+      "best_min_mean": 0.8018704260354224,
+      "best_min_std": 0.27837709447415065,
+      "best_min_min": 0.5055987395002586
+    },
+    {
+      "representation": "bit",
+      "generation": 35,
+      "best_min_mean": 0.8018956599196698,
+      "best_min_std": 0.27836882829878445,
+      "best_min_min": 0.5028236548980332
+    },
+    {
+      "representation": "bit",
+      "generation": 36,
+      "best_min_mean": 0.8014489770136686,
+      "best_min_std": 0.2780236953639619,
+      "best_min_min": 0.5030204676798243
+    },
+    {
+      "representation": "bit",
+      "generation": 37,
+      "best_min_mean": 0.8016639911277574,
+      "best_min_std": 0.278590195714679,
+      "best_min_min": 0.5028344810507703
+    },
+    {
+      "representation": "bit",
+      "generation": 38,
+      "best_min_mean": 0.8013004454321802,
+      "best_min_std": 0.27816719004011997,
+      "best_min_min": 0.5028344810507703
+    },
+    {
+      "representation": "bit",
+      "generation": 39,
+      "best_min_mean": 0.8012820831662552,
+      "best_min_std": 0.27815437675462573,
+      "best_min_min": 0.5028168041589174
+    },
+    {
+      "representation": "bit",
+      "generation": 40,
+      "best_min_mean": 0.8008634541385286,
+      "best_min_std": 0.27773596568173725,
+      "best_min_min": 0.5026851581990381
+    },
+    {
+      "representation": "bit",
+      "generation": 41,
+      "best_min_mean": 0.8008628870550292,
+      "best_min_std": 0.27773604988873796,
+      "best_min_min": 0.5026851581990381
+    },
+    {
+      "representation": "bit",
+      "generation": 42,
+      "best_min_mean": 0.8007814092784125,
+      "best_min_std": 0.27764729805039934,
+      "best_min_min": 0.5026778217705603
+    },
+    {
+      "representation": "bit",
+      "generation": 43,
+      "best_min_mean": 0.8005895914716847,
+      "best_min_std": 0.2778445302515744,
+      "best_min_min": 0.5026465355038253
+    },
+    {
+      "representation": "bit",
+      "generation": 44,
+      "best_min_mean": 0.800588431020075,
+      "best_min_std": 0.2778453762373925,
+      "best_min_min": 0.5026465355038253
+    },
+    {
+      "representation": "bit",
+      "generation": 45,
+      "best_min_mean": 0.8005859649218834,
+      "best_min_std": 0.2778472872372912,
+      "best_min_min": 0.5026465355038253
+    },
+    {
+      "representation": "bit",
+      "generation": 46,
+      "best_min_mean": 0.8005820328601694,
+      "best_min_std": 0.2778512936078489,
+      "best_min_min": 0.5026465342746914
+    },
+    {
+      "representation": "bit",
+      "generation": 47,
+      "best_min_mean": 0.8005609522768266,
+      "best_min_std": 0.27783022038920346,
+      "best_min_min": 0.5026395876686712
+    },
+    {
+      "representation": "bit",
+      "generation": 48,
+      "best_min_mean": 0.8005592389024956,
+      "best_min_std": 0.27783128774790844,
+      "best_min_min": 0.5026390855193091
+    },
+    {
+      "representation": "bit",
+      "generation": 49,
+      "best_min_mean": 0.8003766068728912,
+      "best_min_std": 0.2778108460484147,
+      "best_min_min": 0.5022099225189108
+    },
+    {
+      "representation": "bit",
+      "generation": 50,
+      "best_min_mean": 0.8003649335970762,
+      "best_min_std": 0.2778235544095683,
+      "best_min_min": 0.5021627771253212
+    },
+    {
+      "representation": "bit",
+      "generation": 51,
+      "best_min_mean": 0.800271445168461,
+      "best_min_std": 0.27775370506360864,
+      "best_min_min": 0.5021627771253212
+    },
+    {
+      "representation": "bit",
+      "generation": 52,
+      "best_min_mean": 0.8002681329958724,
+      "best_min_std": 0.2777571433487509,
+      "best_min_min": 0.5021590962664194
+    },
+    {
+      "representation": "bit",
+      "generation": 53,
+      "best_min_mean": 0.8002473860945971,
+      "best_min_std": 0.27773657291112436,
+      "best_min_min": 0.5021590618017313
+    },
+    {
+      "representation": "bit",
+      "generation": 54,
+      "best_min_mean": 0.8002451963797675,
+      "best_min_std": 0.27773510946477187,
+      "best_min_min": 0.5021590618017313
+    },
+    {
+      "representation": "bit",
+      "generation": 55,
+      "best_min_mean": 0.800243811893829,
+      "best_min_std": 0.27773551449621625,
+      "best_min_min": 0.5021581661089887
+    },
+    {
+      "representation": "bit",
+      "generation": 56,
+      "best_min_mean": 0.8002426327818659,
+      "best_min_std": 0.2777351351311448,
+      "best_min_min": 0.5021581661089887
+    },
+    {
+      "representation": "bit",
+      "generation": 57,
+      "best_min_mean": 0.8002397110299866,
+      "best_min_std": 0.2777377765790805,
+      "best_min_min": 0.5021556109910441
+    },
+    {
+      "representation": "bit",
+      "generation": 58,
+      "best_min_mean": 0.8002395501143689,
+      "best_min_std": 0.2777379492330964,
+      "best_min_min": 0.5021548067009678
+    },
+    {
+      "representation": "bit",
+      "generation": 59,
+      "best_min_mean": 0.8002387565184848,
+      "best_min_std": 0.2777370865437252,
+      "best_min_min": 0.5021548067009678
+    },
+    {
+      "representation": "bit",
+      "generation": 60,
+      "best_min_mean": 0.8002384566976876,
+      "best_min_std": 0.27773740768689026,
+      "best_min_min": 0.502153370851488
+    },
+    {
+      "representation": "bit",
+      "generation": 61,
+      "best_min_mean": 0.8002357470287293,
+      "best_min_std": 0.27774003188254537,
+      "best_min_min": 0.5021414572287742
+    },
+    {
+      "representation": "bit",
+      "generation": 62,
+      "best_min_mean": 0.8002350694542384,
+      "best_min_std": 0.2777407353059338,
+      "best_min_min": 0.5021407097979934
+    },
+    {
+      "representation": "bit",
+      "generation": 63,
+      "best_min_mean": 0.8002348708832067,
+      "best_min_std": 0.27774093392850047,
+      "best_min_min": 0.5021398630752092
+    },
+    {
+      "representation": "bit",
+      "generation": 64,
+      "best_min_mean": 0.8002342955005182,
+      "best_min_std": 0.2777415420821761,
+      "best_min_min": 0.5021380085609174
+    },
+    {
+      "representation": "bit",
+      "generation": 65,
+      "best_min_mean": 0.8002339071344695,
+      "best_min_std": 0.2777413790055716,
+      "best_min_min": 0.5021373601236491
+    },
+    {
+      "representation": "bit",
+      "generation": 66,
+      "best_min_mean": 0.800233882851787,
+      "best_min_std": 0.27774139946724125,
+      "best_min_min": 0.5021373564659984
+    },
+    {
+      "representation": "bit",
+      "generation": 67,
+      "best_min_mean": 0.8002337377809393,
+      "best_min_std": 0.27774138318067,
+      "best_min_min": 0.5021373564659984
+    },
+    {
+      "representation": "bit",
+      "generation": 68,
+      "best_min_mean": 0.8002335081771236,
+      "best_min_std": 0.27774111702389237,
+      "best_min_min": 0.5021373512878098
+    },
+    {
+      "representation": "bit",
+      "generation": 69,
+      "best_min_mean": 0.800233399631314,
+      "best_min_std": 0.27774122867750717,
+      "best_min_min": 0.5021373463326148
+    },
+    {
+      "representation": "bit",
+      "generation": 70,
+      "best_min_mean": 0.8002333965357916,
+      "best_min_std": 0.2777412317957414,
+      "best_min_min": 0.5021373461813581
+    },
+    {
+      "representation": "bit",
+      "generation": 71,
+      "best_min_mean": 0.8002325676209197,
+      "best_min_std": 0.27774207549579655,
+      "best_min_min": 0.5021373461813581
+    },
+    {
+      "representation": "bit",
+      "generation": 72,
+      "best_min_mean": 0.8002325675589589,
+      "best_min_std": 0.2777420755595065,
+      "best_min_min": 0.5021373461813581
+    },
+    {
+      "representation": "bit",
+      "generation": 73,
+      "best_min_mean": 0.8002325673050159,
+      "best_min_std": 0.2777420758207702,
+      "best_min_min": 0.5021373449791442
+    },
+    {
+      "representation": "bit",
+      "generation": 74,
+      "best_min_mean": 0.8002323671408336,
+      "best_min_std": 0.2777422813283174,
+      "best_min_min": 0.502137340451137
+    },
+    {
+      "representation": "bit",
+      "generation": 75,
+      "best_min_mean": 0.8002322870895935,
+      "best_min_std": 0.2777423616034423,
+      "best_min_min": 0.502137340451137
+    },
+    {
+      "representation": "bit",
+      "generation": 76,
+      "best_min_mean": 0.8002320992754045,
+      "best_min_std": 0.2777425575469098,
+      "best_min_min": 0.502136413940809
+    },
+    {
+      "representation": "bit",
+      "generation": 77,
+      "best_min_mean": 0.8002320994897723,
+      "best_min_std": 0.27774255731683306,
+      "best_min_min": 0.5021364150126476
+    },
+    {
+      "representation": "bit",
+      "generation": 78,
+      "best_min_mean": 0.800232094499662,
+      "best_min_std": 0.27774256208361553,
+      "best_min_min": 0.5021364150126476
+    },
+    {
+      "representation": "bit",
+      "generation": 79,
+      "best_min_mean": 0.8002320924775882,
+      "best_min_std": 0.27774256235825084,
+      "best_min_min": 0.5021364091286722
+    },
+    {
+      "representation": "bit",
+      "generation": 80,
+      "best_min_mean": 0.8002320923012288,
+      "best_min_std": 0.27774256218227056,
+      "best_min_min": 0.5021364091286722
+    },
+    {
+      "representation": "bit",
+      "generation": 81,
+      "best_min_mean": 0.8002320880487487,
+      "best_min_std": 0.277742566503739,
+      "best_min_min": 0.5021364079264606
+    },
+    {
+      "representation": "bit",
+      "generation": 82,
+      "best_min_mean": 0.8002320879890735,
+      "best_min_std": 0.27774256656778706,
+      "best_min_min": 0.5021364076280853
+    },
+    {
+      "representation": "bit",
+      "generation": 83,
+      "best_min_mean": 0.8002320879538581,
+      "best_min_std": 0.27774256660399665,
+      "best_min_min": 0.5021364076280853
+    },
+    {
+      "representation": "bit",
+      "generation": 84,
+      "best_min_mean": 0.8002320867467134,
+      "best_min_std": 0.277742565647124,
+      "best_min_min": 0.5021364076280853
+    },
+    {
+      "representation": "bit",
+      "generation": 85,
+      "best_min_mean": 0.8002320785815558,
+      "best_min_std": 0.27774257404279057,
+      "best_min_min": 0.5021364076280853
+    },
+    {
+      "representation": "bit",
+      "generation": 86,
+      "best_min_mean": 0.800232078042393,
+      "best_min_std": 0.2777425745971743,
+      "best_min_min": 0.5021364076280853
+    },
+    {
+      "representation": "bit",
+      "generation": 87,
+      "best_min_mean": 0.800232078042393,
+      "best_min_std": 0.2777425745971743,
+      "best_min_min": 0.5021364076280853
+    },
+    {
+      "representation": "bit",
+      "generation": 88,
+      "best_min_mean": 0.8002320777726549,
+      "best_min_std": 0.27774257434614325,
+      "best_min_min": 0.5021364074854776
+    },
+    {
+      "representation": "bit",
+      "generation": 89,
+      "best_min_mean": 0.8002320768700688,
+      "best_min_std": 0.27774257531487123,
+      "best_min_min": 0.5021364029725469
+    },
+    {
+      "representation": "bit",
+      "generation": 90,
+      "best_min_mean": 0.800232076761319,
+      "best_min_std": 0.2777425751882435,
+      "best_min_min": 0.5021364029725469
+    },
+    {
+      "representation": "bit",
+      "generation": 91,
+      "best_min_mean": 0.8002320767125288,
+      "best_min_std": 0.27774257523841106,
+      "best_min_min": 0.5021364029725469
+    },
+    {
+      "representation": "bit",
+      "generation": 92,
+      "best_min_mean": 0.8002320766836168,
+      "best_min_std": 0.2777425752691152,
+      "best_min_min": 0.5021364028299392
+    },
+    {
+      "representation": "bit",
+      "generation": 93,
+      "best_min_mean": 0.8002320766828245,
+      "best_min_std": 0.27774257526818863,
+      "best_min_min": 0.5021364028299392
+    },
+    {
+      "representation": "bit",
+      "generation": 94,
+      "best_min_mean": 0.8002320765479094,
+      "best_min_std": 0.2777425752837254,
+      "best_min_min": 0.5021364028299392
+    },
+    {
+      "representation": "bit",
+      "generation": 95,
+      "best_min_mean": 0.8002320759837327,
+      "best_min_std": 0.2777425758638295,
+      "best_min_min": 0.5021364028299392
+    },
+    {
+      "representation": "bit",
+      "generation": 96,
+      "best_min_mean": 0.8002320759419147,
+      "best_min_std": 0.277742575908712,
+      "best_min_min": 0.5021364026208489
+    },
+    {
+      "representation": "bit",
+      "generation": 97,
+      "best_min_mean": 0.8002320749272167,
+      "best_min_std": 0.27774257695017174,
+      "best_min_min": 0.5021364028299392
+    },
+    {
+      "representation": "bit",
+      "generation": 98,
+      "best_min_mean": 0.8002320745627483,
+      "best_min_std": 0.2777425773231881,
+      "best_min_min": 0.5021364028299392
+    },
+    {
+      "representation": "bit",
+      "generation": 99,
+      "best_min_mean": 0.8002320742415712,
+      "best_min_std": 0.2777425776553163,
+      "best_min_min": 0.5021364026208489
+    },
+    {
+      "representation": "bit",
+      "generation": 100,
+      "best_min_mean": 0.8002320742415712,
+      "best_min_std": 0.2777425776553163,
+      "best_min_min": 0.5021364026208489
+    }
+  ],
+  "float_mean_best": 0.5005008178047755,
+  "float_std_best": 0.00039016973724270867,
+  "float_mean_evals": 18352.6,
+  "bit_mean_best": 0.8001072278597517,
+  "bit_std_best": 0.2778710310941946,
+  "bit_mean_evals": 18178.8
+}

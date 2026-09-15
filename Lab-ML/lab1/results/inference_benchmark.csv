@@ -1,0 +1,4 @@
+model,role,n_train,n_test,fit_s,predict_s,predict_us_per_instance,notes
+"DecisionTree (entropy, M=2)",classifier,3976,5010,0.0206,0.000691,0.14,"median of 5 runs, sklearn"
+kNN k=1,classifier,3976,5010,0.0007,0.025395,5.07,"median of 5 runs, sklearn"
+kNN k=5,classifier,3976,5010,0.0009,0.028777,5.74,"median of 5 runs, sklearn"

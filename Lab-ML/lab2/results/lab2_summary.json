@@ -1,0 +1,687 @@
+{
+  "lab": 2,
+  "title": "Clustering",
+  "ex_2_1_2_3": {
+    "inertia": 653.2247028139782,
+    "centroids": [
+      {
+        "centroid_index": 0,
+        "centroid_x": 2.78259352173913,
+        "centroid_y": 2.9445091956521736,
+        "n_assigned": 46,
+        "closest_gaussian_mean": "(3.0, 3.0)",
+        "distance_to_closest_mean": 0.22437648307468164,
+        "distance_to_other_mean": 5.850942066627094,
+        "distance_to_empirical_class_mean": 0.2271203093298123
+      },
+      {
+        "centroid_index": 1,
+        "centroid_x": 7.184038518518518,
+        "centroid_y": 7.77501,
+        "n_assigned": 54,
+        "closest_gaussian_mean": "(7.0, 7.0)",
+        "distance_to_closest_mean": 0.796561784420073,
+        "distance_to_other_mean": 6.34877144214112,
+        "distance_to_empirical_class_mean": 0.3183425234311493
+      }
+    ],
+    "empirical_class_means": [
+      [
+        2.7327240952380945,
+        2.7229314999999996
+      ],
+      [
+        6.916602931034483,
+        7.602324827586208
+      ]
+    ],
+    "classes_to_clusters": {
+      "class_by_cluster_table": [
+        [
+          42,
+          0
+        ],
+        [
+          4,
+          54
+        ]
+      ],
+      "cluster_to_class": [
+        0,
+        1
+      ],
+      "accuracy": 0.96,
+      "n_errors": 4,
+      "confusion_matrix": [
+        [
+          42,
+          0
+        ],
+        [
+          4,
+          54
+        ]
+      ]
+    },
+    "n_misclassified": 4
+  },
+  "ex_2_4": {
+    "gausstrain.arff": {
+      "centroids": [
+        {
+          "centroid_index": 0,
+          "centroid_x": 2.78259352173913,
+          "centroid_y": 2.9445091956521736,
+          "n_assigned": 46,
+          "closest_gaussian_mean": "(3.0, 3.0)",
+          "distance_to_closest_mean": 0.22437648307468164,
+          "distance_to_other_mean": 5.850942066627094
+        },
+        {
+          "centroid_index": 1,
+          "centroid_x": 7.184038518518518,
+          "centroid_y": 7.77501,
+          "n_assigned": 54,
+          "closest_gaussian_mean": "(7.0, 7.0)",
+          "distance_to_closest_mean": 0.796561784420073,
+          "distance_to_other_mean": 6.34877144214112
+        }
+      ],
+      "classes_to_clusters": {
+        "class_by_cluster_table": [
+          [
+            42,
+            0
+          ],
+          [
+            4,
+            54
+          ]
+        ],
+        "cluster_to_class": [
+          0,
+          1
+        ],
+        "accuracy": 0.96,
+        "n_errors": 4,
+        "confusion_matrix": [
+          [
+            42,
+            0
+          ],
+          [
+            4,
+            54
+          ]
+        ]
+      },
+      "n_points_on_wrong_side_of_bisector": 3,
+      "of_those_correctly_assigned": 0
+    },
+    "gausstrainhv.arff": {
+      "centroids": [
+        {
+          "centroid_index": 0,
+          "centroid_x": 3.2514128571428573,
+          "centroid_y": 2.7475270444444453,
+          "n_assigned": 63,
+          "closest_gaussian_mean": "(3.0, 3.0)",
+          "distance_to_closest_mean": 0.35630186362646477,
+          "distance_to_other_mean": 5.668812204097545
+        },
+        {
+          "centroid_index": 1,
+          "centroid_x": 7.682481621621623,
+          "centroid_y": 8.78002027027027,
+          "n_assigned": 37,
+          "closest_gaussian_mean": "(7.0, 7.0)",
+          "distance_to_closest_mean": 1.9063717702547756,
+          "distance_to_other_mean": 7.4387007240216
+        }
+      ],
+      "classes_to_clusters": {
+        "class_by_cluster_table": [
+          [
+            53,
+            0
+          ],
+          [
+            10,
+            37
+          ]
+        ],
+        "cluster_to_class": [
+          0,
+          1
+        ],
+        "accuracy": 0.9,
+        "n_errors": 10,
+        "confusion_matrix": [
+          [
+            53,
+            0
+          ],
+          [
+            10,
+            37
+          ]
+        ]
+      },
+      "n_points_on_wrong_side_of_bisector": 12,
+      "of_those_correctly_assigned": 4
+    }
+  },
+  "ex_2_5": {
+    "inertia": 64013.14342590491,
+    "classes_to_clusters": {
+      "class_by_cluster_table": [
+        [
+          522,
+          0,
+          2,
+          1,
+          22,
+          3,
+          1,
+          1,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          516,
+          4,
+          0,
+          4,
+          0
+        ],
+        [
+          2,
+          532,
+          0,
+          0,
+          0,
+          3,
+          27,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          0,
+          26,
+          10,
+          0,
+          0,
+          684,
+          15
+        ],
+        [
+          1,
+          0,
+          0,
+          583,
+          0,
+          13,
+          1,
+          1,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          584,
+          0,
+          0,
+          2,
+          0,
+          26,
+          2,
+          4
+        ],
+        [
+          2,
+          1,
+          34,
+          4,
+          11,
+          0,
+          1,
+          546,
+          0,
+          0
+        ],
+        [
+          0,
+          12,
+          0,
+          0,
+          0,
+          0,
+          521,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          4,
+          2,
+          558,
+          1,
+          1,
+          14,
+          4,
+          23
+        ],
+        [
+          3,
+          0,
+          1,
+          1,
+          16,
+          2,
+          1,
+          0,
+          0,
+          650
+        ]
+      ],
+      "cluster_to_class": [
+        0,
+        2,
+        5,
+        4,
+        8,
+        1,
+        7,
+        6,
+        3,
+        9
+      ],
+      "accuracy": 0.9455511288180611,
+      "n_errors": 328,
+      "confusion_matrix": [
+        [
+          522,
+          3,
+          0,
+          3,
+          1,
+          2,
+          1,
+          1,
+          22,
+          2
+        ],
+        [
+          0,
+          516,
+          0,
+          4,
+          0,
+          1,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          2,
+          3,
+          532,
+          2,
+          0,
+          0,
+          0,
+          27,
+          0,
+          0
+        ],
+        [
+          2,
+          10,
+          1,
+          684,
+          0,
+          1,
+          0,
+          0,
+          26,
+          15
+        ],
+        [
+          1,
+          13,
+          0,
+          0,
+          583,
+          0,
+          1,
+          1,
+          0,
+          2
+        ],
+        [
+          1,
+          2,
+          0,
+          2,
+          0,
+          584,
+          26,
+          0,
+          0,
+          4
+        ],
+        [
+          2,
+          0,
+          1,
+          0,
+          4,
+          34,
+          546,
+          1,
+          11,
+          0
+        ],
+        [
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0,
+          521,
+          0,
+          0
+        ],
+        [
+          4,
+          1,
+          0,
+          4,
+          2,
+          4,
+          14,
+          1,
+          558,
+          23
+        ],
+        [
+          3,
+          2,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          16,
+          650
+        ]
+      ]
+    },
+    "overfitting_estimate": {
+      "n_clusters": 10,
+      "n_labeled_clusters": 10,
+      "n_unlabeled_clusters": 0,
+      "weka_reported_errors": 328,
+      "recoverable_from_unlabeled_clusters": 0,
+      "naive_accuracy": 0.9455511288180611
+    },
+    "centroid_similarity": [
+      {
+        "cluster": 0,
+        "assigned_digit": 0,
+        "n": 537,
+        "corr_with_class_mean": 0.9993334907913607
+      },
+      {
+        "cluster": 1,
+        "assigned_digit": 2,
+        "n": 546,
+        "corr_with_class_mean": 0.9993214267551672
+      },
+      {
+        "cluster": 2,
+        "assigned_digit": 5,
+        "n": 627,
+        "corr_with_class_mean": 0.9983090193149522
+      },
+      {
+        "cluster": 3,
+        "assigned_digit": 4,
+        "n": 591,
+        "corr_with_class_mean": 0.999759678263685
+      },
+      {
+        "cluster": 4,
+        "assigned_digit": 8,
+        "n": 633,
+        "corr_with_class_mean": 0.9970891080112327
+      },
+      {
+        "cluster": 5,
+        "assigned_digit": 1,
+        "n": 550,
+        "corr_with_class_mean": 0.9996682628131179
+      },
+      {
+        "cluster": 6,
+        "assigned_digit": 7,
+        "n": 557,
+        "corr_with_class_mean": 0.9994413931597962
+      },
+      {
+        "cluster": 7,
+        "assigned_digit": 6,
+        "n": 588,
+        "corr_with_class_mean": 0.9979813583629275
+      },
+      {
+        "cluster": 8,
+        "assigned_digit": 3,
+        "n": 699,
+        "corr_with_class_mean": 0.9985568365743922
+      },
+      {
+        "cluster": 9,
+        "assigned_digit": 9,
+        "n": 696,
+        "corr_with_class_mean": 0.9992440114930141
+      }
+    ],
+    "mean_centroid_correlation": 0.9988704585539645
+  },
+  "ex_2_6": {
+    "k_selection": [
+      {
+        "dataset": "gausstrain (2 gaussians)",
+        "k": 2,
+        "inertia": 653.2247028139782,
+        "bic": 215.30612036999636,
+        "silhouette": 0.5215774178898933,
+        "classes_to_clusters_acc": 0.96
+      },
+      {
+        "dataset": "gausstrain (2 gaussians)",
+        "k": 3,
+        "inertia": 477.0355681893374,
+        "bic": 197.6886185293909,
+        "silhouette": 0.43494636553886523,
+        "classes_to_clusters_acc": 0.97
+      },
+      {
+        "dataset": "gausstrain (2 gaussians)",
+        "k": 4,
+        "inertia": 375.6832387187984,
+        "bic": 187.61965744438012,
+        "silhouette": 0.38631507328149,
+        "classes_to_clusters_acc": 0.95
+      },
+      {
+        "dataset": "gausstrain (2 gaussians)",
+        "k": 5,
+        "inertia": 287.3357662710987,
+        "bic": 174.6256791170666,
+        "silhouette": 0.35737734693219414,
+        "classes_to_clusters_acc": 0.94
+      },
+      {
+        "dataset": "gausstrain (2 gaussians)",
+        "k": 6,
+        "inertia": 248.16623971835006,
+        "bic": 173.78592905346358,
+        "silhouette": 0.3360663806262819,
+        "classes_to_clusters_acc": 0.92
+      },
+      {
+        "dataset": "gausstrain (2 gaussians)",
+        "k": 8,
+        "inertia": 183.37543690734614,
+        "bic": 171.16062776988394,
+        "silhouette": 0.3540823581367232,
+        "classes_to_clusters_acc": 0.93
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 2,
+        "inertia": 108133.12001613785,
+        "bic": 19222.708521378263,
+        "silhouette": 0.17385627148040964,
+        "classes_to_clusters_acc": 0.22725763612217795
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 3,
+        "inertia": 96076.56070002593,
+        "bic": 19424.43342828954,
+        "silhouette": 0.1939468689114374,
+        "classes_to_clusters_acc": 0.3197211155378486
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 4,
+        "inertia": 87894.30819555043,
+        "bic": 19802.103402102224,
+        "silhouette": 0.18329308283733173,
+        "classes_to_clusters_acc": 0.4161686586985392
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 5,
+        "inertia": 83328.4293138365,
+        "bic": 20394.619705292145,
+        "silhouette": 0.1657915509590886,
+        "classes_to_clusters_acc": 0.5089641434262948
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 6,
+        "inertia": 79356.0869268516,
+        "bic": 21014.247893009357,
+        "silhouette": 0.16254416632426855,
+        "classes_to_clusters_acc": 0.598937583001328
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 8,
+        "inertia": 68953.80724076106,
+        "bic": 21995.562112067626,
+        "silhouette": 0.1956176031348592,
+        "classes_to_clusters_acc": 0.7762284196547145
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 10,
+        "inertia": 64013.14342590491,
+        "bic": 23375.423821303848,
+        "silhouette": 0.20287371948800198,
+        "classes_to_clusters_acc": 0.9455511288180611
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 15,
+        "inertia": 59490.625133422654,
+        "bic": 27503.38826904619,
+        "silhouette": 0.1594799433672079,
+        "classes_to_clusters_acc": 0.9347609561752988
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 20,
+        "inertia": 56474.9286693405,
+        "bic": 31759.349156162345,
+        "silhouette": 0.1355980722047166,
+        "classes_to_clusters_acc": 0.9397410358565738
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 30,
+        "inertia": 52130.71394876356,
+        "bic": 40415.8552135529,
+        "silhouette": 0.11569776037532574,
+        "classes_to_clusters_acc": 0.9382470119521913
+      },
+      {
+        "dataset": "Bigtest1_104 (10 digits)",
+        "k": 40,
+        "inertia": 49435.31698702858,
+        "bic": 49234.72794031972,
+        "silhouette": 0.09047385547186115,
+        "classes_to_clusters_acc": 0.9516932270916335
+      }
+    ],
+    "generalisation": [
+      {
+        "k": 2,
+        "train_classes_to_clusters_acc": 0.96,
+        "test_acc_using_train_centroids": 0.92,
+        "gap_pp": 3.9999999999999925
+      },
+      {
+        "k": 4,
+        "train_classes_to_clusters_acc": 0.95,
+        "test_acc_using_train_centroids": 0.93,
+        "gap_pp": 1.9999999999999907
+      },
+      {
+        "k": 6,
+        "train_classes_to_clusters_acc": 0.92,
+        "test_acc_using_train_centroids": 0.9,
+        "gap_pp": 2.0000000000000018
+      },
+      {
+        "k": 8,
+        "train_classes_to_clusters_acc": 0.93,
+        "test_acc_using_train_centroids": 0.92,
+        "gap_pp": 1.0000000000000009
+      },
+      {
+        "k": 12,
+        "train_classes_to_clusters_acc": 0.96,
+        "test_acc_using_train_centroids": 0.97,
+        "gap_pp": -1.0000000000000009
+      },
+      {
+        "k": 20,
+        "train_classes_to_clusters_acc": 0.95,
+        "test_acc_using_train_centroids": 0.97,
+        "gap_pp": -2.0000000000000018
+      }
+    ],
+    "note": "XMeans unavailable in this environment; k-means over a range of k with BIC and silhouette is used as a documented substitute."
+  }
+}

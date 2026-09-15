@@ -1,0 +1,498 @@
+from __future__ import annotations
+
+import html
+import json
+import re
+import socket
+import threading
+import webbrowser
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+
+ROWS = 13
+COLS = 8
+CELL_COUNT = ROWS * COLS
+MAX_PATTERNS = 10
+
+SAMPLE_ZERO = [
+	[0, 0, 0, 1, 0, 0, 0, 0],
+	[0, 1, 1, 1, 1, 1, 1, 0],
+	[1, 1, 1, 0, 0, 1, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[1, 1, 0, 0, 0, 0, 1, 1],
+	[0, 1, 1, 1, 1, 1, 1, 0],
+	[0, 0, 1, 1, 1, 1, 0, 0],
+]
+
+SAMPLE_ZERO_VARIANT_1 = [
+  [0, 0, 0, 1, 1, 0, 0, 0],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [1, 1, 1, 0, 0, 1, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [0, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0],
+]
+
+SAMPLE_ZERO_VARIANT_2 = [
+  [0, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 1, 1, 1, 0],
+  [0, 1, 1, 1, 0, 1, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [1, 1, 0, 0, 0, 0, 1, 1],
+  [0, 1, 1, 1, 1, 1, 0, 0],
+  [0, 0, 1, 1, 1, 0, 0, 0],
+]
+
+SAMPLE_PATTERNS = [SAMPLE_ZERO, SAMPLE_ZERO_VARIANT_1, SAMPLE_ZERO_VARIANT_2]
+
+
+def parse_pattern(text: str) -> list[list[int]]:
+	stripped = text.strip()
+	if not stripped:
+		raise ValueError(f"Input is empty. Paste {CELL_COUNT} binary values or {ROWS} lines of {COLS} digits.")
+
+	line_candidates = [line.strip() for line in stripped.splitlines() if line.strip()]
+	if len(line_candidates) == ROWS and all(re.fullmatch(rf"[01]{{{COLS}}}", line) for line in line_candidates):
+		return [[int(char) for char in line] for line in line_candidates]
+
+	tokens = re.findall(r"[01]", stripped)
+	if len(tokens) != CELL_COUNT:
+		raise ValueError(
+			f"Pattern must contain exactly {CELL_COUNT} binary values for a {ROWS}x{COLS} image. "
+			f"Received {len(tokens)} values."
+		)
+
+	values = [int(token) for token in tokens]
+	return [values[index:index + COLS] for index in range(0, CELL_COUNT, COLS)]
+
+
+def parse_patterns(text: str) -> list[list[list[int]]]:
+	stripped = text.strip()
+	if not stripped:
+		raise ValueError("Input is empty. Paste one or more patterns separated by a blank line.")
+
+	normalized = stripped.replace("\r\n", "\n").replace("\r", "\n")
+	normalized = re.sub(r"^\s*-{3,}\s*$", "", normalized, flags=re.MULTILINE)
+	blocks = [block.strip() for block in re.split(r"\n\s*\n+", normalized) if block.strip()]
+	if len(blocks) > MAX_PATTERNS:
+		raise ValueError(f"At most {MAX_PATTERNS} patterns are supported. Received {len(blocks)} patterns.")
+	return [parse_pattern(block) for block in blocks]
+
+
+def with_matrix_lines(grid: list[list[int]]) -> str:
+	return "\n".join("".join(str(value) for value in row) for row in grid)
+
+
+def format_patterns(patterns: list[list[list[int]]]) -> str:
+	return "\n\n".join(with_matrix_lines(pattern) for pattern in patterns)
+
+
+def free_port() -> int:
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+		sock.bind(("127.0.0.1", 0))
+		return int(sock.getsockname()[1])
+
+
+def build_html() -> str:
+    sample_json = html.escape(json.dumps(SAMPLE_PATTERNS))
+    initial_matrix = html.escape(format_patterns(SAMPLE_PATTERNS))
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>13x8 Pattern Centroid Visualizer</title>
+  <style>
+    :root {{
+      --bg: #f5f6fa;
+      --card: #ffffff;
+      --text: #13151a;
+      --muted: #586173;
+      --line: #d8deea;
+      --accent: #2b6ef2;
+      --pixel-on: #111111;
+      --pixel-off: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }}
+    .page {{ max-width: 1500px; margin: 0 auto; padding: 24px; }}
+    h1 {{ margin: 0 0 8px; font-size: 2.3rem; }}
+    p.lead {{ margin: 0 0 20px; color: var(--muted); line-height: 1.5; }}
+    .layout {{ display: grid; grid-template-columns: minmax(420px, 1fr) minmax(520px, 1fr); gap: 24px; }}
+    .card {{ background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 18px; }}
+    .section-title {{ margin: 0 0 12px; font-size: 1.15rem; }}
+    .meta {{ display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }}
+    input[type="text"] {{ border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 1rem; min-width: 90px; }}
+    .toolbar {{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }}
+    button {{ border: none; border-radius: 10px; padding: 10px 14px; font-size: 0.96rem; cursor: pointer; background: #eef3ff; color: #1746a2; font-weight: 600; }}
+    button.primary {{ background: var(--accent); color: white; }}
+    textarea {{ width: 100%; min-height: 340px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.98rem; line-height: 1.4; }}
+    textarea.invalid {{ border-color: #d92d20; background: #fff6f5; }}
+    .preview-shell {{ display: flex; justify-content: center; align-items: center; min-height: 420px; }}
+    .aggregate-grid {{ display: grid; grid-template-columns: repeat(8, 34px); gap: 3px; background: #d6d6d6; padding: 8px; border-radius: 8px; }}
+    .aggregate-cell {{ width: 34px; height: 34px; border: 1px solid #d1d5db; background: white; }}
+    .pattern-list {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px; margin-top: 14px; }}
+    .thumb {{ border: 1px solid var(--line); border-radius: 12px; padding: 10px; background: #fafbff; }}
+    .thumb-title {{ font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; color: #334155; }}
+    .thumb-grid {{ display: grid; grid-template-columns: repeat(8, 10px); gap: 1px; justify-content: center; }}
+    .thumb-cell {{ width: 10px; height: 10px; background: white; border: 1px solid #eceff4; }}
+    .thumb-cell.on {{ background: #111111; border-color: #111111; }}
+    .summary-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }}
+    .summary textarea {{ min-height: 150px; }}
+    .count-badge {{ display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; background: #eef3ff; color: #1746a2; font-weight: 700; }}
+    .status {{ margin-top: 18px; padding: 12px 14px; background: #101827; color: #f8fafc; border-radius: 12px; font-size: 0.95rem; }}
+    .note {{ color: var(--muted); font-size: 0.94rem; line-height: 1.45; }}
+    @media (max-width: 1080px) {{ .layout {{ grid-template-columns: 1fr; }} .preview-shell {{ min-height: auto; }} .summary-grid {{ grid-template-columns: 1fr; }} }}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>13x8 Pattern Centroid Visualizer</h1>
+    <p class="lead">Paste from 1 up to {MAX_PATTERNS} patterns and visualize a single aggregated grayscale image. The gray intensity is normalized on the number of patterns currently loaded, so fewer than {MAX_PATTERNS} patterns work correctly.</p>
+
+    <div class="layout">
+      <section class="card">
+        <h2 class="section-title">Load multiple patterns</h2>
+        <div class="meta">
+          <span class="count-badge" id="patternCount">0 / {MAX_PATTERNS} patterns loaded</span>
+          <span class="note">Each pattern is 13 rows × 8 columns = 104 binary values.</span>
+        </div>
+
+        <div class="toolbar">
+          <button id="loadSampleBtn">Load sample set</button>
+          <button id="clearBtn">Clear all</button>
+          <button id="copyBtn">Copy counts</button>
+          <button id="applyBtn" class="primary">Apply patterns</button>
+        </div>
+
+        <label class="section-title" for="patternInput">Paste from 1 to {MAX_PATTERNS} patterns</label>
+        <textarea id="patternInput">{initial_matrix}</textarea>
+        <p class="note">Use a blank line between patterns. The grayscale result is computed only on the patterns you actually loaded.<br />Accepted formats per pattern:<br />- 13 lines like <code>00010000</code><br />- flattened binary values like <code>0, 0, 0, 1, ...</code></p>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">Grayscale aggregate</h2>
+        <p id="aggregateInfo"><strong>Loaded patterns:</strong> 0</p>
+        <div class="preview-shell">
+          <div id="aggregateGrid" class="aggregate-grid" aria-label="Aggregated grayscale centroid"></div>
+        </div>
+        <div class="summary">
+          <div class="summary-grid">
+            <div>
+              <h3 class="section-title">Count matrix</h3>
+              <textarea id="countMatrixOutput" readonly></textarea>
+            </div>
+            <div>
+              <h3 class="section-title">Flattened counts</h3>
+              <textarea id="countFlattenedOutput" readonly></textarea>
+            </div>
+          </div>
+
+          <h3 class="section-title" style="margin-top:16px;">Loaded pattern thumbnails</h3>
+          <div id="patternList" class="pattern-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="status" class="status">Ready.</div>
+  </div>
+
+  <script>
+    const ROWS = {ROWS};
+    const COLS = {COLS};
+    const CELL_COUNT = ROWS * COLS;
+    const MAX_PATTERNS = {MAX_PATTERNS};
+    const SAMPLE_PATTERNS = JSON.parse('{sample_json}');
+
+    const aggregateGrid = document.getElementById('aggregateGrid');
+    const patternInput = document.getElementById('patternInput');
+    const countMatrixOutput = document.getElementById('countMatrixOutput');
+    const countFlattenedOutput = document.getElementById('countFlattenedOutput');
+    const statusBox = document.getElementById('status');
+    const aggregateInfo = document.getElementById('aggregateInfo');
+    const patternCount = document.getElementById('patternCount');
+    const patternList = document.getElementById('patternList');
+
+    let patterns = SAMPLE_PATTERNS.map(pattern => pattern.map(row => [...row]));
+
+    function clonePattern(pattern) {{
+      return pattern.map(row => [...row]);
+    }}
+
+    function clonePatterns(items) {{
+      return items.map(clonePattern);
+    }}
+
+    function flatten(source) {{
+      return source.flat();
+    }}
+
+    function matrixString(pattern) {{
+      return pattern.map(row => row.join('')).join('\\n');
+    }}
+
+    function patternsString(items) {{
+      return items.map(matrixString).join('\\n\\n');
+    }}
+
+    function flattenCounts(counts) {{
+      return counts.flat().join(', ');
+    }}
+
+    function setStatus(message) {{
+      statusBox.textContent = message;
+    }}
+
+    function buildCounts(items) {{
+      const counts = Array.from({{ length: ROWS }}, () => Array.from({{ length: COLS }}, () => 0));
+      for (const pattern of items) {{
+        for (let row = 0; row < ROWS; row += 1) {{
+          for (let col = 0; col < COLS; col += 1) {{
+            counts[row][col] += pattern[row][col];
+          }}
+        }}
+      }}
+      return counts;
+    }}
+
+    function loadedCount() {{
+      return patterns.length;
+    }}
+
+    function countMatrixString(counts) {{
+      return counts.map(row => row.map(value => String(value).padStart(2, ' ')).join(' ')).join('\\n');
+    }}
+
+    function updateOutputs(syncInput = true) {{
+      const counts = buildCounts(patterns);
+      countMatrixOutput.value = countMatrixString(counts);
+      countFlattenedOutput.value = flattenCounts(counts);
+      if (syncInput) {{
+        patternInput.value = patternsString(patterns);
+      }}
+      patternCount.textContent = `${{loadedCount()}} / ${{MAX_PATTERNS}} patterns loaded`;
+      aggregateInfo.innerHTML = `<strong>Loaded patterns:</strong> ${{loadedCount()}} · <strong>Grayscale denominator:</strong> ${{Math.max(loadedCount(), 1)}}`;
+    }}
+
+    function renderAggregate(syncInput = true) {{
+      const cells = aggregateGrid.querySelectorAll('.aggregate-cell');
+      const counts = buildCounts(patterns);
+      const divisor = Math.max(loadedCount(), 1);
+      let index = 0;
+      for (let row = 0; row < ROWS; row += 1) {{
+        for (let col = 0; col < COLS; col += 1) {{
+          const ratio = counts[row][col] / divisor;
+          const shade = Math.round(255 * (1 - ratio));
+          const value = `rgb(${{shade}}, ${{shade}}, ${{shade}})`;
+          cells[index].style.background = value;
+          cells[index].title = loadedCount() > 0
+            ? `${{counts[row][col]}} / ${{loadedCount()}} active`
+            : 'No patterns loaded';
+          index += 1;
+        }}
+      }}
+      updateOutputs(syncInput);
+    }}
+
+    function renderPatternList() {{
+      patternList.innerHTML = '';
+      patterns.forEach((pattern, patternIndex) => {{
+        const wrapper = document.createElement('div');
+        wrapper.className = 'thumb';
+
+        const title = document.createElement('div');
+        title.className = 'thumb-title';
+        title.textContent = `Pattern ${{patternIndex + 1}}`;
+        wrapper.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'thumb-grid';
+        for (let row = 0; row < ROWS; row += 1) {{
+          for (let col = 0; col < COLS; col += 1) {{
+            const cell = document.createElement('div');
+            cell.className = 'thumb-cell';
+            if (pattern[row][col] === 1) {{
+              cell.classList.add('on');
+            }}
+            grid.appendChild(cell);
+          }}
+        }}
+        wrapper.appendChild(grid);
+        patternList.appendChild(wrapper);
+      }});
+    }}
+
+    function createAggregateCells() {{
+      for (let row = 0; row < ROWS; row += 1) {{
+        for (let col = 0; col < COLS; col += 1) {{
+          const cell = document.createElement('div');
+          cell.className = 'aggregate-cell';
+          aggregateGrid.appendChild(cell);
+        }}
+      }}
+    }}
+
+    function parsePattern(text) {{
+      const stripped = text.trim();
+      if (!stripped) {{
+        throw new Error(`Input is empty. Paste ${{CELL_COUNT}} binary values or ${{ROWS}} lines of ${{COLS}} digits.`);
+      }}
+      const lines = stripped.split(/\\r?\\n/).map(line => line.trim()).filter(Boolean);
+      if (lines.length === ROWS && lines.every(line => new RegExp(`^[01]{{${{COLS}}}}$`).test(line))) {{
+        return lines.map(line => Array.from(line).map(char => Number(char)));
+      }}
+      const tokens = stripped.match(/[01]/g) || [];
+      if (tokens.length !== CELL_COUNT) {{
+        throw new Error(`Pattern must contain exactly ${{CELL_COUNT}} binary values. Received ${{tokens.length}}.`);
+      }}
+      const values = tokens.map(Number);
+      const parsed = [];
+      for (let index = 0; index < values.length; index += COLS) {{
+        parsed.push(values.slice(index, index + COLS));
+      }}
+      return parsed;
+    }}
+
+    function parsePatterns(text) {{
+      const stripped = text.trim();
+      if (!stripped) {{
+        throw new Error('Input is empty. Paste one or more patterns separated by a blank line.');
+      }}
+      const normalized = stripped.replace(/\\r\\n/g, '\\n').replace(/\\r/g, '\\n').replace(/^\\s*-{{3,}}\\s*$/gm, '');
+      const blocks = normalized.split(/\\n\\s*\\n+/).map(block => block.trim()).filter(Boolean);
+      if (blocks.length > MAX_PATTERNS) {{
+        throw new Error(`At most ${{MAX_PATTERNS}} patterns are supported. Received ${{blocks.length}} patterns.`);
+      }}
+      return blocks.map(parsePattern);
+    }}
+
+    document.getElementById('loadSampleBtn').addEventListener('click', () => {{
+      patterns = clonePatterns(SAMPLE_PATTERNS);
+      patternInput.classList.remove('invalid');
+      renderPatternList();
+      renderAggregate(true);
+      setStatus('Loaded sample pattern set.');
+    }});
+
+    document.getElementById('clearBtn').addEventListener('click', () => {{
+      patterns = [];
+      patternInput.value = '';
+      patternInput.classList.remove('invalid');
+      renderPatternList();
+      renderAggregate(false);
+      setStatus('Cleared all loaded patterns.');
+    }});
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {{
+      const value = countFlattenedOutput.value;
+      try {{
+        await navigator.clipboard.writeText(value);
+        setStatus('Copied flattened counts to clipboard.');
+      }} catch (_error) {{
+        countFlattenedOutput.focus();
+        countFlattenedOutput.select();
+        setStatus('Clipboard access was blocked. The flattened counts are selected for manual copy.');
+      }}
+    }});
+
+    document.getElementById('applyBtn').addEventListener('click', () => {{
+      try {{
+        patterns = parsePatterns(patternInput.value);
+        patternInput.classList.remove('invalid');
+        renderPatternList();
+        renderAggregate(true);
+        setStatus('Applied patterns from text input.');
+      }} catch (error) {{
+        patternInput.classList.add('invalid');
+        alert(error.message);
+        setStatus(error.message);
+      }}
+    }});
+
+    patternInput.addEventListener('input', () => {{
+      try {{
+        patterns = parsePatterns(patternInput.value);
+        patternInput.classList.remove('invalid');
+        renderPatternList();
+        renderAggregate(false);
+        setStatus('Live aggregate updated from text input.');
+      }} catch (_error) {{
+        patternInput.classList.add('invalid');
+      }}
+    }});
+
+    createAggregateCells();
+    renderPatternList();
+    renderAggregate(true);
+      setStatus(`Ready. Paste from 1 to ${{MAX_PATTERNS}} patterns separated by a blank line. Grayscale is normalized on the currently loaded patterns.`);
+  </script>
+</body>
+</html>
+"""
+
+
+HTML_PAGE = build_html().encode("utf-8")
+
+
+class PatternHandler(BaseHTTPRequestHandler):
+	def do_GET(self) -> None:
+		if self.path not in {"/", "/index.html"}:
+			self.send_error(404, "Not found")
+			return
+		self.send_response(200)
+		self.send_header("Content-Type", "text/html; charset=utf-8")
+		self.send_header("Content-Length", str(len(HTML_PAGE)))
+		self.end_headers()
+		self.wfile.write(HTML_PAGE)
+
+	def log_message(self, _format: str, *_args: object) -> None:
+		return
+
+
+def main() -> None:
+	port = free_port()
+	server = ThreadingHTTPServer(("127.0.0.1", port), PatternHandler)
+	url = f"http://127.0.0.1:{port}/"
+	print("Starting binary digit pattern visualizer...")
+	print(f"Open in browser: {url}")
+
+	thread = threading.Thread(target=server.serve_forever, daemon=True)
+	thread.start()
+
+	try:
+		webbrowser.open(url)
+		server.serve_forever()
+	except KeyboardInterrupt:
+		print("\nStopping server...")
+	finally:
+		server.shutdown()
+		server.server_close()
+
+
+if __name__ == "__main__":
+	main()

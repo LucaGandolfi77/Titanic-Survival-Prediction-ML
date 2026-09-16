@@ -1,8 +1,8 @@
 /* ===== Squad management + market logic ===== */
 import { GameState } from './state.js';
-import { createSkater, generateMarketSkaters, recalcSkater, trainSkater, getTotalWages, getTeamCohesion } from './skaters.js';
+import { createSkater, generateMarketSkaters, trainSkater, getTotalWages, getTeamCohesion } from './skaters.js';
 import { randInt, clamp } from './utils.js';
-import { ACTIVE_SQUAD_SIZE, RESERVE_SIZE, MAX_ROSTER, TRAIN_TEAM_COST, SCOUT_COST } from './config.js';
+import { ACTIVE_SQUAD_SIZE, RESERVE_SIZE, MAX_ROSTER, TRAIN_TEAM_COST, SCOUT_COST, STAFF } from './config.js';
 
 /**
  * Find a skater by id across every roster list (active, reserve, market, listed).
@@ -51,15 +51,6 @@ export function releaseSkater(skaterId) {
   return false;
 }
 
-export function swapActivePositions(idA, idB) {
-  const iA = GameState.activeSquad.findIndex(s => s.id === idA);
-  const iB = GameState.activeSquad.findIndex(s => s.id === idB);
-  if (iA === -1 || iB === -1) return false;
-  [GameState.activeSquad[iA], GameState.activeSquad[iB]] =
-    [GameState.activeSquad[iB], GameState.activeSquad[iA]];
-  return true;
-}
-
 // ===== Market actions =====
 export function buySkater(skaterId) {
   const totalRoster = GameState.activeSquad.length + GameState.reserveBench.length;
@@ -89,11 +80,9 @@ export function buySkater(skaterId) {
 export function listForSale(skaterId, askingPrice) {
   // Find in active or reserve
   let sk = null;
-  let fromActive = false;
   let idx = GameState.activeSquad.findIndex(s => s.id === skaterId);
   if (idx !== -1) {
     sk = GameState.activeSquad.splice(idx, 1)[0];
-    fromActive = true;
   } else {
     idx = GameState.reserveBench.findIndex(s => s.id === skaterId);
     if (idx !== -1) {
@@ -128,13 +117,15 @@ export function cancelListing(skaterId) {
 // AI buys from market/listed skaters
 export function aiMarketActivity() {
   const messages = [];
-  // Each rival has a chance to buy from market
+  // Each rival has a chance to buy from market — signings raise their strength
+  // for future competitions, so the AI genuinely improves over the season.
   for (const rival of GameState.rivals) {
     if (Math.random() < 0.3 && GameState.marketSkaters.length > 0) {
       const skIdx = randInt(0, GameState.marketSkaters.length - 1);
       const sk = GameState.marketSkaters.splice(skIdx, 1)[0];
-      rival.points += Math.round(sk.overall * 0.5);
-      messages.push(`${rival.name} signed ${sk.name}`);
+      rival.strength = clamp(rival.strength + Math.round(sk.overall / 20), 30, 95);
+      rival.fame += 1;
+      messages.push(`${rival.name} signed ${sk.name} (their team got stronger)`);
     }
     // AI may buy your listed skater
     if (Math.random() < 0.25 && GameState.listedSkaters.length > 0) {
@@ -157,30 +148,56 @@ export function scoutMarket() {
   if (GameState.money < SCOUT_COST) return { ok: false, msg: `Need €${SCOUT_COST.toLocaleString()} for scouting` };
   GameState.money -= SCOUT_COST;
   GameState.scoutedThisWeek = true;
-  // Add 3 hidden skaters (one possibly tier 4)
-  const hasStar = Math.random() < 0.25;
-  const tiers = hasStar ? [4, 3, 2] : [3, 2, 2];
-  for (const tier of tiers) {
+  // Head Scout: 4 hidden skaters with a better star chance
+  const headScout = GameState.staff.includes('headscout');
+  const hasStar = Math.random() < (headScout ? 0.35 : 0.25);
+  const added = hasStar
+    ? (headScout ? [4, 3, 2, 2] : [4, 3, 2])
+    : (headScout ? [3, 2, 2, 2] : [3, 2, 2]);
+  for (const tier of added) {
     const sk = createSkater(tier);
     sk.status = 'market';
     sk.askingPrice = Math.round(sk.value * (0.9 + Math.random() * 0.4));
     sk.scouted = true;
     GameState.marketSkaters.push(sk);
   }
-  return { ok: true, msg: hasStar ? 'Scout found a STAR talent! 🌟' : 'Scout found 3 new prospects' };
+  const count = added.length;
+  return { ok: true, msg: hasStar ? `Scout found a STAR talent! 🌟 (+${count - 1} prospects)` : `Scout found ${count} new prospects` };
 }
 
-export function trainTeam() {
+/**
+ * Train all healthy active skaters. Focus picks which stat to train;
+ * the Technique Coach raises the amount to +3.
+ * @param {'balanced'|string} [focus]
+ */
+export function trainTeam(focus = 'balanced') {
   if (GameState.money < TRAIN_TEAM_COST) return { ok: false, msg: `Need €${TRAIN_TEAM_COST.toLocaleString()} for training` };
   GameState.money -= TRAIN_TEAM_COST;
+  const amount = GameState.staff.includes('technique') ? 3 : 2;
   const results = [];
   for (const sk of GameState.activeSquad) {
     if (sk.status !== 'injured') {
-      const stat = trainSkater(sk);
-      results.push(`${sk.name}: +2 ${stat}`);
+      const stat = trainSkater(sk, focus, amount);
+      results.push(`${sk.name}: +${amount} ${stat}`);
     }
   }
-  return { ok: true, msg: `Trained ${results.length} skaters`, details: results };
+  return { ok: true, msg: `Trained ${results.length} skaters (${focus}${amount === 3 ? ', coached' : ''})`, details: results };
+}
+
+/**
+ * Hire a coaching staff member (permanent, passive bonuses).
+ * @param {string} staffId
+ */
+export function hireStaff(staffId) {
+  const member = STAFF.find(s => s.id === staffId);
+  if (!member) return { ok: false, msg: 'Unknown staff' };
+  if (GameState.staff.includes(staffId)) return { ok: false, msg: 'Already hired' };
+  if (GameState.money < member.cost) {
+    return { ok: false, msg: `Need €${member.cost.toLocaleString()} to hire ${member.name}` };
+  }
+  GameState.money -= member.cost;
+  GameState.staff.push(staffId);
+  return { ok: true, msg: `${member.icon} Hired ${member.name}: ${member.description}` };
 }
 
 export function getCohesion() {
@@ -189,4 +206,24 @@ export function getCohesion() {
 
 export function getWeeklyWages() {
   return getTotalWages(GameState.activeSquad, GameState.reserveBench);
+}
+
+/**
+ * Renew a skater's contract for `weeks` more weeks at half their weekly wage
+ * per week (loyalty discount). Syncs the contract wage with their current wage.
+ * @param {string} skaterId
+ * @param {number} [weeks]
+ */
+export function renewContract(skaterId, weeks = 12) {
+  const sk = findSkater(skaterId);
+  if (!sk) return { ok: false, msg: 'Skater not found' };
+  if (GameState.activeSquad.includes(sk) === false && GameState.reserveBench.includes(sk) === false) {
+    return { ok: false, msg: 'Only squad skaters can renew' };
+  }
+  const cost = Math.round(sk.wage * weeks / 2);
+  if (GameState.money < cost) return { ok: false, msg: `Need €${cost.toLocaleString()} to renew` };
+  GameState.money -= cost;
+  sk.contract.weeksRemaining += weeks;
+  sk.contract.wage = sk.wage;
+  return { ok: true, msg: `${sk.name} signed a ${weeks}-week extension (−€${cost.toLocaleString()})` };
 }

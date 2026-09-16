@@ -32,12 +32,6 @@ export class MusicEngine {
     if (this.masterGain) this.masterGain.gain.value = v;
   }
 
-  setEnabled(on) {
-    this.enabled = on;
-    if (this.masterGain) this.masterGain.gain.value = on ? this.volume : 0;
-    if (!on) this.stopMusic();
-  }
-
   // ===== Background music =====
   startMusic(tempo = 'slow') {
     this.init();
@@ -132,7 +126,9 @@ export class MusicEngine {
         osc.stop();
         osc.disconnect();
         gain.disconnect();
-      } catch(e) {}
+      } catch {
+        // oscillator already stopped — nothing to clean up
+      }
     }
     this.oscillators = [];
   }

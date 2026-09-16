@@ -10,6 +10,8 @@ import { Controls } from './controls.js';
 import { HUD } from './hud.js';
 import { AudioSystem } from './audio.js';
 import { UIManager } from './ui.js';
+import { AchievementSystem } from './achievements.js';
+import { getLevelConfig } from './levels.js';
 import { CELL_THEMES } from './hypercube.js';
 
 class GameCore {
@@ -26,6 +28,9 @@ class GameCore {
         this.controls = new Controls();
         this.hud = new HUD();
         this.audio = new AudioSystem();
+        this.achievements = new AchievementSystem();
+        this.achievements.init();
+        this.levelConfig = null;
         try {
             this.ui = new UIManager(this);
         } catch (e) {
@@ -62,7 +67,13 @@ class GameCore {
         requestAnimationFrame(() => this.gameLoop());
     }
     
-    startLevel(level) {
+    async startLevel(level) {
+        const customLevel = await this.achievements.storage.loadSetting('hds_custom_level');
+        if (customLevel && customLevel.level === level) {
+            this.levelConfig = customLevel;
+        } else {
+            this.levelConfig = getLevelConfig(level);
+        }
         this.audio.init();
         this.audio.resume();
         
@@ -70,7 +81,7 @@ class GameCore {
         this.isRunning = true;
         this.isPaused = false;
         this.deliveriesDone = 0;
-        this.deliveriesTarget = 2 + level;
+        this.deliveriesTarget = this.levelConfig.deliveriesTarget;
         
         // Clear old cells
         Object.values(this.visualCellGroups).forEach(g => {
@@ -83,21 +94,32 @@ class GameCore {
         this.van.group.rotation.set(0, 0, 0);
         this.van.speed = 0;
         
-        const numCells = Math.min(8, 2 + level * 2);
-        this.activeCells = Array.from({length: numCells}, (_, i) => i);
+        // Use level config for cell count
+        const numCells = this.levelConfig.numCells;
+        this.activeCells = [...this.levelConfig.availableCells];
         
         this.currentCellId = 0;
         this.loadCell(this.currentCellId);
         this.setEnvironmentForCell(this.currentCellId);
         
         this.packages.activePackages = [];
+        this.packages.timeLimit = this.levelConfig.timeLimit;
         this.spawnDelivery();
+        
+        // Override scene fog with level config
+        this.sceneMgr.setEnvironmentColor(
+          CELL_THEMES[this.currentCellId].bg, 
+          CELL_THEMES[this.currentCellId].fog, 
+          this.levelConfig.fogDensity
+        );
         
         this.hud.updateScore(this.score, this.currentLevel, this.deliveriesTarget);
         this.hud.updateMinimap(this.currentCellId, this.packages.activePackages);
         
         this.clock.start();
-        this.ui.showToast(`Level ${level} Started!`);
+        this.levelStartTime = Date.now();
+        this.ui.showToast(`${this.levelConfig.name} Started!`);
+        this.achievements.recordSessionStart();
     }
 
     togglePause() {
@@ -158,6 +180,8 @@ this.audio.playPortalWhoosh();
         }
 
     finalizeTransition(newCellId) {
+        this.achievements.recordPortalUse();
+        
         // Hide the old cell
         if (this.currentCellId !== newCellId) {
             this.visualCellGroups[this.currentCellId].visible = false;
@@ -224,6 +248,10 @@ this.audio.playPortalWhoosh();
                 this.audio.playDeliverySuccess();
                 this.ui.showToast("+ Delivery!");
                 this.playHaptic([50, 80, 100]);
+                this.achievements.recordDelivery();
+                const minTime = Math.min(...this.packages.activePackages.map(p => p.timeRemaining));
+                this.achievements.recordTimeRemaining(minTime);
+                this.achievements.recordScore(this.score);
                 this.spawnDelivery();
             }
             // Check fail
@@ -241,8 +269,16 @@ this.audio.playPortalWhoosh();
         // Check Level win
         if (this.deliveriesDone >= this.deliveriesTarget && this.isRunning) {
             this.isRunning = false;
-            this.ui.showLevelComplete({level: this.currentLevel, deliveries: this.deliveriesDone, score: this.score});
+            const elapsed = (Date.now() - this.levelStartTime) / 1000;
+            this.achievements.recordLevelComplete(
+              this.currentLevel,
+              elapsed,
+              this.packages.activePackages.filter(p => p.state === 'failed').length,
+              this.activeCells
+            );
+            this.achievements.recordScore(this.score);
             this.playHaptic([50, 100, 150, 200]);
+            this.ui.showLevelComplete({level: this.currentLevel, deliveries: this.deliveriesDone, score: this.score});
         }
         
         // Audio & Visual updates

@@ -14,6 +14,25 @@
   background: var(--bg-medium);
   border-bottom: 1px solid var(--border-subtle);
 }
+#mg-pause-btn {
+  font-size: 16px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+}
+#mg-pause-btn:hover {
+  border-color: var(--accent-ice);
+}
+.mg-key-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  text-align: center;
+}
 #mg-comp-name {
   font-family: var(--font-display);
   font-size: 14px;

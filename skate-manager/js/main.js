@@ -1,15 +1,17 @@
 /* ===== Main entry point — game loop, events, routing ===== */
-import { GameState, saveGame, loadGame, hasSave, resetState } from './state.js';
+import { GameState, saveGame, loadGame, hasAnySave, getSaveInfo,
+         resetState, serializeState, migrateState, isValidSave } from './state.js';
 import { createSkater, generateStartingSquad, generateMarketSkaters, weeklyStatFluctuation,
-         injureSkater, getSquadAvgOverall, getSquadAvgMorale, recalcSkater } from './skaters.js';
-import { generateCalendar, enterCompetition, withdrawCompetition, canEnterCompetition,
+         injureSkater, recalcSkater } from './skaters.js';
+import { generateCalendar, enterCompetition, withdrawCompetition, simulateCompetition,
          getThisWeekCompetition, calculatePlacements, generateRivals } from './competitions.js';
-import { processWeeklySponsors, negotiateSponsor, getTotalSponsorIncome, getFameBonus, getWinPointsBonus } from './sponsors.js';
+import { processWeeklySponsors, negotiateSponsor, getFameBonus, getWinPointsBonus } from './sponsors.js';
 import { promoteToActive, demoteToReserve, releaseSkater, buySkater,
          listForSale, cancelListing, aiMarketActivity, refreshMarket,
-         scoutMarket, trainTeam, getWeeklyWages, findSkater } from './squad.js';
+         scoutMarket, trainTeam, getWeeklyWages, findSkater, renewContract, hireStaff } from './squad.js';
 import { MiniGame } from './minigame.js';
 import { MusicEngine } from './music.js';
+import { applyI18n, setLang } from './i18n.js';
 import { randInt, pick, clamp, formatMoneyFull, formatMoney } from './utils.js';
 import {
   STARTING_MONEY,
@@ -17,15 +19,14 @@ import {
   RESERVE_SIZE,
   RETIREMENT_AGE,
   RETIREMENT_CHANCE,
-  CONTRACT_EXPIRY_WARN_WEEKS,
-  DEFAULT_VOLUME
+  CONTRACT_EXPIRY_WARN_WEEKS
 } from './config.js';
 import {
   showToast, showModal, hideModal, confirmModal,
   showSkaterDetail, showSellModal, showBuyModal, showCompEntryModal,
-  showScreen, switchTab, updateHeader, renderOverview, renderSquad,
+  showScreen, switchTab, renderOverview, renderSquad,
   renderMarket, renderCalendar, renderSponsors, renderStandings,
-  renderResults, renderSeasonEnd, refreshAllPanels
+  renderResults, renderSeasonEnd, renderStats, refreshAllPanels
 } from './ui.js';
 
 // ===== Global instances =====
@@ -103,6 +104,19 @@ function handleCardAction(action, skaterId) {
       }
       break;
     }
+    case 'renew': {
+      const skater = findSkater(skaterId);
+      if (!skater) return;
+      const result = renewContract(skaterId);
+      if (result.ok) {
+        showToast(result.msg, 'gold');
+        GameState.eventLog.push(`📝 ${result.msg}`);
+        refreshUI();
+      } else {
+        showToast(result.msg, 'warning');
+      }
+      break;
+    }
   }
 }
 
@@ -128,6 +142,17 @@ function autoSave() {
 }
 
 // ===== Random events (called during advanceWeek) =====
+
+/** Track team records after each competition result. */
+function updateRecords(result) {
+  const rec = GameState.records;
+  rec.totalPrize += result.prizeMoney || 0;
+  if (result.placement === 1) rec.totalWins++;
+  if (result.placement <= 3) rec.totalPodiums++;
+  if (result.score > rec.bestScore) rec.bestScore = result.score;
+  if (result.placement < rec.bestPlacement) rec.bestPlacement = result.placement;
+}
+
 function triggerRandomEvents() {
   const events = [];
   const r = Math.random();
@@ -198,6 +223,44 @@ function triggerRandomEvents() {
     events.push(`🌟 Media spotlight! +${fameGain} fame.`);
   }
 
+  // 9. Blizzard training (4% chance) — tough conditions build stamina
+  if (Math.random() < 0.04 && GameState.activeSquad.length > 0) {
+    for (const sk of GameState.activeSquad) {
+      sk.stats.stamina = clamp(sk.stats.stamina + 2, 1, 100);
+      recalcSkater(sk);
+    }
+    events.push('🌨️ Blizzard training camp! All skaters gained +2 stamina.');
+  }
+
+  // 10. Sellout crowd (5% chance) — gate receipts
+  if (Math.random() < 0.05) {
+    const gate = randInt(3, 6) * 1000;
+    GameState.money += gate;
+    events.push(`🎫 Sellout crowd! Gate receipts: +${formatMoneyFull(gate)}.`);
+  }
+
+  // 11. Mentorship (4% chance) — a veteran boosts a young skater
+  if (Math.random() < 0.04 && GameState.activeSquad.length > 0) {
+    const veterans = GameState.activeSquad.filter(sk => sk.age >= 26);
+    const youths = [...GameState.activeSquad, ...GameState.reserveBench].filter(sk => sk.age < 21);
+    if (veterans.length > 0 && youths.length > 0) {
+      const mentor = pick(veterans);
+      const youth = pick(youths);
+      const stat = pick(['technique', 'stamina', 'rhythm', 'sync', 'charisma']);
+      youth.stats[stat] = clamp(youth.stats[stat] + 3, 1, 100);
+      recalcSkater(youth);
+      events.push(`🤝 ${mentor.name} mentored ${youth.name}: +3 ${stat}.`);
+    }
+  }
+
+  // 12. Rivalry tension (4% chance) — pressure hurts morale
+  if (Math.random() < 0.04 && GameState.activeSquad.length > 0) {
+    for (const sk of GameState.activeSquad) {
+      sk.morale = clamp(sk.morale - 3, 0, 100);
+    }
+    events.push('😤 Rivalry tension is building — team morale dropped.');
+  }
+
   return events;
 }
 
@@ -230,6 +293,15 @@ async function advanceWeek() {
   for (const sk of [...GameState.activeSquad, ...GameState.reserveBench]) {
     weeklyStatFluctuation(sk);
     recalcSkater(sk);
+  }
+
+  // Coaching staff passive effects
+  if (GameState.staff.includes('fitness') || GameState.staff.includes('psychologist')) {
+    for (const sk of [...GameState.activeSquad, ...GameState.reserveBench]) {
+      if (GameState.staff.includes('fitness')) sk.form = clamp(sk.form + 2, 0, 100);
+      if (GameState.staff.includes('psychologist')) sk.morale = clamp(sk.morale + 3, 0, 100);
+    }
+    GameState.eventLog.push('👔 Coaching staff worked with the team this week.');
   }
 
   // Warn about contracts expiring soon
@@ -317,47 +389,70 @@ function startCompetition() {
   bgMusic.stopMusic();
 
   miniGame.init(compInfo.comp);
-  miniGame.onFinish = (routineResult) => {
-    // Calculate placements
-    const result = calculatePlacements(routineResult.score, compInfo.weekIndex);
-
-    // Apply fame bonus from sponsors
-    const fameBonus = getFameBonus();
-    if (fameBonus > 0) {
-      GameState.fame += fameBonus;
-      result.fameAwarded += fameBonus;
-    }
-
-    // Apply win points bonus from sponsors
-    if (result.placement === 1) {
-      const wpBonus = getWinPointsBonus();
-      if (wpBonus > 0) {
-        GameState.points += wpBonus;
-        result.pointsAwarded += wpBonus;
-      }
-    }
-
-    // Log result
-    const placeStr = result.placement <= 3 ? ['','🥇','🥈','🥉'][result.placement] : `#${result.placement}`;
-    GameState.eventLog.push(`🏆 ${result.competition}: ${placeStr} (${result.score.toLocaleString()} pts)`);
-
-    if (result.placement <= 3) {
-      bgMusic.init();
-      bgMusic.playWinFanfare();
-    } else {
-      bgMusic.init();
-      bgMusic.playLoseSad();
-    }
-
-    // Switch to results screen
-    setTimeout(() => {
-      showScreen('screen-results');
-      renderResults(result);
-    }, 1500);
-  };
+  miniGame.onFinish = (routineResult) => finishCompetition(routineResult.score, compInfo);
 
   // Start the mini-game after a brief delay
   setTimeout(() => miniGame.start(), 500);
+}
+
+/** Shared post-competition flow: placements, sponsor bonuses, log, results screen. */
+function finishCompetition(score, compInfo) {
+  const result = calculatePlacements(score, compInfo.weekIndex);
+
+  // Apply fame bonus from sponsors
+  const fameBonus = getFameBonus();
+  if (fameBonus > 0) {
+    GameState.fame += fameBonus;
+    result.fameAwarded += fameBonus;
+  }
+
+  // Apply win points bonus from sponsors
+  if (result.placement === 1) {
+    const wpBonus = getWinPointsBonus();
+    if (wpBonus > 0) {
+      GameState.points += wpBonus;
+      result.pointsAwarded += wpBonus;
+    }
+  }
+
+  // Track records & appearances
+  updateRecords(result);
+  for (const sk of GameState.activeSquad) sk.appearances = (sk.appearances || 0) + 1;
+
+  // Log result
+  const placeStr = result.placement <= 3 ? ['','🥇','🥈','🥉'][result.placement] : `#${result.placement}`;
+  GameState.eventLog.push(`🏆 ${result.competition}: ${placeStr} (${result.score.toLocaleString()} pts)`);
+
+  if (result.placement <= 3) {
+    bgMusic.init();
+    bgMusic.playWinFanfare();
+  } else {
+    bgMusic.init();
+    bgMusic.playLoseSad();
+  }
+
+  // Switch to results screen
+  setTimeout(() => {
+    showScreen('screen-results');
+    renderResults(result);
+  }, 1500);
+}
+
+/** Quick-sim the routine from squad stats instead of playing the mini-game. */
+function quickSim() {
+  bgMusic.playClick();
+  const compInfo = getThisWeekCompetition();
+  if (!compInfo || !compInfo.entered) {
+    showToast('No competition to simulate', 'warning');
+    return;
+  }
+  if (compInfo.comp.competition) {
+    showToast('Already competed this week', 'warning');
+    return;
+  }
+
+  GameState.eventLog.push('⚡ Quick-simulated the routine.');
+  finishCompetition(simulateCompetition(), compInfo);
 }
 
 function enterComp() {
@@ -444,13 +539,30 @@ function startNewSeason() {
   // Age skaters
   for (const sk of [...GameState.activeSquad, ...GameState.reserveBench]) {
     sk.age++;
-    // Retirement check for very old skaters
+    // Retirement check for very old skaters — legends enter the Hall of Fame
     if (sk.age >= RETIREMENT_AGE && Math.random() < RETIREMENT_CHANCE) {
       GameState.eventLog.push(`👋 ${sk.name} (age ${sk.age}) has retired.`);
+      if (sk.overall >= 75) {
+        GameState.hallOfFame.push({ name: sk.name, overall: sk.overall, age: sk.age });
+        GameState.eventLog.push(`🏅 ${sk.name} enters the Hall of Fame!`);
+      }
       releaseSkater(sk.id);
     } else {
       recalcSkater(sk);
     }
+  }
+
+  // Youth intake draft — new prospects arrive at the start of the season
+  const draftCount = Math.min(2, RESERVE_SIZE - GameState.reserveBench.length);
+  if (draftCount > 0) {
+    const drafted = [];
+    for (let i = 0; i < draftCount; i++) {
+      const youth = createSkater(1);
+      youth.status = 'reserve';
+      GameState.reserveBench.push(youth);
+      drafted.push(youth.name);
+    }
+    GameState.eventLog.push(`📜 Youth draft: ${drafted.join(', ')} join the reserves.`);
   }
 
   // New calendar
@@ -499,30 +611,125 @@ function startNewGame() {
   showToast(`Welcome, Coach! ${teamName} is ready to skate!`, 'gold', 5000);
 }
 
-// ===== Load game =====
-function loadSavedGame() {
+// ===== Save slots (load & save) =====
+const SLOT_COUNT = 3;
+
+function showLoadSlots() {
   bgMusic.playClick();
-  if (!hasSave()) {
-    showToast('No saved game found', 'warning');
-    return;
+  const gameInProgress = GameState.activeSquad.length > 0;
+  const rows = [];
+  for (let slot = 1; slot <= SLOT_COUNT; slot++) {
+    const info = getSaveInfo(slot);
+    rows.push(`
+      <div class="slot-row">
+        <span class="slot-label">Slot ${slot}: ${info ? `${info.teamName} — S${info.season} W${info.week}` : '<em>empty</em>'}</span>
+        <div class="modal-buttons" style="margin:0">
+          ${info ? `<button class="modal-btn confirm" data-slot="${slot}" data-mode="load">📂 Load</button>` : ''}
+          ${gameInProgress ? `<button class="modal-btn cancel" data-slot="${slot}" data-mode="save">💾 Save here</button>` : ''}
+        </div>
+      </div>
+    `);
   }
-  const ok = loadGame();
+  showModal(`
+    <h3 class="modal-title">Save Slots</h3>
+    ${rows.join('')}
+    <div class="modal-buttons"><button class="modal-btn cancel" id="modal-slots-close">Close</button></div>
+  `);
+  document.querySelectorAll('#modal-content [data-slot]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const slot = parseInt(btn.dataset.slot);
+      const mode = btn.dataset.mode;
+      hideModal();
+      if (mode === 'load') loadFromSlot(slot);
+      else saveToSlot(slot);
+    });
+  });
+  document.getElementById('modal-slots-close').addEventListener('click', hideModal);
+}
+
+function loadFromSlot(slot) {
+  const ok = loadGame(slot);
   if (ok) {
     showScreen('screen-game');
     refreshUI();
-    showToast(`Welcome back, Coach!`, 'success');
+    showToast('Welcome back, Coach!', 'success');
   } else {
     showToast('Failed to load save', 'danger');
   }
 }
 
+function saveToSlot(slot) {
+  const ok = saveGame(slot);
+  if (ok) {
+    GameState.eventLog.push(`💾 Game saved to slot ${slot}.`);
+    showToast(`Saved to slot ${slot}`, 'success');
+  } else {
+    showToast('Save failed', 'danger');
+  }
+}
+
+// ===== Export / import save (file) =====
+function exportSave() {
+  bgMusic.playClick();
+  try {
+    const blob = new Blob([JSON.stringify(serializeState(), null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `skate-manager-save-s${GameState.season}-w${GameState.week}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Save exported', 'success');
+  } catch {
+    showToast('Export failed', 'danger');
+  }
+}
+
+function importSaveFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      if (!isValidSave(parsed)) {
+        showToast('Not a valid Skate Manager save', 'danger');
+        return;
+      }
+      Object.assign(GameState, migrateState(parsed));
+      GameState.minigameActive = false;
+      GameState.currentCompetition = null;
+      showScreen('screen-game');
+      refreshUI();
+      showToast(`Imported save: ${GameState.teamName}`, 'success');
+      autoSave();
+    } catch {
+      showToast('Import failed — invalid file', 'danger');
+    }
+  };
+  reader.readAsText(file);
+}
+
 // ===== Train team =====
 function doTrainTeam() {
   bgMusic.playClick();
-  const result = trainTeam();
+  const focusSelect = document.getElementById('train-focus');
+  const focus = focusSelect ? focusSelect.value : 'balanced';
+  const result = trainTeam(focus);
   if (result.ok) {
     showToast(result.msg, 'success');
     GameState.eventLog.push(`🎯 ${result.msg}`);
+    refreshUI();
+  } else {
+    showToast(result.msg, 'warning');
+  }
+}
+
+// ===== Hire coaching staff =====
+function handleStaffHire(staffId) {
+  bgMusic.playClick();
+  const result = hireStaff(staffId);
+  if (result.ok) {
+    showToast(result.msg, 'gold');
+    GameState.eventLog.push(`👔 ${result.msg}`);
     refreshUI();
   } else {
     showToast(result.msg, 'warning');
@@ -549,7 +756,7 @@ function setupEventListeners() {
     bgMusic.playClick();
     showScreen('screen-setup');
   });
-  document.getElementById('btn-load-game').addEventListener('click', loadSavedGame);
+  document.getElementById('btn-load-game').addEventListener('click', showLoadSlots);
   document.getElementById('btn-settings').addEventListener('click', () => {
     bgMusic.playClick();
     showScreen('screen-settings');
@@ -573,8 +780,19 @@ function setupEventListeners() {
     bgMusic.setVolume(v);
     miniGame.music.setVolume(v);
   });
+  document.getElementById('setting-sfx').addEventListener('change', (e) => {
+    GameState.sfxEnabled = e.target.checked;
+    bgMusic.sfxEnabled = e.target.checked;
+    miniGame.music.sfxEnabled = e.target.checked;
+  });
   document.getElementById('setting-autosave').addEventListener('change', (e) => {
     GameState.autosave = e.target.checked;
+  });
+  document.getElementById('setting-language').addEventListener('change', (e) => {
+    GameState.language = e.target.value;
+    setLang(e.target.value);
+    applyI18n();
+    refreshUI();
   });
 
   // Tab navigation
@@ -587,11 +805,12 @@ function setupEventListeners() {
       // Re-render the panel that was switched to
       switch (tab) {
         case 'overview': renderOverview(); break;
-        case 'squad': renderSquad(handleCardAction); break;
-        case 'market': renderMarket(handleCardAction); break;
+        case 'squad': renderSquad(); break;
+        case 'market': renderMarket(); break;
         case 'calendar': renderCalendar(); break;
-        case 'sponsors': renderSponsors(handleNegotiate); break;
+        case 'sponsors': renderSponsors(); break;
         case 'standings': renderStandings(); break;
+        case 'stats': renderStats(); break;
       }
     });
   });
@@ -599,8 +818,46 @@ function setupEventListeners() {
   // Game actions
   document.getElementById('btn-advance-week').addEventListener('click', advanceWeek);
   document.getElementById('btn-compete').addEventListener('click', startCompetition);
+  document.getElementById('btn-quick-sim').addEventListener('click', quickSim);
   document.getElementById('btn-train-team').addEventListener('click', doTrainTeam);
   document.getElementById('btn-scout').addEventListener('click', doScout);
+
+  // Delegated card actions + skater detail — one listener covers all panels.
+  // Replaces re-wiring every button on each render.
+  document.getElementById('game-content').addEventListener('click', (e) => {
+    const btn = e.target.closest('.card-btn');
+    if (btn) {
+      e.stopPropagation();
+      if (btn.classList.contains('negotiate')) {
+        handleNegotiate(btn.dataset.sponsor);
+        return;
+      }
+      if (btn.classList.contains('hire-staff')) {
+        handleStaffHire(btn.dataset.staff);
+        return;
+      }
+      const action = btn.classList.contains('promote') ? 'promote' :
+                     btn.classList.contains('demote') ? 'demote' :
+                     btn.classList.contains('sell') ? 'sell' :
+                     btn.classList.contains('release') ? 'release' :
+                     btn.classList.contains('buy') ? 'buy' :
+                     btn.classList.contains('cancel-listing') ? 'cancel-listing' : null;
+      if (action && btn.dataset.id) handleCardAction(action, btn.dataset.id);
+      return;
+    }
+    // Click on card (not buttons) = show detail (squad skaters get renew action)
+    const card = e.target.closest('.skater-card');
+    if (card && card.dataset.id) {
+      const skater = findSkater(card.dataset.id);
+      if (skater) {
+        const inSquad = GameState.activeSquad.includes(skater) || GameState.reserveBench.includes(skater);
+        const actions = inSquad
+          ? [{ id: 'renew', label: '📝 Renew Contract (+12 wks)', class: 'confirm' }]
+          : [];
+        showSkaterDetail(skater, actions);
+      }
+    }
+  });
 
   // Enter / withdraw competition from overview
   document.getElementById('overview-next-comp').addEventListener('click', (e) => {
@@ -622,6 +879,17 @@ function setupEventListeners() {
     showScreen('screen-menu');
   });
 
+  // Save I/O (settings screen)
+  document.getElementById('btn-export-save').addEventListener('click', exportSave);
+  document.getElementById('btn-import-save').addEventListener('click', () => {
+    document.getElementById('import-file').click();
+  });
+  document.getElementById('import-file').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) importSaveFile(file);
+    e.target.value = ''; // allow re-importing the same file
+  });
+
   // Audio context resume on first user gesture
   document.addEventListener('click', () => {
     bgMusic.init();
@@ -632,16 +900,27 @@ function setupEventListeners() {
 // ===== Initialization =====
 function init() {
   setupEventListeners();
+  setLang(GameState.language);
+  applyI18n();
+
+  // Register service worker for offline play (requires http/https)
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {
+      // offline support unavailable — game still works normally
+    });
+  }
 
   // Show/hide continue button based on save existence
   const loadBtn = document.getElementById('btn-load-game');
-  loadBtn.style.opacity = hasSave() ? '1' : '0.4';
-  loadBtn.style.pointerEvents = hasSave() ? 'auto' : 'none';
+  loadBtn.style.opacity = hasAnySave() ? '1' : '0.4';
+  loadBtn.style.pointerEvents = hasAnySave() ? 'auto' : 'none';
 
   // Populate settings from defaults
   document.getElementById('setting-volume').value = Math.round(GameState.volume * 100);
   document.getElementById('setting-sfx').checked = GameState.sfxEnabled;
   document.getElementById('setting-autosave').checked = GameState.autosave;
+  const langSelect = document.getElementById('setting-language');
+  if (langSelect) langSelect.value = GameState.language;
 }
 
 // Boot

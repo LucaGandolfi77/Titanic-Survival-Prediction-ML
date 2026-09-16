@@ -1,15 +1,33 @@
 /* ===== Canvas 2D rink renderer ===== */
-import { lerp } from './utils.js';
 
 export class RinkRenderer {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.width = canvas.width;
-    this.height = canvas.height;
     this.teamColor = '#7dd3fc';
     this.sparkle = false;
     this.sparkleParticles = [];
+    this.resize();
+  }
+
+  /**
+   * Size the backing store to the CSS box × devicePixelRatio (crisp on HiDPI
+   * screens) and draw in CSS-pixel (logical) coordinates: this.width/height
+   * are logical, the ctx transform scales by dpr.
+   */
+  resize() {
+    const rect = this.canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = Math.round(rect.width) || 600;
+    const cssH = Math.round(rect.height) || 400;
+    // Pin the CSS size so the display box doesn't shift with attribute changes
+    this.canvas.style.width = cssW + 'px';
+    this.canvas.style.height = cssH + 'px';
+    this.width = cssW;
+    this.height = cssH;
+    this.canvas.width = Math.round(cssW * dpr);
+    this.canvas.height = Math.round(cssH * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   setTeamColor(color) {
@@ -198,7 +216,6 @@ export class RinkRenderer {
   drawSparkles() {
     if (!this.sparkle) return;
     const ctx = this.ctx;
-    const now = Date.now();
 
     // Add new sparkles
     if (Math.random() < 0.3) {

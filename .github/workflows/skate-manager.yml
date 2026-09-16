@@ -1,0 +1,33 @@
+# Skate Manager — lint & test CI
+name: skate-manager CI
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["skate-manager/**"]
+  pull_request:
+    paths: ["skate-manager/**"]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: skate-manager
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test

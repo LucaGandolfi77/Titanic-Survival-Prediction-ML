@@ -5,9 +5,13 @@
   "type": "module",
   "description": "Figure skating team management game - vanilla HTML5/CSS3/JS",
   "scripts": {
-    "test": "node tests/smoke.test.mjs"
+    "test": "node tests/smoke.test.mjs && node tests/scoring.test.mjs",
+    "lint": "eslint js/ tests/",
+    "lint:fix": "eslint js/ tests/ --fix",
+    "format": "prettier --write js/ css/ tests/"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "eslint": "^10.10.0",
     "prettier": "^3.9.7"
   }

@@ -664,6 +664,42 @@
 .badge-result.place-3 { background: #cd7f32; color: #0f172a; }
 .badge-result.place-other { background: var(--bg-panel); color: var(--text-muted); }
 
+/* ===== Stats tab: score chart ===== */
+.score-chart-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.score-chart-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 150px;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.score-chart-bar {
+  flex: 1;
+  height: 12px;
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.score-chart-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-ice), var(--accent-gold));
+  border-radius: var(--radius-sm);
+}
+.score-chart-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-gold);
+  min-width: 90px;
+  text-align: right;
+}
+
 /* ===== Sponsor card extras ===== */
 .sponsor-card {
   display: flex;

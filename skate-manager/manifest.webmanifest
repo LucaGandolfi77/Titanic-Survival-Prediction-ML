@@ -1,0 +1,12 @@
+{
+  "name": "Skate Manager",
+  "short_name": "SkateMgr",
+  "description": "Build the ultimate synchronized skating team",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#7dd3fc",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

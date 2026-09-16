@@ -8,14 +8,6 @@ export function uid() { return 'sk_' + (++_idCounter) + '_' + Math.random().toSt
 export function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 export function randFloat(min, max) { return Math.random() * (max - min) + min; }
 export function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
-export function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = randInt(0, i);
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 export function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 export function lerp(a, b, t) { return a + (b - a) * t; }
 export function formatMoney(n) {
@@ -103,20 +95,3 @@ export function formDotClass(form) {
   if (form >= 35) return 'mid';
   return 'low';
 }
-
-// ===== Weighted random =====
-export function weightedRandom(weights) {
-  const total = weights.reduce((s, w) => s + w, 0);
-  let r = Math.random() * total;
-  for (let i = 0; i < weights.length; i++) {
-    r -= weights[i];
-    if (r <= 0) return i;
-  }
-  return weights.length - 1;
-}
-
-// ===== Deep clone =====
-export function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
-
-// ===== Delay helper =====
-export function delay(ms) { return new Promise(r => setTimeout(r, ms)); }

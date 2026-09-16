@@ -30,6 +30,7 @@ export function createSkater(tier = 2) {
     morale: randInt(55, 85),
     status: 'active',
     injuryWeeks: 0,
+    appearances: 0, // competitions skated
     contract: {
       weeksRemaining: randInt(8, 36),
       wage
@@ -100,10 +101,17 @@ export function injureSkater(sk, weeks) {
   sk.injuryWeeks = weeks;
 }
 
-export function trainSkater(sk) {
+/**
+ * Train one skater: +`amount` to the focused stat (or a random stat when balanced).
+ * @param {import('./types.js').Skater} sk
+ * @param {'balanced'|StatKey} [focus]
+ * @param {number} [amount]
+ * @returns {StatKey} the stat that was trained
+ */
+export function trainSkater(sk, focus = 'balanced', amount = 2) {
   const stats = ['technique', 'stamina', 'rhythm', 'sync', 'charisma'];
-  const stat = stats[randInt(0, 4)];
-  sk.stats[stat] = clamp(sk.stats[stat] + 2, 1, 100);
+  const stat = focus !== 'balanced' && stats.includes(focus) ? focus : stats[randInt(0, 4)];
+  sk.stats[stat] = clamp(sk.stats[stat] + amount, 1, 100);
   recalcSkater(sk);
   return stat;
 }

@@ -1,6 +1,6 @@
 /* ===== Competition system ===== */
 import { GameState } from './state.js';
-import { getSquadAvgOverall } from './skaters.js';
+import { getSquadAvgOverall, getTeamCohesion } from './skaters.js';
 import { randInt, pick } from './utils.js';
 import { SEASON_WEEKS } from './config.js';
 
@@ -175,6 +175,21 @@ export function getThisWeekCompetition() {
   const comp = GameState.calendar[idx];
   if (!comp.name) return null;
   return { comp, weekIndex: idx, entered: !!GameState.enteredCompetitions[idx] };
+}
+
+/**
+ * Quick-sim: estimate the routine score from squad stats instead of playing
+ * the mini-game. Deliberately weaker than a well-played routine (~1,000–1,400
+ * vs up to ~2,500) so playing still pays off. Injured skaters sit out.
+ * @returns {number}
+ */
+export function simulateCompetition() {
+  const healthy = GameState.activeSquad.filter(sk => sk.injuryWeeks === 0);
+  const list = healthy.length > 0 ? healthy : GameState.activeSquad;
+  const avgOv = getSquadAvgOverall(list);
+  const avgForm = list.length ? Math.round(list.reduce((s, sk) => s + sk.form, 0) / list.length) : 0;
+  const cohesion = getTeamCohesion(list);
+  return Math.max(0, Math.round(avgOv * 18 + cohesion + avgForm * 1.5 + randInt(-150, 150)));
 }
 
 export function generateRivals() {

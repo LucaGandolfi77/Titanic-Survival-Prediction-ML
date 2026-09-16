@@ -35,6 +35,38 @@ export const MAX_ACTIVE_SPONSORS = 3;
 export const SPONSOR_BREACH_LIMIT = 2;   // warnings before a deal is cancelled
 export const TEMPO_BONUS_PERK = 0.25;    // CoolBreeze: +25% on high-tempo bonus
 
+// ---- Coaching staff (permanent hires with passive weekly bonuses) ----
+export const STAFF = [
+  {
+    id: 'fitness',
+    name: 'Fitness Coach',
+    icon: '💪',
+    cost: 20000,
+    description: '+2 form every week for all skaters'
+  },
+  {
+    id: 'technique',
+    name: 'Technique Coach',
+    icon: '🎯',
+    cost: 30000,
+    description: 'Team training gives +3 instead of +2'
+  },
+  {
+    id: 'psychologist',
+    name: 'Team Psychologist',
+    icon: '🧠',
+    cost: 25000,
+    description: '+3 morale every week for all skaters'
+  },
+  {
+    id: 'headscout',
+    name: 'Head Scout',
+    icon: '🕵️',
+    cost: 35000,
+    description: 'Scouting finds 4 prospects, 35% star chance'
+  }
+];
+
 // ---- Skater generation ----
 export const STAT_RANGES = {
   1: [30, 50],

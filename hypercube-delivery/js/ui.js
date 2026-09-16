@@ -61,6 +61,36 @@ export class UIManager {
         const btnToMenu = document.getElementById('btn-to-menu');
         if (btnToMenu) btnToMenu.addEventListener('click', () => this.goToMenu());
 
+        const btnSettings = document.getElementById('btn-settings');
+        if (btnSettings) btnSettings.addEventListener('click', () => this.showScreen('settings'));
+
+        const btnAchievements = document.getElementById('btn-achievements');
+        if (btnAchievements) btnAchievements.addEventListener('click', () => {
+            this.renderAchievements();
+            this.showScreen('achievements');
+        });
+
+        const btnLevelEditor = document.getElementById('btn-leveleditor');
+        if (btnLevelEditor) btnLevelEditor.addEventListener('click', () => this.showScreen('leveleditor'));
+
+        const btnAchBack = document.getElementById('btn-ach-back');
+        if (btnAchBack) btnAchBack.addEventListener('click', () => this.showScreen('menu'));
+
+        const btnEditorBack = document.getElementById('btn-editor-back');
+        if (btnEditorBack) btnEditorBack.addEventListener('click', () => this.showScreen('menu'));
+
+        const btnEditorSave = document.getElementById('btn-editor-save');
+        if (btnEditorSave) btnEditorSave.addEventListener('click', () => this.saveEditorLevel());
+
+        const btnEditorLoad = document.getElementById('btn-editor-load');
+        if (btnEditorLoad) btnEditorLoad.addEventListener('click', () => this.loadEditorLevel());
+
+        const btnEditorPlay = document.getElementById('btn-editor-play');
+        if (btnEditorPlay) btnEditorPlay.addEventListener('click', () => this.playEditorLevel());
+
+        const btnEditorExport = document.getElementById('btn-editor-export');
+        if (btnEditorExport) btnEditorExport.addEventListener('click', () => this.exportEditorLevel());
+
         // Level Complete
         const btnNextLevel = document.getElementById('btn-next-level');
         if (btnNextLevel) btnNextLevel.addEventListener('click', () => {
@@ -189,6 +219,80 @@ export class UIManager {
             row.innerHTML = `<td>${i + 1}</td><td>${s.name}</td><td>${s.score}</td><td>${s.level}</td>`;
             table.appendChild(row);
         });
+    }
+
+    async renderAchievements() {
+        const list = document.getElementById('achievements-list');
+        if (!list) return;
+        list.innerHTML = '';
+        const { ACHIEVEMENTS } = await import('./achievements.js');
+        for (const a of ACHIEVEMENTS) {
+            const unlocked = this.game.achievements.isUnlocked(a.id);
+            const el = document.createElement('div');
+            el.style.cssText = `background:${unlocked ? 'var(--bg-card)' : 'rgba(255,255,255,0.03)'}; border:1px solid ${unlocked ? a.icon : 'var(--text-muted)'}; padding:8px 12px; border-radius:8px; text-align:center; min-width:80px; opacity:${unlocked ? 1 : 0.4};`;
+            el.innerHTML = `<div style="font-size:1.5rem;">${a.icon}</div><div style="font-family:var(--font-hud);font-size:0.7rem;color:${unlocked ? 'var(--accent-green)' : 'var(--text-muted)'};">${a.name}</div>`;
+            list.appendChild(el);
+        }
+    }
+
+    async saveEditorLevel() {
+        const level = parseInt(document.getElementById('editor-level')?.value) || 1;
+        const name = document.getElementById('editor-name')?.value || 'Custom Level';
+        const cells = parseInt(document.getElementById('editor-cells')?.value) || 4;
+        const dels = parseInt(document.getElementById('editor-dels')?.value) || 3;
+        const time = parseInt(document.getElementById('editor-time')?.value) || 75;
+
+        const config = {
+            level, name, description: `Custom: ${name}`,
+            numCells: Math.min(8, Math.max(2, cells)),
+            deliveriesTarget: Math.min(10, Math.max(1, dels)),
+            timeLimit: Math.max(30, Math.min(180, time)),
+            pointsMultiplier: 1,
+            availableCells: Array.from({length: Math.min(8, cells)}, (_, i) => i),
+            portalSpeed: 1.0, fogDensity: 0.015,
+        };
+        const ok = await this.game.achievements.storage.saveSetting('hds_current_editor', config);
+        this.showToast(ok ? 'Level Saved!' : 'Save failed');
+    }
+
+    async loadEditorLevel() {
+        const config = await this.game.achievements.storage.loadSetting('hds_current_editor');
+        if (!config) { this.showToast('No saved level'); return; }
+        document.getElementById('editor-level').value = config.level || '';
+        document.getElementById('editor-name').value = config.name || '';
+        document.getElementById('editor-cells').value = config.numCells || 4;
+        document.getElementById('editor-dels').value = config.deliveriesTarget || 3;
+        document.getElementById('editor-time').value = config.timeLimit || 75;
+        document.getElementById('editor-json').value = JSON.stringify(config, null, 2);
+        this.showToast('Level Loaded!');
+    }
+
+    async playEditorLevel() {
+        const json = document.getElementById('editor-json')?.value;
+        let config;
+        if (json?.trim()) {
+            const parsed = (await import('./levels.js')).importLevelConfig(json);
+            if (parsed) { config = parsed; }
+            else { this.showToast('Invalid JSON'); return; }
+        } else {
+            config = await this.game.achievements.storage.loadSetting('hds_current_editor');
+            if (!config) { this.showToast('No level configured'); return; }
+        }
+        await this.game.achievements.storage.saveSetting('hds_custom_level', config);
+        this.showScreen(null);
+        // Start custom level
+        this.game.startLevel(config.level);
+    }
+
+    async exportEditorLevel() {
+        const json = document.getElementById('editor-json')?.value;
+        if (!json?.trim()) { this.showToast('Nothing to export'); return; }
+        try {
+            await navigator.clipboard.writeText(json);
+            this.showToast('Copied to clipboard!');
+        } catch {
+            this.showToast('Copy failed');
+        }
     }
 
     async shareScore() {

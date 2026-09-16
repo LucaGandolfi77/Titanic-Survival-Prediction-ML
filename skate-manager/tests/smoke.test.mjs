@@ -1,6 +1,7 @@
 /* Smoke test for skate-manager pure logic modules */
-import { GameState, resetState, STARTING_MONEY, SAVE_VERSION, serializeState, migrateState } from '../js/state.js';
-import { generateStartingSquad, createSkater, getSquadAvgOverall } from '../js/skaters.js';
+import { GameState, resetState, serializeState, migrateState } from '../js/state.js';
+import { STARTING_MONEY, SAVE_VERSION } from '../js/config.js';
+import { generateStartingSquad, getSquadAvgOverall } from '../js/skaters.js';
 import { generateCalendar, generateRivals, generateRivalScores, canEnterCompetition,
          enterCompetition, withdrawCompetition, calculatePlacements, getThisWeekCompetition } from '../js/competitions.js';
 import { getTotalWages } from '../js/skaters.js';
@@ -33,12 +34,18 @@ console.log('\n[2] Competition minOverall');
 const t4min = 15 + 4 * 15;
 check('tier 4 minOverall (75) <= 99', t4min <= 99);
 resetState();
-GameState.calendar = generateCalendar(1);
 GameState.rivals = generateRivals();
+// The random calendar may contain no tier-3 competition — regenerate until one exists
+let tier3Comp;
+for (let tries = 0; tries < 20 && !tier3Comp; tries++) {
+  GameState.calendar = generateCalendar(1);
+  tier3Comp = GameState.calendar.find(c => c.tier === 3);
+}
+check('calendar generated with a tier-3 competition', !!tier3Comp);
+if (!tier3Comp) { console.log(`\n${failures + 1} FAILURES ✗`); process.exit(1); }
 const eliteSquad = generateStartingSquad('elite').squad;
 GameState.activeSquad = eliteSquad;
 const avgOv = getSquadAvgOverall(eliteSquad);
-const tier3Comp = GameState.calendar.find(c => c.tier === 3);
 check(`elite squad (avg ${avgOv}) can enter tier-3 comp (min ${tier3Comp.minOverall})`, avgOv >= tier3Comp.minOverall);
 const eliteCheck = canEnterCompetition(GameState.calendar.indexOf(tier3Comp));
 check(`canEnterCompetition tier-3 passes for elite`, eliteCheck.ok || eliteCheck.msg.includes('entry fee'), `(${eliteCheck.msg})`);

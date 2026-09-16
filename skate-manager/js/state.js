@@ -47,6 +47,21 @@ export const GameState = {
   // AI rivals
   rivals: [],
 
+  // Coaching staff (ids of hired staff, see config.js STAFF)
+  staff: [],
+
+  // Team records
+  records: {
+    bestScore: 0,
+    bestPlacement: 99,
+    totalWins: 0,
+    totalPodiums: 0,
+    totalPrize: 0
+  },
+
+  // Hall of fame — retired legends (retired with overall >= 75)
+  hallOfFame: [],
+
   // Event log
   eventLog: [],
 
@@ -57,6 +72,7 @@ export const GameState = {
   sfxEnabled: true,
   volume: DEFAULT_VOLUME,
   autosave: true,
+  language: 'en',
 
   // Mini-game state (transient, never saved)
   minigameActive: false,
@@ -64,6 +80,11 @@ export const GameState = {
 };
 
 // Save/Load
+// Slots: slot 1 = legacy key (backward compatible), slots 2–3 = extra slots
+function slotKey(slot) {
+  return slot === 1 ? SAVE_KEY : `${SAVE_KEY}-${slot}`;
+}
+
 export function serializeState() {
   const data = {};
   for (const [key, value] of Object.entries(GameState)) {
@@ -72,16 +93,16 @@ export function serializeState() {
   return data;
 }
 
-export function saveGame() {
+export function saveGame(slot = 1) {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(serializeState()));
+    localStorage.setItem(slotKey(slot), JSON.stringify(serializeState()));
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
 
-function isValidSave(parsed) {
+export function isValidSave(parsed) {
   return !!parsed && typeof parsed === 'object' &&
     typeof parsed.week === 'number' &&
     typeof parsed.season === 'number' &&
@@ -111,9 +132,9 @@ export function migrateState(parsed) {
   return parsed;
 }
 
-export function loadGame() {
+export function loadGame(slot = 1) {
   try {
-    const data = localStorage.getItem(SAVE_KEY);
+    const data = localStorage.getItem(slotKey(slot));
     if (!data) return false;
     const parsed = JSON.parse(data);
     if (!isValidSave(parsed)) return false;
@@ -122,13 +143,34 @@ export function loadGame() {
     GameState.minigameActive = false;
     GameState.currentCompetition = null;
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
 
-export function hasSave() {
-  return !!localStorage.getItem(SAVE_KEY);
+export function hasSave(slot = 1) {
+  return !!localStorage.getItem(slotKey(slot));
+}
+
+export function hasAnySave() {
+  return hasSave(1) || hasSave(2) || hasSave(3);
+}
+
+/** Light metadata for the save-slot picker (does not touch GameState). */
+export function getSaveInfo(slot = 1) {
+  try {
+    const data = localStorage.getItem(slotKey(slot));
+    if (!data) return null;
+    const parsed = JSON.parse(data);
+    return {
+      teamName: parsed.teamName || '—',
+      season: parsed.season || 1,
+      week: parsed.week || 1,
+      difficulty: parsed.difficulty || 'semi-pro'
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function resetState() {
@@ -148,6 +190,15 @@ export function resetState() {
   GameState.competitionResults = [];
   GameState.activeSponsors = [];
   GameState.rivals = [];
+  GameState.staff = [];
+  GameState.records = {
+    bestScore: 0,
+    bestPlacement: 99,
+    totalWins: 0,
+    totalPodiums: 0,
+    totalPrize: 0
+  };
+  GameState.hallOfFame = [];
   GameState.eventLog = [];
   GameState.seasonHistory = [];
   GameState.minigameActive = false;

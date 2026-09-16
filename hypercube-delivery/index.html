@@ -87,7 +87,36 @@
       <button id="btn-howto" class="menu-btn">📖 HOW TO PLAY</button>
       <button id="btn-leaderboard" class="menu-btn">🏆 LEADERBOARD</button>
       <button id="btn-settings" class="menu-btn">⚙️ SETTINGS</button>
+      <button id="btn-achievements" class="menu-btn">🏆 ACHIEVEMENTS</button>
+      <button id="btn-leveleditor" class="menu-btn">🔧 LEVEL EDITOR</button>
     </div>
+  </div>
+
+  <div id="screen-achievements" class="screen hidden">
+    <h2>🏆 ACHIEVEMENTS</h2>
+    <div id="achievements-list" style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; max-width:500px; margin-bottom:24px;"></div>
+    <button id="btn-ach-back" class="menu-btn mt-auto">← BACK</button>
+  </div>
+
+  <div id="screen-leveleditor" class="screen hidden">
+    <h2>🔧 LEVEL EDITOR</h2>
+    <div id="editor-content" style="display:flex; flex-direction:column; gap:12px; max-width:400px; width:90%;">
+      <input id="editor-level" type="number" min="1" max="20" placeholder="Level #" style="background:var(--bg-deep);border:1px solid var(--accent-cyan);color:var(--accent-cyan);font-family:var(--font-hud);font-size:1.2rem;padding:8px;text-align:center;">
+      <input id="editor-name" type="text" maxlength="30" placeholder="Level Name" style="background:var(--bg-deep);border:1px solid var(--accent-cyan);color:var(--accent-cyan);font-family:var(--font-hud);font-size:1rem;padding:8px;text-align:center;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <label style="color:var(--text-muted);font-family:var(--font-hud);font-size:0.9rem;">Cells: <input id="editor-cells" type="number" min="2" max="8" value="4" style="width:50px;background:var(--bg-deep);border:1px solid var(--accent-cyan);color:var(--accent-cyan);text-align:center;"></label>
+        <label style="color:var(--text-muted);font-family:var(--font-hud);font-size:0.9rem;">Deliveries: <input id="editor-dels" type="number" min="1" max="10" value="3" style="width:50px;background:var(--bg-deep);border:1px solid var(--accent-cyan);color:var(--accent-cyan);text-align:center;"></label>
+        <label style="color:var(--text-muted);font-family:var(--font-hud);font-size:0.9rem;">Time(s): <input id="editor-time" type="number" min="30" max="180" value="75" style="width:60px;background:var(--bg-deep);border:1px solid var(--accent-cyan);color:var(--accent-cyan);text-align:center;"></label>
+      </div>
+      <textarea id="editor-json" placeholder="Or paste JSON config..." style="background:var(--bg-deep);border:1px solid var(--accent-cyan);color:var(--accent-cyan);font-family:var(--font-hud);font-size:0.8rem;padding:8px;height:100px;resize:none;"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <button id="btn-editor-save" class="menu-btn" style="width:auto;">💾 SAVE</button>
+        <button id="btn-editor-load" class="menu-btn" style="width:auto;">📂 LOAD</button>
+        <button id="btn-editor-play" class="menu-btn primary" style="width:auto;">▶ PLAY</button>
+        <button id="btn-editor-export" class="menu-btn" style="width:auto;">📋 EXPORT</button>
+      </div>
+    </div>
+    <button id="btn-editor-back" class="menu-btn mt-auto">← BACK</button>
   </div>
 
   <div id="screen-howto" class="screen hidden">

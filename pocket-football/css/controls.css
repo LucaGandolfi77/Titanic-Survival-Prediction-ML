@@ -5,7 +5,6 @@
   pointer-events: none;
 }
 
-/* Joystick */
 #joystick-zone {
   position: absolute;
   bottom: 0; left: 0;
@@ -22,10 +21,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translate(-50%, 50%); /* Base offset, managed by JS */
-  opacity: 0; /* Hidden until touched */
+  transform: translate(-50%, 50%);
+  opacity: 0;
   transition: opacity 0.2s;
-  pointer-events: none; /* Let zone catch touches */
+  pointer-events: none;
 }
 
 #joystick-outer.active {
@@ -39,7 +38,6 @@
   position: absolute;
 }
 
-/* Action Buttons */
 #action-zone {
   position: absolute;
   bottom: 0; right: 0;
@@ -86,7 +84,6 @@
 .action-btn.tackle { background: var(--btn-tackle); }
 .action-btn.switch { background: var(--btn-switch); }
 
-/* Power bar for shoot */
 .power-bar-arc {
   position: absolute;
   top: -8px; left: -8px;
@@ -95,7 +92,7 @@
   border-radius: 50%;
   border: 4px solid transparent;
   pointer-events: none;
-  border-top-color: var(--goal-yellow); /* updated dynamically by JS if needed, but simple CSS handles it for now usually via canvas or JS inline styles */
+  border-top-color: var(--goal-yellow);
   transform: rotate(-45deg);
   opacity: 0;
 }
@@ -104,12 +101,7 @@
   opacity: 1;
 }
 
-/* Landscape Mode Adjustments */
 @media (orientation: landscape) {
-  #joystick-zone, #action-zone {
-    height: 60%;
-  }
-  #buttons-grid {
-    gap: 20px;
-  }
+  #joystick-zone, #action-zone { height: 60%; }
+  #buttons-grid { gap: 20px; }
 }

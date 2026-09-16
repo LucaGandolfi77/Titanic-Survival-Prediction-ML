@@ -1,5 +1,50 @@
 /* ── js/utils.js ── RNG, helpers, name generator ── */
 
+/* ── Seeded RNG (Mulberry32) — reproducible sequences ── */
+export class SeededRNG {
+  constructor(seed) {
+    this.seed = seed | 0;
+  }
+
+  next() {
+    let t = (this.seed += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+
+  range(min, max) {
+    return this.next() * (max - min) + min;
+  }
+
+  int(min, max) {
+    return Math.floor(this.range(min, max + 1));
+  }
+
+  chance(percent) {
+    return this.next() * 100 < percent;
+  }
+
+  from(arr) {
+    return arr[this.int(0, arr.length - 1)];
+  }
+
+  static fromDate() {
+    return new SeededRNG(Date.now() | 0);
+  }
+
+  static fromGameState(oak, casino) {
+    const seed = (oak.height * 1000 + oak.age * 100 + casino.totalCoins) | 0;
+    return new SeededRNG(seed);
+  }
+}
+
+/* ── Unique ID generator ── */
+let _idCounter = 0;
+export function uid() {
+  return `id_${Date.now().toString(36)}_${(++_idCounter).toString(36)}`;
+}
+
 export function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -42,10 +87,6 @@ export function formatNumber(n) {
 }
 
 /* ── Unique ID generator ── */
-let _idCounter = 0;
-export function uid() {
-  return `id_${Date.now().toString(36)}_${(++_idCounter).toString(36)}`;
-}
 
 /* ── Name Generator ── */
 const AFGHAN_SYLLABLES = [

@@ -47,21 +47,26 @@ export class Renderer {
   }
   
   render(state) {
-    const { players, ball, matchTime, scores, isGoal, controlledPlayer } = state;
+    const { players, ball, matchTime, scores, isGoal, controlledPlayer, arenaColors } = state;
+
+    const fieldPrimary = arenaColors?.fieldPrimary || '#4a8f3f';
+    const fieldStripe = arenaColors?.fieldStripe || '#3f7a35';
+    const ambient = arenaColors?.ambient || 1;
+    const skyColor = arenaColors?.skyColor || '#87CEEB';
     
     // Clear
-    this.ctx.fillStyle = '#1a1a2e'; // Dark background outside field
+    this.ctx.fillStyle = skyColor; // Sky/environment color instead of dark bg
     this.ctx.fillRect(0, 0, this.width, this.height);
-    
+
     this.ctx.save();
     this.ctx.translate(this.offsetX, this.offsetY);
     this.ctx.scale(this.scale, this.scale);
-    
+
     // 1. Field
-    this.drawField();
-    
+    this.drawField(fieldPrimary, fieldStripe, ambient);
+
     // 2. Shadows (Players + Ball)
-    this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    this.ctx.fillStyle = `rgba(0,0,0,${0.2 * ambient})`;
     players.forEach(p => {
       this.ctx.beginPath();
       this.ctx.ellipse(p.pos.x, p.pos.y + 10, 8, 4, 0, 0, Math.PI * 2);
@@ -102,13 +107,13 @@ export class Renderer {
     // this.drawMinimap(players, ball);
   }
   
-  drawField() {
+  drawField(fieldPrimary, fieldStripe, ambient = 1) {
     // Grass Base
-    this.ctx.fillStyle = '#4a8f3f';
+    this.ctx.fillStyle = fieldPrimary;
     this.ctx.fillRect(0, 0, this.fieldW, this.fieldH);
-    
+
     // Stripes
-    this.ctx.fillStyle = '#3f7a35';
+    this.ctx.fillStyle = fieldStripe;
     const stripeW = this.fieldW / 10;
     for (let i = 0; i < 10; i++) {
        if (i % 2 === 1) {

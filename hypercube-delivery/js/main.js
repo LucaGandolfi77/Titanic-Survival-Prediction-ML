@@ -52,6 +52,8 @@ class GameCore {
         this.deliveriesTarget = 0;
         
         this.clock = new THREE.Clock();
+        this._hornDown = false;
+        this._disposed = false;
         
         // Setup initial camera
         this.cameraOffset = new THREE.Vector3(0, 5, -12); // behind van
@@ -72,15 +74,15 @@ class GameCore {
         
         // Clear old cells
         Object.values(this.visualCellGroups).forEach(g => {
+            this.worldBuilder.disposeCell(g);
             this.sceneMgr.worldContainer.remove(g);
         });
         this.visualCellGroups = {};
-        this.sceneMgr.worldContainer.quaternion.identity(); // reset rotation
-        this.van.group.position.set(0, 0, 0); // reset van
+        this.sceneMgr.worldContainer.quaternion.identity();
+        this.van.group.position.set(0, 0, 0);
         this.van.group.rotation.set(0, 0, 0);
         this.van.speed = 0;
         
-        // Determine active cells based on level
         const numCells = Math.min(8, 2 + level * 2);
         this.activeCells = Array.from({length: numCells}, (_, i) => i);
         
@@ -88,7 +90,7 @@ class GameCore {
         this.loadCell(this.currentCellId);
         this.setEnvironmentForCell(this.currentCellId);
         
-        this.packages.activePackages = []; // Clear
+        this.packages.activePackages = [];
         this.spawnDelivery();
         
         this.hud.updateScore(this.score, this.currentLevel, this.deliveriesTarget);
@@ -128,9 +130,6 @@ class GameCore {
         
         this.sceneMgr.worldContainer.add(this.visualCellGroups[cellId]);
         this.portals.createVisualsForCell(cellId);
-        
-        // Re-create package meshes for the new cell
-        this.packages.createVisuals(cellId);
     }
     
     setEnvironmentForCell(cellId) {
@@ -154,8 +153,9 @@ class GameCore {
         const bounceBack = new THREE.Vector3(0,0,-8).applyQuaternion(this.van.group.quaternion);
         this.van.group.position.add(bounceBack);
         
-        this.audio.playPortalWhoosh();
-    }
+this.audio.playPortalWhoosh();
+            this.playHaptic([30, 50, 30]);
+        }
 
     finalizeTransition(newCellId) {
         // Hide the old cell
@@ -206,6 +206,7 @@ class GameCore {
                     this.van.speed *= -0.5;
                     this.van.group.position.sub(this.van.velocity.clone().multiplyScalar(0.1));
                     this.ui.showToast("Portal Locked!");
+                    this.playHaptic([20, 40, 20]);
                 }
             }
         }
@@ -222,12 +223,14 @@ class GameCore {
                 this.score += pkgResult.scoreGained;
                 this.audio.playDeliverySuccess();
                 this.ui.showToast("+ Delivery!");
+                this.playHaptic([50, 80, 100]);
                 this.spawnDelivery();
             }
             // Check fail
             if (this.packages.activePackages.some(p => p.state === 'failed')) {
                 this.ui.showGameOver({level: this.currentLevel, score: this.score});
                 this.isRunning = false;
+                this.playHaptic([200]);
             }
             
             this.hud.updateScore(this.score, this.currentLevel, this.deliveriesTarget);
@@ -239,6 +242,7 @@ class GameCore {
         if (this.deliveriesDone >= this.deliveriesTarget && this.isRunning) {
             this.isRunning = false;
             this.ui.showLevelComplete({level: this.currentLevel, deliveries: this.deliveriesDone, score: this.score});
+            this.playHaptic([50, 100, 150, 200]);
         }
         
         // Audio & Visual updates
@@ -268,9 +272,35 @@ class GameCore {
         // Render
         this.sceneMgr.render();
     }
+    
+    playHaptic(pattern) {
+        if (navigator.vibrate) {
+            try { navigator.vibrate(pattern); } catch (e) { /* not supported */ }
+        }
+    }
+
+    dispose() {
+        this._disposed = true;
+        this.controls = null;
+        this.hud = null;
+        this.audio = null;
+        this.ui = null;
+        Object.values(this.visualCellGroups).forEach(g => {
+            this.worldBuilder.disposeCell(g);
+        });
+        this.visualCellGroups = {};
+    }
 }
 
 // Bootstrap
-window.onload = () => {
+window.onload = async () => {
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log('Service Worker registered:', registration.scope);
+        } catch (err) {
+            console.warn('SW registration failed:', err);
+        }
+    }
     window.game = new GameCore();
 };

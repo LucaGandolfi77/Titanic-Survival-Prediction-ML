@@ -38,10 +38,19 @@ export class PackageManager {
         return pkg;
     }
 
-    createVisuals(currentCell) {
-        // Clear old
-        this.pickups.forEach(p => this.container.remove(p));
-        this.deliveries.forEach(d => this.container.remove(d));
+createVisuals(currentCell) {
+        this.pickups.forEach(p => {
+            this.container.remove(p.mesh);
+            if (p.mesh.geometry) p.mesh.geometry.dispose();
+            if (p.mesh.material) p.mesh.material.dispose();
+            if (p.zone.geometry) p.zone.geometry.dispose();
+            if (p.zone.material) p.zone.material.dispose();
+        });
+        this.deliveries.forEach(d => {
+            this.container.remove(d.zone);
+            if (d.zone.geometry) d.zone.geometry.dispose();
+            if (d.zone.material) d.zone.material.dispose();
+        });
         this.pickups = [];
         this.deliveries = [];
 

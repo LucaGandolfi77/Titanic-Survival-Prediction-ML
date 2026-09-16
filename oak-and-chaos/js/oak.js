@@ -33,6 +33,9 @@ const MILESTONES = [
   { height: 100, name: '🏆 ZARGHUN ASCENDED', desc: 'YOU WIN!',                       triggered: false },
 ];
 
+/**
+ * OakTree — core game entity: growth, energy, DNA, breeding gates.
+ */
 export class OakTree {
   constructor() {
     this.name         = 'Zarghun';

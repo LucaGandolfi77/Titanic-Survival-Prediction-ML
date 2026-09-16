@@ -80,7 +80,13 @@
 /* ---------- preview card ---------- */
 .bench-preview {
   padding: var(--space-md);
-  border: 1px solid rgba(245, 158, 11, .15);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  background:
+    linear-gradient(135deg, rgba(245, 158, 11, 0.06), transparent 60%),
+    rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .bench-results-mini {

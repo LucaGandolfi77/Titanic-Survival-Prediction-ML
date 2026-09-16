@@ -19,7 +19,6 @@ export class CityGenerator {
     }
 
     generate(levelData) {
-        // Clear previous
         while(this.cityGroup.children.length > 0) {
             const child = this.cityGroup.children[0];
             this.cityGroup.remove(child);
@@ -29,7 +28,6 @@ export class CityGenerator {
         this.buildings = [];
         this.roadTiles = [];
 
-        // Ground
         const groundGeo = new THREE.PlaneGeometry(this.gridSize, this.gridSize);
         const groundMat = new THREE.MeshLambertMaterial({color: 0x3a3a3a});
         const ground = new THREE.Mesh(groundGeo, groundMat);
@@ -39,30 +37,66 @@ export class CityGenerator {
 
         const blocksX = Math.floor(this.gridSize / this.blockSize);
         const blocksZ = Math.floor(this.gridSize / this.blockSize);
-        
         const halfGrid = this.gridSize / 2;
 
         let ecoPlaced = 0;
-        const totalEco = levelData.ecoCount;
+        const totalEco = levelData.ecoCount || 0;
         const totalBlocks = blocksX * blocksZ;
-        const ecoProbability = totalEco / totalBlocks;
+        const ecoProbability = totalBlocks > 0 ? totalEco / totalBlocks : 0;
+        const customBuildings = levelData.customBuildings || [];
 
         for (let i = 0; i < blocksX; i++) {
             for (let j = 0; j < blocksZ; j++) {
                 const cx = -halfGrid + (i * this.blockSize) + (this.blockSize/2);
                 const cz = -halfGrid + (j * this.blockSize) + (this.blockSize/2);
-                
-                // Save road centers for trash spawning
+
                 this.roadTiles.push(new THREE.Vector3(cx - 10, 0, cz - 10));
 
-                const isEcoBlock = (Math.random() < ecoProbability && ecoPlaced < totalEco) || 
+                const isEcoBlock = (Math.random() < ecoProbability && ecoPlaced < totalEco) ||
                                    (ecoPlaced < totalEco && i*j > totalBlocks - totalEco);
-                
+
                 if (isEcoBlock) ecoPlaced++;
 
                 this.buildBlock(cx, cz, isEcoBlock, levelData);
             }
         }
+
+        for (const cb of customBuildings) {
+            this._buildCustom(cb);
+        }
+    }
+
+    _buildCustom(data) {
+        const { x, z, w = 5, h = 10, d = 5, type = 'normal' } = data;
+        const geo = new THREE.BoxGeometry(w, h, d);
+        geo.computeVertexNormals();
+
+        let mat;
+        if (type === 'eco') {
+            mat = new THREE.MeshLambertMaterial({color: 0x22c55e});
+        } else {
+            mat = new THREE.MeshLambertMaterial({color: MathUtils.randItem(this.palettes)});
+        }
+
+        const building = new THREE.Mesh(geo, mat);
+        building.position.set(x, h/2, z);
+        building.castShadow = true;
+        building.receiveShadow = true;
+        this.cityGroup.add(building);
+
+        if (type === 'eco') {
+            this.addEcoDetails(building, w, h, d);
+        }
+
+        this.buildings.push({
+            mesh: building,
+            type,
+            health: h < 10 ? 1 : (h < 18 ? 2 : 3),
+            pos: building.position.clone(),
+            size: new THREE.Vector3(w, h, d),
+            active: true,
+            isEco: type === 'eco'
+        });
     }
 
     buildBlock(cx, cz, isEco, levelData) {

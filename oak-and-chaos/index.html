@@ -3,23 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="OAK & CHAOS — Idle Casino Simulator. Grow Zarghun the sentient oak tree.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OAK & CHAOS">
+  <meta name="application-name" content="OAK & CHAOS">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="referrer" content="no-referrer">
   <title>OAK & CHAOS — Idle Casino Simulator</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%2322c55e'/%3E%3Ctext x='96' y='128' font-size='96' text-anchor='middle'%3E%F0%9F%8C%B3%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%2322c55e'/%3E%3Ctext x='96' y='128' font-size='96' text-anchor='middle'%3E%F0%9F%8C%B3%3C/text%3E%3C/svg%3E">
+
+  <link rel="preload" href="css/oak.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/casino.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/breeding.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/oak.css">
-  <link rel="stylesheet" href="css/casino.css">
-  <link rel="stylesheet" href="css/breeding.css">
-  <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/ui.css">
+  <noscript><link rel="stylesheet" href="css/oak.css"><link rel="stylesheet" href="css/casino.css"></noscript>
 </head>
 <body>
 
-  <!-- ══════════ TOP BAR ══════════ -->
+<noscript>
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;color:#f9fafb;font-family:Inter,sans-serif;text-align:center;padding:40px">
+    <div>
+      <h1 style="font-size:2rem;color:#22c55e;margin-bottom:16px">🌳 OAK & CHAOS</h1>
+      <p style="font-size:1.1rem;color:#d1d5db">Questo gioco richiede JavaScript attivato.</p>
+      <p style="color:#6b7280;margin-top:8px">Abilita JavaScript nelle impostazioni del browser e ricarica la pagina.</p>
+    </div>
+  </div>
+</noscript>
+
+<!-- ══════════ TOP BAR ══════════ -->
   <header id="top-bar">
     <div class="top-left">
       <span class="game-logo">🌳 OAK &amp; CHAOS</span>
@@ -38,11 +62,11 @@
       <div class="stat-pill time-pill"><span id="hud-day-icon">☀️</span> Day <span id="hud-day">1</span></div>
     </div>
     <div class="top-right">
-      <button id="btn-speed-1" class="speed-btn active" data-speed="1">1×</button>
-      <button id="btn-speed-2" class="speed-btn" data-speed="2">2×</button>
-      <button id="btn-speed-5" class="speed-btn" data-speed="5">5×</button>
-      <button id="btn-pause" class="speed-btn">⏸</button>
-      <button id="btn-help" class="speed-btn" title="Help">❓</button>
+      <button id="btn-speed-1" class="speed-btn active" data-speed="1" aria-label="Velocità 1x">1×</button>
+      <button id="btn-speed-2" class="speed-btn" data-speed="2" aria-label="Velocità 2x">2×</button>
+      <button id="btn-speed-5" class="speed-btn" data-speed="5" aria-label="Velocità 5x">5×</button>
+      <button id="btn-pause" class="speed-btn" aria-label="Pausa/Riprendi">⏸</button>
+      <button id="btn-help" class="speed-btn" aria-label="Guida" title="Guida">❓</button>
     </div>
   </header>
 
@@ -92,9 +116,9 @@
         </div>
 
         <div class="action-bar">
-          <button class="action-btn grow-btn" id="btn-grow">🌱 Grow <span class="cost">50⚡</span></button>
-          <button class="action-btn acorn-btn" id="btn-acorn">🌰 Acorn <span class="cost">30⚡</span></button>
-          <button class="action-btn meditate-btn" id="btn-meditate">🧘 Meditate</button>
+          <button class="action-btn grow-btn" id="btn-grow" aria-label="Cresci - 50 energia">🌱 Grow <span class="cost">50⚡</span></button>
+          <button class="action-btn acorn-btn" id="btn-acorn" aria-label="Produci Acorn - 30 energia">🌰 Acorn <span class="cost">30⚡</span></button>
+          <button class="action-btn meditate-btn" id="btn-meditate" aria-label="Medita per guadagnare DNA">🧘 Meditate</button>
         </div>
 
         <div class="upgrades-section">
@@ -158,11 +182,11 @@
         <div class="spend-section">
           <h3>💸 Spend Coins</h3>
           <div class="spend-buttons">
-            <button class="spend-btn" id="btn-nutrients">🧪 Nutrients <span class="cost">50🪙</span></button>
-            <button class="spend-btn" id="btn-fertilizer">🌿 Fertilizer <span class="cost">200🪙</span></button>
-            <button class="spend-btn" id="btn-bribe">🤫 Bribe Inspector <span class="cost">300🪙</span></button>
-            <button class="spend-btn" id="btn-unlock-m5">🔓 Machine 5 <span class="cost">500🪙</span></button>
-            <button class="spend-btn" id="btn-unlock-m6">🔓 Machine 6 <span class="cost">500🪙</span></button>
+      <button class="spend-btn" id="btn-nutrients" aria-label="Nutrienti - 50 monete">🧪 Nutrienti <span class="cost">50🪙</span></button>
+      <button class="spend-btn" id="btn-fertilizer" aria-label="Fertilizer - 200 monete">🌿 Fertilizer <span class="cost">200🪙</span></button>
+      <button class="spend-btn" id="btn-bribe" aria-label="Corri ispettore - 300 monete">🤫 Bribe Inspector <span class="cost">300🪙</span></button>
+      <button class="spend-btn" id="btn-unlock-m5" aria-label="Sblocca Macchina 5 - 500 monete">🔓 Machine 5 <span class="cost">500🪙</span></button>
+      <button class="spend-btn" id="btn-unlock-m6" aria-label="Sblocca Macchina 6 - 500 monete">🔓 Machine 6 <span class="cost">500🪙</span></button>
           </div>
         </div>
       </div>
@@ -189,7 +213,7 @@
   <!-- ══════════ MODALS ══════════ -->
   <div id="modal-overlay" class="hidden">
     <div id="modal-content">
-      <button id="modal-close" class="modal-close-btn">✕</button>
+      <button id="modal-close" class="modal-close-btn" aria-label="Chiudi modale">✕</button>
       <div id="modal-body"></div>
     </div>
   </div>
@@ -274,8 +298,9 @@
 
       <h3>Keyboard Shortcuts</h3>
       <ul>
-        <li><strong>Space / P:</strong> Pause/Resume (if implemented in controls).</li>
-        <li><strong>1 / 2 / 5:</strong> Switch game speed (1×/2×/5×).</li>
+        <li><strong>Space / P:</strong> Pause/Resume (funzionante).</li>
+        <li><strong>1 / 2 / 5:</strong> Switch game speed (1×/2×/5×) (funzionante).</li>
+        <li><strong>↑↑↓↓←→←→BA:</strong> Konami Code — Chaos Mode Easter Egg.</li>
       </ul>
 
       <h3>Developer Notes</h3>

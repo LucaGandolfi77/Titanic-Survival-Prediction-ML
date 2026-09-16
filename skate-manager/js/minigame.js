@@ -5,7 +5,7 @@ import { FORMATIONS, getAvailableFormations } from './formations.js';
 import { MusicEngine } from './music.js';
 import { lerp, clamp, randInt, randFloat } from './utils.js';
 import { getTeamCohesion, getSquadAvgMorale } from './skaters.js';
-import { getSyncBonus } from './sponsors.js';
+import { getSyncBonus, getTempoBonus } from './sponsors.js';
 
 export class MiniGame {
   constructor() {
@@ -91,8 +91,8 @@ export class MiniGame {
 
       this.skaters.push({
         idx: i,
+        ref: sk, // live reference to the GameState skater — stat AND morale changes persist
         stats: sk.stats,
-        morale: sk.morale || 60,
         // Position
         renderX: cx + rx * Math.cos(phase),
         renderY: cy + ry * Math.sin(phase),
@@ -100,8 +100,8 @@ export class MiniGame {
         cx, cy, rx, ry,
         phase,
         phaseSpeed: 0.4 + randFloat(-0.05, 0.05),
-        // State
-        state: 'skating', // skating | formation | wobbling | fallen
+        // State (injured skaters sit out the routine)
+        state: sk.injuryWeeks > 0 ? 'injured' : 'skating', // skating | formation | wobbling | fallen | injured
         // Formation targets
         targetX: undefined,
         targetY: undefined,
@@ -114,19 +114,21 @@ export class MiniGame {
       });
     }
 
-    // Set up canvas click handler
+    // Set up canvas handlers (stored so stop() can remove them)
     this._clickHandler = (e) => this.handleClick(e);
-    this.canvas.addEventListener('click', this._clickHandler);
-    this.canvas.addEventListener('touchstart', (e) => {
+    this._touchHandler = (e) => {
       e.preventDefault();
       const touch = e.touches[0];
       const rect = this.canvas.getBoundingClientRect();
       this.handleClickAt(touch.clientX - rect.left, touch.clientY - rect.top);
-    }, { passive: false });
+    };
+    this.canvas.addEventListener('click', this._clickHandler);
+    this.canvas.addEventListener('touchstart', this._touchHandler, { passive: false });
 
     // Setup formation buttons
     this.setupFormationButtons();
     this.setupTempoButtons();
+    this.resetTempoButtons();
 
     // Update comp name
     document.getElementById('mg-comp-name').textContent = competition ? competition.name : 'Exhibition';
@@ -161,15 +163,22 @@ export class MiniGame {
   }
 
   setupTempoButtons() {
-    const buttons = document.querySelectorAll('.tempo-btn');
-    buttons.forEach(btn => {
+    // Tempo buttons are static DOM — bind only once per MiniGame instance
+    // to avoid stacking duplicate listeners on every competition.
+    if (this._tempoBound) return;
+    this._tempoBound = true;
+    document.querySelectorAll('.tempo-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const tempo = btn.dataset.tempo;
-        this.changeTempo(tempo);
-        buttons.forEach(b => b.classList.remove('active'));
+        this.changeTempo(btn.dataset.tempo);
+        document.querySelectorAll('.tempo-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
       });
     });
+  }
+
+  resetTempoButtons() {
+    document.querySelectorAll('.tempo-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.tempo === 'slow'));
   }
 
   start() {
@@ -191,7 +200,8 @@ export class MiniGame {
     this.running = false;
     this.music.stopMusic();
     if (this.animFrame) cancelAnimationFrame(this.animFrame);
-    this.canvas.removeEventListener('click', this._clickHandler);
+    if (this.canvas && this._clickHandler) this.canvas.removeEventListener('click', this._clickHandler);
+    if (this.canvas && this._touchHandler) this.canvas.removeEventListener('touchstart', this._touchHandler);
   }
 
   loop() {
@@ -241,8 +251,7 @@ export class MiniGame {
 
     // TIME UP
     if (this.timer <= 0) {
-      this.running = false;
-      this.music.stopMusic();
+      this.stop(); // stops the music and removes canvas handlers
       this.finishRoutine();
       return;
     }
@@ -258,7 +267,7 @@ export class MiniGame {
       this.formationTimer -= dt;
       // Accumulate score while in formation
       const syncBonus = getSyncBonus();
-      this.score += this.currentFormation.difficulty * 10 * dt * (1 + syncBonus);
+      this.score += this.currentFormation.difficulty * 10 * dt * this.tempoMultiplier * (1 + syncBonus);
 
       if (this.formationTimer <= 0) {
         // Formation ends
@@ -292,7 +301,7 @@ export class MiniGame {
         // Wobble chance
         const tempoRisk = this.tempoRiskMap[this.tempo];
         const wobbleChance = tempoRisk * (1 - sk.stats.stamina / 100) * 0.002;
-        const moraleMod = sk.morale < 40 ? 1.5 : 1.0;
+        const moraleMod = sk.ref.morale < 40 ? 1.5 : 1.0;
         if (Math.random() < wobbleChance * moraleMod * 60 * dt) {
           sk.state = 'wobbling';
           sk.wobbleTimer = sk.wobbleMax;
@@ -343,8 +352,8 @@ export class MiniGame {
           this.setJudges('😬');
           setTimeout(() => this.setJudges('😐'), 1200);
           this.removeWobbleAlert(sk.idx);
-          // Morale hit for all
-          for (const s of this.skaters) s.morale = clamp(s.morale - 5, 0, 100);
+          // Morale hit for all (persists to GameState via ref)
+          for (const s of this.skaters) s.ref.morale = clamp(s.ref.morale - 5, 0, 100);
           this.addScorePopup(sk.renderX, sk.renderY, '-50');
         }
       } else if (sk.state === 'fallen') {
@@ -363,7 +372,7 @@ export class MiniGame {
     }
 
     // Update morale display
-    const avgMorale = this.skaters.reduce((s, sk) => s + sk.morale, 0) / this.skaters.length;
+    const avgMorale = this.skaters.reduce((s, sk) => s + sk.ref.morale, 0) / this.skaters.length;
     const moraleFill = document.getElementById('morale-fill');
     moraleFill.style.width = avgMorale + '%';
     moraleFill.style.backgroundColor =
@@ -402,7 +411,7 @@ export class MiniGame {
     // Set targets for each skater
     for (let i = 0; i < this.skaters.length; i++) {
       const sk = this.skaters[i];
-      if (sk.state === 'fallen' || sk.state === 'wobbling') continue;
+      if (sk.state === 'fallen' || sk.state === 'wobbling' || sk.state === 'injured') continue;
       sk.state = 'formation';
       const pos = formation.positions[i];
       sk.targetX = pos.x * this.canvas.width;
@@ -450,7 +459,7 @@ export class MiniGame {
         this.music.playWobbleSave();
         this.removeWobbleAlert(sk.idx);
         this.addScorePopup(sk.renderX, sk.renderY, '+10');
-        sk.morale = clamp(sk.morale - 2, 0, 100);
+        sk.ref.morale = clamp(sk.ref.morale - 2, 0, 100);
         return;
       }
     }
@@ -513,23 +522,28 @@ export class MiniGame {
     this.renderer.sparkle = false;
     const cohesion = getTeamCohesion(GameState.activeSquad);
     const syncBonusPercent = getSyncBonus();
+    const tempoBonusPct = getTempoBonus();
 
-    // Calculate final score
-    const baseScore = this.score;
-    const musicBonus = Math.round(this.highTempoTime / this.duration * 100) * 1.3;
-    const syncBonus = cohesion * 0.5;
-    const wobblePenalty = this.wobblesFailed * 50;
+    // Calculate final score from rounded components so the results breakdown
+    // adds up exactly. Wobble penalties are already applied to baseScore
+    // during the routine (-50 per fall) — they are NOT subtracted again here.
+    const baseScore = Math.round(this.score);
+    const musicBonus = Math.round(Math.round(this.highTempoTime / this.duration * 100) * 1.3);
+    const tempoBoost = Math.round(musicBonus * tempoBonusPct); // CoolBreeze perk
+    const syncBonus = Math.round(cohesion * (0.5 + syncBonusPercent)); // includes QuantumIce
+    const wobblePenalty = this.wobblesFailed * 50; // informational: applied live
     const perfectBonus = this.perfectRoutine ? 300 : 0;
 
-    const finalScore = Math.round(
-      (baseScore + musicBonus + syncBonus) - wobblePenalty + perfectBonus
+    const finalScore = Math.max(0,
+      baseScore + musicBonus + tempoBoost + syncBonus + perfectBonus
     );
 
     const result = {
-      score: Math.max(0, finalScore),
-      baseScore: Math.round(baseScore),
-      musicBonus: Math.round(musicBonus),
-      syncBonus: Math.round(syncBonus),
+      score: finalScore,
+      baseScore,
+      musicBonus,
+      tempoBoost,
+      syncBonus,
       wobblePenalty,
       perfectBonus,
       formationsCompleted: this.formationsCompleted,

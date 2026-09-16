@@ -172,8 +172,14 @@ function createNPCState(def) {
   };
 }
 
-/* ══════════════════════════════════════════════════════════ */
+/**
+ * Casino — slot machine mechanics, NPC operators, revenue tracking.
+ * @fires Casino#onSpinResult
+ */
 export class Casino {
+  /**
+   * Initialize casino: 6 machines, 6 NPCs, counters, history.
+   */
   constructor() {
     this.machines = MACHINE_DEFS.map(d => createMachineState(d));
     this.npcs     = NPC_DEFS.map(d => createNPCState(d));
@@ -187,10 +193,20 @@ export class Casino {
     this.revenueMul    = 1.0;  // can be buffed by events
 
     // Spin result callback (set by main to trigger UI effects)
+    /**
+     * @callback onSpinResult
+     * @param {Object} machine - Machine state
+     * @param {Object} result - { win, mult, jackpot }
+     * @param {number} revenue - Coins earned
+     */
     this.onSpinResult = null;
   }
 
-  /* ── Update (per frame) ── */
+  /**
+   * Update casino state each frame.
+   * @param {number} delta - Seconds since last frame
+   * @param {number} oakHeight - Current oak height in metres
+   */
   update(delta, oakHeight) {
     // Casino closure countdown
     if (this.isClosed) {
@@ -269,7 +285,6 @@ export class Casino {
     }
   }
 
-  /* ── Execute a single spin ── */
   _executeSpin(machine, npc) {
     const syms = machine.symbols;
 
@@ -277,7 +292,8 @@ export class Casino {
     const reels = [randomFrom(syms), randomFrom(syms), randomFrom(syms)];
     machine.currentReels = reels.map(r => r.s);
     machine.spinning = true;
-    setTimeout(() => { machine.spinning = false; }, 1800);
+    const spinTimeoutId = setTimeout(() => { machine.spinning = false; }, 1800);
+    machine._spinTimeoutId = spinTimeoutId;
 
     // Evaluate result
     const result = this._evaluateResult(reels, machine, npc);

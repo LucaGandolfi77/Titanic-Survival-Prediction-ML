@@ -15,6 +15,6 @@
   --font: 'Outfit', sans-serif;
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 4px 20px rgba(0,0,0,0.5);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   --transition: 0.3s ease;
 }

@@ -48,8 +48,40 @@ export class SceneManager {
         this.directionalLight.shadow.bias = -0.0005;
         this.scene.add(this.directionalLight);
 
+        this.isContextLost = false;
+
+        // WebGL Context Loss handling
+        this.canvas.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            this.isContextLost = true;
+            console.warn('WebGL context lost. Attempting recovery...');
+        });
+        this.canvas.addEventListener('webglcontextrestored', () => {
+            console.log('WebGL context restored.');
+            this.isContextLost = false;
+            this.handleContextRestore();
+        });
+
         // Window resize handler
-        window.addEventListener('resize', this.onWindowResize.bind(this));
+        this._resizeHandler = this.onWindowResize.bind(this);
+        window.addEventListener('resize', this._resizeHandler);
+    }
+
+    dispose() {
+        window.removeEventListener('resize', this._resizeHandler);
+        this.renderer.dispose();
+        this.renderer.forceContextLoss();
+    }
+
+    handleContextLoss() {
+        this.isContextLost = true;
+        if (this._contextLostHandler) {
+            this._contextLostHandler();
+        }
+    }
+
+    handleContextRestore() {
+        this.isContextLost = false;
     }
 
     onWindowResize() {
@@ -66,6 +98,7 @@ export class SceneManager {
     }
 
     render() {
+        if (this.isContextLost) return;
         this.renderer.render(this.scene, this.camera);
     }
 }

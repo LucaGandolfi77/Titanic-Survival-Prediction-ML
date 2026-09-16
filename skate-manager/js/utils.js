@@ -1,5 +1,7 @@
 /* ===== Utility helpers ===== */
 
+import { STAT_RANGES } from './config.js';
+
 let _idCounter = 0;
 export function uid() { return 'sk_' + (++_idCounter) + '_' + Math.random().toString(36).slice(2, 7); }
 
@@ -60,13 +62,7 @@ export function generateNationality() {
 
 // ===== Stat generation for tiers =====
 export function generateStats(tier) {
-  const ranges = {
-    1: [30, 50],
-    2: [50, 70],
-    3: [70, 90],
-    4: [85, 99]
-  };
-  const [lo, hi] = ranges[tier] || ranges[2];
+  const [lo, hi] = STAT_RANGES[tier] || STAT_RANGES[2];
   return {
     technique: randInt(lo, hi),
     stamina:   randInt(lo, hi),
@@ -92,7 +88,7 @@ export function calcValue(overall, age) {
 }
 
 export function calcWage(overall) {
-  return Math.round(overall * 22 + 200);
+  return Math.round(overall * 8 + 150);
 }
 
 export function overallColor(ov) {

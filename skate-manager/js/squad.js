@@ -2,10 +2,23 @@
 import { GameState } from './state.js';
 import { createSkater, generateMarketSkaters, recalcSkater, trainSkater, getTotalWages, getTeamCohesion } from './skaters.js';
 import { randInt, clamp } from './utils.js';
+import { ACTIVE_SQUAD_SIZE, RESERVE_SIZE, MAX_ROSTER, TRAIN_TEAM_COST, SCOUT_COST } from './config.js';
+
+/**
+ * Find a skater by id across every roster list (active, reserve, market, listed).
+ * @param {string} id
+ * @returns {import('./types.js').Skater|undefined}
+ */
+export function findSkater(id) {
+  return GameState.activeSquad.find(s => s.id === id) ||
+         GameState.reserveBench.find(s => s.id === id) ||
+         GameState.marketSkaters.find(s => s.id === id) ||
+         GameState.listedSkaters.find(s => s.id === id);
+}
 
 // ===== Squad actions =====
 export function promoteToActive(skaterId) {
-  if (GameState.activeSquad.length >= 16) return false;
+  if (GameState.activeSquad.length >= ACTIVE_SQUAD_SIZE) return false;
   const idx = GameState.reserveBench.findIndex(s => s.id === skaterId);
   if (idx === -1) return false;
   const sk = GameState.reserveBench.splice(idx, 1)[0];
@@ -15,7 +28,7 @@ export function promoteToActive(skaterId) {
 }
 
 export function demoteToReserve(skaterId) {
-  if (GameState.reserveBench.length >= 8) return false;
+  if (GameState.reserveBench.length >= RESERVE_SIZE) return false;
   const idx = GameState.activeSquad.findIndex(s => s.id === skaterId);
   if (idx === -1) return false;
   const sk = GameState.activeSquad.splice(idx, 1)[0];
@@ -50,7 +63,7 @@ export function swapActivePositions(idA, idB) {
 // ===== Market actions =====
 export function buySkater(skaterId) {
   const totalRoster = GameState.activeSquad.length + GameState.reserveBench.length;
-  if (totalRoster >= 24) return { ok: false, msg: 'Roster full (max 24)' };
+  if (totalRoster >= MAX_ROSTER) return { ok: false, msg: `Roster full (max ${MAX_ROSTER})` };
 
   const idx = GameState.marketSkaters.findIndex(s => s.id === skaterId);
   if (idx === -1) return { ok: false, msg: 'Skater no longer available' };
@@ -62,7 +75,7 @@ export function buySkater(skaterId) {
   GameState.money -= price;
   GameState.marketSkaters.splice(idx, 1);
 
-  if (GameState.activeSquad.length < 16) {
+  if (GameState.activeSquad.length < ACTIVE_SQUAD_SIZE) {
     sk.status = 'active';
     GameState.activeSquad.push(sk);
   } else {
@@ -99,10 +112,10 @@ export function cancelListing(skaterId) {
   const idx = GameState.listedSkaters.findIndex(s => s.id === skaterId);
   if (idx === -1) return false;
   const sk = GameState.listedSkaters.splice(idx, 1)[0];
-  if (GameState.activeSquad.length < 16) {
+  if (GameState.activeSquad.length < ACTIVE_SQUAD_SIZE) {
     sk.status = 'active';
     GameState.activeSquad.push(sk);
-  } else if (GameState.reserveBench.length < 8) {
+  } else if (GameState.reserveBench.length < RESERVE_SIZE) {
     sk.status = 'reserve';
     GameState.reserveBench.push(sk);
   } else {
@@ -141,8 +154,8 @@ export function refreshMarket() {
 
 export function scoutMarket() {
   if (GameState.scoutedThisWeek) return { ok: false, msg: 'Already scouted this week' };
-  if (GameState.money < 2000) return { ok: false, msg: 'Need €2,000 for scouting' };
-  GameState.money -= 2000;
+  if (GameState.money < SCOUT_COST) return { ok: false, msg: `Need €${SCOUT_COST.toLocaleString()} for scouting` };
+  GameState.money -= SCOUT_COST;
   GameState.scoutedThisWeek = true;
   // Add 3 hidden skaters (one possibly tier 4)
   const hasStar = Math.random() < 0.25;
@@ -158,8 +171,8 @@ export function scoutMarket() {
 }
 
 export function trainTeam() {
-  if (GameState.money < 5000) return { ok: false, msg: 'Need €5,000 for training' };
-  GameState.money -= 5000;
+  if (GameState.money < TRAIN_TEAM_COST) return { ok: false, msg: `Need €${TRAIN_TEAM_COST.toLocaleString()} for training` };
+  GameState.money -= TRAIN_TEAM_COST;
   const results = [];
   for (const sk of GameState.activeSquad) {
     if (sk.status !== 'injured') {

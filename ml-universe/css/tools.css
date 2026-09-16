@@ -59,22 +59,47 @@
   align-items: center;
   gap: var(--sp-2);
   padding: var(--sp-3) var(--sp-6);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-primary);
   white-space: nowrap;
-  transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  transition: transform var(--transition-spring), box-shadow var(--transition-base), border-color var(--transition-base);
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 50%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 50%
+  );
+  background-size: 200% 200%;
+  animation: sheen 5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .tool-pill:hover {
   transform: scale(1.08);
-  box-shadow: var(--glow-indigo);
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glow-indigo), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.tool-pill:hover::before {
+  animation-duration: 1.5s;
 }
 
 .tool-pill svg {

@@ -147,6 +147,8 @@ export class TrashManager {
             
             if(p.life <= 0 || p.mesh.position.y < 0) {
                 this.scene.remove(p.mesh);
+                if (p.mesh.geometry) p.mesh.geometry.dispose();
+                if (p.mesh.material) p.mesh.material.dispose();
                 this.particles.splice(i, 1);
             }
         }
@@ -155,6 +157,8 @@ export class TrashManager {
     removeTrash(index) {
         let t = this.trashItems[index];
         this.scene.remove(t.mesh);
+        if (t.mesh.geometry) t.mesh.geometry.dispose();
+        if (t.mesh.material) t.mesh.material.dispose();
         this.trashItems.splice(index, 1);
         this.trashCleared++;
         

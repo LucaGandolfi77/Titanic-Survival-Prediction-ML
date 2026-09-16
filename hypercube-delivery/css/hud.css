@@ -238,3 +238,46 @@
     display: none !important;
   }
 }
+
+/* Mobile touch target sizing */
+@media (max-width: 768px) {
+  #left-joystick-area {
+    width: 130px;
+    height: 130px;
+    bottom: 15px;
+    left: 15px;
+  }
+  #left-stick-outer {
+    width: 100px;
+    height: 100px;
+    margin: 15px;
+  }
+  #left-stick-knob {
+    width: 42px;
+    height: 42px;
+    top: 29px;
+    left: 29px;
+  }
+  #right-buttons {
+    right: 15px;
+    gap: 10px;
+  }
+  #right-buttons button {
+    height: 56px;
+    min-width: 56px;
+  }
+  #btn-cam {
+    width: 44px;
+    height: 44px;
+    top: 15px;
+    right: 15px;
+  }
+  #hud-minimap {
+    width: 140px;
+    height: 160px;
+  }
+  #minimap-canvas {
+    width: 110px;
+    height: 110px;
+  }
+}

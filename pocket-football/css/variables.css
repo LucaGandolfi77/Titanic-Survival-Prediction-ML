@@ -17,4 +17,6 @@
   --font-body:       'Inter', sans-serif;
   --font-mono:       'Share Tech Mono', monospace;
   --bg-color:        #1a1a2e;
+  --tournament-bg:   #16213e;
+  --xp-bg:           rgba(255,255,255,0.1);
 }

@@ -9,8 +9,11 @@ export class PortalManager {
     }
 
     createVisualsForCell(cellId) {
-        // Clear old ones
-        this.activePortals.forEach(p => this.container.remove(p));
+        this.activePortals.forEach(p => {
+            this.container.remove(p);
+            if (p.geometry) p.geometry.dispose();
+            if (p.material) p.material.dispose();
+        });
         this.activePortals = [];
 
         const connections = HYPERCUBE_GRAPH[cellId];

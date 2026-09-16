@@ -1,0 +1,24 @@
+{
+  "name": "concerts-chase",
+  "version": "1.0.0",
+  "description": "A world-tour management game",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint \"js/**/*.js\"",
+    "format": "prettier --write \"js/**/*.js\" css/*.css index.html README.md",
+    "format:check": "prettier --check \"js/**/*.js\" css/*.css index.html README.md",
+    "stylelint": "stylelint \"css/**/*.css\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "commitlint": "commitlint --edit"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^9.0.0",
+    "globals": "^17.12.0",
+    "prettier": "^3.0.0",
+    "rollup-plugin-visualizer": "^7.1.1",
+    "vite": "^8.3.0",
+    "vitest": "^1.6.1"
+  }
+}

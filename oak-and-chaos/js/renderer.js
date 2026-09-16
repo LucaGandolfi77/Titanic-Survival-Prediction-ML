@@ -7,26 +7,24 @@ import { ROLES } from './breeding.js';
    renderOak — update oak visual CSS + stats in the DOM
    ══════════════════════════════════════════════════════════ */
 export function renderOak(oak, dayPhase) {
-  // Stage class
   const oakEl = document.getElementById('oak-visual');
   const stageClass = oak.getStageClass();
-  if (!oakEl.classList.contains(stageClass)) {
+  const currentClass = oakEl.getAttribute('data-stage') || '';
+
+  if (currentClass !== stageClass) {
+    oakEl.setAttribute('data-stage', stageClass);
     oakEl.className = stageClass;
-    if (oak.isMeditating) oakEl.classList.add('meditating');
-    // Trigger grow animation
     oakEl.style.animation = 'none';
     void oakEl.offsetHeight;
     oakEl.style.animation = 'oakGrow 1s ease';
   }
 
-  // Meditating
-  if (oak.isMeditating && !oakEl.classList.contains('meditating')) {
+  if (oak.isMeditating) {
     oakEl.classList.add('meditating');
-  } else if (!oak.isMeditating && oakEl.classList.contains('meditating')) {
+  } else {
     oakEl.classList.remove('meditating');
   }
 
-  // Day/Night on container
   const container = document.getElementById('oak-visual-container');
   if (dayPhase === 'night') {
     container.classList.add('night-time');
@@ -34,7 +32,6 @@ export function renderOak(oak, dayPhase) {
     container.classList.remove('night-time');
   }
 
-  // Stats
   document.getElementById('stat-ht').textContent = oak.height.toFixed(1) + 'm';
   document.getElementById('stat-gi').textContent = oak.trunkGirth.toFixed(1);
   document.getElementById('stat-lv').textContent = formatNumber(oak.leaves);
@@ -42,7 +39,6 @@ export function renderOak(oak, dayPhase) {
   document.getElementById('stat-ch').textContent = Math.floor(oak.charisma);
   document.getElementById('stat-ac').textContent = oak.acorns;
 
-  // Action buttons disable state
   document.getElementById('btn-grow').disabled = oak.energy < 50 || oak.height >= 100;
   document.getElementById('btn-acorn').disabled = oak.energy < 30;
 }

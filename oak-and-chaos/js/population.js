@@ -33,13 +33,16 @@ const DEFAULT_PARTNERS = [
 ];
 
 /* ══════════════════════════════════════════════════════════ */
+/**
+ * PopulationManager — all partners & offspring.
+ */
 export class PopulationManager {
   constructor() {
     this.partners  = DEFAULT_PARTNERS.map(p => ({ ...p, id: uid() }));
     this.offspring  = [];
   }
 
-  /* ── Get partners, optionally filtered ── */
+  /** @param {string} [type] - 'plant' | 'animal' | 'taliban' | 'all' */
   getPartnersByType(type) {
     if (!type || type === 'all') return this.partners;
     return this.partners.filter(p => p.category === type);

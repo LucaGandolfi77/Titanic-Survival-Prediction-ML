@@ -1,0 +1,58 @@
+{
+  "swift": {
+    "name": "Taylor Swift",
+    "tour": "The Eras Tour 2.0",
+    "emoji": "🎤",
+    "bonus": 50,
+    "color": "#ff2d78"
+  },
+  "styles": {
+    "name": "Harry Styles",
+    "tour": "Together Together Tour",
+    "emoji": "🕺",
+    "bonus": 40,
+    "color": "#00f5d4"
+  },
+  "maneskin": {
+    "name": "Måneskin",
+    "tour": "Rush! World Tour 2026",
+    "emoji": "🎸",
+    "bonus": 60,
+    "color": "#ffd700"
+  },
+  "eilish": {
+    "name": "Billie Eilish",
+    "tour": "Hit Me Hard Tour",
+    "emoji": "🖤",
+    "bonus": 35,
+    "color": "#80ff80"
+  },
+  "beyonce": {
+    "name": "Beyoncé",
+    "tour": "Renaissance World Tour II",
+    "emoji": "👑",
+    "bonus": 70,
+    "color": "#ffaa00"
+  },
+  "kpop": {
+    "name": "BLACKPULSE",
+    "tour": "Pulse World Tour",
+    "emoji": "💜",
+    "bonus": 65,
+    "color": "#aa44ff"
+  },
+  "latin": {
+    "name": "El Fuego",
+    "tour": "Fuego Latino Tour",
+    "emoji": "🔥",
+    "bonus": 45,
+    "color": "#ff6600"
+  },
+  "rock": {
+    "name": "The Thunder",
+    "tour": "Thunder Struck Tour",
+    "emoji": "🥁",
+    "bonus": 55,
+    "color": "#ff4444"
+  }
+}

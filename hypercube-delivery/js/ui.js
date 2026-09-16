@@ -1,7 +1,10 @@
-// Screen management, menus, transitions
+// UI Screen management, menus, transitions
+import { IDBStorage } from './storage.js';
 export class UIManager {
     constructor(gameCore) {
         this.game = gameCore;
+        this.storage = new IDBStorage();
+        this.scores = [];
         this.screens = {
             menu: document.getElementById('screen-menu'),
             howto: document.getElementById('screen-howto'),
@@ -70,6 +73,9 @@ export class UIManager {
             this.showScreen(null);
             this.game.startLevel(this.game.currentLevel);
         });
+
+        const btnShare = document.getElementById('btn-share');
+        if (btnShare) btnShare.addEventListener('click', () => this.shareScore());
 
         // Game Over
         const btnTryAgain = document.getElementById('btn-tryagain');
@@ -143,30 +149,67 @@ export class UIManager {
         if (go) go.innerHTML = `Reached Level: ${stats.level}<br>Final Score: ${stats.score}`;
     }
     
-    saveScore() {
+    async saveScore() {
         const initialsEl = document.getElementById('initials-input');
         const initials = (initialsEl && initialsEl.value) ? initialsEl.value : 'AAA';
-        const scores = JSON.parse(localStorage.getItem('hds_scores') || '[]');
-        scores.push({
+        const entry = {
             name: initials.toUpperCase(),
             score: this.game.score,
             level: this.game.currentLevel
-        });
-        scores.sort((a,b) => b.score - a.score);
-        localStorage.setItem('hds_scores', JSON.stringify(scores.slice(0, 10)));
+        };
+
+        try {
+            this.scores.push(entry);
+            this.scores.sort((a, b) => b.score - a.score);
+            this.scores = this.scores.slice(0, 10);
+            await this.storage.saveScores(this.scores);
+        } catch (e) {
+            const fallback = JSON.parse(localStorage.getItem('hds_scores') || '[]');
+            fallback.push(entry);
+            fallback.sort((a, b) => b.score - a.score);
+            localStorage.setItem('hds_scores', JSON.stringify(fallback.slice(0, 10)));
+        }
         this.showToast('Score Saved!');
         this.renderLeaderboard();
         this.showScreen('leaderboard');
     }
-    
-    renderLeaderboard() {
-        const scores = JSON.parse(localStorage.getItem('hds_scores') || '[]');
+
+    async renderLeaderboard() {
+        let scores = [];
+        try {
+            scores = await this.storage.loadScores();
+        } catch (e) {
+            scores = JSON.parse(localStorage.getItem('hds_scores') || '[]');
+        }
         const table = document.getElementById('scores-table');
         if (!table) return;
         table.innerHTML = `<tr><th>Rank</th><th>Name</th><th>Score</th><th>Level</th></tr>`;
         scores.forEach((s, i) => {
-            table.innerHTML += `<tr><td>${i+1}</td><td>${s.name}</td><td>${s.score}</td><td>${s.level}</td></tr>`;
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${i + 1}</td><td>${s.name}</td><td>${s.score}</td><td>${s.level}</td>`;
+            table.appendChild(row);
         });
+    }
+
+    async shareScore() {
+        const text = `I scored ${this.game.score} points on Level ${this.game.currentLevel} in Hypercube Delivery!`;
+        const data = {
+            title: 'Hypercube Delivery Service',
+            text: text,
+            url: window.location.href
+        };
+        try {
+            if (navigator.share) {
+                await navigator.share(data);
+            } else if (navigator.clipboard) {
+                await navigator.clipboard.writeText(`${text} ${data.url}`);
+                this.showToast('Link copied!');
+            }
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                this.showToast('Share failed');
+            }
+        }
     }
 
     // Mini Tesseract for main menu background

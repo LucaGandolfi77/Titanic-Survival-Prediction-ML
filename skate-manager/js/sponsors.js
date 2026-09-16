@@ -1,6 +1,7 @@
 /* ===== Sponsor system ===== */
 import { GameState } from './state.js';
 import { getSquadAvgOverall } from './skaters.js';
+import { MAX_ACTIVE_SPONSORS, SPONSOR_BREACH_LIMIT, TEMPO_BONUS_PERK } from './config.js';
 
 export const SPONSORS = [
   {
@@ -98,8 +99,8 @@ export function getAvailableSponsors() {
 }
 
 export function canNegotiate(sponsorId) {
-  if (GameState.activeSponsors.length >= GameState.maxSimultaneous) {
-    return { ok: false, msg: 'Maximum 3 active sponsors' };
+  if (GameState.activeSponsors.length >= MAX_ACTIVE_SPONSORS) {
+    return { ok: false, msg: `Maximum ${MAX_ACTIVE_SPONSORS} active sponsors` };
   }
   const sp = SPONSORS.find(s => s.id === sponsorId);
   if (!sp) return { ok: false, msg: 'Unknown sponsor' };
@@ -149,12 +150,12 @@ export function processWeeklySponsors() {
 
     if (breached) {
       deal.breachCount++;
-      if (deal.breachCount >= 2) {
-        messages.push(`📉 ${sp.name} cancelled deal (requirements not met for 2 weeks)`);
+      if (deal.breachCount >= SPONSOR_BREACH_LIMIT) {
+        messages.push(`📉 ${sp.name} cancelled deal (requirements not met for ${SPONSOR_BREACH_LIMIT} weeks)`);
         toRemove.push(i);
         continue;
       } else {
-        messages.push(`⚠️ ${sp.name} warning: requirements not met (1/2)`);
+        messages.push(`⚠️ ${sp.name} warning: requirements not met (1/${SPONSOR_BREACH_LIMIT})`);
       }
     } else {
       deal.breachCount = 0;
@@ -186,6 +187,12 @@ export function getTotalSponsorIncome() {
 export function getSyncBonus() {
   const qt = GameState.activeSponsors.find(d => d.sponsor.id === 'quantumice');
   return qt ? qt.sponsor.syncBonus : 0;
+}
+
+// CoolBreeze perk: bonus fraction applied to the high-tempo music bonus
+export function getTempoBonus() {
+  const cb = GameState.activeSponsors.find(d => d.sponsor.tempoBonus);
+  return cb ? TEMPO_BONUS_PERK : 0;
 }
 
 export function getFameBonus() {

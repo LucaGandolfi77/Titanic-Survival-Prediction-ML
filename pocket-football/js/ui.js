@@ -43,10 +43,12 @@ export const UI = {
   updateScore(home, away) {
     document.getElementById('home-score').textContent = home;
     document.getElementById('away-score').textContent = away;
-    // Also update pause/half/full screens
-    document.getElementById('pause-score').textContent = `${home} - ${away}`;
-    document.getElementById('halftime-score').textContent = `${home} - ${away}`;
-    document.getElementById('fulltime-score').textContent = `${home} - ${away}`;
+    const pauseScoreEl = document.getElementById('pause-score');
+    const halftimeScoreEl = document.getElementById('halftime-score');
+    const fulltimeScoreEl = document.getElementById('fulltime-score');
+    if (pauseScoreEl) pauseScoreEl.textContent = `${home} - ${away}`;
+    if (halftimeScoreEl) halftimeScoreEl.textContent = `${home} - ${away}`;
+    if (fulltimeScoreEl) fulltimeScoreEl.textContent = `${home} - ${away}`;
   },
 
   updateTime(seconds, half) {
@@ -61,9 +63,56 @@ export const UI = {
     const el = document.getElementById('event-text');
     el.textContent = text;
     this.overlays.event.classList.remove('hidden');
-    setTimeout(() => {
+    clearTimeout(this._eventTimeout);
+    this._eventTimeout = setTimeout(() => {
       this.overlays.event.classList.add('hidden');
     }, duration);
+  },
+
+  showToast(message, duration = 2500) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.add('visible'), 10);
+    setTimeout(() => {
+      toast.classList.remove('visible');
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  },
+
+  updateProfile(progression, stats, badges, levelInfo) {
+    const levelEl = document.getElementById('profile-level-info');
+    if (levelEl) {
+      levelEl.innerHTML = `
+        <div class="level-display">Level ${levelInfo.level}</div>
+        <div class="xp-bar-container">
+          <div class="xp-bar-fill" style="width: ${levelInfo.percent}%"></div>
+        </div>
+        <div class="xp-text">${levelInfo.xp} / ${levelInfo.xpToNext} XP</div>
+      `;
+    }
+    const statsEl = document.getElementById('profile-stats');
+    if (statsEl) {
+      statsEl.innerHTML = `
+        <div class="stat-row"><span>⚽ Goals</span><span>${stats.totalGoals}</span></div>
+        <div class="stat-row"><span>🧤 Passes</span><span>${stats.totalPasses}</span></div>
+        <div class="stat-row"><span>⚔️ Tackles</span><span>${stats.totalTackles}</span></div>
+        <div class="stat-row"><span>🏆 Wins</span><span>${stats.totalWins}/${stats.totalMatches}</span></div>
+        <div class="stat-row"><span>📈 Win Rate</span><span>${stats.winRate}%</span></div>
+        <div class="stat-row"><span>🔥 Streak</span><span>${stats.currentStreak} (Best: ${stats.bestStreak})</span></div>
+      `;
+    }
+    const badgesEl = document.getElementById('profile-badges');
+    if (badgesEl) {
+      if (badges.length === 0) {
+        badgesEl.innerHTML = '<p style="color:var(--text-muted)">No badges yet. Keep playing!</p>';
+      } else {
+        badgesEl.innerHTML = '<h3 style="margin-bottom:10px">Achievements</h3>' +
+          badges.map(b => `<span class="badge-item" title="${b.desc}">${b.icon}</span>`).join('');
+      }
+    }
   },
   
   setupListeners(callbacks) {
@@ -102,7 +151,7 @@ export const UI = {
     // Pause
     document.getElementById('btn-resume').onclick = callbacks.onResume;
     document.getElementById('btn-restart').onclick = callbacks.onRestart;
-        document.getElementById('btn-pause-step-settings') // typo in previous logic?
+        document.getElementById('btn-pause-settings').onclick = () => { UI.showScreen('settings'); };
     document.getElementById('btn-pause-menu').onclick = callbacks.onQuit;
     
     // Halftime

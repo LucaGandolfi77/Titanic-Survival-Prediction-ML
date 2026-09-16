@@ -3,18 +3,17 @@
 import { ROLES } from './breeding.js';
 
 /**
- * UiManager — owns all DOM bindings.
+ * UiManager — owns all DOM bindings, tabs, modals, notifications, keyboard shortcuts.
  * Receives references to game systems via init().
  */
 export class UiManager {
-  constructor() {
-    this.gameRef = null;   // set by init()
-    this._modalOpen = false;
-  }
-
-  /* ═══════════ init — wire everything up ═══════════ */
+  /**
+   * Wire all DOM event listeners and initialize sub-managers.
+   * @param {Game} game - Central game controller reference
+   */
   init(game) {
     this.gameRef = game;
+    this._konamiTriggered = false;
     this._bindTabs();
     this._bindSpeedButtons();
     this._bindOakActions();
@@ -22,7 +21,8 @@ export class UiManager {
     this._bindSpend();
     this._bindModal();
     this._delegateClicks();
-    this._initDebugPanel();
+    this._bindKeyboard();
+    this._bindKonami();
   }
 
   /* ═══════════ Tab switching ═══════════ */
@@ -44,8 +44,12 @@ export class UiManager {
     });
   }
 
+  /**
+   * Switch active tab within a panel.
+   * @param {string} panelId - 'left-panel' or 'right-panel'
+   * @param {string} tabId - target tab content id
+   */
   _switchTab(panelId, tabId) {
-    const panel = document.getElementById(panelId);
     panel.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
     const target = document.getElementById(tabId);
     if (target) target.classList.add('active');
@@ -198,18 +202,107 @@ export class UiManager {
     });
   }
 
+  /**
+   * Open a modal with HTML content.
+   * @param {string} html - Modal body HTML
+   */
   openModal(html) {
     document.getElementById('modal-body').innerHTML = html;
     document.getElementById('modal-overlay').classList.remove('hidden');
     this._modalOpen = true;
   }
 
+  /**
+   * Close the active modal.
+   */
   closeModal() {
     document.getElementById('modal-overlay').classList.add('hidden');
     this._modalOpen = false;
   }
 
-  /* ═══════════ Delegated click handlers ═══════════ */
+  /* ═══════════ Keyboard shortcuts ═══════════ */
+  _bindKeyboard() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.code === 'Space' || e.key === 'p' || e.key === 'P') {
+        e.preventDefault();
+        this.gameRef.togglePause();
+        const pauseBtn = document.getElementById('btn-pause');
+        if (pauseBtn) {
+          pauseBtn.classList.toggle('active');
+          pauseBtn.textContent = this.gameRef.paused ? '▶️' : '⏸';
+        }
+      }
+      if (e.key === '1') {
+        this.gameRef.setSpeed(1);
+        document.querySelectorAll('.speed-btn[data-speed]').forEach(b => b.classList.remove('active'));
+        const b1 = document.getElementById('btn-speed-1');
+        if (b1) b1.classList.add('active');
+        document.getElementById('btn-pause')?.classList.remove('active');
+      }
+      if (e.key === '2') {
+        this.gameRef.setSpeed(2);
+        document.querySelectorAll('.speed-btn[data-speed]').forEach(b => b.classList.remove('active'));
+        const b2 = document.getElementById('btn-speed-2');
+        if (b2) b2.classList.add('active');
+        document.getElementById('btn-pause')?.classList.remove('active');
+      }
+      if (e.key === '5') {
+        this.gameRef.setSpeed(5);
+        document.querySelectorAll('.speed-btn[data-speed]').forEach(b => b.classList.remove('active'));
+        const b5 = document.getElementById('btn-speed-5');
+        if (b5) b5.classList.add('active');
+        document.getElementById('btn-pause')?.classList.remove('active');
+      }
+    });
+  }
+
+  /* ═══════════ Konami Code Easter Egg ═══════════ */
+  _bindKonami() {
+    const KONAMI_SEQUENCE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+    let konamiIndex = 0;
+    let konamiTimer = null;
+
+    document.addEventListener('keydown', (e) => {
+      if (this._konamiTriggered) return;
+
+      if (konamiTimer) clearTimeout(konamiTimer);
+      konamiTimer = setTimeout(() => { konamiIndex = 0; }, 2000);
+
+      if (e.code === KONAMI_SEQUENCE[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex >= KONAMI_SEQUENCE.length) {
+          this._konamiTriggered = true;
+          this._triggerChaosMode();
+        }
+      } else {
+        konamiIndex = (e.code === KONAMI_SEQUENCE[0]) ? 1 : 0;
+      }
+    });
+  }
+
+  _triggerChaosMode() {
+    const game = this.gameRef;
+    game.oak.acorns = 9999;
+    game.oak.dnaPoints = 9999;
+    game.oak.energy = game.oak.maxEnergy;
+    game.casino.totalCoins = 999999;
+
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+    this.showToast('chaos', '🔓 CHAOS MODE', 'Tutto sbloccato! Konami Code attivato.');
+
+    const oakEl = document.getElementById('oak-visual');
+    if (oakEl) {
+      oakEl.classList.add('chaos-mode');
+      setTimeout(() => oakEl.classList.remove('chaos-mode'), 5000);
+    }
+
+    try {
+      localStorage.setItem('oak_and_chaos_chaos', Date.now().toString());
+    } catch (e) { /* ignore */ }
+
+    game.requestRender();
+  }
   _delegateClicks() {
     document.addEventListener('click', e => {
       // Breed buttons
@@ -273,76 +366,6 @@ export class UiManager {
   }
 
   /* ═══════════ breed handler ═══════════ */
-  _handleBreed(partnerId) {
-    const partner = this.gameRef.population.getPartner(partnerId);
-    console.log('[ui] _handleBreed called', { partnerId });
-    if (!partner) return;
-    console.log('[ui] partner info', { name: partner.name, category: partner.category, compatibility: partner.compatibility });
-    const result = this.gameRef.breeding.attemptBreed(this.gameRef.oak, partner);
-    console.log('[ui] breeding result', result);
-    if (result.success) {
-      this.gameRef.population.addOffspring(result.offspring);
-      this.showToast('success', '🎉 New Offspring!', `${result.offspring.name} was born!`);
-      this._showBreedResult(result.offspring);
-    } else {
-      this.showToast('error', '❌ Breed Failed', result.reason || 'Incompatible or insufficient resources.');
-    }
-    this.gameRef.requestRender();
-  }
-
-  /* ═══════════ Debug panel for testing (grant resources) ═══════════ */
-  _initDebugPanel() {
-    try {
-      const panel = document.createElement('div');
-      panel.id = 'debug-panel';
-      panel.style.position = 'fixed';
-      panel.style.right = '12px';
-      panel.style.bottom = '12px';
-      panel.style.zIndex = '9999';
-      panel.style.background = 'rgba(0,0,0,0.6)';
-      panel.style.color = '#fff';
-      panel.style.padding = '8px';
-      panel.style.borderRadius = '8px';
-      panel.style.fontSize = '12px';
-      panel.style.display = 'flex';
-      panel.style.gap = '6px';
-      panel.innerHTML = `
-        <button id="dbg-acorn" style="padding:6px">+5 🌰</button>
-        <button id="dbg-dna" style="padding:6px">+5 🧬</button>
-        <button id="dbg-energy" style="padding:6px">Fill ⚡</button>
-        <button id="dbg-coins" style="padding:6px">+1000 🪙</button>
-      `;
-      document.body.appendChild(panel);
-
-      document.getElementById('dbg-acorn').addEventListener('click', () => {
-        this.gameRef.oak.acorns = (this.gameRef.oak.acorns || 0) + 5;
-        console.log('[debug] granted 5 acorns', { acorns: this.gameRef.oak.acorns });
-        this.showToast('success', 'Debug', 'Granted 5 acorns');
-        this.gameRef.requestRender();
-      });
-      document.getElementById('dbg-dna').addEventListener('click', () => {
-        this.gameRef.oak.dnaPoints = (this.gameRef.oak.dnaPoints || 0) + 5;
-        console.log('[debug] granted 5 dna', { dna: this.gameRef.oak.dnaPoints });
-        this.showToast('success', 'Debug', 'Granted 5 DNA');
-        this.gameRef.requestRender();
-      });
-      document.getElementById('dbg-energy').addEventListener('click', () => {
-        this.gameRef.oak.energy = this.gameRef.oak.maxEnergy;
-        console.log('[debug] filled energy', { energy: this.gameRef.oak.energy });
-        this.showToast('success', 'Debug', 'Energy filled');
-        this.gameRef.requestRender();
-      });
-      document.getElementById('dbg-coins').addEventListener('click', () => {
-        this.gameRef.casino.totalCoins = (this.gameRef.casino.totalCoins || 0) + 1000;
-        console.log('[debug] granted coins', { coins: this.gameRef.casino.totalCoins });
-        this.showToast('success', 'Debug', 'Granted 1000 coins');
-        this.gameRef.requestRender();
-      });
-    } catch (e) {
-      console.warn('Debug panel init failed:', e);
-    }
-  }
-
   _showBreedResult(offspring) {
     const html = `
       <div class="breed-result-modal">
@@ -362,6 +385,16 @@ export class UiManager {
       </div>
     `;
     this.openModal(html);
+  }
+
+  /**
+   * Reset the game: save state, stop loop, clear storage, reload.
+   */
+  resetGameViaModal() {
+    if (this.gameRef) {
+      this.gameRef.save();
+      this.gameRef.stop();
+    }
   }
 
   /* ═══════════ repair handler ═══════════ */
@@ -394,6 +427,12 @@ export class UiManager {
   }
 
   /* ═══════════ Toasts ═══════════ */
+  /**
+   * Show a toast notification.
+   * @param {'success'|'error'|'weird'|'info'} type - Toast style variant
+   * @param {string} title - Short headline
+   * @param {string} message - Body text
+   */
   showToast(type, title, message) {
     const area = document.getElementById('toast-area');
     const toast = document.createElement('div');
@@ -404,17 +443,29 @@ export class UiManager {
     toast.innerHTML = `<span class="toast-icon">${title.split(' ')[0]}</span><span class="toast-text"><strong>${title}</strong><br>${message}</span>`;
     area.appendChild(toast);
     setTimeout(() => toast.remove(), 4200);
+    if (navigator.vibrate) navigator.vibrate(30);
   }
 
   /* ═══════════ Achievement popup ═══════════ */
+  /**
+   * Show achievement popup.
+   * @param {string} text - Achievement description
+   */
   showAchievement(text) {
     const popup = document.getElementById('achievement-popup');
     document.getElementById('achievement-name').textContent = text;
     popup.classList.remove('hidden');
     setTimeout(() => popup.classList.add('hidden'), 4000);
+    if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
   }
 
   /* ═══════════ Win screen ═══════════ */
+  /**
+   * Display the win screen with final stats.
+   * @param {OakTree} oak - Oak tree instance
+   * @param {Casino} casino - Casino instance
+   * @param {PopulationManager} population - Population manager
+   */
   showWinScreen(oak, casino, population) {
     document.getElementById('win-stats').innerHTML = `
       <p>Height: ${oak.height.toFixed(1)}m</p>

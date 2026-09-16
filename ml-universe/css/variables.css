@@ -3,7 +3,7 @@
    ================================================================ */
 
 :root {
-  /* ── Colors ───────────────────────────────────────────────── */
+  /* ── Glassmorphism ────────────────────────────────── */
   --bg-primary:       #080B14;
   --bg-secondary:     #0D1117;
   --bg-card:          #111827;
@@ -21,6 +21,29 @@
   --glow-indigo:      0 0 40px rgba(99, 102, 241, 0.4);
   --glow-cyan:        0 0 40px rgba(6, 182, 212, 0.4);
   --glow-purple:      0 0 40px rgba(139, 92, 246, 0.4);
+
+  /* ── Liquid Glass (iOS-style) ─────────────────────── */
+  --glass-blur: 32px;
+  --glass-blur-mobile: 16px;
+  --glass-opacity: 0.06;
+  --glass-opacity-hover: 0.10;
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-border-hover: rgba(255, 255, 255, 0.28);
+  --glass-highlight: rgba(255, 255, 255, 0.22);
+  --glass-tint-indigo: rgba(99, 102, 241, 0.06);
+  --glass-tint-violet: rgba(139, 92, 246, 0.06);
+  --glass-tint-cyan: rgba(6, 182, 212, 0.06);
+  --glass-tint-emerald: rgba(16, 185, 129, 0.06);
+  --glass-tint-amber: rgba(245, 158, 11, 0.06);
+  --glass-tint-pink: rgba(236, 72, 153, 0.06);
+  --radius-liquid: 24px;
+  --radius-liquid-xl: 32px;
+  --shadow-liquid-indigo: 0 8px 32px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+  --shadow-liquid-cyan: 0 8px 32px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+  --shadow-liquid-violet: 0 8px 32px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+  --shadow-liquid-emerald: 0 8px 32px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+  --shadow-liquid-amber: 0 8px 32px rgba(245, 158, 11, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+  --shadow-liquid-pink: 0 8px 32px rgba(236, 72, 153, 0.2), inset 0 1px 0 rgba(255,255,255,0.15);
 
   /* ── Typography ───────────────────────────────────────────── */
   --font-body:    'Inter', system-ui, -apple-system, sans-serif;

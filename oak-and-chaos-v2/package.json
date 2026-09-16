@@ -1,0 +1,1 @@
+{"name":"oak-and-chaos-v2","version":"2.0.0","description":"OAK & CHAOS — Idle Casino Simulator (TypeScript)","type":"module","scripts":{"build":"tsc && node postbuild.mjs","watch":"tsc --watch","typecheck":"tsc --noEmit","dev":"tsc --watch & python3 -m http.server 8080","clean":"rm -rf build"},"devDependencies":{"typescript":"^5.4.0"}}

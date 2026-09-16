@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="OAK & CHAOS — Idle Casino Simulator. Grow Zarghun the sentient oak tree.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OAK & CHAOS">
+  <meta name="application-name" content="OAK & CHAOS">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="referrer" content="no-referrer">
+  <title>OAK & CHAOS — Idle Casino Simulator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%2322c55e'/%3E%3Ctext x='96' y='128' font-size='96' text-anchor='middle'%3E%F0%9F%8C%B3%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%2322c55e'/%3E%3Ctext x='96' y='128' font-size='96' text-anchor='middle'%3E%F0%9F%8C%B3%3C/text%3E%3C/svg%3E">
+
+  <link rel="preload" href="css/oak.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/casino.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/breeding.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <noscript><link rel="stylesheet" href="css/oak.css"><link rel="stylesheet" href="css/casino.css"></noscript>
+</head>
+<body>
+
+<noscript>
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d1117;color:#f9fafb;font-family:Inter,sans-serif;text-align:center;padding:40px">
+    <div>
+      <h1 style="font-size:2rem;color:#22c55e;margin-bottom:16px">🌳 OAK & CHAOS</h1>
+      <p style="font-size:1.1rem;color:#d1d5db">Questo gioco richiede JavaScript attivato.</p>
+      <p style="color:#6b7280;margin-top:8px">Abilita JavaScript nelle impostazioni del browser e ricarica la pagina.</p>
+    </div>
+  </div>
+</noscript>
+
+<!-- ══════════ TOP BAR ══════════ -->
+  <header id="top-bar">
+    <div class="top-left">
+      <span class="game-logo">🌳 OAK &amp; CHAOS</span>
+      <span id="oak-name-display" class="oak-name">Zarghun — Sapling</span>
+    </div>
+    <div class="top-stats">
+      <div class="stat-pill" id="stat-age"><span class="stat-icon">📅</span> Age: <span id="hud-age">0</span>y</div>
+      <div class="stat-pill" id="stat-height"><span class="stat-icon">📏</span> Height: <span id="hud-height">1.0</span>m</div>
+      <div class="stat-pill energy-pill">
+        <span class="stat-icon">⚡</span>
+        <div class="bar-outer"><div class="bar-fill energy-fill" id="energy-fill"></div></div>
+        <span id="hud-energy">100</span>/<span id="hud-max-energy">100</span>
+      </div>
+      <div class="stat-pill coin-pill"><span class="stat-icon">💰</span> <span id="hud-coins">0</span></div>
+      <div class="stat-pill dna-pill"><span class="stat-icon">🧬</span> <span id="hud-dna">0</span> pts</div>
+      <div class="stat-pill time-pill"><span id="hud-day-icon">☀️</span> Day <span id="hud-day">1</span></div>
+    </div>
+    <div class="top-right">
+      <button id="btn-speed-1" class="speed-btn active" data-speed="1" aria-label="Velocità 1x">1×</button>
+      <button id="btn-speed-2" class="speed-btn" data-speed="2" aria-label="Velocità 2x">2×</button>
+      <button id="btn-speed-5" class="speed-btn" data-speed="5" aria-label="Velocità 5x">5×</button>
+      <button id="btn-pause" class="speed-btn" aria-label="Pausa/Riprendi">⏸</button>
+      <button id="btn-help" class="speed-btn" aria-label="Guida" title="Guida">❓</button>
+    </div>
+  </header>
+
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <main id="game-main">
+
+    <!-- ───── LEFT PANEL: OAK GROVE ───── -->
+    <section id="left-panel">
+      <div class="panel-tabs" id="left-tabs">
+        <button class="tab active" data-tab="tab-tree">🌳 Tree</button>
+        <button class="tab" data-tab="tab-breed">🧬 Breed</button>
+        <button class="tab" data-tab="tab-family">👨‍👩‍👧 Family</button>
+      </div>
+
+      <!-- TREE TAB -->
+      <div class="tab-content active" id="tab-tree">
+        <div id="oak-visual-container">
+          <div id="oak-visual" class="stage-sapling">
+            <div class="oak-glow"></div>
+            <div class="oak-crown">
+              <div class="leaf-cluster lc-1"></div>
+              <div class="leaf-cluster lc-2"></div>
+              <div class="leaf-cluster lc-3"></div>
+              <div class="leaf-cluster lc-4"></div>
+              <div class="leaf-cluster lc-5"></div>
+              <div class="leaf-cluster lc-6"></div>
+              <div class="leaf-cluster lc-7"></div>
+              <div class="leaf-cluster lc-8"></div>
+              <div class="leaf-cluster lc-9"></div>
+              <div class="leaf-cluster lc-10"></div>
+              <div class="leaf-cluster lc-11"></div>
+              <div class="leaf-cluster lc-12"></div>
+            </div>
+            <div class="oak-trunk"></div>
+            <div class="oak-roots"></div>
+            <div id="oak-speech" class="hidden"></div>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="oak-stats-grid">
+          <div class="mini-stat"><span class="ms-label">Height</span><span class="ms-val" id="stat-ht">1.0m</span></div>
+          <div class="mini-stat"><span class="ms-label">Girth</span><span class="ms-val" id="stat-gi">0.1</span></div>
+          <div class="mini-stat"><span class="ms-label">Leaves</span><span class="ms-val" id="stat-lv">10</span></div>
+          <div class="mini-stat"><span class="ms-label">Fertility</span><span class="ms-val" id="stat-fe">10</span></div>
+          <div class="mini-stat"><span class="ms-label">Charisma</span><span class="ms-val" id="stat-ch">5</span></div>
+          <div class="mini-stat"><span class="ms-label">Acorns</span><span class="ms-val" id="stat-ac">0</span></div>
+        </div>
+
+        <div class="action-bar">
+          <button class="action-btn grow-btn" id="btn-grow" aria-label="Cresci - 50 energia">🌱 Grow <span class="cost">50⚡</span></button>
+          <button class="action-btn acorn-btn" id="btn-acorn" aria-label="Produci Acorn - 30 energia">🌰 Acorn <span class="cost">30⚡</span></button>
+          <button class="action-btn meditate-btn" id="btn-meditate" aria-label="Medita per guadagnare DNA">🧘 Meditate</button>
+        </div>
+
+        <div class="upgrades-section">
+          <h3 class="section-title">🧬 DNA Upgrades</h3>
+          <div id="upgrades-list" class="upgrades-list"></div>
+        </div>
+      </div>
+
+      <!-- BREED TAB -->
+      <div class="tab-content" id="tab-breed">
+        <div class="breed-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="plant">🌿 Plants</button>
+          <button class="filter-btn" data-filter="animal">🐾 Animals</button>
+          <button class="filter-btn" data-filter="taliban">👳 Taliban</button>
+        </div>
+        <div class="breed-status">
+          <span>🌰 Acorns: <strong id="breed-acorns">0</strong></span>
+          <span>👶 Children: <strong id="breed-children">0</strong></span>
+        </div>
+        <div id="partners-grid" class="partners-grid"></div>
+      </div>
+
+      <!-- FAMILY TAB -->
+      <div class="tab-content" id="tab-family">
+        <div class="family-header">
+          <h3>🌳 The Zarghun Dynasty</h3>
+          <span id="family-count">0 offspring</span>
+        </div>
+        <div id="family-list" class="family-list"></div>
+      </div>
+    </section>
+
+    <!-- ───── RIGHT PANEL: CASINO FLOOR ───── -->
+    <section id="right-panel">
+      <div class="panel-tabs" id="right-tabs">
+        <button class="tab active" data-tab="tab-floor">🎰 Floor</button>
+        <button class="tab" data-tab="tab-revenue">📊 Revenue</button>
+        <button class="tab" data-tab="tab-staff">👤 Staff</button>
+      </div>
+
+      <!-- FLOOR TAB -->
+      <div class="tab-content active" id="tab-floor">
+        <div class="casino-header">
+          <span>💰 Rev/min: <strong id="casino-rpm">0</strong></span>
+          <span>📈 Today: <strong id="casino-today">0</strong></span>
+        </div>
+        <div id="machines-grid" class="machines-grid"></div>
+      </div>
+
+      <!-- REVENUE TAB -->
+      <div class="tab-content" id="tab-revenue">
+        <div class="revenue-chart-section">
+          <h3>📊 Revenue Per Machine</h3>
+          <div id="revenue-bars" class="revenue-bars"></div>
+        </div>
+        <div class="revenue-history">
+          <h3>📈 Daily Earnings (last 7 days)</h3>
+          <div id="daily-bars" class="revenue-bars daily-bars"></div>
+        </div>
+        <div class="spend-section">
+          <h3>💸 Spend Coins</h3>
+          <div class="spend-buttons">
+      <button class="spend-btn" id="btn-nutrients" aria-label="Nutrienti - 50 monete">🧪 Nutrienti <span class="cost">50🪙</span></button>
+      <button class="spend-btn" id="btn-fertilizer" aria-label="Fertilizer - 200 monete">🌿 Fertilizer <span class="cost">200🪙</span></button>
+      <button class="spend-btn" id="btn-bribe" aria-label="Corri ispettore - 300 monete">🤫 Bribe Inspector <span class="cost">300🪙</span></button>
+      <button class="spend-btn" id="btn-unlock-m5" aria-label="Sblocca Macchina 5 - 500 monete">🔓 Machine 5 <span class="cost">500🪙</span></button>
+      <button class="spend-btn" id="btn-unlock-m6" aria-label="Sblocca Macchina 6 - 500 monete">🔓 Machine 6 <span class="cost">500🪙</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAFF TAB -->
+      <div class="tab-content" id="tab-staff">
+        <h3>👳 Taliban Operators</h3>
+        <div id="staff-operators" class="staff-list"></div>
+        <h3>🌳 Oak Offspring Dealers</h3>
+        <div id="staff-dealers" class="staff-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════ EVENT LOG ══════════ -->
+  <footer id="event-log">
+    <div class="log-title">📜 Event Log</div>
+    <div id="event-list" class="event-list"></div>
+  </footer>
+
+  <!-- ══════════ TOAST AREA ══════════ -->
+  <div id="toast-area"></div>
+
+  <!-- ══════════ MODALS ══════════ -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal-content">
+      <button id="modal-close" class="modal-close-btn" aria-label="Chiudi modale">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <template id="faq-template">
+    <div class="faq-content">
+      <h2>FAQ & Guidelines</h2>
+
+      <h3>Overview</h3>
+      <p>OAK & CHAOS is an idle simulator where you manage an oak tree (the Oak) alongside a small casino. Use Energy, Acorns, DNA points and Coins to grow the tree, breed offspring, buy upgrades and unlock casino machines.</p>
+
+      <h3>HUD & Stats</h3>
+      <ul>
+        <li><strong>Age:</strong> Oak's age in years.</li>
+        <li><strong>Height:</strong> Oak's current height in meters.</li>
+        <li><strong>Energy / Max Energy:</strong> resource consumed by actions like Grow and Acorn.</li>
+        <li><strong>Coins:</strong> casino currency for purchases and unlocks.</li>
+        <li><strong>DNA:</strong> points used to unlock genetic upgrades.</li>
+        <li><strong>Day:</strong> current in-game day.</li>
+      </ul>
+
+      <h3>Main Controls & Actions</h3>
+      <ul>
+        <li><strong>Speed:</strong> 1×, 2×, 5× and Pause control game speed.</li>
+        <li><strong>Grow (🌱):</strong> spend Energy to increase Oak size and possibly yield leaves/acorns.</li>
+        <li><strong>Acorn (🌰):</strong> spend Energy to produce acorns used for breeding and special actions.</li>
+        <li><strong>Meditate (🧘):</strong> restores or optimizes Energy and may trigger passive bonuses.</li>
+      </ul>
+
+      <h3>DNA Upgrades</h3>
+      <p>Spend DNA points to buy upgrades that permanently alter Oak traits. Typical upgrade categories:</p>
+      <ul>
+        <li><strong>Growth:</strong> increases height/girth gains from Grow actions.</li>
+        <li><strong>Fertility:</strong> raises chance or quantity of producing acorns/offspring.</li>
+        <li><strong>Charisma:</strong> affects breeding quality and some casino interactions.</li>
+        <li><strong>Resource Efficiency:</strong> reduces energy costs for actions.</li>
+      </ul>
+
+      <h3>Breeding & Family</h3>
+      <ul>
+        <li><strong>Filters:</strong> view partners by type (All, Plants, Animals, etc.).</li>
+        <li><strong>Acorns:</strong> used as the currency for breeding; cost per offspring is shown in the UI.</li>
+        <li><strong>Children:</strong> generated offspring appear in the Family tab with traits inherited from parents.</li>
+        <li><strong>Strategy:</strong> breed selectively — higher-trait parents produce better offspring that can amplify late-game benefits.</li>
+      </ul>
+
+      <h3>Casino Mechanics</h3>
+      <ul>
+        <li><strong>Floor:</strong> displays slot machines and other revenue sources.</li>
+        <li><strong>Rev/min (Revenue per Minute):</strong> shows passive income generated by machines.</li>
+        <li><strong>Today:</strong> tracks earnings for the current in-game day.</li>
+        <li><strong>Spend Buttons:</strong> buy consumables and unlocks with Coins (example costs shown in UI: Nutrients 50, Fertilizer 200, Bribe 300, unlocks 500).</li>
+        <li><strong>Investing:</strong> reinvest Coins into upgrades and machines to increase passive income over time.</li>
+      </ul>
+
+      <h3>Staff</h3>
+      <p>Hire staff to improve casino operations and Oak offspring sales. Operators increase machine efficiency; dealers increase marketplace reach. Hiring costs and effects are shown in the Staff tab.</p>
+
+      <h3>Event Log & Notifications</h3>
+      <p>The Event Log at the bottom records important events and outcomes. Toasts appear briefly for immediate feedback (e.g., achievements or purchase confirmations).</p>
+
+      <h3>Win Condition & Achievements</h3>
+      <ul>
+        <li><strong>Win Screen:</strong> appears when the Oak reaches an Ascension milestone; shows final stats and offers a restart.</li>
+        <li><strong>Achievements:</strong> unlock milestones and receive bonus rewards; the achievement popup notifies you when unlocked.</li>
+      </ul>
+
+      <h3>Quick Tips & Strategy</h3>
+      <ul>
+        <li><strong>Early game:</strong> focus on efficient Energy use and buy DNA upgrades that improve resource gain or reduce costs.</li>
+        <li><strong>Mid game:</strong> balance breeding and casino investment — good offspring amplify long-term benefits.</li>
+        <li><strong>Late game:</strong> prioritize high-return casino machines and maximize DNA upgrades that scale with time.</li>
+        <li><strong>General:</strong> monitor the Event Log to identify high-value actions and avoid wasting Energy on low-yield tasks.</li>
+      </ul>
+
+      <h3>Troubleshooting & Accessibility</h3>
+      <ul>
+        <li>If buttons don't respond, try reloading the page and checking the console for errors.</li>
+        <li>The UI supports keyboard navigation where applicable; consider increasing browser zoom for readability.</li>
+        <li>Report bugs by creating an issue in the repository with reproduction steps and console logs.</li>
+      </ul>
+
+      <h3>Keyboard Shortcuts</h3>
+      <ul>
+        <li><strong>Space / P:</strong> Pause/Resume (funzionante).</li>
+        <li><strong>1 / 2 / 5:</strong> Switch game speed (1×/2×/5×) (funzionante).</li>
+        <li><strong>↑↑↓↓←→←→BA:</strong> Konami Code — Chaos Mode Easter Egg.</li>
+      </ul>
+
+      <h3>Developer Notes</h3>
+      <p>The modal uses the existing `modal-overlay` and `modal-content` elements. Content is injected from the `faq-template` template to keep layout consistent with other modals.</p>
+
+      <div style="margin-top:12px; text-align:right;"><button id="faq-done" class="menu-btn">Close</button></div>
+    </div>
+  </template>
+
+  <!-- ══════════ WIN SCREEN ══════════ -->
+  <div id="win-screen" class="hidden">
+    <div class="win-content">
+      <div class="win-oak">🌳</div>
+      <h1 class="win-title">ZARGHUN HAS ASCENDED</h1>
+      <div id="win-stats"></div>
+      <button id="btn-play-again" class="menu-btn primary">🔄 Play Again</button>
+    </div>
+  </div>
+
+  <!-- ══════════ ACHIEVEMENT POPUP ══════════ -->
+  <div id="achievement-popup" class="hidden">
+    <div class="achievement-icon">🏆</div>
+    <div class="achievement-text">
+      <div class="achievement-label">ACHIEVEMENT UNLOCKED</div>
+      <div id="achievement-name"></div>
+    </div>
+  </div>
+
+  <script type="module" src="build/main.js"></script>
+</body>
+</html>

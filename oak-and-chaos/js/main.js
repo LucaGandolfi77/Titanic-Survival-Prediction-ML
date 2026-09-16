@@ -6,6 +6,7 @@ import { BreedingLab }      from './breeding.js';
 import { PopulationManager } from './population.js';
 import { EventSystem }      from './events.js';
 import { UiManager }        from './ui.js';
+import { SeededRNG }        from './utils.js';
 import {
   renderOak, renderHUD, renderMachines, renderPartners,
   renderFamily, renderUpgrades, renderRevenue, renderStaff,
@@ -38,10 +39,22 @@ class Game {
     this.speed      = 1;         // 1×, 2×, 5×
     this.paused     = false;
     this.won        = false;
+    this._seededRNG = false;     // enable for reproducible testing
 
     this._prevTs    = 0;
     this._autoSaveTimer = 0;
     this._renderDirty  = true;
+    this._rafId = null;
+
+    // Seeded RNG — expose for testing
+    this.rng = {
+      useSeeded: false,
+      _native: Math.random.bind(Math.random),
+      _seeded: null,
+      enable(seed) { this.useSeeded = true; this._seeded = new SeededRNG(seed || Date.now()); },
+      disable() { this.useSeeded = false; this._seeded = null; },
+      random() { return this.useSeeded ? this._seeded.next() : this._native(); },
+    };
 
     // Machine spin callback → coin bursts
     this.casino.onSpinResult = (machine, result) => {
@@ -61,17 +74,15 @@ class Game {
     this.load();
     this.ui.init(this);
 
-    // Initial render
     this._renderAll();
 
-    // Game loop
     this._prevTs = performance.now();
-    requestAnimationFrame(ts => this._loop(ts));
+    this._rafId = requestAnimationFrame(ts => this._loop(ts));
   }
 
   /* ═══════════ game loop ═══════════ */
   _loop(ts) {
-    const rawDelta = (ts - this._prevTs) / 1000; // seconds
+    const rawDelta = (ts - this._prevTs) / 1000;
     this._prevTs = ts;
 
     if (!this.paused && !this.won) {
@@ -79,20 +90,25 @@ class Game {
       this._tick(delta);
     }
 
-    // Auto-save every 30s real time
     this._autoSaveTimer += rawDelta;
     if (this._autoSaveTimer >= 30) {
       this._autoSaveTimer = 0;
       this.save();
     }
 
-    // Render at ~15 fps to save CPU (every ~66ms)
     if (this._renderDirty || rawDelta > 0.06) {
       this._renderAll();
       this._renderDirty = false;
     }
 
-    requestAnimationFrame(t => this._loop(t));
+    this._rafId = requestAnimationFrame(t => this._loop(t));
+  }
+
+  stop() {
+    if (this._rafId) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
   }
 
   /* ═══════════ tick ═══════════ */
@@ -147,14 +163,19 @@ class Game {
 
   /* ═══════════ render all panels ═══════════ */
   _renderAll() {
-    renderOak(this.oak, this.dayPhase);
-    renderHUD(this.oak, this.casino, this.population, this.gameDay, this.dayPhase);
-    renderMachines(this.casino);
-    renderPartners(this.population.partners, this.oak);
-    renderFamily(this.population.offspring);
-    renderUpgrades(this.oak.upgrades, this.oak.dnaPoints);
-    renderRevenue(this.casino);
-    renderStaff(this.casino, this.population.offspring);
+    try {
+      renderOak(this.oak, this.dayPhase);
+      renderHUD(this.oak, this.casino, this.population, this.gameDay, this.dayPhase);
+      renderMachines(this.casino);
+      renderPartners(this.population.partners, this.oak);
+      renderFamily(this.population.offspring);
+      renderUpgrades(this.oak.upgrades, this.oak.dnaPoints);
+      renderRevenue(this.casino);
+      renderStaff(this.casino, this.population.offspring);
+    } catch (e) {
+      console.error('Render error:', e);
+      this._renderDirty = true;
+    }
   }
 
   /* ═══════════ public API used by UiManager ═══════════ */
@@ -194,7 +215,14 @@ class Game {
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return;
       const data = JSON.parse(raw);
-      if (!data || data.version !== 1) return;
+      if (!data) {
+        console.warn('Load: empty data');
+        return;
+      }
+      if (data.version !== 1) {
+        console.warn(`Load: version mismatch (expected 1, got ${data.version}). Save may be incompatible.`);
+        return;
+      }
 
       this.gameDay    = data.gameDay || 1;
       this.dayPhase   = data.dayPhase || 'day';
@@ -205,32 +233,33 @@ class Game {
       this.population.loadJSON(data.population);
       this.events.loadJSON(data.events);
 
-      // Offline progress (max 2 hours)
       const offlineMs = Date.now() - (data.timestamp || Date.now());
       const offlineSec = Math.min(offlineMs / 1000, 7200);
       if (offlineSec > 5) {
         this._applyOfflineProgress(offlineSec);
+        this.ui.showToast('success', '⏩ Offline Progress',
+          `Simulated ${Math.floor(offlineSec / 60)} minutes while you were away.`);
       }
     } catch (e) {
-      console.warn('Load failed:', e);
+      console.error('Load failed:', e);
+      this.ui.showToast('error', '💾 Load Error', 'Failed to restore save data.');
     }
   }
 
   _applyOfflineProgress(seconds) {
-    const steps = Math.floor(seconds / 2); // simulate in 2-second chunks
+    const steps = Math.floor(seconds / 2);
     for (let i = 0; i < steps; i++) {
-      this.oak.update(2, 0.6); // average sunlight
+      this.oak.update(2, 0.6);
       this.casino.update(2, this.oak.height);
       this.breeding.update(2);
       this.population.updateAges(2);
     }
-    const mins = (seconds / 60).toFixed(0);
-    this.ui.showToast('success', '⏩ Offline Progress',
-      `Simulated ${mins} minutes while you were away.`);
   }
 
   /* ═══════════ reset / play again ═══════════ */
   resetGame() {
+    this.save();
+    this.stop();
     localStorage.removeItem(SAVE_KEY);
     location.reload();
   }

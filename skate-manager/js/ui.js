@@ -313,16 +313,22 @@ export function renderOverview() {
   if (nextComp && nextComp.comp.name) {
     const comp = nextComp.comp;
     const entered = nextComp.entered;
+    const competed = !!comp.competition;
     document.getElementById('overview-next-comp').innerHTML = `
       <div class="next-comp-card">
         <h4>📅 This Week: ${comp.name}</h4>
         <span>Tier ${comp.tier} &middot; Entry: ${formatMoneyFull(comp.entryFee)} &middot; 1st: ${formatMoneyFull(comp.prizes[1])}</span>
-        ${entered ? '<span class="badge-entered">✔ ENTERED</span>' : `<span class="badge-not-entered">⬜ NOT ENTERED</span>`}
+        ${competed
+          ? '<span class="badge-entered">✔ COMPETED</span>'
+          : entered
+            ? '<span class="badge-entered">✔ ENTERED</span><span class="badge-withdraw">↩ WITHDRAW</span>'
+            : '<span class="badge-not-entered">⬜ NOT ENTERED</span>'
+        }
       </div>
     `;
-    // Show compete button
+    // Show compete button only while the competition can still be played
     const btnCompete = document.getElementById('btn-compete');
-    btnCompete.style.display = entered ? 'inline-block' : 'none';
+    btnCompete.style.display = entered && !competed ? 'inline-block' : 'none';
   } else {
     document.getElementById('overview-next-comp').innerHTML = `
       <div class="next-comp-card">
@@ -368,6 +374,10 @@ export function renderEventLog() {
 
 // ===== Panel: Squad =====
 export function renderSquad(onCardAction) {
+  // Section titles reflect the live roster size
+  document.getElementById('active-squad-title').textContent = `Active Squad (${GameState.activeSquad.length}/16)`;
+  document.getElementById('reserve-title').textContent = `Reserve Bench (${GameState.reserveBench.length}/8)`;
+
   // Cohesion bar
   const cohesion = getCohesion();
   document.getElementById('cohesion-fill').style.width = cohesion + '%';
@@ -433,8 +443,9 @@ function findSkaterById(id) {
 
 // ===== Panel: Market =====
 export function renderMarket(onCardAction) {
-  const refreshIn = GameState.marketRefreshWeek > 0 ? GameState.marketRefreshWeek : 'now';
-  document.getElementById('market-refresh-info').textContent = `Refreshes in: ${refreshIn} week(s)`;
+  const weeksToRefresh = Math.max(0, GameState.marketRefreshWeek - GameState.week);
+  document.getElementById('market-refresh-info').textContent =
+    weeksToRefresh === 0 ? 'Refreshes when you advance' : `Refreshes in: ${weeksToRefresh} week${weeksToRefresh > 1 ? 's' : ''}`;
 
   // Available skaters
   const grid = document.getElementById('market-available-grid');
@@ -609,8 +620,9 @@ export function renderResults(result) {
       <h4>Score Breakdown</h4>
       <div class="breakdown-row"><span>Base Score</span><span>${result.baseScore.toLocaleString()}</span></div>
       <div class="breakdown-row"><span>Music Bonus</span><span>+${result.musicBonus.toLocaleString()}</span></div>
+      ${result.tempoBoost > 0 ? `<div class="breakdown-row"><span>🥤 CoolBreeze Boost</span><span>+${result.tempoBoost.toLocaleString()}</span></div>` : ''}
       <div class="breakdown-row"><span>Sync Bonus</span><span>+${result.syncBonus.toLocaleString()}</span></div>
-      <div class="breakdown-row negative"><span>Wobble Penalty</span><span>-${result.wobblePenalty.toLocaleString()}</span></div>
+      <div class="breakdown-row negative"><span>Wobble Penalty (applied during routine)</span><span>-${result.wobblePenalty.toLocaleString()}</span></div>
       ${result.perfectBonus > 0 ? `<div class="breakdown-row perfect"><span>Perfect Bonus ✨</span><span>+${result.perfectBonus}</span></div>` : ''}
       <div class="breakdown-row total"><span>TOTAL</span><span>${result.score.toLocaleString()}</span></div>
       <div class="breakdown-stats">

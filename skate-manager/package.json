@@ -1,0 +1,14 @@
+{
+  "name": "skate-manager",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Figure skating team management game - vanilla HTML5/CSS3/JS",
+  "scripts": {
+    "test": "node tests/smoke.test.mjs"
+  },
+  "devDependencies": {
+    "eslint": "^10.10.0",
+    "prettier": "^3.9.7"
+  }
+}

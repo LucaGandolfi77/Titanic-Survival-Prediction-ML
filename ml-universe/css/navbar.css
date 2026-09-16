@@ -21,11 +21,19 @@
   left: 0;
   width: 100%;
   z-index: var(--z-nav);
-  background: rgba(8, 11, 20, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-subtle);
-  transition: height var(--transition-base), padding var(--transition-base);
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.04), transparent 50%),
+    rgba(8, 11, 20, 0.85);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-bottom: 1px solid var(--glass-border);
+  transition: height var(--transition-base), padding var(--transition-base), background var(--transition-base);
+}
+
+.site-header.navbar--scrolled {
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.06), transparent 50%),
+    rgba(8, 11, 20, 0.92);
 }
 
 .site-header .nav-inner {
@@ -64,8 +72,10 @@
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-secondary);
-  transition: color var(--transition-fast);
-  padding: var(--sp-1) 0;
+  transition: color var(--transition-fast), border-color var(--transition-base), background var(--transition-base);
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
 }
 
 .nav-link::after {
@@ -84,6 +94,10 @@
 .nav-link:hover,
 .nav-link.active {
   color: var(--text-primary);
+  border-color: var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .nav-link:hover::after,
@@ -102,6 +116,18 @@
   height: 28px;
   cursor: pointer;
   z-index: calc(var(--z-overlay) + 1);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+
+.hamburger:hover {
+  border-color: var(--glass-border-hover);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .hamburger span {
@@ -131,9 +157,11 @@
 .nav-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(8, 11, 20, 0.97);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.03), transparent 50%),
+    rgba(8, 11, 20, 0.95);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
   z-index: var(--z-overlay);
   display: flex;
   flex-direction: column;
@@ -158,6 +186,9 @@
   transition: color var(--transition-base), transform var(--transition-base);
   opacity: 0;
   transform: translateY(20px);
+  padding: var(--sp-2) var(--sp-6);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
 }
 
 .nav-overlay.open a {
@@ -173,4 +204,8 @@
 .nav-overlay a:hover {
   color: var(--text-primary);
   transform: translateX(8px);
+  border-color: var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }

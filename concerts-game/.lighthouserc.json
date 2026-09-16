@@ -1,0 +1,10 @@
+module.exports = {
+  globDirectory: 'dist/',
+  globPatterns: ['**/*.{js,css,html,json,woff2}'],
+  maxAssetSize: 500000,
+  maxEntrySize: 500000,
+  urls: ['http://localhost:3000/'],
+  settings: {
+    ci: true
+  }
+}

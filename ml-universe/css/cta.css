@@ -3,13 +3,12 @@
    ================================================================ */
 
 #cta {
-  background: linear-gradient(135deg,
-    rgba(99, 102, 241, 0.08) 0%,
-    rgba(139, 92, 246, 0.06) 50%,
-    rgba(6, 182, 212, 0.04) 100%
-  );
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 50%, rgba(6, 182, 212, 0.04) 100%);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .cta-content {
@@ -42,18 +41,24 @@
   flex: 1 1 240px;
   min-width: 0;
   padding: var(--sp-3) var(--sp-6);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
   color: var(--text-primary);
   font-size: var(--text-base);
   outline: none;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), filter var(--transition-base);
 }
 
 #newsletter-form input[type="email"]:focus {
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  filter: brightness(1.05);
 }
 
 #newsletter-form input[type="email"]::placeholder {
@@ -64,20 +69,24 @@
   position: relative;
   overflow: hidden;
   padding: var(--sp-3) var(--sp-8);
-  background: var(--gradient-hero);
+  background:
+    linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.15)),
+    var(--gradient-hero);
   background-size: 200% 200%;
   animation: shimmer 3s ease-in-out infinite;
   color: #fff;
   font-weight: 600;
   font-size: var(--text-sm);
   border-radius: var(--radius-full);
-  box-shadow: var(--glow-indigo);
-  transition: transform var(--transition-spring);
-  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--glow-indigo), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: transform var(--transition-spring), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
 #newsletter-form button[type="submit"]:hover {
   transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: var(--glow-cyan), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* Ripple */

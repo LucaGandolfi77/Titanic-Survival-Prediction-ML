@@ -108,6 +108,19 @@ export class RinkRenderer {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('⚠', x, y - scaledR - 8);
+    } else if (skater.state === 'injured') {
+      // Sits out the routine — dimmed with a medical cross
+      ctx.globalAlpha = 0.35;
+      ctx.fillStyle = '#64748b';
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#f87171';
+      ctx.font = 'bold 14px Inter';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✚', x, y + 1);
     } else if (skater.state === 'fallen') {
       // X mark, gray
       ctx.globalAlpha = 0.4;

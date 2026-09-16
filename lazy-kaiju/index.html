@@ -8,11 +8,16 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/ui.css">
   <link rel="stylesheet" href="css/hud.css">
+  <meta name="theme-color" content="#4a7c59">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%234a7c59' rx='24'/%3E%3Ctext x='90' y='120' font-size='90' text-anchor='middle'%3E%F0%9F%A6%8E%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/extra.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.158.0/build/three.module.js"
+        "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
       }
     }
   </script>
@@ -93,8 +98,12 @@
       <h1>LAZY KAIJU<br>CITY CLEANER</h1>
       <p class="subtitle">🦎 Grogg just wants a nap.<br>The city had other plans.</p>
       <button id="btn-play" class="menu-btn primary">▶ PLAY</button>
+      <button id="btn-2p" class="menu-btn">👥 2 PLAYERS</button>
+      <button id="btn-editor" class="menu-btn">🎨 LEVEL EDITOR</button>
+      <button id="btn-share" class="menu-btn">📤 SHARE</button>
       <button id="btn-howto" class="menu-btn">📖 HOW TO PLAY</button>
       <button id="btn-hiscores" class="menu-btn">🏆 HIGH SCORES</button>
+      <button id="btn-badges" class="menu-btn">🎖️ BADGES</button>
       <button id="btn-settings" class="menu-btn">⚙️ SETTINGS</button>
     </div>
   </div>
@@ -152,6 +161,15 @@
     <button id="btn-hs-back" class="menu-btn">← BACK</button>
   </div>
 
+  <div id="screen-badges" class="screen hidden">
+    <h2>🎖️ BADGES</h2>
+    <div id="xp-display" style="font-family:var(--font-hud);color:var(--text-muted);margin-bottom:10px;">
+      XP: <span id="xp-value">0</span>/<span id="xp-next">100</span> | Level: <span id="level-value">1</span>
+    </div>
+    <div id="badges-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:40vh;overflow-y:auto;padding:10px;"></div>
+    <button id="btn-badges-back" class="menu-btn">← BACK</button>
+  </div>
+
   <div id="screen-settings" class="screen hidden">
     <h2>⚙️ SETTINGS</h2>
     <div class="setting-row">
@@ -171,14 +189,76 @@
       <button id="btn-sound" class="toggle-btn active">ON</button>
     </div>
     <div class="setting-row">
+      <label>Music</label>
+      <button id="btn-music" class="toggle-btn active">ON</button>
+    </div>
+    <div class="setting-row">
+      <label>Gesture Cam</label>
+      <button id="btn-gesture" class="toggle-btn">OFF</button>
+    </div>
+    <div class="setting-row">
+      <label>AR Mode</label>
+      <button id="btn-ar" class="toggle-btn">OFF</button>
+    </div>
+    <div class="setting-row">
+      <label>Push Notifications</label>
+      <button id="btn-push" class="toggle-btn">OFF</button>
+    </div>
+    <div class="setting-row">
+      <label>Voice Chat</label>
+      <button id="btn-webrtc" class="toggle-btn">OFF</button>
+    </div>
+    <div class="setting-row">
+      <label>Smart Home</label>
+      <button id="btn-iot" class="toggle-btn">OFF</button>
+    </div>
+    <div class="setting-row">
       <label>Show Hitboxes</label>
       <button id="btn-debug" class="toggle-btn">OFF</button>
     </div>
     <button id="btn-set-back" class="menu-btn">← BACK</button>
   </div>
 
+  <div id="screen-editor" class="screen hidden">
+    <h2>🎨 LEVEL EDITOR</h2>
+    <div id="editor-info">Click to place buildings • Right-click to remove • Save to share</div>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:10px;">Use the toolbar on the game canvas</p>
+    <button id="btn-editor-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="screen-multiplayer" class="screen hidden">
+    <h2>👥 2 PLAYERS</h2>
+    <div class="mp-players">
+      <div class="mp-player-card">
+        <h3>🦎 PLAYER 1</h3>
+        <p style="font-size:0.8rem;color:var(--text-muted);">WASD + SPACE</p>
+        <input id="mp-p1-name" type="text" value="Player 1" maxlength="12" aria-label="Player 1 name">
+      </div>
+      <div class="mp-player-card">
+        <h3>🦎 PLAYER 2</h3>
+        <p style="font-size:0.8rem;color:var(--text-muted);">IJKL + ENTER</p>
+        <input id="mp-p2-name" type="text" value="Player 2" maxlength="12" aria-label="Player 2 name">
+      </div>
+    </div>
+    <button id="btn-mp-start" class="menu-btn primary">▶ START RACE!</button>
+    <button id="btn-mp-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="consent-banner" class="hidden" style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(13,17,23,0.95);border-top:2px solid var(--kaiju-green);padding:15px 20px;display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;">
+    <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">We use anonymous analytics to improve the game. <strong style="color:var(--text-primary);">No personal data is collected.</strong></p>
+    <button id="consent-accept" class="consent-btn consent-accept">✓ Got it!</button>
+    <button id="consent-decline" class="consent-btn consent-decline">No thanks</button>
+  </div>
+
   <div id="toast-container" aria-live="polite"></div>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

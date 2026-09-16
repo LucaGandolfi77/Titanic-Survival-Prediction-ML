@@ -156,15 +156,15 @@ const WEIRD_EVENTS = [
 ];
 
 /* ══════════════════════════════════════════════════════════ */
+/**
+ * EventSystem — random event generation and scheduling.
+ * 18 predefined events across 3 categories: positive, negative, weird.
+ */
 export class EventSystem {
-  constructor() {
-    this.history = [];      // { event, timestamp }
-    this.pending = [];
-    this._timer = randomFloat(30, 60);
-    this._eventListeners = [];
-    this.maxHistory = 50;
-  }
-
+  /**
+   * Register an event listener.
+   * @param {Function} fn - Callback receives event object
+   */
   onEvent(fn) { this._eventListeners.push(fn); }
 
   /* ── Update ── */

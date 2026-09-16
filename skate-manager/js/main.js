@@ -2,15 +2,24 @@
 import { GameState, saveGame, loadGame, hasSave, resetState } from './state.js';
 import { createSkater, generateStartingSquad, generateMarketSkaters, weeklyStatFluctuation,
          injureSkater, getSquadAvgOverall, getSquadAvgMorale, recalcSkater } from './skaters.js';
-import { generateCalendar, enterCompetition, canEnterCompetition,
+import { generateCalendar, enterCompetition, withdrawCompetition, canEnterCompetition,
          getThisWeekCompetition, calculatePlacements, generateRivals } from './competitions.js';
 import { processWeeklySponsors, negotiateSponsor, getTotalSponsorIncome, getFameBonus, getWinPointsBonus } from './sponsors.js';
 import { promoteToActive, demoteToReserve, releaseSkater, buySkater,
          listForSale, cancelListing, aiMarketActivity, refreshMarket,
-         scoutMarket, trainTeam, getWeeklyWages } from './squad.js';
+         scoutMarket, trainTeam, getWeeklyWages, findSkater } from './squad.js';
 import { MiniGame } from './minigame.js';
 import { MusicEngine } from './music.js';
 import { randInt, pick, clamp, formatMoneyFull, formatMoney } from './utils.js';
+import {
+  STARTING_MONEY,
+  ACTIVE_SQUAD_SIZE,
+  RESERVE_SIZE,
+  RETIREMENT_AGE,
+  RETIREMENT_CHANCE,
+  CONTRACT_EXPIRY_WARN_WEEKS,
+  DEFAULT_VOLUME
+} from './config.js';
 import {
   showToast, showModal, hideModal, confirmModal,
   showSkaterDetail, showSellModal, showBuyModal, showCompEntryModal,
@@ -33,7 +42,7 @@ function handleCardAction(action, skaterId) {
         showToast('Skater promoted to active squad', 'success');
         refreshUI();
       } else {
-        showToast('Active squad full (max 16)', 'warning');
+        showToast(`Active squad full (max ${ACTIVE_SQUAD_SIZE})`, 'warning');
       }
       break;
     }
@@ -43,7 +52,7 @@ function handleCardAction(action, skaterId) {
         showToast('Skater moved to reserves', 'info');
         refreshUI();
       } else {
-        showToast('Reserve bench full (max 8)', 'warning');
+        showToast(`Reserve bench full (max ${RESERVE_SIZE})`, 'warning');
       }
       break;
     }
@@ -109,15 +118,8 @@ function handleNegotiate(sponsorId) {
   }
 }
 
-function findSkater(id) {
-  return GameState.activeSquad.find(s => s.id === id) ||
-         GameState.reserveBench.find(s => s.id === id) ||
-         GameState.marketSkaters.find(s => s.id === id) ||
-         GameState.listedSkaters.find(s => s.id === id);
-}
-
 function refreshUI() {
-  refreshAllPanels(handleCardAction, handleNegotiate);
+  refreshAllPanels();
   autoSave();
 }
 
@@ -203,10 +205,10 @@ function triggerRandomEvents() {
 async function advanceWeek() {
   bgMusic.playClick();
 
-  // Check if we need to play a competition first
+  // Block advancing while an entered competition hasn't been played or withdrawn
   const compInfo = getThisWeekCompetition();
   if (compInfo && compInfo.entered && !compInfo.comp.competition) {
-    showToast('You must compete first!', 'warning');
+    showToast("You've entered this week's competition — compete or withdraw first!", 'warning');
     return;
   }
 
@@ -230,15 +232,44 @@ async function advanceWeek() {
     recalcSkater(sk);
   }
 
+  // Warn about contracts expiring soon
+  for (const sk of [...GameState.activeSquad, ...GameState.reserveBench]) {
+    if (sk.contract.weeksRemaining === CONTRACT_EXPIRY_WARN_WEEKS) {
+      GameState.eventLog.push(`⚠️ ${sk.name}'s contract expires in ${CONTRACT_EXPIRY_WARN_WEEKS} weeks.`);
+    }
+  }
+
+  // Contract expiries — skaters with 0 weeks remaining leave the team
+  const departed = [];
+  GameState.activeSquad = GameState.activeSquad.filter(sk => {
+    if (sk.contract.weeksRemaining <= 0) { departed.push(sk); return false; }
+    return true;
+  });
+  GameState.reserveBench = GameState.reserveBench.filter(sk => {
+    if (sk.contract.weeksRemaining <= 0) { departed.push(sk); return false; }
+    return true;
+  });
+  for (const sk of departed) {
+    GameState.eventLog.push(`📝 ${sk.name}'s contract expired — they left the team.`);
+    showToast(`📝 ${sk.name}'s contract expired!`, 'warning', 4000);
+  }
+  // Auto-promote the best available reserve to keep the active squad full
+  while (GameState.activeSquad.length < ACTIVE_SQUAD_SIZE && GameState.reserveBench.length > 0) {
+    const best = GameState.reserveBench.reduce((a, b) => (b.overall > a.overall ? b : a));
+    promoteToActive(best.id);
+    GameState.eventLog.push(`⬆ ${best.name} promoted from reserves to fill the squad.`);
+  }
+
   // AI market activity
   const marketMsgs = aiMarketActivity();
   for (const msg of marketMsgs) {
     GameState.eventLog.push(`🤖 ${msg}`);
   }
 
-  // Market refresh every 2 weeks
-  if (GameState.week % 2 === 0) {
+  // Market refresh cadence (driven by marketRefreshWeek)
+  if (GameState.week >= GameState.marketRefreshWeek) {
     refreshMarket();
+    GameState.marketRefreshWeek = GameState.week + 2;
     GameState.eventLog.push('🛒 Market refreshed with new skaters.');
   }
 
@@ -346,6 +377,24 @@ function enterComp() {
   });
 }
 
+function withdrawComp() {
+  bgMusic.playClick();
+  const compInfo = getThisWeekCompetition();
+  if (!compInfo || !compInfo.entered || compInfo.comp.competition) return;
+
+  confirmModal('Withdraw from Competition',
+    `Withdraw from ${compInfo.comp.name}? The entry fee will be lost.`, () => {
+      const result = withdrawCompetition(compInfo.weekIndex);
+      if (result.ok) {
+        showToast(result.msg, 'info');
+        GameState.eventLog.push(`↩ ${result.msg}`);
+        refreshUI();
+      } else {
+        showToast(result.msg, 'warning');
+      }
+    });
+}
+
 // ===== Season end =====
 function endSeason() {
   // Save season history
@@ -396,7 +445,7 @@ function startNewSeason() {
   for (const sk of [...GameState.activeSquad, ...GameState.reserveBench]) {
     sk.age++;
     // Retirement check for very old skaters
-    if (sk.age >= 35 && Math.random() < 0.3) {
+    if (sk.age >= RETIREMENT_AGE && Math.random() < RETIREMENT_CHANCE) {
       GameState.eventLog.push(`👋 ${sk.name} (age ${sk.age}) has retired.`);
       releaseSkater(sk.id);
     } else {
@@ -427,6 +476,7 @@ function startNewGame() {
   GameState.teamName = teamName;
   GameState.teamColor = teamColor;
   GameState.difficulty = difficulty;
+  GameState.money = STARTING_MONEY[difficulty] || STARTING_MONEY['semi-pro'];
 
   // Generate squad
   const { squad, reserve } = generateStartingSquad(difficulty);
@@ -523,11 +573,6 @@ function setupEventListeners() {
     bgMusic.setVolume(v);
     miniGame.music.setVolume(v);
   });
-  document.getElementById('setting-sfx').addEventListener('change', (e) => {
-    GameState.sfxEnabled = e.target.checked;
-    bgMusic.sfxEnabled = e.target.checked;
-    miniGame.music.sfxEnabled = e.target.checked;
-  });
   document.getElementById('setting-autosave').addEventListener('change', (e) => {
     GameState.autosave = e.target.checked;
   });
@@ -557,10 +602,10 @@ function setupEventListeners() {
   document.getElementById('btn-train-team').addEventListener('click', doTrainTeam);
   document.getElementById('btn-scout').addEventListener('click', doScout);
 
-  // Enter competition from overview (the "not entered" state)
+  // Enter / withdraw competition from overview
   document.getElementById('overview-next-comp').addEventListener('click', (e) => {
-    const badge = e.target.closest('.badge-not-entered');
-    if (badge) enterComp();
+    if (e.target.closest('.badge-not-entered')) enterComp();
+    if (e.target.closest('.badge-withdraw')) withdrawComp();
   });
 
   // Results continue

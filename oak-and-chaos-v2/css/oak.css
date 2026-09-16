@@ -1,0 +1,342 @@
+/* ── css/oak.css ── Oak Tree Visual (Pure CSS Art) ── */
+
+#oak-visual-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 260px;
+  padding-bottom: 10px;
+  position: relative;
+  background: radial-gradient(ellipse at bottom, #1a3a1a 0%, var(--bg-dark) 70%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Ground */
+#oak-visual-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 20px;
+  background: linear-gradient(0deg, #2d5a1e, transparent);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+#oak-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 2s ease;
+  z-index: 1;
+}
+
+/* ── TRUNK ── */
+.oak-trunk {
+  width: 14px;
+  height: 50px;
+  background: linear-gradient(90deg, var(--oak-bark), var(--oak-trunk), var(--oak-bark));
+  border-radius: 3px 3px 6px 6px;
+  position: relative;
+  transition: width 1s, height 1s;
+}
+.oak-trunk::before,
+.oak-trunk::after {
+  content: '';
+  position: absolute;
+  background: var(--oak-trunk);
+  border-radius: 2px;
+}
+/* Left branch stub */
+.oak-trunk::before {
+  width: 12px; height: 4px;
+  top: 20%; left: -10px;
+  transform: rotate(-30deg);
+}
+/* Right branch stub */
+.oak-trunk::after {
+  width: 12px; height: 4px;
+  top: 30%; right: -10px;
+  transform: rotate(30deg);
+}
+
+/* ── ROOTS ── */
+.oak-roots {
+  width: 30px;
+  height: 8px;
+  background: var(--oak-bark);
+  border-radius: 0 0 50% 50%;
+  opacity: .6;
+  transition: width 1s;
+}
+
+/* ── CROWN ── */
+.oak-crown {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  transition: width 1s, height 1s;
+}
+.leaf-cluster {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, var(--oak-leaf-light), var(--oak-leaf-mid), var(--oak-leaf-dark));
+  box-shadow: inset -2px -2px 6px rgba(0,0,0,.3);
+  animation: leafRustle 3s ease-in-out infinite;
+  transition: width 1s, height 1s, opacity .5s;
+}
+/* Position each cluster */
+.lc-1  { width: 35px; height: 35px; top:  5px; left: 8px; animation-delay: 0s; }
+.lc-2  { width: 30px; height: 28px; top:  0;   left: 22px; animation-delay: .4s; }
+.lc-3  { width: 28px; height: 30px; top: 12px; left: -2px; animation-delay: .8s; }
+.lc-4  { width: 25px; height: 24px; top: 18px; left: 28px; animation-delay: 1.2s; opacity: 0; }
+.lc-5  { width: 22px; height: 22px; top: -5px; left: 15px; animation-delay: 1.5s; opacity: 0; }
+.lc-6  { width: 20px; height: 20px; top: 25px; left: 5px;  animation-delay: 1.8s; opacity: 0; }
+.lc-7  { width: 28px; height: 25px; top: 10px; left: 35px; animation-delay: .3s;  opacity: 0; }
+.lc-8  { width: 24px; height: 26px; top: -8px; left: 0;    animation-delay: .7s;  opacity: 0; }
+.lc-9  { width: 30px; height: 28px; top: 5px;  left: -10px; animation-delay: 1.1s; opacity: 0; }
+.lc-10 { width: 26px; height: 24px; top: 20px; left: 40px; animation-delay: 1.4s; opacity: 0; }
+.lc-11 { width: 32px; height: 30px; top: -12px; left: 10px; animation-delay: .2s; opacity: 0; }
+.lc-12 { width: 20px; height: 22px; top: 28px; left: 20px; animation-delay: 2s;   opacity: 0; }
+
+/* ── OAK GLOW ── */
+.oak-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: width 1s, height 1s, opacity 1s;
+  opacity: 0;
+}
+
+/* ── SPEECH BUBBLE ── */
+#oak-speech {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  color: var(--oak-green);
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--oak-green);
+  white-space: nowrap;
+  z-index: 5;
+  animation: oakTalk .3s ease;
+}
+#oak-speech::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--oak-green);
+}
+
+/* ══════════ GROWTH STAGES ══════════ */
+
+/* SAPLING (0–2m) — tiny, 3 leaf clusters visible */
+.stage-sapling .oak-trunk  { width: 10px; height: 40px; }
+.stage-sapling .oak-crown  { width: 40px; height: 40px; }
+.stage-sapling .oak-roots  { width: 20px; }
+.stage-sapling .lc-1, .stage-sapling .lc-2, .stage-sapling .lc-3 { opacity: 1; }
+
+/* YOUNG (2–8m) */
+.stage-young .oak-trunk  { width: 14px; height: 60px; }
+.stage-young .oak-crown  { width: 70px; height: 60px; }
+.stage-young .oak-roots  { width: 30px; }
+.stage-young .lc-1, .stage-young .lc-2, .stage-young .lc-3,
+.stage-young .lc-4, .stage-young .lc-5 { opacity: 1; }
+
+/* MATURE (8–20m) */
+.stage-mature .oak-trunk  { width: 20px; height: 80px; }
+.stage-mature .oak-crown  { width: 110px; height: 90px; }
+.stage-mature .oak-roots  { width: 44px; }
+.stage-mature .leaf-cluster { opacity: 1 !important; }
+.stage-mature .lc-1  { width: 45px; height: 40px; }
+.stage-mature .lc-2  { width: 40px; height: 38px; }
+.stage-mature .lc-3  { width: 38px; height: 40px; }
+.stage-mature .lc-4  { width: 35px; height: 34px; }
+.stage-mature .lc-5  { width: 30px; height: 30px; }
+.stage-mature .lc-6  { width: 28px; height: 28px; }
+.stage-mature .lc-7  { width: 36px; height: 32px; left: 55px; }
+.stage-mature .lc-8  { width: 32px; height: 34px; left: -8px; }
+.stage-mature .lc-9  { left: -18px; }
+.stage-mature .lc-10 { left: 65px; }
+
+/* ANCIENT (20–50m) */
+.stage-ancient .oak-trunk  { width: 28px; height: 110px; }
+.stage-ancient .oak-crown  { width: 160px; height: 130px; }
+.stage-ancient .oak-roots  { width: 60px; height: 12px; }
+.stage-ancient .leaf-cluster { opacity: 1 !important; }
+.stage-ancient .lc-1  { width: 55px; height: 50px; }
+.stage-ancient .lc-2  { width: 50px; height: 48px; left: 40px; }
+.stage-ancient .lc-3  { width: 48px; height: 50px; left: -8px; }
+.stage-ancient .lc-4  { width: 45px; height: 44px; left: 70px; }
+.stage-ancient .lc-5  { width: 40px; height: 40px; top: -15px; left: 20px; }
+.stage-ancient .lc-6  { width: 38px; height: 38px; }
+.stage-ancient .lc-7  { width: 46px; height: 42px; left: 80px; }
+.stage-ancient .lc-8  { width: 42px; height: 44px; left: -18px; }
+.stage-ancient .lc-9  { width: 40px; height: 38px; left: -28px; }
+.stage-ancient .lc-10 { width: 36px; height: 34px; left: 95px; }
+.stage-ancient .lc-11 { width: 50px; height: 45px; top: -20px; }
+.stage-ancient .lc-12 { width: 34px; height: 36px; top: 38px; left: 40px; }
+.stage-ancient .oak-glow {
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(34,197,94,.15) 0%, transparent 70%);
+  opacity: 1;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* COSMIC (50–100m) */
+.stage-cosmic .oak-trunk  { width: 36px; height: 140px; }
+.stage-cosmic .oak-crown  { width: 220px; height: 180px; }
+.stage-cosmic .oak-roots  { width: 80px; height: 14px; }
+.stage-cosmic .leaf-cluster {
+  opacity: 1 !important;
+  background: radial-gradient(circle at 40% 40%, #c084fc, var(--accent-purple), #581c87) !important;
+  box-shadow: 0 0 12px rgba(168,85,247,.5);
+}
+.stage-cosmic .lc-1  { width: 65px; height: 60px; }
+.stage-cosmic .lc-2  { width: 60px; height: 55px; left: 55px; }
+.stage-cosmic .lc-3  { width: 55px; height: 58px; left: -15px; }
+.stage-cosmic .lc-4  { width: 55px; height: 52px; left: 95px; }
+.stage-cosmic .lc-5  { width: 50px; height: 48px; top: -22px; left: 30px; }
+.stage-cosmic .lc-6  { width: 45px; height: 45px; }
+.stage-cosmic .lc-7  { width: 56px; height: 50px; left: 110px; }
+.stage-cosmic .lc-8  { width: 50px; height: 52px; left: -28px; }
+.stage-cosmic .lc-9  { width: 48px; height: 45px; left: -38px; }
+.stage-cosmic .lc-10 { width: 44px; height: 42px; left: 125px; }
+.stage-cosmic .lc-11 { width: 60px; height: 55px; top: -30px; }
+.stage-cosmic .lc-12 { width: 42px; height: 44px; top: 50px; left: 55px; }
+.stage-cosmic .oak-trunk {
+  background: linear-gradient(90deg, #581c87, var(--accent-purple), #581c87);
+}
+.stage-cosmic .oak-glow {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(168,85,247,.2) 0%, rgba(34,197,94,.1) 40%, transparent 70%);
+  opacity: 1;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* ASCENDED (100m) */
+.stage-ascended .oak-trunk  { width: 44px; height: 160px; }
+.stage-ascended .oak-crown  { width: 280px; height: 220px; }
+.stage-ascended .oak-roots  { width: 100px; height: 16px; }
+.stage-ascended .leaf-cluster {
+  opacity: 1 !important;
+  background: radial-gradient(circle at 40% 40%, #fde047, #f59e0b, #d97706) !important;
+  box-shadow: 0 0 18px rgba(245,158,11,.6);
+}
+.stage-ascended .oak-trunk {
+  background: linear-gradient(90deg, #92400e, #fbbf24, #92400e);
+}
+.stage-ascended .oak-glow {
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(251,191,36,.3) 0%, rgba(168,85,247,.15) 40%, transparent 70%);
+  opacity: 1;
+  animation: glowPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Stats grid ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-sm);
+}
+.mini-stat {
+  background: var(--bg-card);
+  padding: var(--gap-sm);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+.ms-label {
+  display: block;
+  font-size: .65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.ms-val {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--oak-green);
+}
+
+/* ── Action bar ── */
+.action-bar {
+  display: flex;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+.action-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: var(--gap-sm) var(--gap-md);
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-hover);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  transition: background .2s, border-color .2s, transform .1s;
+}
+.action-btn:hover { background: var(--bg-card-hover); border-color: var(--oak-green); }
+.action-btn:active { transform: scale(.96); }
+.action-btn .cost { color: var(--text-muted); font-size: .75rem; }
+.action-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.grow-btn:hover     { box-shadow: var(--shadow-glow-green); }
+.acorn-btn:hover    { box-shadow: 0 0 12px rgba(146,64,14,.4); }
+.meditate-btn:hover { box-shadow: var(--shadow-glow-purple); }
+
+/* ── Upgrades ── */
+.upgrades-section { margin-top: var(--gap-sm); }
+.section-title {
+  font-family: var(--font-pixel);
+  font-size: .6rem;
+  margin-bottom: var(--gap-sm);
+  color: var(--accent-purple);
+}
+.upgrades-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+.upgrade-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  padding: var(--gap-sm) var(--gap-md);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: border-color .2s;
+}
+.upgrade-item:hover { border-color: var(--accent-purple); }
+.upgrade-item.purchased { opacity: .5; border-color: var(--success-green); }
+.upgrade-info { flex: 1; }
+.upgrade-name {
+  font-family: var(--font-mono);
+  font-size: .85rem;
+}
+.upgrade-desc {
+  font-size: .7rem;
+  color: var(--text-muted);
+}
+.upgrade-buy {
+  padding: 4px 10px;
+  background: var(--accent-purple);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  transition: background .2s;
+}
+.upgrade-buy:hover { background: #6d28d9; }
+.upgrade-buy:disabled { background: var(--text-muted); cursor: not-allowed; }

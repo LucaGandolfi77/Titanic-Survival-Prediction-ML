@@ -180,3 +180,56 @@ h2 {
   animation: slideUpFade 0.3s forwards;
   box-shadow: 0 0 10px rgba(255, 171, 0, 0.2);
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px), (max-height: 600px) and (orientation: landscape) {
+  h1 { font-size: 2rem !important; }
+  h2 { font-size: 1.8rem !important; }
+  .subtitle { font-size: 0.9rem !important; }
+
+  .menu-content {
+    padding: var(--sp-4);
+    max-width: 90vw;
+    gap: var(--sp-2);
+  }
+
+  .menu-btn {
+    width: 200px;
+    padding: var(--sp-2) var(--sp-3);
+    font-size: 1rem;
+    min-height: 48px;
+  }
+
+  .slide { padding: var(--sp-2); margin-bottom: var(--sp-4); }
+  .slide h3 { font-size: 0.9rem; }
+  .slide p { font-size: 0.85rem; }
+
+  #howto-slides { margin-bottom: var(--sp-4); }
+
+  #initials-input { font-size: 1.5rem; width: 80px; }
+
+  #scores-table { width: 95%; font-size: 0.85rem; }
+
+  #score-breakdown, #gameover-stats, #pause-info {
+    font-size: 1rem;
+    margin-bottom: var(--sp-4);
+  }
+
+  #screen-level-complete .menu-btn,
+  #screen-gameover .menu-btn {
+    min-height: 48px;
+  }
+}
+
+/* Portrait mobile */
+@media (max-width: 480px) and (orientation: portrait) {
+  .menu-content { max-width: 95vw; padding: var(--sp-3); }
+  h1 { font-size: 1.6rem !important; }
+  .menu-btn { width: 100%; max-width: 220px; }
+}
+
+/* Safe area support for notched devices */
+@supports (padding: max(0px)) {
+  #hud { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  #onscreen-controls { padding: env(safe-area-inset-bottom); }
+}

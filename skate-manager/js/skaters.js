@@ -1,15 +1,17 @@
 /* ===== Skater data model and generation ===== */
 import { uid, generateName, generateNationality, generateStats, calcOverall, calcValue, calcWage, randInt, clamp } from './utils.js';
+import { AGE_RANGES, FORM_FLUCTUATION, MORALE_FLUCTUATION } from './config.js';
 
 const AVATARS = ['🧊', '⛸️', '❄️', '🌸', '💎', '✨', '🌟', '🦋'];
 
 export function createSkater(tier = 2) {
   const stats = generateStats(tier);
   const overall = calcOverall(stats);
-  const age = tier === 1 ? randInt(16, 20) :
-              tier === 2 ? randInt(19, 28) :
-              tier === 3 ? randInt(22, 30) :
-              randInt(24, 32);
+  const ageRanges = AGE_RANGES;
+  const age = tier === 1 ? randInt(...ageRanges[1]) :
+              tier === 2 ? randInt(...ageRanges[2]) :
+              tier === 3 ? randInt(...ageRanges[3]) :
+              randInt(...ageRanges[4]);
   const nat = generateNationality();
   const value = calcValue(overall, age);
   const wage = calcWage(overall);
@@ -82,10 +84,10 @@ export function recalcSkater(sk) {
 }
 
 export function weeklyStatFluctuation(sk) {
-  // Form fluctuates ±10
-  sk.form = clamp(sk.form + randInt(-10, 10), 0, 100);
-  // Morale fluctuates ±5
-  sk.morale = clamp(sk.morale + randInt(-5, 5), 0, 100);
+  // Form fluctuates ±FORM_FLUCTUATION
+  sk.form = clamp(sk.form + randInt(-FORM_FLUCTUATION, FORM_FLUCTUATION), 0, 100);
+  // Morale fluctuates ±MORALE_FLUCTUATION
+  sk.morale = clamp(sk.morale + randInt(-MORALE_FLUCTUATION, MORALE_FLUCTUATION), 0, 100);
   // Heal injuries
   if (sk.injuryWeeks > 0) sk.injuryWeeks--;
   if (sk.injuryWeeks === 0 && sk.status === 'injured') sk.status = 'active';

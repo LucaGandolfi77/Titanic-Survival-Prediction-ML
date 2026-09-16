@@ -2,10 +2,17 @@ import * as THREE from 'three';
 
 export class GameAudio {
     constructor() {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.value = 0.5; // Initial volume
-        this.masterGain.connect(this.ctx.destination);
+        try {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            console.warn('AudioContext unavailable:', e);
+            this.ctx = null;
+        }
+        if (this.ctx) {
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.gain.value = 0.5;
+            this.masterGain.connect(this.ctx.destination);
+        }
     }
 
     resume() {

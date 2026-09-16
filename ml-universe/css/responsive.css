@@ -10,6 +10,11 @@
   .algo-card {
     flex: 0 0 300px;
   }
+  .card--glass,
+  .bento-card {
+    backdrop-filter: blur(var(--glass-blur-mobile));
+    -webkit-backdrop-filter: blur(var(--glass-blur-mobile));
+  }
 }
 
 /* ── iPhone 14 Pro — 390px ──────────────────────────────────── */

@@ -2,6 +2,7 @@
 import { GameState } from './state.js';
 import { getSquadAvgOverall } from './skaters.js';
 import { randInt, pick } from './utils.js';
+import { SEASON_WEEKS } from './config.js';
 
 const COMP_NAMES = {
   1: ['Regional Cup', 'City Open', 'Provincial Series'],
@@ -12,7 +13,7 @@ const COMP_NAMES = {
 
 export function generateCalendar(season) {
   const calendar = [];
-  for (let w = 0; w < 12; w++) {
+  for (let w = 0; w < SEASON_WEEKS; w++) {
     // Competition every 1-2 weeks, sometimes off weeks
     const hasComp = w === 0 || Math.random() < 0.7;
     if (hasComp) {
@@ -54,7 +55,7 @@ export function generateCalendar(season) {
           2: 5 * tier,
           3: 3 * tier
         },
-        minOverall: tier * 35,
+        minOverall: 15 + tier * 15, // 30/45/60/75 — reachable as the squad improves (max overall is 99)
         competition: null // Will hold result after playing
       });
     } else {
@@ -88,14 +89,26 @@ export function enterCompetition(weekIndex) {
   return { ok: true, msg: `Entered ${GameState.calendar[weekIndex].name}` };
 }
 
+export function withdrawCompetition(weekIndex) {
+  const comp = GameState.calendar[weekIndex];
+  if (!comp || !comp.name) return { ok: false, msg: 'No competition this week' };
+  if (!GameState.enteredCompetitions[weekIndex]) return { ok: false, msg: 'Not entered' };
+  if (comp.competition) return { ok: false, msg: 'Already competed' };
+  delete GameState.enteredCompetitions[weekIndex];
+  return { ok: true, msg: `Withdrawn from ${comp.name} (entry fee lost)` };
+}
+
 export function generateRivalScores(tier) {
-  // AI rival scores based on difficulty range per tier
+  // Rival scores are scaled to the player's scoring range so that skilled,
+  // risky play (higher tempo + harder formations) can actually win competitions.
+  const strengthFactors = { amateur: 12, 'semi-pro': 15, elite: 18 };
+  const strengthFactor = strengthFactors[GameState.difficulty] || 15;
+  const tierBonus = tier * 100 * (strengthFactor / 15);
+
   const scores = [];
   for (const rival of GameState.rivals) {
-    const baseScore = rival.strength * 100;
-    const variance = randInt(-2000, 2000);
-    const tierBonus = tier * 1500;
-    const score = Math.max(500, baseScore + tierBonus + variance);
+    const variance = randInt(-150, 150);
+    const score = Math.max(300, rival.strength * strengthFactor + tierBonus + variance);
     scores.push({ team: rival.name, score, isPlayer: false });
   }
   return scores;

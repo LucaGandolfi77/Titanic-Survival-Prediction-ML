@@ -11,31 +11,55 @@
 .bento-card {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-liquid);
+  border: 1px solid var(--glass-border);
   min-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: var(--sp-8);
   opacity: 0;
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-spring), box-shadow var(--transition-base), border-color var(--transition-base);
+  background:
+    linear-gradient(135deg, var(--glass-tint-indigo), transparent 60%),
+    rgba(255, 255, 255, var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .bento-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--_card-gradient, linear-gradient(135deg, var(--bg-card), var(--bg-secondary)));
+  background: linear-gradient(
+    135deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: sheen 6s ease-in-out infinite;
   z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .bento-card::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 60%);
-  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--glass-highlight),
+    transparent
+  );
+  z-index: 3;
+  pointer-events: none;
 }
 
 .bento-card > * {
@@ -44,8 +68,13 @@
 }
 
 .bento-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border-color: var(--glass-border-hover);
+}
+
+.bento-card:hover::before {
+  animation-duration: 2s;
 }
 
 .bento-card h3 {
@@ -76,10 +105,12 @@
   color: var(--accent-green);
   margin-top: var(--sp-3);
   width: fit-content;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Animated gradient variant */
 .bento-card--animated::before {
   background-size: 200% 200%;
-  animation: gradient-shift 6s ease-in-out infinite;
+  animation: iridescent 8s ease-in-out infinite;
 }

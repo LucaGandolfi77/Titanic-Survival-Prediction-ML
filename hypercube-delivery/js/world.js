@@ -53,19 +53,34 @@ export class WorldBuilder {
         const connections = HYPERCUBE_GRAPH[cellId];
         const wallMat = this.getMaterial(theme.bg, 0.9);
         const wallMatTrans = new THREE.MeshStandardMaterial({
-            color: theme.bg, 
-            transparent: true, 
+            color: theme.bg,
+            transparent: true,
             opacity: 0.5,
             wireframe: true
         });
 
         connections.forEach(conn => {
-            // we leave a hole for portals, or just represent boundaries
-            const wallMesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), wallMatTrans);
+            const wallGeo = new THREE.PlaneGeometry(100, 100);
+            const wallMesh = new THREE.Mesh(wallGeo, wallMatTrans);
             const pos = PORTAL_POSITIONS[conn.dir].pos;
-            wallMesh.position.copy(pos).multiplyScalar(2); // push to edge
-            wallMesh.lookAt(new THREE.Vector3(0,0,0));
+            wallMesh.position.copy(pos).multiplyScalar(2);
+            wallMesh.lookAt(new THREE.Vector3(0, 0, 0));
             group.add(wallMesh);
+        });
+    }
+
+    disposeCell(group) {
+        group.traverse((child) => {
+            if (child.isMesh) {
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(m => m.dispose());
+                    } else {
+                        child.material.dispose();
+                    }
+                }
+            }
         });
     }
 
@@ -165,7 +180,10 @@ export class WorldBuilder {
     }
 
     lightenColor(hex, percent) {
-        // Dummy lighten just returns accent for simplicity if needed
-        return hex;
+        const num = parseInt(hex.replace('#', ''), 16);
+        const r = Math.min(255, (num >> 16) + Math.round(255 * percent / 100));
+        const g = Math.min(255, ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100));
+        const b = Math.min(255, (num & 0x0000FF) + Math.round(255 * percent / 100));
+        return '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1);
     }
 }

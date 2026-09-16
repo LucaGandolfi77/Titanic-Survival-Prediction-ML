@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Concerts Chase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script type="module" crossorigin src="/assets/index-Ces0rNY_.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DtqFOoJY.css">
+  </head>
+  <body>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function () {})
+        })
+      }
+    </script>
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container"></div>
+
+    <!-- TUTORIAL OVERLAY -->
+    <div id="tutorial-overlay" class="tutorial-overlay" style="display: none">
+      <div id="tutorial-spotlight" class="tutorial-spotlight" style="display: none"></div>
+      <div id="tutorial-card" class="tutorial-card" style="display: none">
+        <button class="modal-close" onclick="G.tutorialSkip()">✕</button>
+        <div id="tutorial-title"></div>
+        <div id="tutorial-text" class="tutorial-text"></div>
+        <div id="tutorial-actions"></div>
+      </div>
+    </div>
+
+    <!-- MUTE BUTTON -->
+    <button id="mute-btn" onclick="G.toggleMute()" title="Toggle Sound"><i data-lucide="volume-2"></i></button>
+    <!-- SETTINGS BUTTON -->
+    <button id="settings-btn" onclick="G.showSettings()" title="Settings"><i data-lucide="settings"></i></button>
+
+    <!-- HUD -->
+    <div id="hud" style="display: none">
+      <div class="hud-item"><span class="hud-label">Points</span><span id="hud-points">0</span></div>
+      <div class="hud-item"><span class="hud-label">Budget</span><span id="hud-budget">€5,000</span></div>
+      <div class="hud-item"><span class="hud-label">Attended</span><span id="hud-attended">0/38</span></div>
+      <div class="hud-item"><span class="hud-label">Date</span><span id="hud-date">Jan 1, 2026</span></div>
+      <div class="hud-item"><span class="hud-label">Next</span><span id="hud-next">—</span></div>
+    </div>
+
+    <!-- MAIN MENU -->
+    <div id="screen-menu" class="screen active">
+      <div class="menu-bg"></div>
+      <div class="menu-content">
+        <h1 class="game-title">🎵 Concerts Chase</h1>
+        <p class="game-subtitle">Hunt concerts · Book flights · Rock out</p>
+        <div class="difficulty-select">
+          <button class="btn btn-secondary" onclick="G.startGame('casual')">Casual 🌿</button>
+          <button class="btn btn-secondary" onclick="G.startGame('balanced')">Balanced ⚖️</button>
+          <button class="btn btn-primary" onclick="G.startGame('rockstar')">Rockstar 🔥</button>
+        </div>
+        <button class="btn btn-secondary" onclick="G.showHowToPlay()" style="margin-top: 16px">How to Play</button>
+        <button class="btn btn-gold" onclick="G.showChallenge()" style="margin-top: 12px">🏆 Weekly Challenge</button>
+      </div>
+    </div>
+
+    <!-- WORLD MAP -->
+    <div id="screen-map" class="screen">
+      <div class="map-header">
+        <h2>🌍 World Tour Map</h2>
+        <div class="map-actions">
+          <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-calendar')">📅 Calendar</button>
+          <button class="btn btn-sm btn-secondary" onclick="G.showTravelUpgrades()">✈️ Travel</button>
+          <button class="btn btn-sm btn-gold" onclick="G.showOrganise()">🎤 Organise</button>
+          <button class="btn btn-sm btn-secondary" onclick="G.showMerch()">🛍 Merch</button>
+        </div>
+      </div>
+      <div id="map-container"></div>
+      <div id="map-tooltip" class="tooltip"></div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div id="screen-calendar" class="screen">
+      <div class="screen-header">
+        <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-map')">
+          <i data-lucide="arrow-left"></i> Back
+        </button>
+        <h2><i data-lucide="calendar"></i> Concert Calendar</h2>
+        <div class="calendar-nav">
+          <button class="btn btn-sm" onclick="G.calPrev()">◀</button>
+          <span id="cal-month-label"></span>
+          <button class="btn btn-sm" onclick="G.calNext()">▶</button>
+        </div>
+      </div>
+      <div class="calendar-filter">
+        <select id="cal-filter" onchange="G.calFilter = this.value">
+          <option value="all">All Concerts</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="discovered">Discovered</option>
+          <option value="attended">Attended</option>
+          <option value="expired">Expired</option>
+        </select>
+        <select id="cal-artist-filter" onchange="G.calArtistFilter = this.value">
+          <option value="all">All Artists</option>
+        </select>
+      </div>
+      <div id="calendar-grid"></div>
+    </div>
+
+    <!-- DISCOVERY MINIGAME -->
+    <div id="screen-discovery" class="screen">
+      <div id="discovery-content"></div>
+    </div>
+
+    <!-- BOOKING PANEL -->
+    <div id="screen-booking" class="screen">
+      <div id="booking-content"></div>
+    </div>
+
+    <!-- CONCERT MINIGAME -->
+    <div id="screen-concert" class="screen">
+      <div id="concert-content"></div>
+    </div>
+
+    <!-- CHALLENGE MODE -->
+    <div id="screen-challenge" class="screen">
+      <div class="screen-header">
+        <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-menu')">← Back</button>
+        <h2>🏆 Weekly Challenge</h2>
+      </div>
+      <div id="challenge-content"></div>
+    </div>
+
+    <!-- RESULT CARD -->
+    <div id="screen-result" class="screen">
+      <div id="result-content"></div>
+    </div>
+
+    <!-- ORGANISE CONCERT -->
+    <div id="screen-organise" class="screen">
+      <div class="screen-header">
+        <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-map')">← Back</button>
+        <h2>🎤 Organise Your Concert</h2>
+      </div>
+      <div id="organise-content"></div>
+    </div>
+
+    <!-- MERCH SHOP -->
+    <div id="screen-merch" class="screen">
+      <div class="screen-header">
+        <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-map')">← Back</button>
+        <h2>🛍 Merch Shop</h2>
+      </div>
+      <div id="merch-content"></div>
+    </div>
+
+    <!-- PHOTO MODE -->
+    <div id="screen-photo" class="screen">
+      <div class="screen-header">
+        <button class="btn btn-sm btn-secondary" onclick="G.showScreen('screen-map')">← Back</button>
+        <h2>📷 Photo Mode</h2>
+      </div>
+      <div id="photo-content"></div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="screen-gameover" class="screen">
+      <div id="gameover-content"></div>
+    </div>
+
+    <!-- HOW TO PLAY MODAL -->
+    <div id="modal-howto" class="modal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="G.closeModal('modal-howto')">✕</button>
+        <h2>How to Play</h2>
+        <div class="howto-text">
+          <p>
+            <strong>🎯 Goal:</strong> Discover hidden concert dates, book travel, attend concerts, and earn the highest
+            score!
+          </p>
+          <p><strong>🔍 Discover:</strong> Click ❓ dots on the map to play minigames and reveal concert dates.</p>
+          <p><strong>✈️ Book:</strong> Once discovered, book a flight and hotel. Earlier booking = cheaper prices!</p>
+          <p>
+            <strong>🎶 Attend:</strong> When the concert date arrives, play the artist's unique minigame. Score 90%+ to
+            get on stage!
+          </p>
+          <p><strong>🎤 Organise:</strong> Create your own concerts with fictional friends to earn extra budget.</p>
+          <p>
+            <strong>💰 Budget:</strong> You start with €5,000. Manage wisely — running out of money limits your options!
+          </p>
+          <p>
+            <strong>📅 Time:</strong> Each action advances the in-game calendar by a few days. Don't miss concert dates!
+          </p>
+          <p>
+            <strong>🏆 Scoring:</strong> &lt;40% = No entry · 40-69% = Seated · 70-89% = Parterre · 90%+ = On Stage!
+          </p>
+          <p><strong>🎉 Festival Month:</strong> Attend 3+ concerts in the same month for a ×1.5 score multiplier!</p>
+          <p>
+            <strong>⌨️ Shortcuts:</strong> Press <strong>?</strong> for all shortcuts · <strong>Esc</strong> to pause
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAUSE OVERLAY -->
+    <div id="pause-overlay" class="modal" style="display: none">
+      <div class="modal-box" style="text-align: center">
+        <h2>⏸ Game Paused</h2>
+        <p style="color: var(--gray-light); margin: 12px 0">Press <strong>Esc</strong> or click to resume</p>
+        <button class="btn btn-primary" onclick="G.togglePause()">Resume</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="modal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="G.closeModal('settings-modal')">✕</button>
+        <h2><i data-lucide="settings"></i> Settings</h2>
+        <div class="settings-section">
+          <label>🔊 Volume</label>
+          <input
+            type="range"
+            id="settings-volume"
+            min="0"
+            max="100"
+            value="80"
+            oninput="G.setVolume(this.value / 100)"
+          />
+        </div>
+        <div class="settings-section">
+          <label>✨ Animations</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="settings-animations" checked onchange="G.animationEnabled = this.checked" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-section">
+          <button class="btn btn-secondary" onclick="G.resetGame()">Reset Game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KEYBOARD SHORTCUTS MODAL -->
+    <div id="modal-shortcuts" class="modal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="G.closeModal('modal-shortcuts')">✕</button>
+        <h2>⌨️ Keyboard Shortcuts</h2>
+        <div class="shortcuts-grid">
+          <div class="shortcut-item"><kbd>?</kbd> <span>Show this help</span></div>
+          <div class="shortcut-item"><kbd>Esc</kbd> <span>Pause / Resume</span></div>
+          <div class="shortcut-item"><kbd>Space</kbd> <span>Action (minigames)</span></div>
+          <div class="shortcut-item"><kbd>← →</kbd> <span>Calendar navigate</span></div>
+          <div class="shortcut-item"><kbd>A S D F</kbd> <span>Maneskin lanes</span></div>
+          <div class="shortcut-item"><kbd>↑ ↓ ← →</kbd> <span>Styles dance moves</span></div>
+          <div class="shortcut-item"><kbd>1-5</kbd> <span>K-pop rhythm lanes</span></div>
+          <div class="shortcut-item"><kbd>D F J K</kbd> <span>Rock drum lanes</span></div>
+          <div class="shortcut-item"><kbd>P</kbd> <span>Photo mode (concerts)</span></div>
+          <div class="shortcut-item"><kbd>M</kbd> <span>Merch shop</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS (load order matters — ES modules) -->
+  </body>
+</html>

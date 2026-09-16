@@ -566,6 +566,22 @@
   background: var(--accent-gold);
   color: #0f172a;
 }
+.badge-withdraw {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg-panel);
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.badge-withdraw:hover {
+  background: var(--accent-red);
+  color: #0f172a;
+}
 
 /* ===== Sponsors summary card ===== */
 .sponsors-summary-card {

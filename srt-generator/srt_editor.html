@@ -52,7 +52,7 @@
   <div class="card layout">
     <div>
       <div class="card-title">2 — Timeline Visuale</div>
-      <div class="timeline" id="timeline">
+      <div class="timeline" id="timeline" onwheel="if(event.deltaY<0){zoom=Math.min(4,zoom*1.15);renderBlocks()}else{zoom=Math.max(0.5,zoom/1.15);renderBlocks()}">
         <div class="time-scale" id="scale"></div>
         <div class="blocks" id="blocks"></div>
       </div>
@@ -61,7 +61,10 @@
         <div class="controls">
           <button class="btn ghost" id="zoom-in">Zoom +</button>
           <button class="btn ghost" id="zoom-out">Zoom -</button>
-          <button class="btn" id="snap-toggle">Snap: ON</button>
+          <button class="btn ghost" id="snap-toggle">Snap: ON</button>
+          <button class="btn ghost" id="undo-btn">↩ Undo</button>
+          <button class="btn ghost" id="redo-btn">↪ Redo</button>
+          <button class="btn ghost" id="validate-btn">✓ Valida</button>
         </div>
       </div>
     </div>
@@ -76,9 +79,12 @@
     </div>
   </div>
 
+    <button id="theme-btn" style="position:fixed;top:12px;right:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:16px;z-index:50" title="Toggle tema">🌓</button>
   <footer>Design e colori presi dall'interfaccia principale.</footer>
 
   <script>
+    (function(){ var s=document.createElement("style"); s.textContent=".toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1d27;border:1px solid #2e3348;border-radius:8px;color:#e2e6f0;padding:12px 24px;font-size:14px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}.toast.show{opacity:1}.toast.error{background:#3d1a1a;border-color:#e05a5a;color:#f09090}";document.head.appendChild(s);})(); function addHaptic(d){if(navigator.vibrate){try{navigator.vibrate(d||10)}catch(e){}}}
+    function showToast(msg,err){var t=document.createElement("div");t.className="toast"+(err?" error":"");t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),300)},2500)}
     // Simple SRT parser/formatter
     function parseTime(t){ // "HH:MM:SS,mmm"
       const m = t.trim().match(/(\d+):(\d+):(\d+),(\d+)/);
@@ -151,7 +157,7 @@
         blocksEl.appendChild(b);
 
         // events
-        b.addEventListener('mousedown', e=> startDrag(e,b,i));
+        b.addEventListener('mousedown', e=> startDrag(e,b,i)); b.addEventListener('touchstart', e=> { if(e.touches.length===1) { e.preventDefault(); startDrag({...e, clientX:e.touches[0].clientX, clientY:e.touches[0].clientY, button:0}, b, i); } });
         handle.addEventListener('mousedown', e=> startResize(e,b,i));
         b.addEventListener('dblclick', ()=> selectIndex(i));
       });
@@ -172,7 +178,7 @@
     let resizeState = null;
     function startResize(e,el,i){ e.stopPropagation(); e.preventDefault(); resizeState = {el,i,startX:e.clientX,origW:el.clientWidth}; window.addEventListener('mousemove', onResize); window.addEventListener('mouseup', endResize); }
     function onResize(e){ if(!resizeState) return; const el = resizeState.el; const parent = blocksEl; const dx = e.clientX - resizeState.startX; const parentW = parent.clientWidth; let newWpx = resizeState.origW + dx; newWpx = Math.max(6, Math.min(newWpx, parentW - el.offsetLeft)); const newWpct = (newWpx/parentW)/zoom*100; el.style.width = newWpct + '%'; const idx = parseInt(el.dataset.index); const startPct = parseFloat(el.style.left); const startTime = (startPct/100)*total; const newEnd = startTime + (newWpct/100)*total; items[idx].end = Math.max(startTime + 0.05, newEnd); if(snap) items[idx].end = Math.round(items[idx].end*10)/10; updateTextareaFromItems(); }
-    function endResize(){ if(!resizeState) return; window.removeEventListener('mousemove', onResize); window.removeEventListener('mouseup', endResize); resizeState = null; }
+    function endResize(){ if(!resizeState) return; window.removeEventListener('mousemove', onResize); window.removeEventListener('mouseup', endResize); resizeState = null; undoMgr.push(snapshot()); }
 
     function updateTextareaFromItems(){ srtTextarea.value = buildSRT(items); }
 
@@ -182,22 +188,22 @@
     srtDrop.addEventListener('drop', async e=>{ e.preventDefault(); srtDrop.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if(f) { const txt = await f.text(); srtTextarea.value = txt; loadFromTextarea(); srtInfo.style.display='block'; srtInfo.textContent = 'Caricato: '+f.name+' · '+formatBytes(f.size); } });
 
     // Load into timeline
-    function loadFromTextarea(){ items = parseSRT(srtTextarea.value); if(items.length===0) { alert('Nessun blocco valido trovato nel SRT'); return; } total = Math.max(...items.map(it=>it.end)); if(total<=0) total = 60; durationInfo.textContent = 'Durata stimata: ' + Math.round(total) + 's'; renderScale(); renderBlocks(); }
+    function loadFromTextarea(){ items = parseSRT(srtTextarea.value); if(items.length===0) { showToast('Nessun blocco valido trovato nel SRT', true); return; } total = Math.max(...items.map(it=>it.end)); if(total<=0) total = 60; durationInfo.textContent = 'Durata stimata: ' + Math.round(total) + 's'; renderScale(); renderBlocks(); }
 
     // apply edit from editor fields
     applyEdit.addEventListener('click', ()=>{
-      if(selectedIndex<0) { alert('Seleziona prima un blocco nella timeline'); return; }
-      const it = items[selectedIndex]; const ns = parseTime(selStart.value); const ne = parseTime(selEnd.value); if(isNaN(ns)||isNaN(ne)||ne<=ns) { alert('Tempi non validi'); return; }
+      if(selectedIndex<0) { showToast('Seleziona prima un blocco nella timeline', true); return; }
+      const it = items[selectedIndex]; const ns = parseTime(selStart.value); const ne = parseTime(selEnd.value); if(isNaN(ns)||isNaN(ne)||ne<=ns) { showToast('Tempi non validi', true); return; }
       it.start = ns; it.end = ne; it.text = selText.value; updateTextareaFromItems(); renderBlocks(); highlightSelected();
     });
 
     // clicking textarea parse
-    srtTextarea.addEventListener('blur', loadFromTextarea);
+    srtTextarea.addEventListener('blur', function(){ loadFromTextarea(); undoMgr.push(snapshot()); });
 
     // export
     exportBtn.addEventListener('click', ()=>{ const out = buildSRT(items); const blob = new Blob([out], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.edited.srt'; a.click(); URL.revokeObjectURL(a.href); });
 
-    saveLocal.addEventListener('click', ()=>{ localStorage.setItem('srt_editor_saved', srtTextarea.value); alert('Salvato localmente'); });
+    saveLocal.addEventListener('click', ()=>{ localStorage.setItem('srt_editor_saved', srtTextarea.value); showToast('Salvato localmente'); });
     document.getElementById('zoom-in').addEventListener('click', ()=>{ zoom=Math.min(4, zoom*1.2); renderBlocks(); });
     document.getElementById('zoom-out').addEventListener('click', ()=>{ zoom=Math.max(0.5, zoom/1.2); renderBlocks(); });
     snapToggle.addEventListener('click', ()=>{ snap = !snap; snapToggle.textContent = 'Snap: ' + (snap? 'ON':'OFF'); });
@@ -207,6 +213,66 @@
     document.getElementById('select-next').addEventListener('click', ()=>{ if(selectedIndex<items.length-1) selectIndex(selectedIndex+1); });
 
     function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+
+    // ── Undo/Redo ──
+    var undoMgr = createUndoManager(50);
+    function snapshot(){ return { items: JSON.parse(JSON.stringify(items)), zoom: zoom, snap: snap, selectedIndex: selectedIndex }; }
+
+    function doUndo(){ var s = undoMgr.undo(); if(s){ items = s.items; selectedIndex = -1; zoom = s.zoom; snap = s.snap; updateTextareaFromItems(); renderBlocks(); showToast("Undo"); addHaptic(5); } }
+    function doRedo(){ var s = undoMgr.redo(); if(s){ items = s.items; selectedIndex = -1; zoom = s.zoom; snap = s.snap; updateTextareaFromItems(); renderBlocks(); showToast("Redo"); addHaptic(5); } }
+
+    document.getElementById('undo-btn').addEventListener('click', doUndo);
+    document.getElementById('redo-btn').addEventListener('click', doRedo);
+
+    // ── Auto-save ──
+    var saveSRT = autoSave('srt_editor_content', function(){ return srtTextarea.value; }, 800);
+    srtTextarea.addEventListener('input', function(){ saveSRT(); });
+    // Auto-load on init
+    var saved = autoLoad('srt_editor_content', '');
+    if(saved && saved.trim()){ srtTextarea.value = saved; loadFromTextarea(); undoMgr.push(snapshot()); showToast('Trovato salvataggio precedente'); }
+    else { undoMgr.push(snapshot()); }
+
+    // ── Export formats ──
+    document.getElementById('export-vtt').addEventListener('click', function(){ var vtt = srtToVTT(buildSRT(items)); var blob = new Blob([vtt], {type:'text/plain'}); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.vtt'; a.click(); URL.revokeObjectURL(a.href); showToast('Esportato .VTT'); addHaptic(5); });
+    document.getElementById('export-txt').addEventListener('click', function(){ var txt = srtToTXT(buildSRT(items)); var blob = new Blob([txt], {type:'text/plain'}); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.txt'; a.click(); URL.revokeObjectURL(a.href); showToast('Esportato .TXT'); addHaptic(5); });
+
+    // ── Validation ──
+    document.getElementById('validate-btn').addEventListener('click', function(){ var v = validateSRT(srtTextarea.value); if(v.valid){ showToast('✓ Valido: ' + v.blocks + ' blocchi'); } else { var msg = 'Errori: ' + v.errors.length; if(v.warnings.length > 0) msg += ' | Warning: ' + v.warnings.length; showToast(msg, true); alert(v.errors.join('\n') + (v.warnings.length ? '\n\n⚠️ ' + v.warnings.join('\n') : '')); } addHaptic(10); });
+
+    // ── Theme Toggle ──
+    var themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', function(){ toggleTheme(); var t = getTheme(); themeBtn.textContent = t === 'light' ? '☀️' : '🌓'; });
+    if(autoLoad('srt_theme', 'dark') === 'light'){ setTheme('light'); themeBtn.textContent = '☀️'; }
+
+    // ── Keyboard shortcuts (undo/redo) ──
+    initKeyboardShortcuts({
+      'ctrl+z': function(e){ e.preventDefault(); doUndo(); },
+      'ctrl+shift+z': function(e){ e.preventDefault(); doRedo(); },
+      'ctrl+y': function(e){ e.preventDefault(); doRedo(); },
+    }, 'SRT Editor');
   </script>
+
+  <!-- Keyboard Shortcuts -->
+  <script src="./js/utils.js"></script>
+  <script>
+  initKeyboardShortcuts({
+      "?": function(e){ e.preventDefault(); addHaptic(10); showShortcutsModal({
+        "?": { label: "Questa schermata" },
+        "j": { label: "Blocco successivo" },
+        "k": { label: "Blocco precedente" },
+        "d": { label: "Elimina" },
+        "ctrl+e": { label: "Esporta .srt" },
+        "ctrl+s": { label: "Salva locale" },
+        "escape": { label: "Deseleziona" },
+      }, "SRT Editor"); },
+      "j": function(e){ e.preventDefault(); if(selectedIndex < items.length-1) selectIndex(selectedIndex+1); addHaptic(5); },
+      "k": function(e){ e.preventDefault(); if(selectedIndex > 0) selectIndex(selectedIndex-1); addHaptic(5); },
+      "d": function(e){ e.preventDefault(); if(selectedIndex>=0){ items.splice(selectedIndex,1); updateTextareaFromItems(); renderBlocks(); showToast("Eliminato"); addHaptic(10); } },
+      "escape": function(e){ e.preventDefault(); selectedIndex = -1; highlightSelected(); },
+    }, "SRT Editor");
+    </script>
 </body>
 </html>
+
+    // Auto-save on unload
+    window.addEventListener('beforeunload', function(){ try{ localStorage.setItem('srt_editor_content', srtTextarea.value); }catch(e){}});

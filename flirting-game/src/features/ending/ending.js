@@ -1,6 +1,7 @@
-// Ending screen: renders the adaptive ending, persists personal records
-// and wires the Web Share button. Loaded dynamically via import() —
-// none of this code is needed until the game finishes for the first time.
+// Ending screen: renders the adaptive ending, persists personal records,
+// queues the relationship milestone (Background Sync) and wires the
+// Web Share button. Loaded dynamically via import() — none of this code is
+// needed until the game finishes for the first time.
 
 import { els } from '../../ui/dom.js';
 import { state } from '../../core/state.js';
@@ -9,6 +10,11 @@ import { showScreen } from '../../ui/router.js';
 import { haptic, patterns } from '../../core/haptics.js';
 import { showToast } from '../../ui/toast.js';
 import { getEnding } from '../../data/dialogues.js';
+import { collectAmbient } from '../../core/ambient.js';
+import { queueMilestone } from '../../core/queue.js';
+import { t } from '../../core/i18n.js';
+import { touchDailyStreak, evaluateAchievements } from '../achievements/achievements.js';
+import { shareTrailer } from '../story/trailer.js';
 
 let shareWired = false;
 
@@ -40,11 +46,55 @@ export function renderEnding({ dialogues, meta = {} }) {
   if (!shareWired) {
     shareWired = true;
     els.shareBtn.addEventListener('click', handleShare);
+    els.trailerBtn?.addEventListener('click', () => {
+      shareTrailer({
+        ending: { badge: ending.badge, title: ending.title },
+        scenes: state.history
+      });
+    });
   }
 
   if (isRecord) {
     showToast(`New personal record: ${state.score} charm! 🏆`, { duration: 4000 });
   }
+
+  // Gamification: daily streak + achievement evaluation.
+  touchDailyStreak();
+  const fresh = storage.load();
+  evaluateAchievements({
+    gamesPlayed: fresh.gamesPlayed,
+    fastCount: state.history.filter((entry) => entry.fast).length,
+    secrets: state.secrets,
+    tier,
+    bestStreak: state.bestStreak,
+    hour: new Date().getHours(),
+    customCount: state.history.filter((entry) => entry.custom).length,
+    voiceUsed: state.voiceUsed,
+    duetPlayed: state.duetActive,
+    endings: fresh.endings
+  });
+
+  // Queue the relationship milestone: synced by the SW when online.
+  collectAmbient()
+    .then((ambient) =>
+      queueMilestone({
+        type: 'game-completed',
+        tier,
+        score: state.score,
+        bestStreak: state.bestStreak,
+        secrets: state.secrets,
+        region: ambient.region,
+        phase: ambient.phase.id
+      })
+    )
+    .then((delivery) => {
+      if (delivery?.immediate) {
+        showToast(`Milestones synced ✓ (${delivery.count})`, { duration: 3000 });
+      } else if (delivery && !delivery.scheduled) {
+        showToast('Milestone queued — will sync when online', { duration: 3000 });
+      }
+    })
+    .catch((err) => console.warn('Milestone queue failed', err));
 }
 
 async function handleShare() {

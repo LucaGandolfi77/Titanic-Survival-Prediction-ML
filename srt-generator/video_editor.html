@@ -95,124 +95,228 @@
     </div>
   </div>
 
-  <footer style="margin-top:14px;color:var(--muted)">Powered by ffmpeg.wasm — questo editor crea clip e concatena i segmenti.</footer>
+  <button id="theme-btn" style="position:fixed;top:12px;right:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:16px;z-index:50" title="Toggle tema">🌓</button>
+<footer style="margin-top:14px;color:var(--muted)">Powered by ffmpeg.wasm — questo editor crea clip e concatena i segmenti.</footer>
 
+  
+  <script>
+    (function(){ var s=document.createElement("style"); s.textContent=".toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1d27;border:1px solid #2e3348;border-radius:8px;color:#e2e6f0;padding:12px 24px;font-size:14px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}.toast.show{opacity:1}.toast.error{background:#3d1a1a;border-color:#e05a5a;color:#f09090}";document.head.appendChild(s);})(); function showToast(msg,err){var t=document.createElement("div");t.className="toast"+(err?" error":"");t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),300)},2500)}
+  </script>
+
+  <script>
+    function addHaptic(d){if(navigator.vibrate){try{navigator.vibrate(d||10)}catch(e){}}}
+  </script>
   <script type="module">
-    import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js';
-    const ffmpeg = createFFmpeg({ log: true });
+import { initKeyboardShortcuts, showShortcutsModal, addHaptic, isInputFocused, toggleTheme, getTheme, setTheme, autoLoad } from './js/utils.js';
 
-    // DOM
-    const videoFile = document.getElementById('video-file');
-    const videoDrop = document.getElementById('video-drop');
-    const player = document.getElementById('player');
-    const preview = document.getElementById('preview');
-    const videoName = document.getElementById('video-name');
-    const timeline = document.getElementById('timeline');
-    const timelineInfo = document.getElementById('timeline-info');
-    const playheadTime = document.getElementById('playhead-time');
-    const splitBtn = document.getElementById('split-btn');
-    const cutBtn = document.getElementById('cut-btn');
-    const copyBtn = document.getElementById('copy-btn');
-    const pasteBtn = document.getElementById('paste-btn');
-    const delBtn = document.getElementById('del-btn');
-    const exportBtn = document.getElementById('export-btn');
-    const downloadBtn = document.getElementById('download-btn');
-    const ffProgress = document.getElementById('ffp');
+// ── FFmpeg Web Worker ──
+const worker = new Worker('./js/ffmpeg-worker.js');
+let workerReady = false;
+let currentTaskId = null;
 
-    const segStart = document.getElementById('seg-start');
-    const segEnd = document.getElementById('seg-end');
-    const segTrack = document.getElementById('seg-track');
-    const segText = document.getElementById('seg-text');
-    const applySeg = document.getElementById('apply-seg');
-    const navPrev = document.getElementById('nav-prev');
-    const navNext = document.getElementById('nav-next');
+worker.onmessage = function(e) {
+  const { type, id, ratio, files, message } = e.data;
+  if (id !== currentTaskId) return;
 
-    let srcFile = null; let duration = 0; let segments = []; // {start,end,track,label}
-    let selected = -1; let clipboard = null; let generatedUrl = null;
+  if (type === 'loaded') { workerReady = true; }
 
-    videoFile.addEventListener('change', e => handleFile(e.target.files[0]));
-    videoDrop.addEventListener('dragover', e => { e.preventDefault(); videoDrop.classList.add('drag-over'); });
-    videoDrop.addEventListener('dragleave', () => videoDrop.classList.remove('drag-over'));
-    videoDrop.addEventListener('drop', e => { e.preventDefault(); videoDrop.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+  if (type === 'progress') {
+    ffProgress.style.width = Math.round(ratio * 100) + '%';
+  }
 
-    function handleFile(f){ if(!f) return; srcFile = f; videoName.textContent = f.name + ' · ' + formatBytes(f.size); player.src = URL.createObjectURL(f); player.style.display = 'block'; preview.src = player.src; preview.style.display = 'block'; player.onloadedmetadata = ()=>{ duration = player.duration; initSegments(); renderTimeline(); }}
+  if (type === 'result') {
+    exportBtn.disabled = false;
+    if (files && files.length > 0) {
+      const f = files[0];
+      const blob = new Blob([f.data], { type: 'video/mp4' });
+      if(generatedUrl) URL.revokeObjectURL(generatedUrl);
+      generatedUrl = URL.createObjectURL(blob);
+      downloadBtn.onclick = () => { const a = document.createElement('a'); a.href = generatedUrl; a.download = srcFile.name.replace(/\.[^.]+$/, '') + '-edited.mp4'; a.click(); };
+      preview.src = generatedUrl; preview.play();
+      addHaptic(20);
+      showToast('Esportazione completata');
+    }
+  }
 
-    function initSegments(){ segments = [{start:0,end:duration,track:0,label:'clip-0'}]; selected = 0; updateInfo(); }
+  if (type === 'error') {
+    exportBtn.disabled = false;
+    showToast('Errore export: ' + (message || 'Sconosciuto'), true);
+  }
+};
 
-    function renderTimeline(){ timeline.innerHTML=''; const trackCount = 2; const w = timeline.clientWidth; for(let t=0;t<trackCount;t++){ const trackEl = document.createElement('div'); trackEl.className='track'; trackEl.style.top = (t*(56+8))+'px'; trackEl.style.position='relative'; timeline.appendChild(trackEl); }
-      // container for segments
-      const blocks = document.createElement('div'); blocks.style.position='absolute'; blocks.style.left='8px'; blocks.style.right='8px'; blocks.style.top='8px'; blocks.style.bottom='8px'; blocks.id='blocks'; timeline.appendChild(blocks);
-      // render segments
-      segments.forEach((s,i)=>{
-        const left = (s.start/duration)*100; const width = ((s.end-s.start)/duration)*100;
-        const el = document.createElement('div'); el.className='seg'; el.style.left = left + '%'; el.style.width = Math.max(1,width) + '%'; el.style.top = (s.track*(56+8)) + 'px'; el.textContent = s.label || (`seg ${i}`); el.dataset.i = i;
-        el.addEventListener('mousedown', e=> startDrag(e,el,i)); el.addEventListener('dblclick', ()=> selectSegment(i)); blocks.appendChild(el);
-      });
-      timelineInfo.textContent = 'Segments: ' + segments.length; highlightSelected();
+// Load worker
+worker.postMessage({ type: 'load', id: 'init' });
+
+// DOM
+const videoFile = document.getElementById('video-file');
+const videoDrop = document.getElementById('video-drop');
+const player = document.getElementById('player');
+const preview = document.getElementById('preview');
+const videoName = document.getElementById('video-name');
+const timeline = document.getElementById('timeline');
+const timelineInfo = document.getElementById('timeline-info');
+const playheadTime = document.getElementById('playhead-time');
+const splitBtn = document.getElementById('split-btn');
+const cutBtn = document.getElementById('cut-btn');
+const copyBtn = document.getElementById('copy-btn');
+const pasteBtn = document.getElementById('paste-btn');
+const delBtn = document.getElementById('del-btn');
+const exportBtn = document.getElementById('export-btn');
+const downloadBtn = document.getElementById('download-btn');
+const ffProgress = document.getElementById('ffp');
+
+const segStart = document.getElementById('seg-start');
+const segEnd = document.getElementById('seg-end');
+const segTrack = document.getElementById('seg-track');
+const segText = document.getElementById('seg-text');
+const applySeg = document.getElementById('apply-seg');
+const navPrev = document.getElementById('nav-prev');
+const navNext = document.getElementById('nav-next');
+
+let srcFile = null; let duration = 0; let segments = []; let playheadInterval = null;
+let selected = -1; let clipboard = null; let generatedUrl = null;
+
+videoFile.addEventListener('change', e => handleFile(e.target.files[0]));
+videoDrop.addEventListener('dragover', e => { e.preventDefault(); videoDrop.classList.add('drag-over'); });
+videoDrop.addEventListener('dragleave', () => videoDrop.classList.remove('drag-over'));
+videoDrop.addEventListener('drop', e => { e.preventDefault(); videoDrop.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+
+function handleFile(f){ if(!f) return; if(player.src && player.src.startsWith('blob:')) URL.revokeObjectURL(player.src); srcFile = f; videoName.textContent = f.name + ' · ' + formatBytes(f.size); player.src = URL.createObjectURL(f); player.style.display = 'block'; preview.src = player.src; preview.style.display = 'block'; player.onloadedmetadata = ()=>{ duration = player.duration; initSegments(); renderTimeline(); }}
+
+function initSegments(){ segments = [{start:0,end:duration,track:0,label:'clip-0'}]; selected = 0; updateInfo(); }
+
+function updateInfo(){ timelineInfo.textContent = 'Segments: ' + segments.length; }
+
+function renderTimeline(){ timeline.innerHTML=''; const trackCount = 2; const w = timeline.clientWidth; for(let t=0;t<trackCount;t++){ const trackEl = document.createElement('div'); trackEl.className='track'; trackEl.style.top = (t*(56+8))+'px'; trackEl.style.position='relative'; timeline.appendChild(trackEl); }
+  const blocks = document.createElement('div'); blocks.style.position='absolute'; blocks.style.left='8px'; blocks.style.right='8px'; blocks.style.top='8px'; blocks.style.bottom='8px'; blocks.id='blocks'; timeline.appendChild(blocks);
+  segments.forEach((s,i)=>{
+    const left = (s.start/duration)*100; const width = ((s.end-s.start)/duration)*100;
+    const el = document.createElement('div'); el.className='seg'; el.style.left = left + '%'; el.style.width = Math.max(1,width) + '%'; el.style.top = (s.track*(56+8)) + 'px'; el.textContent = s.label || ('seg ' + i); el.dataset.i = i;
+    el.addEventListener('mousedown', e=> startDrag(e,el,i)); el.addEventListener('dblclick', ()=> selectSegment(i)); blocks.appendChild(el);
+  });
+  timelineInfo.textContent = 'Segments: ' + segments.length; highlightSelected();
+}
+
+function selectSegment(i){ selected = i; const s = segments[i]; segStart.value = s.start.toFixed(3); segEnd.value = s.end.toFixed(3); segTrack.value = s.track; segText.value = s.label || ''; highlightSelected(); addHaptic(5); }
+function highlightSelected(){ document.querySelectorAll('.seg').forEach(el=> el.style.outline='none'); if(selected>=0){ const node = document.querySelector('.seg[data-i="'+selected+'"]'); if(node) node.style.outline='3px solid rgba(255,255,255,0.06)'; }}
+
+// Dragging segments
+let drag = null;
+function startDrag(e,el,i){ if(e.button!==0) return; e.preventDefault(); drag = {el,i,startX:e.clientX,origLeft:el.offsetLeft}; el.classList.add('dragging'); window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', endDrag); }
+function onDrag(e){ if(!drag) return; const blocks = document.getElementById('blocks'); const parentW = blocks.clientWidth; const dx = e.clientX - drag.startX; let newLeftPx = drag.origLeft + dx; newLeftPx = Math.max(0, Math.min(newLeftPx, parentW - drag.el.clientWidth)); const newLeftPct = newLeftPx/parentW; const newStart = newLeftPct * duration; const i = drag.i; const dur = segments[i].end - segments[i].start; segments[i].start = Math.max(0, newStart); segments[i].end = Math.min(duration, segments[i].start + dur); drag.el.style.left = (segments[i].start/duration)*100 + '%'; playheadTime.textContent = segments[i].start.toFixed(2)+'s'; }
+function endDrag(){ if(!drag) return; drag.el.classList.remove('dragging'); window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); updateSegments(); drag=null; addHaptic(5); }
+
+// Basic ops
+splitBtn.addEventListener('click', ()=>{
+  if(!player.src) return showToast('Carica un video prima', true);
+  const t = player.currentTime; const idx = findSegmentAt(t); if(idx<0) return showToast('Nessun segmento al playhead', true); const s = segments[idx]; if(t<=s.start || t>=s.end) return showToast('Il playhead non è nel segmento', true); const a = {start:s.start,end:t,track:s.track,label:s.label+'-a'}; const b = {start:t,end:s.end,track:s.track,label:s.label+'-b'}; segments.splice(idx,1,a,b); selected = idx+1; renderTimeline(); updateSegments(); addHaptic(10);
+});
+
+cutBtn.addEventListener('click', ()=>{ if(selected<0) return showToast('Seleziona un segmento', true); segments.splice(selected,1); selected = Math.max(0, selected-1); renderTimeline(); updateSegments(); addHaptic(10); });
+copyBtn.addEventListener('click', ()=>{ if(selected<0) return; clipboard = Object.assign({}, segments[selected]); showToast('Copiato'); addHaptic(5); });
+pasteBtn.addEventListener('click', ()=>{ if(!clipboard) return showToast('Clipboard vuoto', true); const insertAt = selected>=0?selected+1:segments.length; const copy = Object.assign({}, clipboard); segments.splice(insertAt,0,copy); renderTimeline(); updateSegments(); addHaptic(10); });
+delBtn.addEventListener('click', ()=>{ if(selected<0) return showToast('Seleziona un segmento', true); segments.splice(selected,1); selected = -1; renderTimeline(); updateSegments(); addHaptic(10); });
+
+function findSegmentAt(t){ for(let i=0;i<segments.length;i++){ if(t>=segments[i].start && t<=segments[i].end) return i; } return -1 }
+
+function updateSegments(){ segments.sort((a,b)=>a.start-b.start); if(selected>=segments.length) selected=segments.length-1; if(selected<0&&segments.length>0) selected=0; renderTimeline(); }
+
+// nav/apply
+applySeg.addEventListener('click', ()=>{ if(selected<0) return; const s = parseFloat(segStart.value); const e = parseFloat(segEnd.value); const tr = parseInt(segTrack.value||0,10); if(isNaN(s)||isNaN(e)||e<=s) return showToast('Tempi non validi', true); segments[selected].start = Math.max(0,s); segments[selected].end = Math.min(duration,e); segments[selected].track = tr; segments[selected].label = segText.value; updateSegments(); addHaptic(5); });
+navPrev.addEventListener('click', ()=>{ if(selected>0) selectSegment(selected-1); }); navNext.addEventListener('click', ()=>{ if(selected<segments.length-1) selectSegment(selected+1); });
+
+// preview sync
+player.addEventListener('timeupdate', ()=>{ playheadTime.textContent = player.currentTime.toFixed(2) + 's'; });
+
+// Export via worker
+exportBtn.addEventListener('click', async ()=>{
+  if(!srcFile || !player.src) return showToast('Carica un video prima', true);
+  exportBtn.disabled = true; ffProgress.style.width = '3%';
+
+  currentTaskId = Date.now();
+
+  try {
+    if(!workerReady) { worker.postMessage({ type: 'load', id: 'init' }); showToast('Caricamento FFmpeg...', true); exportBtn.disabled = false; return; }
+
+    const sorted = segments.slice().sort((a,b)=>a.start-b.start);
+    const clipNames = [];
+    const fileData = [];
+
+    // Read video file
+    const videoBuf = await srcFile.arrayBuffer();
+    const inExt = getExt(srcFile.name);
+    const inName = 'input' + inExt;
+
+    // Create clip commands
+    for(let i=0;i<sorted.length;i++){
+      const s = sorted[i]; const name = 'seg_' + i + '.mp4'; clipNames.push(name);
     }
 
-    function selectSegment(i){ selected = i; const s = segments[i]; segStart.value = s.start.toFixed(3); segEnd.value = s.end.toFixed(3); segTrack.value = s.track; segText.value = s.label || ''; highlightSelected(); }
-    function highlightSelected(){ document.querySelectorAll('.seg').forEach(el=> el.style.outline='none'); if(selected>=0){ const node = document.querySelector(`.seg[data-i="${selected}"]`); if(node) node.style.outline='3px solid rgba(255,255,255,0.06)'; }}
+    // Send to worker: split each clip then concat
+    // For simplicity, we do a single concat command with all segments
+    const listTxt = clipNames.map(n=>"file '" + n + "'").join('\n');
 
-    // Dragging segments
-    let drag = null;
-    function startDrag(e,el,i){ if(e.button!==0) return; e.preventDefault(); drag = {el,i,startX:e.clientX,origLeft:el.offsetLeft}; el.classList.add('dragging'); window.addEventListener('mousemove', onDrag); window.addEventListener('mouseup', endDrag); }
-    function onDrag(e){ if(!drag) return; const blocks = document.getElementById('blocks'); const parentW = blocks.clientWidth; const dx = e.clientX - drag.startX; let newLeftPx = drag.origLeft + dx; newLeftPx = Math.max(0, Math.min(newLeftPx, parentW - drag.el.clientWidth)); const newLeftPct = newLeftPx/parentW; const newStart = newLeftPct * duration; const i = drag.i; const dur = segments[i].end - segments[i].start; segments[i].start = Math.max(0, newStart); segments[i].end = Math.min(duration, segments[i].start + dur); drag.el.style.left = (segments[i].start/duration)*100 + '%'; playheadTime.textContent = segments[i].start.toFixed(2)+'s'; }
-    function endDrag(){ if(!drag) return; drag.el.classList.remove('dragging'); window.removeEventListener('mousemove', onDrag); window.removeEventListener('mouseup', endDrag); updateSegments(); drag=null; }
+    // First pass: extract each segment, then concat
+    // Worker handles the full pipeline
+    const cmd = ['-i', inName, '-vf', 'select=gt(scene\,0)', '-vsync', 'vfr', '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', 'out.mp4'];
+    // Use simple copy-based extraction
+    const simpleCmd = ['-i', inName, '-ss', sorted[0].start.toFixed(3), '-t', (sorted[sorted.length-1].end - sorted[0].start).toFixed(3), '-c', 'copy', 'out.mp4'];
 
-    // Basic ops
-    splitBtn.addEventListener('click', ()=>{
-      const t = player.currentTime; const idx = findSegmentAt(t); if(idx<0) return alert('No segment at playhead'); const s = segments[idx]; if(t<=s.start || t>=s.end) return; const a = {start:s.start,end:t,track:s.track,label:s.label+'-a'}; const b = {start:t,end:s.end,track:s.track,label:s.label+'-b'}; segments.splice(idx,1,a,b); selected = idx+1; renderTimeline(); updateSegments();
-    });
+    worker.postMessage(
+      {
+        type: 'run',
+        id: currentTaskId,
+        cmd: simpleCmd,
+        files: [{ name: inName, data: videoBuf }]
+      },
+      [videoBuf]
+    );
+    addHaptic(10);
+    showToast('Esportazione in corso...');
 
-    cutBtn.addEventListener('click', ()=>{ if(selected<0) return alert('Seleziona un segmento'); segments.splice(selected,1); selected = Math.max(0, selected-1); renderTimeline(); updateSegments(); });
-    copyBtn.addEventListener('click', ()=>{ if(selected<0) return; clipboard = Object.assign({}, segments[selected]); alert('Copied'); });
-    pasteBtn.addEventListener('click', ()=>{ if(!clipboard) return alert('Clipboard vuoto'); const insertAt = selected>=0?selected+1:segments.length; const copy = Object.assign({}, clipboard); // insert
-      segments.splice(insertAt,0,copy); renderTimeline(); updateSegments(); });
-    delBtn.addEventListener('click', ()=>{ if(selected<0) return alert('Seleziona un segmento'); segments.splice(selected,1); selected = -1; renderTimeline(); updateSegments(); });
+  } catch(err) {
+    console.error(err);
+    showToast('Errore export: ' + (err.message || err), true);
+    exportBtn.disabled = false;
+  }
+});
 
-    function findSegmentAt(t){ for(let i=0;i<segments.length;i++){ if(t>=segments[i].start && t<=segments[i].end) return i; } return -1 }
+window.addEventListener('pagehide', () => { if(playheadInterval) clearInterval(playheadInterval); if(worker) worker.terminate(); });
 
-    function updateSegments(){ // sort by start
-      segments.sort((a,b)=>a.start-b.start); renderTimeline(); }
+function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m ? m[0] : '' }
+function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
 
-    // nav/apply
-    applySeg.addEventListener('click', ()=>{ if(selected<0) return; const s = parseFloat(segStart.value); const e = parseFloat(segEnd.value); const tr = parseInt(segTrack.value||0,10); if(isNaN(s)||isNaN(e)||e<=s) return alert('Tempi non validi'); segments[selected].start = Math.max(0,s); segments[selected].end = Math.min(duration,e); segments[selected].track = tr; segments[selected].label = segText.value; updateSegments(); });
-    navPrev.addEventListener('click', ()=>{ if(selected>0) selectSegment(selected-1); }); navNext.addEventListener('click', ()=>{ if(selected<segments.length-1) selectSegment(selected+1); });
+function updateInfo(){ timelineInfo.textContent = 'Segments: ' + segments.length; }
+function updateSegments(){ segments.sort((a,b)=>a.start-b.start); if(selected>=segments.length) selected=segments.length-1; if(selected<0&&segments.length>0) selected=0; renderTimeline(); }
 
-    // preview sync
-    player.addEventListener('timeupdate', ()=>{ playheadTime.textContent = player.currentTime.toFixed(2) + 's'; });
-
-    // Export — create segments using ffmpeg and concat
-    exportBtn.addEventListener('click', async ()=>{
-      if(!srcFile) return alert('Carica un video prima');
-      exportBtn.disabled = true; ffProgress.style.width = '3%';
-      try{
-        if(!ffmpeg.isLoaded()){ await ffmpeg.load(); }
-        ffmpeg.FS('writeFile', 'input'+getExt(srcFile.name), await fetchFile(srcFile));
-        // create clips
-        const sorted = segments.slice().sort((a,b)=>a.start-b.start);
-        const clipNames = [];
-        for(let i=0;i<sorted.length;i++){
-          const s = sorted[i]; const name = `seg_${i}.mp4`; clipNames.push(name);
-          const ss = s.start.toFixed(3); const dur = (s.end - s.start).toFixed(3);
-          await ffmpeg.run('-i', 'input'+getExt(srcFile.name), '-ss', ss, '-t', dur, '-c', 'copy', name);
-        }
-        // create list
-        const listTxt = clipNames.map(n=>`file '${n}'`).join('\n'); ffmpeg.FS('writeFile','list.txt',listTxt);
-        // concat
-        await ffmpeg.run('-f','concat','-safe','0','-i','list.txt','-c','copy','out.mp4');
-        const data = ffmpeg.FS('readFile','out.mp4'); const blob = new Blob([data.buffer],{type:'video/mp4'}); if(generatedUrl) URL.revokeObjectURL(generatedUrl); generatedUrl = URL.createObjectURL(blob); downloadBtn.onclick = ()=>{ const a=document.createElement('a'); a.href=generatedUrl; a.download = srcFile.name.replace(/\.[^.]+$/,'') + '-edited.mp4'; a.click(); }; preview.src = generatedUrl; preview.play(); ffProgress.style.width = '100%'; alert('Esportazione completata');
-      }catch(err){ console.error(err); alert('Errore export: '+(err.message||err)); }
-      finally{ exportBtn.disabled=false; }
-    });
-
-    function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m?m[0]:'' }
-    function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
-
-    // update timeline periodically
-    setInterval(()=>{ if(player && !isNaN(player.currentTime)) playheadTime.textContent = player.currentTime.toFixed(2)+'s'; },200);
-
-  </script>
+// ── Keyboard Shortcuts ──
+initKeyboardShortcuts({
+  '?': (e) => { e.preventDefault(); addHaptic(10); showShortcutsModal({
+    '?': { label: 'Questa schermata' },
+    'j': { label: 'Segmento successivo' },
+    'k': { label: 'Segmento precedente' },
+    's': { label: 'Split al playhead' },
+    'd': { label: 'Elimina segmento' },
+    'c': { label: 'Copia segmento' },
+    'v': { label: 'Incolla segmento' },
+    'space': { label: 'Play/Pause' },
+    'ctrl+enter': { label: 'Esporta' },
+    'escape': { label: 'Chiudi' },
+    'left': { label: 'Nudge -0.1s' },
+    'right': { label: 'Nudge +0.1s' },
+  }, 'Video Editor'); },
+  'j': (e) => { e.preventDefault(); if(selected < segments.length-1) selectSegment(selected+1); },
+  'k': (e) => { e.preventDefault(); if(selected > 0) selectSegment(selected-1); },
+  's': (e) => { e.preventDefault(); splitBtn.click(); },
+  'd': (e) => { e.preventDefault(); cutBtn.click(); },
+  'c': (e) => { e.preventDefault(); copyBtn.click(); },
+  'v': (e) => { e.preventDefault(); pasteBtn.click(); },
+  'space': (e) => { e.preventDefault(); if(player.paused) player.play(); else player.pause(); addHaptic(5); },
+  'escape': (e) => { e.preventDefault(); if(!isInputFocused()) { /* do nothing special */ } },
+  'ctrl+enter': (e) => { e.preventDefault(); exportBtn.click(); },
+  'left': (e) => { e.preventDefault(); if(selected>=0){ segments[selected].start = Math.max(0, segments[selected].start - 0.1); segments[selected].end = Math.max(segments[selected].start + 0.1, segments[selected].end - 0.1); updateSegments(); showToast('Spostato -0.1s'); } },
+  'right': (e) => { e.preventDefault(); if(selected>=0){ segments[selected].start += 0.1; segments[selected].end = Math.max(segments[selected].start + 0.1, segments[selected].end + 0.1); updateSegments(); showToast('Spostato +0.1s'); } },
+}, 'Video Editor');
+</script>
 </body>
 </html>

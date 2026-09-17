@@ -1,11 +1,15 @@
-// Entry point: bootstraps features, registers the Service Worker with an
-// update flow (toast + SKIP_WAITING), and preloads dialogues during idle.
+// Entry point: bootstraps features, registers the Service Worker (module
+// worker, with the update flow + Background Sync message channel), and
+// preloads dialogues + the optional neural model during idle.
 
 import { initSetup } from './features/setup/setup.js';
 import { initGame } from './features/game/game.js';
 import { startGame } from './features/game/game.js';
 import { loadDialogues } from './data/dialogues.js';
 import { showToast } from './ui/toast.js';
+import { storage } from './core/storage.js';
+import { detectCapabilities } from './ai/capabilities.js';
+import { ensureNeural } from './ai/sentiment.js';
 
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
@@ -24,8 +28,15 @@ function registerServiceWorker() {
     window.location.reload();
   });
 
+  // Background Sync completion → notify the player.
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'milestones-synced') {
+      showToast(`Milestones synced ✓ (${event.data.count})`, { duration: 3000 });
+    }
+  });
+
   navigator.serviceWorker
-    .register('./sw.js')
+    .register('./sw.js', { type: 'module' })
     .then((reg) => {
       reg.addEventListener('updatefound', () => {
         const installing = reg.installing;
@@ -44,15 +55,20 @@ function registerServiceWorker() {
     .catch((err) => console.error('Service Worker registration failed', err));
 }
 
-function preloadDialogues() {
+function preloadAssets() {
+  const warmUp = async () => {
+    loadDialogues().catch(() => {});
+    // Neural model already downloaded in a previous session → warm it up
+    // from the browser cache so custom-line sentiment is neural instantly.
+    if (storage.load().aiModelDownloaded && navigator.onLine) {
+      const caps = await detectCapabilities();
+      ensureNeural(caps).catch(() => {});
+    }
+  };
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      loadDialogues().catch(() => {});
-    });
+    requestIdleCallback(() => warmUp());
   } else {
-    setTimeout(() => {
-      loadDialogues().catch(() => {});
-    }, 1500);
+    setTimeout(() => warmUp(), 1500);
   }
 }
 
@@ -60,13 +76,23 @@ function boot() {
   initSetup();
   initGame();
   registerServiceWorker();
-  preloadDialogues();
+  preloadAssets();
 
-  // Manifest shortcut deep-link: Speed Crush/?action=play starts instantly.
-  if (new URLSearchParams(window.location.search).get('action') === 'play') {
+  // Share Target (native share) + manifest shortcut deep-link.
+  const params = new URLSearchParams(window.location.search);
+  const sharedText = (params.get('text') || '').trim().slice(0, 300);
+  if (params.get('action') === 'play' || sharedText) {
+    if (sharedText) setState({ sharedPrompt: sharedText });
     startGame();
   }
 }
+
+// SW notificationclick action ('play') → start a new story.
+navigator.serviceWorker?.addEventListener?.('message', (event) => {
+  if (event.data?.type === 'open-game') {
+    startGame();
+  }
+});
 
 if (document.readyState === 'complete') {
   boot();

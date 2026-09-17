@@ -339,8 +339,26 @@
 }
 .stat-pill strong { color: var(--accent-gold); }
 
+#training-panel { margin-top: 10px; width: 100%; max-width: 900px; }
+#training-panel h3 { font-family: 'Cormorant Garamond', serif; color: var(--accent-gold); font-size: 1.2rem; margin-bottom: 12px; }
+.training-active-panel { width: 100%; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid rgba(255,212,111,0.2); overflow: hidden; }
+.training-active-header { padding: 20px 24px; text-align: center; background: linear-gradient(135deg, rgba(255,212,111,0.08), rgba(255,107,53,0.05)); }
+.training-active-header h3 { font-family: 'Cormorant Garamond', serif; color: var(--accent-gold); font-size: 1.3rem; margin-bottom: 6px; }
+.training-progress-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 12px 0; overflow: hidden; }
+.training-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-fire)); border-radius: 3px; transition: width 0.3s ease; }
+.btn-train { background: linear-gradient(135deg, var(--accent-gold), var(--accent-fire)); color: var(--bg-deep); padding: 14px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 800; transition: var(--transition-fast); box-shadow: 0 4px 20px rgba(255,212,111,0.3); border: none; cursor: pointer; }
+.btn-train:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(255,212,111,0.4); }
+.dataset-card { background: rgba(255,255,255,0.04); border-radius: var(--radius-md); padding: 18px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: var(--transition-fast); }
+.dataset-card:hover { border-color: rgba(255,212,111,0.3); background: rgba(255,255,255,0.07); }
+.dataset-card.selected { border-color: var(--accent-gold); background: rgba(255,212,111,0.08); }
+.param-row { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.param-label { font-weight: 700; min-width: 120px; font-size: 0.9rem; }
+.param-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.param-opt { padding: 7px 14px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transition-fast); }
+.param-opt:hover { background: rgba(255,255,255,0.1); }
+.param-opt.selected { background: rgba(255,212,111,0.15); border-color: var(--accent-gold); color: var(--accent-gold); }
+
 /* ═══════════════ CAPABILITIES TREE ═══════════════ */
-.cap-tree { padding: 20px; text-align: center; }
 .cap-level { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
 .cap-node {
   width: 70px; height: 70px; border-radius: 50%;

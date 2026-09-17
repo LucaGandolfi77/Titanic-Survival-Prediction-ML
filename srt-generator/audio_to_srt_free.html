@@ -151,11 +151,6 @@
   .model-card .model-speed.balanced { color:#e8a43a; }
   .model-card .model-speed.accurate { color:#6c8ef5; }
 
-  #partial-text { font-size:12px; color:var(--muted); margin-top:8px;
-    font-family:monospace; min-height:36px; padding:8px; background:var(--surface2);
-    border-radius:6px; display:none; }
-  #partial-text.visible { display:block; }
-
   .file-list { max-width:120px; }
 
   #trans-progress-section #partial-text { display:none; }
@@ -291,6 +286,7 @@
     <span>✅</span>
     <span id="success-msg">Done!</span>
   </div>
+  <button class="btn ghost" id="validate-btn" style="margin-top:8px;width:100%;justify-content:center">✓ Valida SRT corrente</button>
 
   <!-- Model loading progress -->
   <div class="progress-section" id="model-progress-section">
@@ -312,13 +308,24 @@
       border-radius:6px;display:none;"></div>
   </div>
 
+  <!-- Waveform visualization -->
+  <canvas id="waveform-canvas" class="waveform-canvas" style="display:none"></canvas>
+  <style>#waveform-canvas.visible{display:block}</style>
+
+  <!-- Microphone button -->
+  <button class="btn-mic" id="record-btn">🎙️ Registra & Trascrivi</button>
+
+  <!-- Generate button -->
   <button class="btn-generate" id="generate-btn">
     <span id="btn-icon">✨</span>
     <span id="btn-label">Transcribe & Generate SRT</span>
   </button>
 </div>
 
-<!-- OUTPUT -->
+  <!-- Theme Toggle -->
+  <button id="theme-btn" style="position:fixed;top:12px;right:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:16px;z-index:50" title="Toggle tema">🌓</button>
+
+  <!-- OUTPUT -->
 <div class="card" id="srt-card">
   <div class="card-title">📄 SRT Output</div>
   <div class="srt-stats" id="srt-stats"></div>
@@ -327,6 +334,8 @@
     <button class="btn primary" id="download-btn">⬇️ Download .srt</button>
     <button class="btn" id="copy-btn">📋 Copy to clipboard</button>
     <button class="btn danger" id="clear-btn">🗑 Clear</button>
+    <button class="btn ghost" id="export-vtt">📄 .VTT</button>
+    <button class="btn ghost" id="export-txt">📄 .TXT</button>
   </div>
 </div>
 
@@ -339,9 +348,8 @@
 </footer>
 
 <script type="module">
-// ── Imports ────────────────────────────────────────────────────────────────
-import { pipeline, env }
-  from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+import { initKeyboardShortcuts, showShortcutsModal, addHaptic, isInputFocused, toggleTheme, getTheme, setTheme, autoSave, autoLoad } from './js/utils.js';
+import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
 
 env.allowLocalModels = false;
 env.useBrowserCache  = true;
@@ -353,38 +361,45 @@ let cachedPipeline = null;
 let lastModelId    = null;
 const fileProgress = {};
 
+// Streaming state
+let mediaRecorder = null;
+let audioCtx = null;
+let analyser = null;
+let stream = null;
+let isRecording = false;
+let recordStartTime = 0;
+let transcribePipeline = null;
+let waveformRAF = null;
+let currentChunkId = 0;
+
 // ── Model cards ────────────────────────────────────────────────────────────
 window.selectModel = (el) => {
   document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   selectedModel = el.dataset.model;
   if (selectedModel !== lastModelId) cachedPipeline = null;
+  addHaptic(5);
 };
 
 // ── File input ─────────────────────────────────────────────────────────────
-document.getElementById('audio-input').addEventListener('change', e => {
-  handleFile(e.target.files[0]);
-});
+document.getElementById('audio-input').addEventListener('change', e => { handleFile(e.target.files[0]); });
 const dz = document.getElementById('drop-zone');
 dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('drag-over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('drag-over');
-  handleFile(e.dataTransfer.files[0]);
-});
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
 document.getElementById('remove-btn').addEventListener('click', clearFile);
 
 function handleFile(file) {
   if (!file) return;
   selectedFile = file;
   document.getElementById('file-name').textContent = file.name;
-  document.getElementById('file-size').textContent =
-    formatBytes(file.size) + '  ·  ' + (file.type || 'audio');
+  document.getElementById('file-size').textContent = formatBytes(file.size) + '  ·  ' + (file.type || 'audio');
   document.getElementById('file-preview').classList.add('visible');
   const player = document.getElementById('audio-player');
   player.src = URL.createObjectURL(file);
   player.classList.add('visible');
   clearAlerts();
+  addHaptic(5);
 }
 
 function clearFile() {
@@ -392,7 +407,191 @@ function clearFile() {
   document.getElementById('audio-input').value = '';
   document.getElementById('file-preview').classList.remove('visible');
   const p = document.getElementById('audio-player');
+  if (p.src && p.src.startsWith('blob:')) URL.revokeObjectURL(p.src);
   p.src = ''; p.classList.remove('visible');
+  addHaptic(5);
+}
+
+// ── Streaming / Microphone ──────────────────────────────────────────────────
+document.getElementById('record-btn').addEventListener('click', toggleRecording);
+
+async function toggleRecording() {
+  if (isRecording) { stopRecording(); return; }
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (err) {
+    if (err.name === 'NotAllowedError') {
+      showAlert('error', 'Permesso microfono negato. Abilita nelle impostazioni del browser.');
+    } else if (err.name === 'NotFoundError') {
+      showAlert('error', 'Nessun microfono trovato.');
+    } else {
+      showAlert('error', 'Errore microfono: ' + err.message);
+    }
+    return;
+  }
+
+  isRecording = true;
+  recordStartTime = Date.now();
+  document.getElementById('record-btn').classList.add('recording');
+  document.getElementById('record-btn').innerHTML = '<span class="live-dot"></span> Stop Registrazione';
+  showAlert('info', 'Registrazione in corso...');
+  addHaptic(20);
+
+  // Setup audio context and analyser
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 2048;
+  const source = audioCtx.createMediaStreamSource(stream);
+  source.connect(analyser);
+
+  // Draw waveform
+  drawWaveform();
+
+  // Setup MediaRecorder
+  const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+    ? 'audio/webm;codecs=opus' : 'audio/webm';
+  mediaRecorder = new MediaRecorder(stream, { mimeType, timeslice: 5000 });
+
+  const audioChunks = [];
+  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+
+  mediaRecorder.onstop = async () => {
+    if (audioChunks.length === 0) return;
+    const blob = new Blob(audioChunks, { type: mimeType });
+    await transcribeBlob(blob);
+  };
+
+  mediaRecorder.start(50); // Collect 50ms chunks, flush every 5s
+}
+
+function stopRecording() {
+  var wc = document.getElementById("waveform-canvas"); if(wc) wc.classList.remove("visible");
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+  }
+  if (stream) { stream.getTracks().forEach(t => t.stop()); }
+  if (audioCtx) { audioCtx.close(); audioCtx = null; }
+  if (waveformRAF) { cancelAnimationFrame(waveformRAF); waveformRAF = null; }
+  isRecording = false;
+  document.getElementById('record-btn').classList.remove('recording');
+  document.getElementById('record-btn').innerHTML = '🎙️ Registra & Trascrivi';
+  addHaptic(10);
+}
+
+function drawWaveform() {
+  document.getElementById("waveform-canvas").classList.add("visible");
+  const canvas = document.getElementById('waveform-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = canvas.clientWidth * (window.devicePixelRatio || 1);
+  const H = canvas.height = canvas.clientHeight * (window.devicePixelRatio || 1);
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  function draw() {
+    if (!isRecording) return;
+    waveformRAF = requestAnimationFrame(draw);
+    analyser.getByteTimeDomainData(dataArray);
+
+    ctx.fillStyle = '#21253a';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#6c8ef5';
+    ctx.beginPath();
+    const sliceWidth = W / bufferLength;
+    let x = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      const v = dataArray[i] / 128.0;
+      const y = (v * H) / 2;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+      x += sliceWidth;
+    }
+    ctx.stroke();
+
+    // Mid line
+    ctx.strokeStyle = 'rgba(108, 142, 245, 0.2)';
+    ctx.beginPath();
+    ctx.moveTo(0, H / 2);
+    ctx.lineTo(W, H / 2);
+    ctx.stroke();
+  }
+  draw();
+}
+
+async function transcribeBlob(blob) {
+  try {
+    const text = await streamToText(blob);
+    if (text && text.trim()) {
+      displaySRT(text);
+      showAlert('success', 'Trascrizione completata: ' + (selectedFile?.name || 'audio') + ' (' + Math.round((Date.now() - recordStartTime) / 1000) + 's)');
+    }
+  } catch (err) {
+    showAlert('error', 'Errore trascrizione: ' + err.message);
+    console.error(err);
+  }
+}
+
+async function streamToText(blob) {
+  // Decode audio to Float32Array @ 16kHz (reuse decodeAudio)
+  const buf = await blob.arrayBuffer();
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const decoded = await ctx.decodeAudioData(buf);
+  await ctx.close();
+
+  const TARGET = 16000;
+  let audioData;
+  if (decoded.sampleRate === TARGET && decoded.numberOfChannels === 1) {
+    audioData = decoded.getChannelData(0).slice();
+  } else {
+    const numSamples = Math.ceil(decoded.duration * TARGET);
+    const offCtx = new OfflineAudioContext(1, numSamples, TARGET);
+    const src = offCtx.createBufferSource();
+    src.buffer = decoded;
+    src.connect(offCtx.destination);
+    src.start(0);
+    const resampled = await offCtx.startRendering();
+    audioData = resampled.getChannelData(0).slice();
+  }
+
+  // Get or create pipeline
+  if (!transcribePipeline) {
+    transcribePipeline = await pipeline('automatic-speech-recognition', selectedModel);
+  }
+
+  // Process in chunks of 10 seconds for streaming feel
+  const CHUNK_S = 10;
+  const CHUNK_SAMPLES = CHUNK_S * TARGET;
+  let fullText = '';
+
+  for (let offset = 0; offset < audioData.length; offset += CHUNK_SAMPLES) {
+    const chunk = audioData.slice(offset, offset + CHUNK_SAMPLES);
+    if (chunk.length === 0) break;
+
+    try {
+      const result = await transcribePipeline(chunk, {
+        language: document.getElementById('lang-select').value || null,
+        task: document.getElementById('task-select').value,
+        return_timestamps: true,
+        chunk_length_s: 10,
+        stride_length_s: 3,
+      });
+
+      if (result && result.chunks) {
+        const chunkSRT = chunksToSRT(result.chunks);
+        fullText += (fullText ? '\n\n' : '') + chunkSRT;
+
+        // Update partial display
+        const partial = document.getElementById('partial-text');
+        if (partial) { partial.textContent = '🎙️ ' + result.chunks.map(c => c.text).join(' ').slice(-120); }
+      }
+    } catch (chunkErr) {
+      console.warn('Chunk error:', chunkErr);
+    }
+  }
+
+  return fullText;
 }
 
 // ── Transcribe ─────────────────────────────────────────────────────────────
@@ -400,33 +599,28 @@ document.getElementById('generate-btn').addEventListener('click', runTranscripti
 
 async function runTranscription() {
   clearAlerts();
-  if (!selectedFile) { showAlert('error', 'Please select an audio file first.'); return; }
+  if (!selectedFile) { showAlert('error', 'Seleziona prima un audio.'); return; }
 
   setLoading(true);
 
   try {
-    // Phase 1 — Load / get cached model
     if (!cachedPipeline || lastModelId !== selectedModel) {
       showModelProgress();
-      cachedPipeline = await pipeline(
-        'automatic-speech-recognition',
-        selectedModel,
-        { progress_callback: onModelProgress }
-      );
+      cachedPipeline = await pipeline('automatic-speech-recognition', selectedModel, {
+        progress_callback: onModelProgress
+      });
       lastModelId = selectedModel;
     }
     hideModelProgress();
 
-    // Phase 2 — Decode audio to Float32Array @ 16 kHz
     updateBtn('⏳', 'Decoding audio…');
     const audioData = await decodeAudio(selectedFile);
 
-    // Phase 3 — Transcribe
     showTransProgress();
     updateBtn('🔊', 'Transcribing…');
 
-    const lang    = document.getElementById('lang-select').value  || null;
-    const task    = document.getElementById('task-select').value;
+    const lang = document.getElementById('lang-select').value || null;
+    const task = document.getElementById('task-select').value;
     const partial = document.getElementById('partial-text');
     partial.style.display = 'block';
 
@@ -435,11 +629,10 @@ async function runTranscription() {
       task,
       return_timestamps: true,
       chunk_length_s: 30,
-      stride_length_s:  5,
+      stride_length_s: 5,
       callback_function: (beams) => {
-        const txt = beams[0]?.output_token_ids
-          ? '' : (beams[0]?.text || '');
-        if (txt) partial.textContent = '…' + txt.slice(-120);
+        const txt = beams[0]?.text || '';
+        if (txt && partial) partial.textContent = '…' + txt.slice(-120);
       }
     });
 
@@ -447,13 +640,13 @@ async function runTranscription() {
     partial.style.display = 'none';
 
     if (!result || !result.chunks || result.chunks.length === 0) {
-      throw new Error('No speech detected in the audio. Try a different language setting.');
+      throw new Error('Nessun parlato rilevato. Prova un altro setting linguistico.');
     }
 
     const srt = chunksToSRT(result.chunks);
     displaySRT(srt);
-    showAlert('success',
-      `Generated ${result.chunks.length} subtitle blocks from "${selectedFile.name}"`);
+    showAlert('success', `Generato ${result.chunks.length} blocchi da "${selectedFile.name}"`);
+    addHaptic(20);
 
   } catch (err) {
     hideModelProgress(); hideTransProgress();
@@ -467,7 +660,7 @@ async function runTranscription() {
 // ── Audio decoding ─────────────────────────────────────────────────────────
 async function decodeAudio(file) {
   const buf = await file.arrayBuffer();
-  const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const decoded = await ctx.decodeAudioData(buf);
   await ctx.close();
 
@@ -486,30 +679,24 @@ async function decodeAudio(file) {
   return resampled.getChannelData(0).slice();
 }
 
-// ── Model progress callback ────────────────────────────────────────────────
+// ── Model progress ─────────────────────────────────────────────────────────
 function onModelProgress(p) {
   if (p.status === 'progress') {
     const pct = p.progress ? p.progress.toFixed(1) : 0;
     fileProgress[p.file] = +pct;
-
-    // Update aggregate bar
     const vals = Object.values(fileProgress);
-    const avg  = vals.reduce((a,b)=>a+b,0) / vals.length;
-    document.getElementById('model-bar').style.width  = avg + '%';
-    document.getElementById('model-pct').textContent  = avg.toFixed(0) + '%';
-
-    // Update file list
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+    document.getElementById('model-bar').style.width = avg + '%';
+    document.getElementById('model-pct').textContent = avg.toFixed(0) + '%';
     const list = document.getElementById('file-list');
     let row = document.getElementById('fr-' + CSS.escape(p.file));
     if (!row) {
       row = document.createElement('div');
       row.className = 'file-row';
       row.id = 'fr-' + CSS.escape(p.file);
-      row.innerHTML = `<span class="fname">${p.file}</span>
-        <div class="fbar progress-bg" style="max-width:120px">
-          <div class="progress-fill" id="fb-${CSS.escape(p.file)}" style="width:0%"></div>
-        </div>
-        <span class="fpct" id="fp-${CSS.escape(p.file)}">0%</span>`;
+      row.innerHTML = '<span class="fname">' + p.file + '</span>' +
+        '<div class="fbar progress-bg" style="max-width:120px"><div class="progress-fill" id="fb-' + CSS.escape(p.file) + '" style="width:0%"></div></div>' +
+        '<span class="fpct" id="fp-' + CSS.escape(p.file) + '">0%</span>';
       list.appendChild(row);
     }
     const bar = document.getElementById('fb-' + CSS.escape(p.file));
@@ -523,26 +710,21 @@ function onModelProgress(p) {
   }
 }
 
-// ── SRT helpers ────────────────────────────────────────────────────────────
+// ── SRT helpers ─────────────────────────────────────────────────────────
 function toTimestamp(secs) {
   if (secs == null) secs = 0;
-  const h  = Math.floor(secs / 3600);
-  const m  = Math.floor((secs % 3600) / 60);
-  const s  = Math.floor(secs % 60);
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = Math.floor(secs % 60);
   const ms = Math.round((secs % 1) * 1000);
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:`
-       + `${String(s).padStart(2,'0')},${String(ms).padStart(3,'0')}`;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + ',' + String(ms).padStart(3,'0');
 }
 
 function chunksToSRT(chunks) {
-  return chunks
-    .filter(c => c.text && c.text.trim())
-    .map((c, i) => {
-      const s = c.timestamp?.[0] ?? 0;
-      const e = c.timestamp?.[1] ?? s + 2;
-      return `${i+1}\n${toTimestamp(s)} --> ${toTimestamp(e)}\n${c.text.trim()}`;
-    })
-    .join('\n\n');
+  return chunks.filter(c => c.text && c.text.trim()).map((c, i) => {
+    const s = c.timestamp?.[0] ?? 0; const e = c.timestamp?.[1] ?? s + 2;
+    return (i+1) + '\n' + toTimestamp(s) + ' --> ' + toTimestamp(e) + '\n' + c.text.trim();
+  }).join('\n\n');
 }
 
 // ── Display result ─────────────────────────────────────────────────────────
@@ -551,13 +733,13 @@ function displaySRT(srt) {
   const card = document.getElementById('srt-card');
   card.classList.add('visible');
   const blocks = srt.trim().split(/\n\n+/).length;
-  const words  = srt.replace(/\d+\n[\d:,]+ --> [\d:,]+\n/g,'')
-                    .replace(/\n/g,' ').split(/\s+/).filter(Boolean).length;
-  document.getElementById('srt-stats').innerHTML =
-    `<span class="stat-pill"><strong>${blocks}</strong> blocks</span>
-     <span class="stat-pill">≈ <strong>${words}</strong> words</span>
-     <span class="stat-pill"><strong>${formatBytes(new Blob([srt]).size)}</strong></span>`;
+  const words = srt.replace(/\d+\n[\d:,]+ --> [\d:,]+\n/g,'').replace(/\n/g,' ').split(/\s+/).filter(Boolean).length;
+  const blocksEl = document.createElement('span'); blocksEl.className = 'stat-pill'; blocksEl.innerHTML = '<strong>' + blocks + '</strong> blocchi';
+  const wordsEl = document.createElement('span'); wordsEl.className = 'stat-pill'; wordsEl.innerHTML = '≈ <strong>' + words + '</strong> parole';
+  const sizeEl = document.createElement('span'); sizeEl.className = 'stat-pill'; sizeEl.innerHTML = '<strong>' + formatBytes(new Blob([srt]).size) + '</strong>';
+  document.getElementById('srt-stats').append(blocksEl, wordsEl, sizeEl);
   card.scrollIntoView({ behavior:'smooth', block:'start' });
+  addHaptic(20);
 }
 
 // ── Output actions ─────────────────────────────────────────────────────────
@@ -570,19 +752,18 @@ document.getElementById('download-btn').addEventListener('click', () => {
     download: base + '.srt'
   });
   a.click(); URL.revokeObjectURL(a.href);
+  addHaptic(5);
 });
 
 document.getElementById('copy-btn').addEventListener('click', () => {
   const txt = document.getElementById('srt-output').value;
-  if (txt) navigator.clipboard.writeText(txt).then(() => {
-    showAlert('success', 'Copied to clipboard!');
-    setTimeout(clearAlerts, 2000);
-  });
+  if (txt) navigator.clipboard.writeText(txt).then(() => { showToast('Copiato negli appunti'); addHaptic(5); });
 });
 
 document.getElementById('clear-btn').addEventListener('click', () => {
   document.getElementById('srt-output').value = '';
   document.getElementById('srt-card').classList.remove('visible');
+  addHaptic(5);
 });
 
 // ── UI helpers ─────────────────────────────────────────────────────────────
@@ -591,37 +772,39 @@ function setLoading(on) {
   if (!on) updateBtn('✨', 'Transcribe & Generate SRT');
 }
 function updateBtn(icon, label) {
-  document.getElementById('btn-icon').textContent  = icon;
+  document.getElementById('btn-icon').textContent = icon;
   document.getElementById('btn-label').textContent = label;
 }
-function showModelProgress() {
-  document.getElementById('model-progress-section').classList.add('visible');
-}
-function hideModelProgress() {
-  document.getElementById('model-progress-section').classList.remove('visible');
-}
-function showTransProgress() {
-  document.getElementById('trans-progress-section').classList.add('visible');
-}
-function hideTransProgress() {
-  document.getElementById('trans-progress-section').classList.remove('visible');
-}
-function showAlert(type, msg) {
-  clearAlerts();
-  if (type === 'error')   { document.getElementById('error-msg').textContent  = msg; }
-  if (type === 'success') { document.getElementById('success-msg').textContent= msg; }
-  document.getElementById('alert-' + type)?.classList.add('visible');
-}
-function clearAlerts() {
-  ['error','success'].forEach(t =>
-    document.getElementById('alert-'+t)?.classList.remove('visible'));
-  document.getElementById('alert-warn').classList.remove('visible');
-}
-function formatBytes(b) {
-  if (b < 1024)     return b + ' B';
-  if (b < 1048576)  return (b/1024).toFixed(1) + ' KB';
-  return (b/1048576).toFixed(2) + ' MB';
-}
+function showModelProgress() { document.getElementById('model-progress-section').classList.add('visible'); }
+function hideModelProgress() { document.getElementById('model-progress-section').classList.remove('visible'); }
+function showTransProgress() { document.getElementById('trans-progress-section').classList.add('visible'); }
+function hideTransProgress() { document.getElementById('trans-progress-section').classList.remove('visible'); }
+function showAlert(type, msg) { clearAlerts(); if (type === 'error') { document.getElementById('error-msg').textContent = msg; } if (type === 'success') { document.getElementById('success-msg').textContent = msg; } document.getElementById('alert-' + type)?.classList.add('visible'); }
+function clearAlerts() { ['error','success'].forEach(t => document.getElementById('alert-'+t)?.classList.remove('visible')); document.getElementById('alert-warn').classList.remove('visible'); }
+function formatBytes(b) { if (b < 1024) return b + ' B'; if (b < 1048576) return (b/1024).toFixed(1) + ' KB'; return (b/1048576).toFixed(2) + ' MB'; }
+function showToast(msg, err) { var t = document.createElement('div'); t.className = 'toast' + (err ? ' error' : ''); t.textContent = msg; document.body.appendChild(t); requestAnimationFrame(() => t.classList.add('show')); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2500); }
+
+// ── Keyboard Shortcuts ──
+initKeyboardShortcuts({
+  '?': (e) => { e.preventDefault(); addHaptic(10); showShortcutsModal({
+    '?': { label: 'Questa schermata' },
+    'ctrl+enter': { label: 'Avvia trascrizione' },
+    'ctrl+r': { label: 'Registra & Trascrivi' },
+    'escape': { label: 'Chiudi / Pulisci' },
+  }, 'Audio → SRT'); },
+  'ctrl+enter': (e) => { e.preventDefault(); document.getElementById('generate-btn').click(); },
+  'ctrl+r': (e) => { e.preventDefault(); document.getElementById('record-btn').click(); },
+  'escape': (e) => { e.preventDefault(); if(!isInputFocused()) { if(isRecording) stopRecording(); else showToast(''); } },
+}, 'Audio → SRT');
+
+    // ── Auto-save ──
+    var saveSRT = autoSave('srt_audio_output', function(){ return document.getElementById('srt-output').value; }, 800);
+    document.getElementById('srt-output').addEventListener('input', function(){ saveSRT(); });
+
+    // ── Theme Toggle ──
+    var themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', function(){ toggleTheme(); var t = getTheme(); themeBtn.textContent = t === 'light' ? '☀️' : '🌓'; });
+    if(autoLoad('srt_theme', 'dark') === 'light'){ setTheme('light'); themeBtn.textContent = '☀️'; }
 </script>
 </body>
 </html>

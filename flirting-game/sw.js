@@ -4,7 +4,7 @@
 // - Cross-origin (Google Fonts): Cache-First
 // Plus a message channel so the UI can trigger SKIP_WAITING on updates.
 
-const VERSION = 'v2';
+const VERSION = 'v4';
 const STATIC_CACHE = `speed-crush-static-${VERSION}`;
 const RUNTIME_CACHE = `speed-crush-runtime-${VERSION}`;
 
@@ -24,13 +24,30 @@ const PRECACHE_URLS = [
   './src/core/timer.js',
   './src/core/storage.js',
   './src/core/haptics.js',
+  './src/core/ambient.js',
+  './src/core/difficulty.js',
+  './src/core/webauthn.js',
+  './src/core/queue.js',
+  './src/core/i18n.js',
+  './src/core/motion.js',
   './src/data/dialogues.js',
+  './src/data/validate.js',
+  './src/ai/capabilities.js',
+  './src/ai/sentiment.js',
+  './src/ai/generator.js',
   './src/ui/dom.js',
   './src/ui/router.js',
   './src/ui/toast.js',
   './src/features/setup/setup.js',
   './src/features/game/game.js',
-  './src/features/ending/ending.js'
+  './src/features/ending/ending.js',
+  './src/features/voice/voice.js',
+  './src/features/stats/stats.js',
+  './src/features/achievements/achievements.js',
+  './src/features/notifications/notifications.js',
+  './src/features/duet/duet.js',
+  './src/features/story/story.js',
+  './src/features/story/trailer.js'
 ];
 
 // Install: precache the core resources, take over immediately.
@@ -128,4 +145,52 @@ self.addEventListener('fetch', (event) => {
 // Update flow: the UI toast posts SKIP_WAITING to activate the new version.
 self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
+// Background Sync: drain the offline milestone queue when connectivity
+// returns, then notify the listening clients. The SW is registered as a
+// module worker, so dynamic import() is available here.
+self.addEventListener('sync', (event) => {
+  if (event.tag !== 'sync-milestones') return;
+  event.waitUntil(
+    import('./src/core/queue.js')
+      .then((queue) => queue.drainMilestones())
+      .then((items) =>
+        self.clients
+          .matchAll({ includeUncontrolled: true })
+          .then((clients) => {
+            clients.forEach((client) =>
+              client.postMessage({ type: 'milestones-synced', count: items.length })
+            );
+          })
+      )
+  );
+});
+
+// Push Notifications: rich notifications with quick-reply actions.
+// The contextual reminder is scheduled by the page via Notification
+// Triggers (experimental); 'play' focuses/opens the app and starts a story.
+self.addEventListener('notificationclick', (event) => {
+  const action = event.action;
+  event.notification.close();
+  if (action === 'dismiss') return;
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clients) => {
+        for (const client of clients) {
+          if ('focus' in client) {
+            client.focus();
+            client.postMessage({ type: 'open-game' });
+            return;
+          }
+        }
+        return self.clients.openWindow('./index.html?action=play');
+      })
+  );
+});
+
+self.addEventListener('notificationclose', (event) => {
+  // Analytics hook for the future cloud backend.
+  console.log('Notification closed', event.notification.tag);
 });

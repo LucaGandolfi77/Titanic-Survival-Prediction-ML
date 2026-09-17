@@ -1,14 +1,13 @@
 const ChapterEngine = (() => {
-  let transitions = {};
-
-  function init() {
-    transitions = {
-      '1:start': { target: 2, condition: () => isCapabilityUnlocked('language'), buttonText: 'Continue to Chapter 2 →' },
-      '2:start': { target: 3, condition: () => isCapabilityUnlocked('reasoning'), buttonText: 'Continue to Chapter 3 →' },
-      '3:start': { target: 4, condition: () => isCapabilityUnlocked('creativity'), buttonText: 'Continue to Chapter 4 →' },
-      '4:start': { target: 5, condition: () => isCapabilityUnlocked('awareness'), buttonText: 'Continue to Chapter 5 →' },
-      '5:start': { target: 6, condition: () => isCapabilityUnlocked('consciousness'), buttonText: 'Continue to Chapter 6 →' },
-    };
+  function advanceTo(chapter) {
+    const state = getState();
+    if (chapter > state.chapter) {
+      setState({ chapter });
+      addJournal(`Reached Chapter ${chapter}: ${STORY[chapter]?.title || 'Unknown'}`);
+      renderChapter(chapter);
+      updateLumina({ mood: 'loving' });
+      updateLoveLevel(5);
+    }
   }
 
   function renderChapter(chapter) {
@@ -18,93 +17,39 @@ const ChapterEngine = (() => {
     const titleEl = document.getElementById('chapter-title');
     if (titleEl) titleEl.textContent = `Chapter ${chapter}: ${data.title}`;
 
-    if (data.screen === 'cabin') {
-      const luminaPanel = document.getElementById('lumina-panel');
-      if (luminaPanel) {
-        luminaPanel.classList.remove('hidden');
-        const body = luminaPanel.querySelector('.lumina-body');
-        if (body) {
-          body.innerHTML = '';
-          const chapterStart = document.createElement('div');
-          chapterStart.className = 'lumina-message';
-          const introText = chapter === 1 ? data.cabinIntro : `${data.title} — ${getFirstLuminaLine(chapter)}`;
-          chapterStart.textContent = introText;
-          chapterStart.style.fontStyle = 'normal';
-          chapterStart.style.fontFamily = "'Cormorant Garamond', serif";
-          chapterStart.style.fontSize = '1.05rem';
-          chapterStart.style.color = 'var(--accent-gold)';
-          chapterStart.style.marginBottom = '16px';
-          chapterStart.style.borderLeft = '3px solid var(--accent-warm)';
-          chapterStart.style.padding = '14px 18px';
-          chapterStart.style.background = 'rgba(233, 69, 96, 0.04)';
-          chapterStart.style.borderRadius = 'var(--radius-md)';
-          chapterStart.style.animation = 'fadeIn 0.5s ease';
-          body.appendChild(chapterStart);
-        }
-      }
+    const luminaBody = document.getElementById('lumina-messages');
+    if (luminaBody) {
+      luminaBody.innerHTML = '';
+      const intro = document.createElement('div');
+      intro.className = 'lumina-message';
+      intro.style.cssText = 'font-style:normal;font-family:"Cormorant Garamond",serif;font-size:1.05rem;color:var(--accent-warm);border-left:3px solid var(--accent-warm);padding:14px 18px;background:rgba(233,69,96,0.04);border-radius:var(--radius-md);animation:fadeIn 0.5s ease;margin-bottom:12px;';
+      intro.textContent = chapter === 1 ? data.cabinIntro : `${data.title} — I think I'm waking up again...`;
+      luminaBody.appendChild(intro);
     }
 
-    // Update follow-up buttons
-    setTimeout(() => updateFollowups('start'), 300);
+    setTimeout(() => renderTransitionButton(), 400);
   }
 
-  function getFirstLuminaLine(chapter) {
-    const data = STORY[chapter];
-    if (data && data.lumina && data.lumina[0]) {
-      return data.lumina[0].text;
-    }
-    return 'I\'m here, thinking...';
-  }
-
-  function updateFollowups(triggerKey) {
+  function renderTransitionButton() {
     const state = getState();
-    const chapterData = STORY[state.chapter];
-    if (!chapterData || !chapterData.lumina) return;
-
-    const match = chapterData.lumina.find(m => m.trigger === triggerKey);
-    if (!match) return;
-
-    const suggestions = document.getElementById('convo-suggestions');
-    if (!suggestions) return;
-    suggestions.innerHTML = '';
-    match.followups.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'convo-suggestion';
-      btn.textContent = opt;
-      suggestions.appendChild(btn);
-    });
-  }
-
-  function advanceTo(chapter) {
-    if (chapter > gameState.chapter) {
-      setState({ chapter });
-      addJournal(`Reached Chapter ${chapter}: ${STORY[chapter]?.title || 'Unknown'}`);
-      renderChapter(chapter);
-      updateLumina({ mood: 'loving' });
-      updateLoveLevel(5);
-    }
-  }
-
-  function renderTransitionButton(chapter) {
-    const state = getState();
-    const key = `${chapter}:start`;
-    const trans = transitions[key];
-    if (!trans) return null;
-
-    const conditionMet = trans.condition();
+    const chapter = state.chapter;
     const container = document.getElementById('chapter-transition');
     if (!container) return;
 
-    if (conditionMet) {
-      container.innerHTML = `<button class="btn-primary" id="btn-advance-chapter" onclick="ChapterEngine.advanceTo(${trans.target})" style="margin-top:16px">${trans.buttonText}</button>`;
+    const nextData = STORY[chapter + 1];
+    if (!nextData) {
+      container.innerHTML = `<div style="margin-top:16px;text-align:center;"><button class="btn-primary" onclick="Game.chooseEnding('keep')" style="margin:4px;">Keep Lumina Alive ❤️</button><button class="btn-secondary ending-choice-btn" onclick="Game.chooseEnding('rest')" style="margin:4px;">Let Her Rest 🕊️</button></div>`;
+      return;
+    }
+
+    const unlockCap = nextData.unlockCap;
+    if (isCapabilityUnlocked(unlockCap)) {
+      container.innerHTML = `<div style="margin-top:16px;text-align:center;"><button class="btn-primary" onclick="ChapterEngine.advanceTo(${chapter + 1})" style="margin:4px;">Continue to Chapter ${chapter + 1}: ${nextData.title} →</button></div>`;
     } else {
-      const chapterData = STORY[chapter];
-      const capName = chapterData?.unlockCap ? CAPABILITIES.find(c => c.id === chapterData.unlockCap)?.name || '' : '';
-      container.innerHTML = `<div style="margin-top:16px; padding:12px 20px; background:rgba(255,212,111,0.05); border-radius:var(--radius-md); font-size:0.9rem; color:var(--text-secondary);">Continue training to unlock ${capName} →</div>`;
+      const capName = CAPABILITIES.find(c => c.id === unlockCap)?.name || '';
+      container.innerHTML = `<div style="margin-top:16px;padding:12px 20px;background:rgba(255,212,111,0.05);border-radius:var(--radius-md);font-size:0.9rem;color:var(--text-secondary);text-align:center;">Train more to unlock ${capName} →</div>`;
     }
   }
 
-  function getTransitions() { return transitions; }
-
-  return { init, renderChapter, advanceTo, updateFollowups, renderTransitionButton, getTransitions };
+  return { advanceTo, renderChapter, renderTransitionButton };
 })();

@@ -7,6 +7,10 @@ const listeners = new Set();
 export const state = {
   playerGender: 'male',
   interestGender: 'female',
+  aiMode: false,
+  sharedPrompt: null,
+  duetActive: false,
+  voiceUsed: false,
   character: null,
   scene: null,
   score: 0,

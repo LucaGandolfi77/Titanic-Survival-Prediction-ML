@@ -8,7 +8,12 @@ const DEFAULTS = {
   bestStreak: 0,
   gamesPlayed: 0,
   endings: [],
-  prefs: { playerGender: 'male', interestGender: 'female' }
+  achievements: [],
+  dailyStreak: null,
+  reminders: false,
+  aiModelDownloaded: false,
+  difficulty: { avgReaction: 3.2, samples: 0, timeLimit: 8, threshold: 0.65 },
+  prefs: { playerGender: 'male', interestGender: 'female', aiMode: false, language: null }
 };
 
 function clone(value) {
@@ -43,7 +48,7 @@ export const storage = {
     const next = fn(read());
     if (next) write(next);
   },
-  savePrefs(playerGender, interestGender) {
-    this.save({ prefs: { playerGender, interestGender } });
+  savePrefs(playerGender, interestGender, aiMode = false, language = null) {
+    this.save({ prefs: { playerGender, interestGender, aiMode, language } });
   }
 };

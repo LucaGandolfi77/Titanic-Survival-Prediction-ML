@@ -25,13 +25,15 @@
 
   <main class="app-shell">
     <section class="panel hero-panel active" id="setup-screen">
-      <div class="badge">Interactive Story</div>
+      <div class="badge" data-i18n="setup.badge">Interactive Story</div>
       <h1>Speed Crush</h1>
-      <p class="lead">Pick your vibe, answer fast, and unlock extra flirty scenes before the moment slips away.</p>
+      <p class="lead" data-i18n="setup.lead">Pick your vibe, answer fast, and unlock extra flirty scenes before the moment slips away.</p>
+      <p class="ambient-chip" id="ambient-chip">✨ Detecting context…</p>
+      <p class="streak-badge" id="streak-badge" hidden></p>
 
       <div class="setup-grid">
         <label class="field">
-          <span>Your character</span>
+          <span data-i18n="setup.character">Your character</span>
           <select id="player-gender">
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -39,30 +41,55 @@
         </label>
 
         <label class="field">
-          <span>You want to date</span>
+          <span data-i18n="setup.interest">You want to date</span>
           <select id="interest-gender">
             <option value="female">Women</option>
             <option value="male">Men</option>
           </select>
         </label>
+
+        <label class="field">
+          <span>Language · Lingua · Idioma · Langue</span>
+          <select id="language-select">
+            <option value="en">English</option>
+            <option value="it">Italiano</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="ai-row">
+        <label class="ai-toggle">
+          <input type="checkbox" id="ai-toggle" />
+          <span class="ai-switch"></span>
+          <span class="ai-copy">
+            <strong data-i18n="setup.aiMode">AI mode</strong>
+            <small data-i18n="setup.aiModeHint">Infinite procedural scenes · custom lines · smart scoring</small>
+          </span>
+        </label>
+        <button class="ghost-btn" id="ai-model-btn" type="button" hidden data-i18n="setup.aiModel">🧠 Download neural model (~60MB)</button>
+        <button class="ghost-btn" id="notif-btn" type="button" hidden data-i18n="setup.reminders">🔔 Enable reminders</button>
       </div>
 
       <div class="stats-row intro-stats">
         <div class="stat-card">
-          <span class="stat-label">Goal</span>
-          <strong>Reach chapter 3</strong>
+          <span class="stat-label" data-i18n="setup.goal">Goal</span>
+          <strong data-i18n="setup.goalValue">Reach chapter 3</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Bonus</span>
-          <strong>Fast choices unlock secrets</strong>
+          <span class="stat-label" data-i18n="setup.bonus">Bonus</span>
+          <strong data-i18n="setup.bonusValue">Fast choices unlock secrets</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Personal best</span>
+          <span class="stat-label" data-i18n="setup.best">Personal best</span>
           <strong id="best-value">—</strong>
         </div>
       </div>
 
-      <button class="primary-btn" id="start-btn" type="button">Start the story</button>
+      <button class="primary-btn" id="start-btn" type="button" data-i18n="setup.start">Start the story</button>
+      <button class="ghost-btn stats-btn" id="stats-btn" type="button" data-i18n="setup.stats">🔒 Your stats vault</button>
+      <button class="ghost-btn duet-btn" id="duet-btn" type="button" data-i18n="setup.duet">👯 Duet mode</button>
     </section>
 
     <section class="panel game-panel" id="game-screen">
@@ -71,7 +98,12 @@
           <div class="badge" id="chapter-label">Chapter 1</div>
           <h2 id="character-name">Character</h2>
         </div>
-        <button class="ghost-btn" id="restart-btn" type="button">Restart</button>
+        <div class="topbar-actions">
+          <button class="ghost-btn voice-btn" id="voice-btn" type="button" hidden data-i18n-title="toast.voiceOn" title="Voice mode">🔊</button>
+          <button class="ghost-btn mic-btn" id="mic-btn" type="button" hidden title="Answer by voice">🎙️</button>
+          <button class="ghost-btn ambient-btn" id="ambient-btn" type="button" title="Ambient night-out mode">☾</button>
+          <button class="ghost-btn" id="restart-btn" type="button" data-i18n="game.restart">Restart</button>
+        </div>
       </div>
 
       <div class="character-card">
@@ -88,7 +120,7 @@
 
       <div class="timer-block">
         <div class="timer-copy">
-          <span>Reaction boost</span>
+          <span data-i18n="game.reaction">Reaction boost</span>
           <strong id="timer-text">8.0s</strong>
         </div>
         <div class="timer-track">
@@ -98,22 +130,28 @@
 
       <div class="stats-row">
         <div class="stat-card">
-          <span class="stat-label">Charm</span>
+          <span class="stat-label" data-i18n="game.charm">Charm</span>
           <strong id="score-value">0</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Fast streak</span>
+          <span class="stat-label" data-i18n="game.streak">Fast streak</span>
           <strong id="streak-value">0</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Secret scenes</span>
+          <span class="stat-label" data-i18n="game.secrets">Secret scenes</span>
           <strong id="secret-value">0</strong>
         </div>
       </div>
 
       <div class="choices" id="choices"></div>
 
-      <p class="gesture-hint">Swipe left · choice history &nbsp;·&nbsp; Tap · skip reply</p>
+      <button class="ghost-btn custom-btn" id="custom-btn" type="button" hidden data-i18n="game.custom">✍️ Write your own line</button>
+      <div class="custom-field" id="custom-field">
+        <input type="text" id="custom-input" maxlength="120" data-i18n-placeholder="game.customPlaceholder" placeholder="Write your own flirty line…" aria-label="Your line" />
+        <button class="primary-btn compact" id="custom-send" type="button" data-i18n="game.send">Send</button>
+      </div>
+
+      <p class="gesture-hint" data-i18n="game.hint">Swipe left · choice history &nbsp;·&nbsp; Tap · skip reply</p>
     </section>
 
     <section class="panel end-panel" id="end-screen">
@@ -122,30 +160,102 @@
       <p class="lead" id="end-text"></p>
       <div class="stats-row">
         <div class="stat-card">
-          <span class="stat-label">Final charm</span>
+          <span class="stat-label" data-i18n="end.finalCharm">Final charm</span>
           <strong id="final-score">0</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Best streak</span>
+          <span class="stat-label" data-i18n="end.bestStreak">Best streak</span>
           <strong id="final-streak">0</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Unlocked scenes</span>
+          <span class="stat-label" data-i18n="end.unlocked">Unlocked scenes</span>
           <strong id="final-secret">0</strong>
         </div>
       </div>
-      <button class="primary-btn" id="play-again-btn" type="button">Play again</button>
-      <button class="ghost-btn" id="share-btn" type="button">Share your score</button>
+      <button class="primary-btn" id="play-again-btn" type="button" data-i18n="end.playAgain">Play again</button>
+      <button class="ghost-btn" id="share-btn" type="button" data-i18n="end.share">Share your score</button>
+      <button class="ghost-btn" id="trailer-btn" type="button" data-i18n="end.trailer">🎬 Story trailer</button>
     </section>
   </main>
 
   <div class="history-overlay" id="history-overlay" aria-hidden="true">
     <div class="history-sheet" role="dialog" aria-modal="true" aria-label="Your choices so far">
       <div class="history-head">
-        <h3>Your choices so far</h3>
-        <button class="ghost-btn" id="history-close" type="button">Close</button>
+        <h3 data-i18n="game.historyTitle">Your choices so far</h3>
+        <button class="ghost-btn" id="history-close" type="button" data-i18n="game.close">Close</button>
       </div>
       <div class="history-list" id="history-list"></div>
+    </div>
+  </div>
+
+  <div class="stats-overlay" id="stats-overlay" aria-hidden="true">
+    <div class="stats-sheet" role="dialog" aria-modal="true" aria-label="Your stats vault">
+      <div class="history-head">
+        <h3 data-i18n="stats.title">Your stats vault 🔒</h3>
+        <button class="ghost-btn" id="stats-close" type="button" data-i18n="game.close">Close</button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-row"><span data-i18n="stats.games">Games played</span><strong id="stat-games">0</strong></div>
+        <div class="stat-row"><span data-i18n="stats.bestScore">Best score</span><strong id="stat-best-score">—</strong></div>
+        <div class="stat-row"><span data-i18n="stats.bestStreak">Best streak</span><strong id="stat-best-streak">0</strong></div>
+        <div class="stat-row"><span data-i18n="stats.endings">Endings collected</span><strong id="stat-endings">—</strong></div>
+        <div class="stat-row"><span data-i18n="stats.difficulty">Difficulty</span><strong id="stat-difficulty">Standard (8s · 65%)</strong></div>
+        <div class="stat-row"><span data-i18n="stats.avgReaction">Avg reaction</span><strong id="stat-avg-reaction">—</strong></div>
+        <div class="stat-row"><span data-i18n="stats.ambient">Ambient context</span><strong id="stat-ambient">—</strong></div>
+        <div class="stat-row"><span data-i18n="stats.device">AI backend</span><strong id="stat-device">—</strong></div>
+      </div>
+      <div class="story-section">
+        <button class="ghost-btn" id="export-btn" type="button" data-i18n="stats.export">📤 Export story</button>
+        <button class="ghost-btn" id="import-btn" type="button" data-i18n="stats.import">📥 Import story / pack</button>
+      </div>
+      <div class="achievements-section">
+        <h4 data-i18n="stats.achievements">Achievements</h4>
+        <div class="achievements-list" id="achievements-list"></div>
+      </div>
+      <div class="biometric-section" id="stats-biometric" hidden>
+        <p id="biometric-status">Not set up</p>
+        <button class="ghost-btn" id="biometric-btn" type="button">🔒 Set up Face ID / Touch ID</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="duet-overlay" id="duet-overlay" aria-hidden="true">
+    <div class="duet-sheet" role="dialog" aria-modal="true" aria-label="Duet mode">
+      <div class="history-head">
+        <h3>Duet mode 👯</h3>
+        <button class="ghost-btn" id="duet-close" type="button" data-i18n="game.close">Close</button>
+      </div>
+      <div class="duet-setup" id="duet-setup">
+        <div class="setup-grid">
+          <label class="field">
+            <span>Your role</span>
+            <select id="duet-role">
+              <option value="suitor">I play the suitor (host)</option>
+              <option value="character">I play the crush (guest)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Connection</span>
+            <select id="duet-transport">
+              <option value="broadcast">This device (two tabs)</option>
+              <option value="rtc">Two devices (invite code)</option>
+            </select>
+          </label>
+        </div>
+        <button class="ghost-btn" id="duet-code-btn" type="button" hidden>🔗 Create invite code</button>
+        <div class="duet-codes" id="duet-codes" hidden>
+          <textarea id="duet-code-in" placeholder="Paste invite / reply code…" aria-label="Connection code"></textarea>
+          <button class="ghost-btn" id="duet-connect-btn" type="button" hidden>Connect</button>
+        </div>
+        <textarea id="duet-code-out" readonly hidden aria-label="Your connection code"></textarea>
+        <button class="primary-btn compact" id="duet-start-btn" type="button">Start duet</button>
+        <p class="gesture-hint" id="duet-status">Pick a role to begin.</p>
+      </div>
+      <div class="duet-play" id="duet-play" hidden>
+        <p class="character-meta" id="duet-scene">Waiting for the story…</p>
+        <p class="dialogue-text" id="duet-choice"></p>
+        <div class="duet-reactions" id="duet-reactions"></div>
+      </div>
     </div>
   </div>
 

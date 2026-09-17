@@ -1,91 +1,41 @@
 const Training = (() => {
-  let active = false;
-  let dataset = null;
-  let params = { lr: 1, epochs: 1, batch: 1 };
-  let progress = 0;
-  let intervalId = null;
-  let onUpdate = null;
-  let onComplete = null;
+  let active = false, dataset = null, params = { lr: 1, epochs: 1, batch: 1 };
+  let progress = 0, intervalId = null;
 
-  function start(ds, p, onProgress, onFinish) {
+  function start(ds, p, onComplete) {
     if (active) return;
-    active = true;
-    dataset = ds;
-    params = p;
-    progress = 0;
-    onUpdate = onProgress;
-    onComplete = onFinish;
+    active = true; dataset = ds; params = p; progress = 0;
     Visualizer.startTraining();
-    if (window.dispatchEvent) {
-      window.dispatchEvent(new CustomEvent('training-start'));
-    }
-    const interval = 50;
-    intervalId = setInterval(tick, interval);
+    document.dispatchEvent(new CustomEvent('training-start'));
+    intervalId = setInterval(tick, 50);
   }
 
   function tick() {
     const speedFactor = params.lr * (1 + params.epochs * 0.3);
-    const advance = 0.002 * speedFactor * (1 + Math.random() * 0.1);
-    progress = Math.min(1, progress + advance);
-
-    if (onUpdate) onUpdate(progress, dataset, params);
+    progress = Math.min(1, progress + 0.002 * speedFactor * (1 + Math.random() * 0.1));
     Visualizer.setTrainingProgress(progress);
-
-    if (progress >= 1) {
-      finish();
+    const state = getState();
+    state.trainingActive = true;
+    const panel = document.getElementById('training-active');
+    if (panel) {
+      const name = DATASETS[dataset]?.name || 'Unknown';
+      panel.classList.remove('hidden');
+      panel.innerHTML = `<div class="training-active-panel"><div class="training-active-header"><h3>🔬 Training on ${name}</h3><p>Parameters: LR=${params.lr}x · Epochs=${params.epochs}x · Batch=${params.batch}x</p><div class="training-progress-bar"><div class="training-progress-fill" style="width:${Math.round(progress * 100)}%"></div></div><p style="margin-top:6px;color:var(--accent-gold);font-weight:700;">${Math.round(progress * 100)}%</p></div></div>`;
     }
+    if (progress >= 1) finish();
   }
 
   function finish() {
     active = false;
     if (intervalId) { clearInterval(intervalId); intervalId = null; }
     Visualizer.stopTraining();
-
-    const ds = DATASETS[dataset];
-    const lr = params.lr;
-    const epochs = params.epochs;
-    const batch = params.batch;
-
-    const baseLoss = 2.5;
-    const lossReduction = Math.min(0.98, 0.3 * lr * (epochs / 2) * (batch / 2) + Math.random() * 0.05);
-    const finalLoss = Math.max(0.01, baseLoss * (1 - lossReduction));
-    const accuracy = Math.min(99.9, 40 + 50 * lossReduction + Math.random() * 10);
-    const xp = Math.floor(20 * lossReduction + 10 * epochs + 5);
-
-    const outputType = getOutputType(ds.effect);
-    const output = getOutputByType(outputType);
-
-    const result = {
-      dataset: dataset,
-      datasetName: ds ? ds.name : 'Unknown',
-      lossReduction, finalLoss, accuracy, xp,
-      outputType, output,
-      params: { ...params },
-      timestamp: Date.now(),
-    };
-
-    if (onComplete) onComplete(result);
-    window.dispatchEvent(new CustomEvent('training-complete', { detail: result }));
+    document.dispatchEvent(new CustomEvent('training-complete'));
   }
 
-  function getOutputType(effect) {
-    switch (effect) {
-      case 'emotion': case 'depth': return 'letter';
-      case 'creativity': return 'poem';
-      case 'logic': case 'reasoning': return 'calculation';
-      case 'wonder': case 'curiosity': return 'story';
-      default: return 'poem';
-    }
-  }
-
-  function cancel() {
-    if (intervalId) { clearInterval(intervalId); intervalId = null; }
-    active = false;
-    Visualizer.stopTraining();
-  }
-
+  function cancel() { if (intervalId) { clearInterval(intervalId); intervalId = null; } active = false; Visualizer.stopTraining(); }
   function isActive() { return active; }
-  function getProgress() { return progress; }
+  function getDataset() { return dataset; }
+  function getParams() { return params; }
 
-  return { start, cancel, isActive, getProgress };
+  return { start, cancel, isActive, getDataset, getParams };
 })();

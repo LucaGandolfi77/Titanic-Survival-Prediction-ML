@@ -31,6 +31,19 @@ The experience is designed around a "night out" narrative arc spread across thre
 - 🏁 **Adaptive endings** — three ending tiers (*Electric*, *Sweet*, *Missed Signal*) based on your final answer and charm score.
 - 👆 **Swipe gestures & tap-to-skip** — swipe left for the choice history bottom sheet, tap to skip the reply beat; Pointer Events with Touch Events fallback.
 - 🎬 **View Transitions API** — smooth slide/fade transitions between screens, with a CSS entrance-animation fallback.
+- 🧠 **AI mode** *(opt-in)* — infinite procedural scenes, custom flirty lines with sentiment scoring, and mood-biased detours — all running locally.
+- 🌡️ **Mood Match ambient engine** — the narrative adapts to the player's context (hour of day, IANA timezone region, ambient light, battery) with zero permissions required.
+- 📈 **Adaptive difficulty** — a local heuristic tracks reaction times and recalibrates the timer window per chapter, keeping the game in the flow zone.
+- 🎙️ **Voice flirt mode** — the character speaks with a per-character pitch (SpeechSynthesis) and you can answer by voice (SpeechRecognition with fuzzy choice matching).
+- 🔒 **Stats vault with Passkey** — personal stats protected by Face ID / Touch ID via WebAuthn, fully local.
+- 🔄 **Offline Background Sync** — relationship milestones are queued in IndexedDB and drained by the Service Worker when connectivity returns.
+- 🌍 **Web Share Target** — install the app and share any text from any app → Speed Crush weaves it into a custom opening scene (*"You shared this — convince me it's worth a story"*).
+- 📤 **Story export/import** — File System Access API (with fallbacks): export the complete playthrough as JSON, replay a friend's story, or load a community story pack (schema-validated before it becomes playable).
+- 🎬 **Story trailer** — Canvas + MediaRecorder: an animated recap of your playthrough (choice highlights + ending) recorded as a shareable WebM video.
+- 👯 **Duet mode** — PWA-to-PWA co-op flirtation: one player plays the suitor, the other plays the crush and reacts to every choice — their reaction is what the suitor's device shows. BroadcastChannel on the same device, WebRTC with manual invite-code signaling across devices. No server.
+- 🏆 **Gamification** — 10 achievements, daily streaks (🔥 badge on the setup screen), all visible in the stats vault.
+- ☙ **Ambient "night out" mode** — a glanceable low-distraction UI (timer + dialogue only); pick up the phone (DeviceMotion spike) to wake it back up.
+- 🌐 **i18n** — full UI translation layer (English, Italiano, Español, Français) with auto-detection from the browser language and a picker in the setup screen.
 - 📳 **Haptic feedback** — structured vibration patterns per tone (where supported).
 - 📲 **Web Share API** — share your final score with a native share sheet, with clipboard + toast fallback.
 - 💾 **Personal records** — best score, best streak, games played and unlocked endings persist in `localStorage`.
@@ -50,8 +63,15 @@ The experience is designed around a "night out" narrative arc spread across thre
 | | ![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=flat-square&logo=javascript&logoColor=black) | Game engine, timer, state management |
 | **PWA** | ![Service Worker](https://img.shields.io/badge/Service%20Worker-API-4df3ff?style=flat-square) | Offline caching, background updates |
 | | ![Web App Manifest](https://img.shields.io/badge/Manifest-JSON-8cff77?style=flat-square) | Installability, icons, shortcuts |
+| | ![Background Sync](https://img.shields.io/badge/Background%20Sync-API-4df3ff?style=flat-square) | Offline milestone queue |
 | | ![Web Share API](https://img.shields.io/badge/Web%20Share-API-ff4fa3?style=flat-square) | Native share sheet integration |
 | | ![Vibration API](https://img.shields.io/badge/Vibration-API-ffd44d?style=flat-square) | Haptic feedback on mobile |
+| **AI / Device** | ![Transformers.js](https://img.shields.io/badge/Transformers.js-opt--in-ffd44d?style=flat-square&logo=huggingface&logoColor=black) | Local neural sentiment (zero server, zero keys) |
+| | ![WebNN](https://img.shields.io/badge/WebNN-API-4df3ff?style=flat-square) | Hardware-accelerated inference (experimental) |
+| | ![WebGPU](https://img.shields.io/badge/WebGPU-API-8cff77?style=flat-square) | GPU inference fallback |
+| | ![Web Speech API](https://img.shields.io/badge/Web%20Speech-API-ff4fa3?style=flat-square) | Voice flirt mode (TTS + recognition) |
+| | ![WebAuthn](https://img.shields.io/badge/WebAuthn-Passkeys-ffd44d?style=flat-square) | Biometric stats vault (Face ID / Touch ID) |
+| | ![IndexedDB](https://img.shields.io/badge/IndexedDB-Queue-4df3ff?style=flat-square) | Offline milestone storage |
 | **Assets** | ![SVG](https://img.shields.io/badge/SVG-Icons-ffb199?style=flat-square&logo=svg&logoColor=white) | Scalable vector icons (192px, 512px) |
 | **Fonts** | ![Google Fonts](https://img.shields.io/badge/Google%20Fonts-Inter-4285F4?style=flat-square&logo=googlefonts&logoColor=white) | Typography (Inter, weights 400–800) |
 
@@ -109,11 +129,13 @@ http://localhost:8080
 ## 🎮 How to Play
 
 1. **Pick your vibe** — choose your character gender and who you want to date.
-2. **Read the scene** — a reaction timer starts pulsing (8 seconds).
+2. **Read the scene** — a reaction timer starts pulsing (8 seconds, adaptive after chapter 1).
 3. **Choose fast** — answer while at least **65% of the timer remains** (~5.2s) to unlock the **secret scene** and stack a **fast streak** bonus.
 4. **Watch the colors** — green timer = plenty of time, amber = getting risky, red = almost too late.
 5. **Swipe left** — review your choice history in the bottom sheet; tap to skip a reply beat.
-6. **Reach chapter 3** — your final answer and charm score decide between three endings: *Electric*, *Sweet*, or *Missed Signal*.
+6. **Enable AI mode** — unlock infinite procedural scenes, mood-biased detours, custom flirty lines with smart scoring, and the optional neural model.
+7. **Talk back** — turn on voice mode 🔊 to hear your crush speak, or answer by voice 🎙️ with fuzzy choice matching.
+8. **Reach chapter 3** — your final answer and charm score decide between three endings: *Electric*, *Sweet*, or *Missed Signal*.
 
 ---
 
@@ -123,25 +145,43 @@ Feature-driven architecture — zero build tooling, pure ES modules:
 
 ```
 flirting-game/
-├── index.html               # App shell + 3 screens (setup, game, end)
+├── index.html               # App shell + 3 screens + 4 overlays (history/stats/duet)
 ├── offline.html             # Offline fallback for navigation requests
 ├── style.css                # Glassmorphism UI, animations, responsive grid
-├── manifest.json            # PWA manifest (maskable icons, shortcuts)
-├── sw.js                    # Service Worker (versioned, layered caching)
+├── manifest.json            # PWA manifest (maskable icons, shortcuts, share target)
+├── sw.js                    # Service Worker (v4: caching, sync, notifications)
 ├── dialogues.json           # Graph-based dialog data (scenes, secrets, endings)
 ├── src/
-│   ├── main.js              # Entry point: bootstrapping + SW update flow
+│   ├── main.js              # Entry point: bootstrapping, SW, share target, deep links
 │   ├── core/
 │   │   ├── state.js         # Central state + pub/sub emitter
 │   │   ├── timer.js         # rAF timer engine (pause-safe, no race conditions)
-│   │   ├── storage.js       # localStorage wrapper (records + preferences)
-│   │   └── haptics.js       # Vibration API wrapper with feature detection
+│   │   ├── storage.js       # localStorage wrapper (records, prefs, streaks)
+│   │   ├── haptics.js       # Vibration API wrapper with feature detection
+│   │   ├── ambient.js       # Mood Match: hour, timezone, light, battery
+│   │   ├── difficulty.js    # Adaptive difficulty (flow-zone heuristic)
+│   │   ├── webauthn.js      # Passkey registration/verification
+│   │   ├── queue.js         # IndexedDB milestone queue (SW-safe)
+│   │   ├── i18n.js          # Translation layer (en/it/es/fr) + applyTranslations
+│   │   └── motion.js        # DeviceMotion spike detection (ambient wake)
+│   ├── ai/
+│   │   ├── capabilities.js  # WebNN / WebGPU / Speech / Passkey detection
+│   │   ├── sentiment.js     # Heuristic + Transformers.js neural scoring
+│   │   └── generator.js     # Procedural infinite scene generator
 │   ├── data/
-│   │   └── dialogues.js     # Dialog engine: loader + graph traversal
+│   │   ├── dialogues.js     # Dialog engine: loader + graph traversal
+│   │   └── validate.js      # Story pack schema validation (marketplace)
 │   ├── features/
-│   │   ├── setup/setup.js   # Setup screen (prefs, personal best)
-│   │   ├── game/game.js     # Game engine + rendering + swipe gestures
-│   │   └── ending/ending.js # Endings + Web Share (lazy-loaded via import())
+│   │   ├── setup/setup.js   # Setup screen (prefs, AI, language, notifications, duet)
+│   │   ├── game/game.js     # Game engine + gestures + voice + ambient mode
+│   │   ├── ending/ending.js # Endings + achievements + trailer + share (lazy)
+│   │   ├── voice/voice.js   # Voice flirt mode (TTS + recognition)
+│   │   ├── stats/stats.js   # Passkey-protected stats vault
+│   │   ├── duet/duet.js     # Co-op flirtation (BroadcastChannel + WebRTC)
+│   │   ├── story/story.js   # Story export/import + replay (File System Access)
+│   │   ├── story/trailer.js # Canvas + MediaRecorder story trailer
+│   │   ├── achievements/achievements.js  # Gamification + daily streaks
+│   │   └── notifications/notifications.js # Push + Notification Triggers
 │   └── ui/
 │       ├── dom.js           # Cached DOM references
 │       ├── router.js        # Screen manager + View Transitions API
@@ -228,6 +268,8 @@ perf(assets): lazy-load ending module with dynamic import
 
 ## 🔮 Roadmap & Future Implementations
 
+> ✅ **All three phases are complete.** What follows was the vision; the checkboxes tell the story. New ideas keep flowing below the completed phases.
+
 This roadmap is not a boring TODO list — it's a visionary plan to transform **Speed Crush** from a polished PWA into an **intelligent, ambient, ecosystem-level experience** that feels like it's alive in your pocket.
 
 ### 🚀 Phase 1 — Scalability *(Foundation & Polish)* ✅ *(completed)*
@@ -244,33 +286,33 @@ This roadmap is not a boring TODO list — it's a visionary plan to transform **
 - [x] **Add a "New version available" toast** using SW `message` + `skipWaiting` for silent background updates.
 - [x] **Introduce localStorage persistence** — best score, preferred character, unlocked endings history.
 
-### 🧠 Phase 2 — Intelligence *(Local AI & Contextual Awareness)*
+### 🧠 Phase 2 — Intelligence *(Local AI & Contextual Awareness)* ✅ *(completed)*
 
 > *Goal: make the game feel smart, personal, and aware — fully offline, zero cloud dependency.*
 
-- [ ] **Micro-model IA locale con Transformers.js** — run a small text-generation model (e.g., a distilled GPT-2 or a fine-tuned dialogue model) **directly in the browser** via WebAssembly/WebGPU to generate **infinite custom dialogues** based on the user's vibe, time of day, and past choices. Zero server, zero API keys, fully offline.
-- [ ] **WebNN API integration** — use the native Neural Network API (where available) for hardware-accelerated inference of the dialogue model on mobile devices.
-- [ ] **"Mood Match" ambient engine** — combine `Geolocation API` (reverse-geocoded to city/countryside), `Ambient Light Sensor`, and `Intl.DateTimeFormat` to adapt the narrative tone: moonlit rooftop dialogues at night, neon arcade energy during the day, cozy café vibes on rainy afternoons (via `weather` heuristics or optional API).
-- [ ] **Adaptive difficulty curve** — a local heuristic model that tracks the player's reaction times and adjusts the `TIME_LIMIT` and `FAST_THRESHOLD` dynamically per chapter, keeping the game in the "flow zone".
-- [ ] **Sentiment-aware choices** — use a local sentiment analysis micro-model to tag player-written custom responses and adapt the character's reaction accordingly.
-- [ ] **Voice flirt mode** — `Web Speech API` (SpeechRecognition + SpeechSynthesis) to speak choices aloud and hear the character respond with a synthesized voice, pitch-shifted per character.
-- [ ] **Biometric Passkey unlock** — `WebAuthn` Passkeys to protect a local leaderboard and personal stats with Face ID / Touch ID.
-- [ ] **Offline Background Sync** — `Background Sync API` to queue "relationship milestones" and sync them (with a future cloud backend) when connectivity returns.
+- [x] **Micro-model IA locale con Transformers.js** — a distilled sentiment model (`Xenova/distilbert-base-uncased-finetuned-sst-2-english`, ~60MB quantized) runs **directly in the browser** on explicit opt-in, scoring the player's custom flirty lines. Zero server, zero API keys; the model + library are cached by the SW (Cache-First cross-origin) so neural sentiment works **fully offline after the first download**. Infinite custom dialogues come from the procedural generator (`src/ai/generator.js`) — template pools biased by ambient mood and character, injected as graph detours that always return to the intended next scene.
+- [x] **WebNN API integration** — `src/ai/capabilities.js` detects `navigator.ml` (WebNN) and `navigator.gpu` (WebGPU); the sentiment model loads with a device cascade (**WebNN → WebGPU → WASM**), using hardware acceleration where available and falling back gracefully everywhere else.
+- [x] **"Mood Match" ambient engine** — `src/core/ambient.js` combines the local hour (5 narrative phases: late-night/morning/afternoon/evening/night), the **IANA timezone region** (zero-permission region detection), the **Ambient Light Sensor** and **Battery API** (both feature-detected, silent-fail). The mood biases the procedural scene locations (intimate/bright/fresh/warm pools), shows a context chip on the setup screen, and opens each game with a mood line toast.
+- [x] **Adaptive difficulty curve** — `src/core/difficulty.js` tracks reaction times with an exponential moving average and recalibrates the timer window **per chapter**: consistently fast players get a tighter window (down to 4s), struggling players get a wider one (up to 12s); the fast threshold follows (bounded 50–80%). The profile persists in `localStorage` across sessions.
+- [x] **Sentiment-aware choices** — a **"Write your own line"** input lets the player improvise; the line is scored by the heuristic keyword engine (instant, offline) or by the neural micro-model (when downloaded), and the character's reaction + score adapt to the sentiment. Custom lines can trigger secret detours and even decide the ending tier on the final scene.
+- [x] **Voice flirt mode** — Web Speech API: the character speaks scene lines and reactions with a **deterministic per-character pitch** (derived from the character id), and the player can answer by voice via SpeechRecognition with fuzzy keyword matching against the choice buttons. Both APIs feature-detected; the mode degrades to text-only.
+- [x] **Biometric Passkey unlock** — WebAuthn platform authenticator (Face ID / Touch ID) protects the **stats vault** overlay: registration with local challenges, verification required on every open, fully local with no server.
+- [x] **Offline Background Sync** — relationship milestones (game completions, tier, region, phase) are queued in **IndexedDB** and registered via `SyncManager`; the Service Worker (module worker) drains the queue on the `sync` event and notifies the clients. When the API is missing but the page is online, the queue drains immediately as a fallback.
 
-### 🌍 Phase 3 — Ecosystem *(Social, Ambient & Cross-App)*
+### 🌍 Phase 3 — Ecosystem *(Social, Ambient & Cross-App)* ✅ *(completed)*
 
 > *Goal: transform the PWA into a social, ambient, cross-platform experience that lives beyond the app itself.*
 
-- [ ] **Web Share Target integration** — register Speed Crush as a **Share Target**: share any text, image, or URL from any app → Speed Crush uses it as a prompt to generate a custom flirtation scene. *"Flirt about this photo"* mode.
-- [ ] **File System Access API** — export the complete "relationship story" (all choices, secrets, endings) as a `.json` or `.txt` file; import a friend's story to replay it from their perspective.
-- [ ] **Push Notifications with rich actions** — "Your crush is waiting" notifications with quick-reply action buttons, scheduled via `Notification Triggers API` (experimental) for context-aware reminders (e.g., *"It's 11pm — the right hour for trouble"*).
-- [ ] **PWA-to-PWA multiplayer flirt mode** — `WebRTC` + `BroadcastChannel` to let two players on the same device (or across devices via WebRTC data channels) play a **co-op flirtation**: one plays the character, the other the suitor, in real time.
-- [ ] **Gamification layer** — achievements, daily streaks, seasonal "vibe" badges, a local leaderboard with Passkey-protected personal records, and unlockable cosmetic palettes per character.
-- [ ] **Ambient "night out" mode** — `DeviceOrientation` + `DeviceMotion` sensors to detect when the phone is in a pocket or on a table, and switch the UI to an **ambient glanceable mode** (minimal UI, only the timer and the current dialogue line).
-- [ ] **Cross-app shortcuts & widgets** — PWA `shortcuts` for "Quick Play", plus (on Android/iOS) home-screen widgets showing daily streaks or the current character's mood.
-- [ ] **Progressive story sharing** — generate a shareable "trailer" of your playthrough (choice highlights + ending) as an animated GIF or short video via `Canvas API` + `MediaRecorder API`.
-- [ ] **Internationalization (i18n)** — full translation layer (Italian, Spanish, French) with `Intl` APIs for locale-aware date/time/number formatting and culturally-adapted flirtation lines.
-- [ ] **Open story marketplace** — a JSON schema for community-authored "story packs" (characters, scenes, secrets) that can be imported via File System Access or Web Share Target, making Speed Crush a platform for interactive fiction creators.
+- [x] **Web Share Target integration** — `share_target` in the manifest (GET with title/text/url params): install the app, share any text from any app → Speed Crush opens and **weaves the shared content into a custom opening scene** built around the character, then continues on the normal story graph. The shared prompt is consumed once per launch.
+- [x] **File System Access API** — `src/features/story/story.js`: **export** the complete playthrough (scenes, choices, ending, stats) as a `.json` file via `showSaveFilePicker` (anchor-download fallback); **import** a friend's story (replayed read-only in the history sheet) or a community story pack (validated then playable immediately).
+- [x] **Push Notifications with rich actions** — contextual reminders scheduled via the experimental **Notification Triggers API** ("It's 11pm — the right hour for trouble") when available; the Service Worker handles `notificationclick` with **quick-reply actions** ("Play now" focuses the app and starts a story, via postMessage + deep link).
+- [x] **PWA-to-PWA multiplayer flirt mode** — **Duet mode** (`src/features/duet/duet.js`): one player plays the suitor (the normal game), the other plays the crush and **reacts to every choice** — their reaction is what the suitor's device shows instead of the local one, with a 6s fallback. Same device via **BroadcastChannel**; two devices via **WebRTC data channels with manual copy/paste invite codes** (zero signaling server).
+- [x] **Gamification layer** — `src/features/achievements/achievements.js`: **10 achievements** (First Move, Speed Demon, Secret Keeper, Electric, Streak Master, Night Owl, Custom Charmer, Voice Flirt, Duet Partner, Collector) evaluated over the playthrough context with staggered unlock toasts; **daily streaks** (consecutive days, 🔥 badge on the setup screen); everything visible in the stats vault.
+- [x] **Ambient "night out" mode** — a ☙ toggle switches the UI to a **glanceable low-distraction mode** (timer + dialogue only, decorative clutter hidden); **DeviceMotion spike detection** (with iOS permission gate + debounce) wakes the app back up when the phone is picked up.
+- [x] **Cross-app shortcuts & widgets** — PWA `shortcuts` ("Quick Play" deep link) shipped in the manifest since Phase 1; native home-screen widgets would require a platform shell (kept as a future idea below).
+- [x] **Progressive story sharing** — `src/features/story/trailer.js`: an **animated trailer** of the playthrough (title card → choice highlights with tone colors → ending card) rendered on Canvas and recorded via **MediaRecorder** → shareable WebM video (Web Share with files, download fallback).
+- [x] **Internationalization (i18n)** — `src/core/i18n.js`: full UI translation layer in **English, Italiano, Español, Français** (50+ keys: chrome, stats vault, mood phases, toasts) with `data-i18n` annotations, `{param}` interpolation, auto-detection from `navigator.language`, a picker in the setup screen, and persistence in prefs. Story content stays in the story-pack language.
+- [x] **Open story marketplace** — `src/data/validate.js`: the **story pack schema** (identical to `dialogues.json`) with full graph-integrity validation (scenes, choices, `next` references, secret detours, ending tiers); packs are imported via File System Access and playable immediately after validation — Speed Crush is now a platform for interactive fiction creators.
 
 ---
 

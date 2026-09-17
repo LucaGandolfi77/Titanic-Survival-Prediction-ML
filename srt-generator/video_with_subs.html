@@ -99,131 +99,215 @@
     <video id="out-video" controls style="width:100%"></video>
     <div style="margin-top:8px;display:flex;gap:8px">
       <button id="download-out" class="btn">Scarica video</button>
+      <button class="btn ghost" id="export-vtt">📄 SRT→VTT</button>
+      <button class="btn ghost" id="export-txt">📄 SRT→TXT</button>
+      <button class="btn ghost" id="validate-srt">✓ Valida SRT</button>
     </div>
   </div>
 
-  <footer>Powered by <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" style="color:var(--accent)">ffmpeg.wasm</a></footer>
+  <button id="theme-btn" style="position:fixed;top:12px;right:12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:16px;z-index:50" title="Toggle tema">🌓</button>
+<footer>Powered by <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" style="color:var(--accent)">ffmpeg.wasm</a></footer>
 
+  (function(){ var s=document.createElement('style'); s.textContent='.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1d27;border:1px solid #2e3348;border-radius:8px;color:#e2e6f0;padding:12px 24px;font-size:14px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}.toast.show{opacity:1}.toast.error{background:#3d1a1a;border-color:#e05a5a;color:#f09090}';document.head.appendChild(s);})(); function addHaptic(d){if(navigator.vibrate){try{navigator.vibrate(d||10)}catch(e){}}}
+  function showToast(msg,err){var t=document.createElement('div');t.className='toast'+(err?' error':'');t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2500)}
   <script type="module">
-    import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js';
-    const ffmpeg = createFFmpeg({ log:true });
+import { initKeyboardShortcuts, showShortcutsModal, addHaptic, isInputFocused, toggleTheme, getTheme, setTheme, autoLoad } from './js/utils.js';
 
-    const videoInput = document.getElementById('video-file');
-    const srtInput = document.getElementById('srt-file');
-    const loadSrtBtn = document.getElementById('load-srt');
-    const downloadSrtBtn = document.getElementById('download-srt');
-    const srtText = document.getElementById('srt-text');
-    const startBtn = document.getElementById('start');
-    const cancelBtn = document.getElementById('cancel');
-    const prog = document.getElementById('prog');
-    const status = document.getElementById('status');
-    const outCard = document.getElementById('out');
-    const outVideo = document.getElementById('out-video');
-    const downloadOut = document.getElementById('download-out');
+// ── FFmpeg Web Worker ──
+const worker = new Worker('./js/ffmpeg-worker.js');
+let workerReady = false;
+let currentTaskId = null;
+let running = false;
 
-    const previewVideo = document.getElementById('preview-video');
-    const videoMeta = document.getElementById('video-meta');
-    const videoName = document.getElementById('video-name');
+worker.onmessage = function(e) {
+  const { type, id, ratio, files, message } = e.data;
+  if (id !== currentTaskId) return;
 
-    let currentVideoFile = null;
-    let generatedUrl = null;
-    let running = false;
+  if (type === 'loaded') { workerReady = true; }
 
-    videoInput.addEventListener('change', e => handleVideo(e.target.files[0]));
-    srtInput.addEventListener('change', async e => {
-      const f = e.target.files[0];
-      if(!f) return;
-      const txt = await f.text();
-      srtText.value = txt;
-    });
+  if (type === 'progress') {
+    prog.style.width = Math.round(ratio * 100) + '%';
+    status.textContent = 'Processando: ' + Math.round(ratio * 100) + '%';
+  }
 
-    function handleVideo(file){
-      if(!file) return;
-      currentVideoFile = file;
-      videoMeta.style.display = 'block';
-      videoName.textContent = file.name + ' · ' + formatBytes(file.size);
-      previewVideo.src = URL.createObjectURL(file);
-      previewVideo.style.display = 'block';
+  if (type === 'result') {
+    running = false;
+    startBtn.disabled = false;
+    if (files && files.length > 0) {
+      const f = files[0];
+      const blob = new Blob([f.data], { type: 'video/mp4' });
+      if(generatedUrl) URL.revokeObjectURL(generatedUrl);
+      generatedUrl = URL.createObjectURL(blob);
+      outVideo.src = generatedUrl;
+      outCard.style.display = 'block';
+      downloadOut.onclick = () => { const a = document.createElement('a'); a.href = generatedUrl; a.download = currentVideoFile.name.replace(/\.[^.]+$/, '') + '-subbed.mp4'; a.click(); };
+      addHaptic(20);
+      showToast('Video con sottotitoli generato');
     }
+    status.textContent = 'Completato';
+    prog.style.width = '100%';
+  }
 
-    loadSrtBtn.addEventListener('click', () => {
-      // if srt input chosen, it's already loaded; otherwise try to parse from textarea
-      if(!srtText.value) alert('Nessun SRT nel textarea. Carica un file .srt o incolla il testo.');
-    });
+  if (type === 'error') {
+    running = false;
+    startBtn.disabled = false;
+    console.error(message);
+    showToast('Errore: ' + message, true);
+    status.textContent = 'Errore';
+  }
+};
 
-    downloadSrtBtn.addEventListener('click', () => {
-      const txt = srtText.value || '';
-      const blob = new Blob([txt], { type: 'text/plain' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.srt'; a.click(); URL.revokeObjectURL(a.href);
-    });
+const videoInput = document.getElementById('video-file');
+const srtInput = document.getElementById('srt-file');
+const loadSrtBtn = document.getElementById('load-srt');
+const downloadSrtBtn = document.getElementById('download-srt');
+const srtText = document.getElementById('srt-text');
+const startBtn = document.getElementById('start');
+const cancelBtn = document.getElementById('cancel');
+const prog = document.getElementById('prog');
+const status = document.getElementById('status');
+const outCard = document.getElementById('out');
+const outVideo = document.getElementById('out-video');
+const downloadOut = document.getElementById('download-out');
+const previewVideo = document.getElementById('preview-video');
+const videoMeta = document.getElementById('video-meta');
+const videoName = document.getElementById('video-name');
 
-    function assColorFromHex(hex){
-      // hex #RRGGBB -> &H00BBGGRR
-      const h = hex.replace('#','');
-      return '&H00' + h.slice(4,6) + h.slice(2,4) + h.slice(0,2);
-    }
+let currentVideoFile = null;
+let generatedUrl = null;
 
-    function buildForceStyle(){
-      const font = document.getElementById('font-name').value || 'Arial';
-      const size = parseInt(document.getElementById('font-size').value || 36,10);
-      const outline = parseInt(document.getElementById('outline').value || 2,10);
-      const color = document.getElementById('color').value || '#FFFFFF';
-      const marginv = parseInt(document.getElementById('marginv').value || 40,10);
-      const pc = assColorFromHex(color);
-      const oc = '&H00000000';
-      // ASS force_style expects comma separated key=val pairs
-      return `FontName=${font},FontSize=${size},PrimaryColour=${pc},OutlineColour=${oc},Outline=${outline},MarginV=${marginv}`;
-    }
+videoInput.addEventListener('change', e => handleVideo(e.target.files[0]));
+srtInput.addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if(!f) return;
+  const txt = await f.text();
+  srtText.value = txt;
+  showToast('SRT caricato: ' + f.name);
+});
 
-    startBtn.addEventListener('click', async () => {
-      if(running) return;
-      if(!currentVideoFile){ alert('Seleziona un video prima.'); return; }
-      if(!srtText.value){ alert('Inserisci/Carica un file SRT.'); return; }
+function handleVideo(file){
+  if(!file) return;
+  currentVideoFile = file;
+  videoMeta.style.display = 'block';
+  videoName.textContent = file.name + ' · ' + formatBytes(file.size);
+  previewVideo.src = URL.createObjectURL(file);
+  previewVideo.style.display = 'block';
+  addHaptic(10);
+}
 
-      running = true; startBtn.disabled = true; status.textContent = 'Preparazione...'; prog.style.width = '5%'; outCard.style.display = 'none';
+loadSrtBtn.addEventListener('click', async () => {
+  if(srtInput.files && srtInput.files[0]) {
+    const f = srtInput.files[0];
+    const txt = await f.text();
+    srtText.value = txt;
+    showToast('SRT caricato: ' + f.name);
+  } else if(srtText.value) {
+    showToast('SRT già nel textarea');
+  } else {
+    showToast('Nessun SRT. Carica un file o incolla il testo', true);
+  }
+});
 
-      try{
-        if(!ffmpeg.isLoaded()){
-          status.textContent = 'Caricamento FFmpeg (prima esecuzione)...';
-          await ffmpeg.load();
-        }
+downloadSrtBtn.addEventListener('click', () => {
+  const txt = srtText.value || '';
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'subtitles.srt'; a.click(); URL.revokeObjectURL(a.href);
+  addHaptic(5);
+});
 
-        ffmpeg.setProgress(({ ratio }) => { prog.style.width = Math.round(ratio*100) + '%'; status.textContent = 'Processando: ' + Math.round(ratio*100) + '%'; });
+if(generatedUrl) URL.revokeObjectURL(generatedUrl);
+generatedUrl = null;
+cancelBtn.addEventListener('click', () => {
+  if(running){ running = false; currentTaskId = null; worker.postMessage({ type: 'cancel', id: null }); showToast('Operazione annullata', true); }
+  else { showToast('Nessuna operazione in corso'); }
+  addHaptic(5);
+});
 
-        const inName = 'input' + getExt(currentVideoFile.name);
-        const srtName = 'subs.srt';
-        const outName = 'output.mp4';
+function assColorFromHex(hex){
+  const h = hex.replace('#','');
+  return '&H00' + h.slice(4,6) + h.slice(2,4) + h.slice(0,2);
+}
 
-        ffmpeg.FS('writeFile', inName, await fetchFile(currentVideoFile));
-        ffmpeg.FS('writeFile', srtName, new TextEncoder().encode(srtText.value));
+function buildForceStyle(){
+  const font = document.getElementById('font-name').value || 'Arial';
+  const size = parseInt(document.getElementById('font-size').value || 36,10);
+  const outline = parseInt(document.getElementById('outline').value || 2,10);
+  const color = document.getElementById('color').value || '#FFFFFF';
+  const marginv = parseInt(document.getElementById('marginv').value || 40,10);
+  const pc = assColorFromHex(color);
+  const oc = '&H00000000';
+  return `FontName=${font},FontSize=${size},PrimaryColour=${pc},OutlineColour=${oc},Outline=${outline},MarginV=${marginv}`;
+}
 
-        const force = buildForceStyle();
-        // Using subtitles filter with force_style
-        const vf = `subtitles=${srtName}:force_style='${force}'`;
+startBtn.addEventListener('click', async () => {
+  if(running) return;
+  if(!currentVideoFile){ showToast('Seleziona un video prima', true); return; }
+  if(!srtText.value){ showToast('Inserisci/Carica un file SRT', true); return; }
 
-        // run encoding
-        await ffmpeg.run('-i', inName, '-vf', vf, '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', '-c:a', 'copy', outName);
+  running = true; startBtn.disabled = true; status.textContent = 'Preparazione...'; prog.style.width = '5%'; outCard.style.display = 'none';
 
-        const data = ffmpeg.FS('readFile', outName);
-        const blob = new Blob([data.buffer], { type: 'video/mp4' });
-        if(generatedUrl) URL.revokeObjectURL(generatedUrl);
-        generatedUrl = URL.createObjectURL(blob);
-        outVideo.src = generatedUrl; outCard.style.display = 'block';
-        downloadOut.onclick = () => { const a = document.createElement('a'); a.href = generatedUrl; a.download = currentVideoFile.name.replace(/\.[^.]+$/, '') + '-subbed.mp4'; a.click(); };
-        status.textContent = 'Completato'; prog.style.width = '100%';
+  if(!workerReady) {
+    worker.postMessage({ type: 'load', id: 'init' });
+    status.textContent = 'Caricamento FFmpeg...';
+    showToast('Caricamento FFmpeg in corso...', true);
+    return;
+  }
 
-      }catch(err){
-        console.error(err); alert('Errore: ' + (err.message || err)); status.textContent = 'Errore';
-      }finally{
-        running = false; startBtn.disabled = false;
-      }
-    });
+  currentTaskId = Date.now();
 
-    cancelBtn.addEventListener('click', () => { if(running){ alert('Non è possibile annullare l’operazione al momento.'); } });
+  try {
+    const inName = 'input' + getExt(currentVideoFile.name);
+    const srtName = 'subs.srt';
+    const outName = 'output.mp4';
 
-    function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m ? m[0] : '' }
-    function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+    const videoBuf = await currentVideoFile.arrayBuffer();
+    const srtBuf = new TextEncoder().encode(srtText.value).buffer;
 
-  </script>
+    const force = buildForceStyle();
+    const vf = `subtitles=${srtName}:force_style='${force}'`;
+
+    worker.postMessage(
+      {
+        type: 'run',
+        id: currentTaskId,
+        cmd: ['-i', inName, '-vf', vf, '-c:v', 'libx264', '-crf', '23', '-preset', 'veryfast', '-c:a', 'copy', outName],
+        files: [
+          { name: inName, data: videoBuf },
+          { name: srtName, data: srtBuf }
+        ]
+      },
+      [videoBuf, srtBuf]
+    );
+    addHaptic(10);
+    showToast('Generazione in corso...');
+
+  } catch(err) {
+    running = false; startBtn.disabled = false;
+    showToast('Errore: ' + (err.message || err), true);
+  }
+});
+
+function getExt(name){ const m = name.match(/(\.[^.]+)$/); return m ? m[0] : '' }
+function formatBytes(b){ if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+
+// Load worker
+worker.postMessage({ type: 'load', id: 'init' });
+
+// ── Keyboard Shortcuts ──
+initKeyboardShortcuts({
+  '?': (e) => { e.preventDefault(); addHaptic(10); showShortcutsModal({
+    '?': { label: 'Questa schermata' },
+    'ctrl+enter': { label: 'Genera video' },
+    'escape': { label: 'Chiudi / Annulla' },
+  }, 'Video + Sottotitoli'); },
+  'escape': (e) => { if(!isInputFocused()) { e.preventDefault(); if(running) { running = false; startBtn.disabled = false; showToast('Annullato', true); } } },
+  'ctrl+enter': (e) => { e.preventDefault(); startBtn.click(); },
+}, 'Video + Sottotitoli');
+
+    // ── Theme Toggle ──
+    var themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', function(){ toggleTheme(); var t = getTheme(); themeBtn.textContent = t === 'light' ? '☀️' : '🌓'; });
+    if(autoLoad('srt_theme', 'dark') === 'light'){ setTheme('light'); themeBtn.textContent = '☀️'; }
+</script>
 </body>
 </html>

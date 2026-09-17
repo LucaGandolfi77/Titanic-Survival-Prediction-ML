@@ -3,7 +3,25 @@
     "title": "Speed Crush",
     "timerSeconds": 8,
     "fastThreshold": 0.65,
-    "streakNeeded": 2
+    "streakNeeded": 2,
+    "fizzleBelowScore": 6
+  },
+  "endings": {
+    "great": {
+      "badge": "Electric Ending",
+      "title": "{name} is already planning date two",
+      "text": "You turned fast choices into full-on chemistry. Numbers exchanged, teasing intact, and the night clearly is not over yet."
+    },
+    "good": {
+      "badge": "Sweet Ending",
+      "title": "{name} wants to see you again",
+      "text": "You played it well. The spark stayed alive, the vibe stayed warm, and you leave with a real chance at something fun."
+    },
+    "fizzle": {
+      "badge": "Missed Signal",
+      "title": "The moment slipped away",
+      "text": "The vibe was there, but hesitation got louder than charm. Restart, move faster, and own the next scene."
+    }
   },
   "characters": {
     "female": [

@@ -1,0 +1,250 @@
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-dark);
+  color: var(--text-light);
+}
+
+#game-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Loading Screen */
+#screen-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xl);
+}
+
+#loading-logo {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: 2px;
+}
+
+#loading-skeleton {
+  width: 80%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.skeleton-bar {
+  height: 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139, 105, 20, 0.25), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  100% { left: 100%; }
+}
+
+/* Menu Screen */
+#screen-menu {
+  background: var(--bg-dark);
+  z-index: 100;
+}
+
+#menu-bg-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+#menu-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  background: rgba(26, 20, 8, 0.85);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--primary-dark);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 85%;
+  max-width: 360px;
+}
+
+#menu-panel h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--primary);
+  text-align: center;
+  letter-spacing: 3px;
+  margin-bottom: var(--spacing-xs);
+}
+
+#menu-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Generic screen styling */
+#screen-menu h2,
+#screen-pause h2,
+#screen-gameover h2,
+#screen-victory h2,
+#screen-settings h2,
+#screen-howto h2,
+#screen-profile h2,
+#screen-campaign h2,
+#screen-skirmish h2,
+#screen-campaign-brief h2,
+#screen-campaign-result h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+/* Pause / Game Over / Victory screens */
+#screen-pause,
+#screen-gameover,
+#screen-victory {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#pause-score,
+#go-score,
+#victory-stats {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Settings screen */
+#screen-settings {
+  background: var(--bg-dark);
+  z-index: 100;
+  padding: var(--spacing-xl);
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: var(--spacing-xs) 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  max-width: 360px;
+  width: 85%;
+}
+
+.setting-row label {
+  font-weight: 600;
+}
+
+.toggle-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg-dark);
+  border: 1px solid var(--text-muted);
+  color: var(--text-muted);
+  transition: all 0.15s;
+}
+
+.toggle-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-dark);
+}
+
+/* How to Play */
+#screen-howto {
+  background: var(--bg-dark);
+  z-index: 100;
+  padding: var(--spacing-xl);
+}
+
+#howto-steps {
+  text-align: left;
+  font-size: 14px;
+  line-height: 2;
+  max-width: 360px;
+  width: 85%;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Toast */
+#toast-container {
+  position: fixed;
+  top: calc(var(--safe-top) + 50px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: rgba(44, 36, 16, 0.92);
+  color: var(--text-light);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary-dark);
+  font-size: 13px;
+  font-weight: 600;
+  animation: toast-in 0.25s ease-out, toast-out 0.25s ease-in 2.2s forwards;
+  white-space: nowrap;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Generic screens with scrollable content */
+.screen-scroll {
+  overflow-y: auto;
+  max-height: 100%;
+  padding: var(--spacing-xl) 0 calc(var(--spacing-xl) + var(--safe-bottom));
+}

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Imperium">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#8B6914">
+  <meta name="description" content="Age of Empires-style RTS strategy game for iPhone">
+  <title>Imperium Mobile</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/controls.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%238B6914'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle'%3E%F0%9F%8F%B0%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='30' fill='%238B6914'/%3E%3Ctext x='90' y='130' font-size='90' text-anchor='middle'%3E%F0%9F%8F%B0%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <div id="screen-loading" class="screen">
+    <div id="loading-logo">⚔️ IMPERIUM</div>
+    <div id="loading-skeleton">
+      <div class="skeleton-bar"></div>
+      <div class="skeleton-bar" style="width:80%"></div>
+      <div class="skeleton-bar" style="width:60%"></div>
+      <div class="skeleton-bar" style="width:90%"></div>
+    </div>
+    <p style="color:var(--text-muted);font-size:12px;">Loading empire...</p>
+  </div>
+
+  <div id="screen-menu" class="screen hidden">
+    <div id="menu-panel">
+      <h1>⚔️ IMPERIUM</h1>
+      <p id="menu-subtitle">Command your citizens. Conquer the ages.</p>
+      <button id="btn-play" class="menu-btn primary">▶ PLAY</button>
+      <button id="btn-campaign" class="menu-btn">📜 CAMPAIGN</button>
+      <button id="btn-2p" class="menu-btn">👥 2 PLAYER</button>
+      <button id="btn-skirmish" class="menu-btn">⚔️ SKIRMISH</button>
+      <button id="btn-howto" class="menu-btn">📖 HOW TO PLAY</button>
+      <button id="btn-settings" class="menu-btn">⚙️ SETTINGS</button>
+    </div>
+  </div>
+
+  <div id="screen-campaign" class="screen hidden" style="overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2 style="padding-top:var(--spacing-xl);">📜 CAMPAIGN</h2>
+    <div id="campaign-list" style="width:85%;max-width:360px;display:flex;flex-direction:column;gap:6px;margin-bottom:20px;">
+      <div class="mission-card" data-mission="0" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 1: The Awakening</div>
+          <span class="mission-status" id="ms-0"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Dark Age — Gather food, build houses.</div>
+      </div>
+      <div class="mission-card" data-mission="1" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 2: The Warband</div>
+          <span class="mission-status" id="ms-1"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Dark Age — Train militia, defend.</div>
+      </div>
+      <div class="mission-card" data-mission="2" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;opacity:0.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 3: The Siege</div>
+          <span class="mission-status" id="ms-2"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Feudal Age — Capture enemy castle.</div>
+      </div>
+      <div class="mission-card" data-mission="3" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;opacity:0.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 4: The Trade Route</div>
+          <span class="mission-status" id="ms-3"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Feudal Age — Build markets, protect caravans.</div>
+      </div>
+      <div class="mission-card" data-mission="4" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;opacity:0.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 5: The Fortress</div>
+          <span class="mission-status" id="ms-4"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Castle Age — Build towers, withstand waves.</div>
+      </div>
+      <div class="mission-card" data-mission="5" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;opacity:0.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 6: The Crusade</div>
+          <span class="mission-status" id="ms-5"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Castle Age — Large battle with AI allies.</div>
+      </div>
+      <div class="mission-card" data-mission="6" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;opacity:0.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 7: The Empire</div>
+          <span class="mission-status" id="ms-6"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Imperial Age — Control 60% of map.</div>
+      </div>
+      <div class="mission-card" data-mission="7" style="background:var(--bg-card);padding:12px;border-radius:10px;border:1px solid var(--primary-dark);cursor:pointer;opacity:0.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;color:var(--primary-light);">Mission 8: The Final War</div>
+          <span class="mission-status" id="ms-7"></span>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);">Imperial Age — Defeat 3 AI factions.</div>
+      </div>
+    </div>
+    <button id="campaign-refresh" class="menu-btn small" style="margin-bottom:10px;">🔄 REFRESH</button>
+    <button id="btn-campaign-back" class="menu-btn small">← BACK</button>
+  </div>
+
+  <div id="screen-skirmish" class="screen hidden" style="overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2>⚔️ SKIRMISH</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;width:85%;max-width:360px;margin-bottom:16px;">
+      <div>
+        <label style="font-weight:600;font-size:13px;">Civilization:</label>
+        <div id="faction-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:6px;">
+          <button class="faction-btn menu-btn" id="btn-faction-roma" style="padding:6px;font-size:10px;">🏛️ Roma</button>
+          <button class="faction-btn menu-btn" id="btn-faction-vikings" style="padding:6px;font-size:10px;">⚔️ Vikings</button>
+          <button class="faction-btn menu-btn" id="btn-faction-mongols" style="padding:6px;font-size:10px;">🐎 Mongols</button>
+          <button class="faction-btn menu-btn" id="btn-faction-egyptians" style="padding:6px;font-size:10px;">𓂀 Egypt</button>
+          <button class="faction-btn menu-btn" id="btn-faction-celts" style="padding:6px;font-size:10px;">🌿 Celts</button>
+          <button class="faction-btn menu-btn" id="btn-faction-japanese" style="padding:6px;font-size:10px;">⛩️ Japan</button>
+        </div>
+      </div>
+      <div>
+        <label style="font-weight:600;font-size:13px;">Difficulty:</label>
+        <div id="diff-row" style="display:flex;gap:4px;margin-top:6px;">
+          <button class="diff-btn menu-btn" data-diff="easy" style="padding:6px;font-size:10px;flex:1;">😴 Easy</button>
+          <button class="diff-btn menu-btn" data-diff="normal" style="padding:6px;font-size:10px;flex:1;background:var(--primary);color:var(--text-dark);">⚔️ Normal</button>
+          <button class="diff-btn menu-btn" data-diff="hard" style="padding:6px;font-size:10px;flex:1;">🔥 Hard</button>
+        </div>
+      </div>
+    </div>
+    <button id="btn-start-skirmish" class="menu-btn primary">▶ START SKIRMISH</button>
+    <button id="btn-skirmish-back" class="menu-btn small">← BACK</button>
+  </div>
+
+  <div id="screen-2p" class="screen hidden" style="overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2>👥 2 PLAYER</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Each picks a different faction. Use the Switch button to pass control.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;width:85%;max-width:360px;margin-bottom:16px;">
+      <div style="background:var(--bg-card);padding:12px;border-radius:10px;border:2px solid var(--primary);">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">Player 1</div>
+        <div id="p1-faction-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;"></div>
+      </div>
+      <div style="background:var(--bg-card);padding:12px;border-radius:10px;border:2px solid #9b2226;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:6px;">Player 2</div>
+        <div id="p2-faction-row" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;"></div>
+      </div>
+    </div>
+    <button id="btn-start-2p" class="menu-btn primary">▶ START 2P</button>
+    <button id="btn-2p-back" class="menu-btn small">← BACK</button>
+  </div>
+
+  <div id="screen-settings" class="screen hidden" style="overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2>⚙️ SETTINGS</h2>
+    <div style="display:flex;flex-direction:column;gap:6px;width:85%;max-width:360px;">
+      <div class="setting-row"><label>Sound</label><button class="toggle-btn active" id="btn-sound">ON</button></div>
+      <div class="setting-row"><label>Music</label><button class="toggle-btn active" id="btn-music">ON</button></div>
+      <div class="setting-row"><label>Haptics</label><button class="toggle-btn active" id="btn-haptics">ON</button></div>
+      <div class="setting-row"><label>Speed</label>
+        <div style="display:flex;gap:4px;">
+          <button class="toggle-btn" id="btn-speed-1">1x</button>
+          <button class="toggle-btn active" id="btn-speed-2">2x</button>
+          <button class="toggle-btn" id="btn-speed-3">3x</button>
+        </div>
+      </div>
+      <div class="setting-row"><label>Tutorial</label><button class="toggle-btn" id="btn-tutorial">OFF</button></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;">
+      <button id="btn-set-back" class="menu-btn small">← BACK</button>
+      <button id="btn-age-up" class="menu-btn small">⏫ AGE UP</button>
+    </div>
+  </div>
+
+  <div id="screen-howto" class="screen hidden" style="overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2>📖 HOW TO PLAY</h2>
+    <div style="text-align:left;font-size:14px;line-height:2;max-width:360px;margin-bottom:var(--spacing-lg);">
+      <p>1. 👆 Tap a citizen to select</p>
+      <p>2. 👉 Drag citizen to gather resources</p>
+      <p>3. 🏗️ Build from action bar</p>
+      <p>4. ⚔️ Train military (costs manpower!)</p>
+      <p>5. ⚡ Mercenaries cost gold instead</p>
+      <p>6. 📈 Age up for more capacity</p>
+      <p>7. 🤝 Diplomacy panel: Ally, Trade, War</p>
+      <p>8. 🗺️ Joystick pan, pinch zoom</p>
+    </div>
+    <button id="btn-howto-back" class="menu-btn">← BACK</button>
+  </div>
+
+  <div id="screen-pause" class="screen hidden">
+    <h2>⏸ PAUSED</h2>
+    <button id="btn-resume" class="menu-btn primary">▶ RESUME</button>
+    <button id="btn-restart" class="menu-btn">🔄 RESTART</button>
+    <button id="btn-pause-settings" class="menu-btn">⚙️ SETTINGS</button>
+    <button id="btn-pause-menu" class="menu-btn">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-gameover" class="screen hidden" style="background:rgba(10,5,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <h2 id="gameover-text" style="font-family:var(--font-display);font-size:28px;color:#fff;text-align:center;"></h2>
+    <button id="gameover-restart" class="menu-btn primary" style="margin-top:20px;">🔄 RETRY</button>
+    <button id="gameover-menu" class="menu-btn" style="margin-top:10px;">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-victory" class="screen hidden" style="background:rgba(5,15,5,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <h2 style="font-family:var(--font-display);font-size:32px;color:#d4a017;text-align:center;">👑 VICTORY!</h2>
+    <p style="color:#faf7f0;font-size:16px;margin:10px;">You have conquered all factions!</p>
+    <button id="victory-restart" class="menu-btn primary" style="margin-top:20px;">🔄 NEW GAME</button>
+    <button id="victory-menu" class="menu-btn" style="margin-top:10px;">🏠 MAIN MENU</button>
+  </div>
+
+  <div id="screen-campaign-result" class="screen hidden" style="background:rgba(10,5,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <h2 id="campaign-result-title" style="font-family:var(--font-display);font-size:28px;color:#fff;text-align:center;"></h2>
+    <div id="campaign-result-progress" style="width:85%;max-width:360px;margin:16px 0;"></div>
+    <button id="campaign-result-btn" class="menu-btn primary" style="margin-top:20px;">CONTINUE</button>
+    <button id="campaign-result-menu" class="menu-btn" style="margin-top:10px;">🏠 MAIN MENU</button>
+  </div>
+
+  <!-- Build Panel -->
+  <div id="build-panel" class="screen hidden" style="background:rgba(0,0,0,0.85);z-index:150;overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2 style="font-family:var(--font-display);color:var(--primary);font-size:20px;padding-top:var(--spacing-xl);">🏗️ BUILD</h2>
+    <div id="build-list" style="display:flex;flex-wrap:wrap;gap:6px;width:85%;max-width:360px;margin:8px auto;"></div>
+    <button id="btn-build-close" class="menu-btn small" style="margin-bottom:var(--spacing-xl);">CLOSE</button>
+  </div>
+
+  <!-- Train Panel -->
+  <div id="train-panel" class="screen hidden" style="background:rgba(0,0,0,0.85);z-index:150;overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2 style="font-family:var(--font-display);color:var(--primary);font-size:20px;padding-top:var(--spacing-xl);">⚔️ TRAIN <span id="train-mp-info" style="font-size:12px;color:var(--text-muted);"></span></h2>
+    <div id="train-list" style="display:flex;flex-wrap:wrap;gap:6px;width:85%;max-width:360px;margin:8px auto;"></div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:var(--spacing-xl);">
+      <button id="btn-train-close" class="menu-btn small">CLOSE</button>
+      <button id="btn-mercenary" class="menu-btn small">🔶 MERCENARY</button>
+    </div>
+  </div>
+
+  <!-- Diplomacy Panel -->
+  <div id="diplomacy-panel" class="screen hidden" style="background:rgba(0,0,0,0.9);z-index:160;overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2 style="font-family:var(--font-display);color:var(--primary);font-size:20px;padding-top:var(--spacing-xl);">🤝 DIPLOMACY</h2>
+    <p id="diplomacy-self" style="font-size:13px;color:var(--text-muted);margin:4px 0;"></p>
+    <div id="diplomacy-list" style="width:85%;max-width:360px;margin:8px auto;"></div>
+    <div id="diplomacy-log" style="width:85%;max-width:360px;margin:12px auto;"></div>
+    <button id="btn-diplomacy-close" class="menu-btn small" style="margin-bottom:var(--spacing-xl);">CLOSE</button>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-top">
+      <div id="hud-resources"></div>
+      <div id="hud-age"></div>
+      <div id="hud-population" style="font-size:11px;font-weight:600;"></div>
+      <div id="hud-manpower" style="font-size:11px;font-weight:700;"></div>
+      <div id="hud-weather" style="font-size:13px;"></div>
+      <div id="hud-timeripple" style="font-size:11px;font-weight:700;display:none;"></div>
+      <div id="hud-active-player" style="font-size:12px;font-weight:700;display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Action Bar -->
+  <div id="hud-bottom" class="hidden">
+    <div id="action-bar">
+      <button id="btn-action-build" class="action-btn"><span class="btn-icon">🏗️</span>BUILD</button>
+      <button id="btn-action-train" class="action-btn"><span class="btn-icon">⚔️</span>TRAIN</button>
+      <button id="btn-action-ageup" class="action-btn"><span class="btn-icon">⏫</span>AGE UP</button>
+      <button id="btn-action-diplo" class="action-btn"><span class="btn-icon">🤝</span>DIPLO</button>
+      <button id="btn-action-hero" class="action-btn"><span class="btn-icon">⭐</span>HERO</button>
+      <button id="btn-action-ripple" class="action-btn" title="Time Ripple"><span class="btn-icon">⏩</span>RIPPLE</button>
+      <button id="btn-switch-player" class="action-btn" title="Switch Player" style="display:none;"><span class="btn-icon">🔄</span>SWITCH</button>
+    </div>
+    <div id="unit-info">
+      <span style="color:var(--text-muted);font-size:11px;">Tap a citizen to select</span>
+    </div>
+  </div>
+
+  <!-- Hero Panel -->
+  <div id="hero-panel" class="screen hidden" style="background:rgba(0,0,0,0.9);z-index:160;overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2 style="font-family:var(--font-display);color:var(--primary);font-size:20px;padding-top:var(--spacing-xl);">⭐ HERO</h2>
+    <div id="hero-info" style="width:85%;max-width:360px;margin:8px auto;"></div>
+    <button id="btn-hero-close" class="menu-btn small" style="margin-bottom:var(--spacing-xl);">CLOSE</button>
+  </div>
+
+  <!-- Time Ripple Panel -->
+  <div id="ripple-panel" class="screen hidden" style="background:rgba(0,0,0,0.9);z-index:160;overflow-y:auto;padding-top:env(safe-area-inset-top);">
+    <h2 style="font-family:var(--font-display);color:var(--primary);font-size:20px;padding-top:var(--spacing-xl);">⏩ TIME RIPPLE</h2>
+    <div style="display:flex;flex-direction:column;gap:8px;width:85%;max-width:360px;margin:8px auto;">
+      <button id="btn-ripple-accel" class="menu-btn" style="padding:10px;">⚡ Accelerate (50g)</button>
+      <button id="btn-ripple-slow" class="menu-btn" style="padding:10px;">🕰️ Slow (75g)</button>
+      <button id="btn-ripple-freeze" class="menu-btn" style="padding:10px;">❄️ Freeze (75g)</button>
+    </div>
+    <button id="btn-ripple-close" class="menu-btn small" style="margin-bottom:var(--spacing-xl);">CLOSE</button>
+  </div>
+
+  <!-- Mini Map -->
+  <div id="mini-map-container" class="hidden">
+    <canvas id="mini-map-canvas" width="80" height="60"></canvas>
+  </div>
+
+  <!-- Touch Controls -->
+  <div id="touch-controls" class="hidden">
+    <div id="joystick-zone">
+      <div id="joystick-outer"><div id="joystick-knob"></div></div>
+    </div>
+    <div id="action-buttons">
+      <button id="btn-slam-mobile" class="action-btn-lg" title="Build">🏗️<br>BUILD</button>
+      <button id="btn-yawn-mobile" class="action-btn-lg" title="Train">⚔️<br>TRAIN</button>
+    </div>
+  </div>
+
+  <!-- Citizen Panel -->
+  <div id="citizen-panel" class="hidden">
+    <div class="citizen-name" id="citizen-panel-name">—</div>
+    <div class="citizen-trait" id="citizen-panel-trait">—</div>
+    <div class="citizen-skill" id="citizen-panel-skill">—</div>
+    <div class="morale-bar"><div class="morale-fill" id="citizen-panel-morale" style="width:80%"></div></div>
+    <div id="citizen-panel-tasks" style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;">
+      <button class="unit-task-btn" data-task="gather">🌾 Gather</button>
+      <button class="unit-task-btn" data-task="stay">⏺️ Stay</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+    }
+  </script>
+  <script type="module">
+    import { preloadAssets } from './js/assets.js';
+    await preloadAssets();
+    document.getElementById('screen-loading')?.classList.add('hidden');
+    const M = await import('./js/main.js');
+    const { showToast } = await import('./js/ui/notifications.js');
+    window._imperium = M;
+    await M.initGame(Date.now());
+    ['hud','touch-controls','mini-map-container'].forEach(id => document.getElementById(id)?.classList.remove('hidden'));
+
+    document.getElementById('btn-play')?.addEventListener('click', () => M.initGame(Date.now()));
+    document.getElementById('btn-campaign')?.addEventListener('click', () => { M.refreshCampaignList(); document.getElementById('screen-campaign')?.classList.remove('hidden'); });
+    document.getElementById('btn-skirmish')?.addEventListener('click', () => document.getElementById('screen-skirmish')?.classList.remove('hidden'));
+    document.getElementById('btn-howto')?.addEventListener('click', () => document.getElementById('screen-howto')?.classList.remove('hidden'));
+    document.getElementById('btn-settings')?.addEventListener('click', () => document.getElementById('screen-settings')?.classList.remove('hidden'));
+    document.getElementById('btn-howto-back')?.addEventListener('click', () => document.getElementById('screen-howto')?.classList.add('hidden'));
+    document.getElementById('btn-set-back')?.addEventListener('click', () => document.getElementById('screen-settings')?.classList.add('hidden'));
+    document.getElementById('btn-campaign-back')?.addEventListener('click', () => document.getElementById('screen-campaign')?.classList.add('hidden'));
+    document.getElementById('btn-skirmish-back')?.addEventListener('click', () => document.getElementById('screen-skirmish')?.classList.add('hidden'));
+    document.getElementById('btn-age-up')?.addEventListener('click', () => M.ageUp());
+    document.getElementById('btn-action-build')?.addEventListener('click', () => M.openBuildPanel());
+    document.getElementById('btn-action-train')?.addEventListener('click', () => { M.openTrainPanel(); document.getElementById('train-mp-info') && (document.getElementById('train-mp-info').textContent = '⚔️ MP: ' + M.manpower.getAvailable() + '/' + M.manpower.getMax()); });
+    document.getElementById('btn-action-ageup')?.addEventListener('click', () => M.ageUp());
+    document.getElementById('btn-action-diplo')?.addEventListener('click', () => M.openDiplomacyPanel());
+    document.getElementById('btn-action-hero')?.addEventListener('click', () => {
+      if (M.hireHero()) { M.openHeroPanel(); } else { showToast('Hire hero failed (need 200g)'); }
+    });
+    document.getElementById('btn-action-ripple')?.addEventListener('click', () => {
+      const panel = document.getElementById('ripple-panel');
+      if (panel) { panel.classList.remove('hidden'); M.updateRippleUI(); }
+    });
+    document.getElementById('btn-hero-close')?.addEventListener('click', () => document.getElementById('hero-panel')?.classList.add('hidden'));
+    document.getElementById('btn-ripple-accel')?.addEventListener('click', () => {
+      M.useTimeRipple('accelerate');
+      document.getElementById('ripple-panel')?.classList.add('hidden');
+    });
+    document.getElementById('btn-ripple-slow')?.addEventListener('click', () => {
+      M.useTimeRipple('slow');
+      document.getElementById('ripple-panel')?.classList.add('hidden');
+    });
+    document.getElementById('btn-ripple-freeze')?.addEventListener('click', () => {
+      M.useTimeRipple('freeze');
+      document.getElementById('ripple-panel')?.classList.add('hidden');
+    });
+    document.getElementById('btn-ripple-close')?.addEventListener('click', () => document.getElementById('ripple-panel')?.classList.add('hidden'));
+    document.getElementById('btn-build-close')?.addEventListener('click', () => M.closeBuildPanel());
+    document.getElementById('btn-train-close')?.addEventListener('click', () => M.closeTrainPanel());
+    document.getElementById('btn-diplomacy-close')?.addEventListener('click', () => M.closeDiplomacyPanel());
+    document.getElementById('btn-mercenary')?.addEventListener('click', () => {
+      M.closeTrainPanel();
+      M.openBuildPanel();
+    });
+    document.getElementById('btn-resume')?.addEventListener('click', () => M.togglePause());
+    document.getElementById('btn-restart')?.addEventListener('click', () => M.initGame(Date.now()));
+    document.getElementById('btn-pause-menu')?.addEventListener('click', () => M.togglePause());
+    document.getElementById('btn-pause-settings')?.addEventListener('click', () => document.getElementById('screen-settings')?.classList.remove('hidden'));
+    document.getElementById('btn-sound')?.addEventListener('click', (e) => e.target.classList.toggle('active'));
+    document.getElementById('btn-music')?.addEventListener('click', (e) => e.target.classList.toggle('active'));
+    document.getElementById('btn-haptics')?.addEventListener('click', (e) => e.target.classList.toggle('active'));
+    document.getElementById('btn-speed-1')?.addEventListener('click', (e) => { document.querySelectorAll('#btn-speed-1,#btn-speed-2,#btn-speed-3').forEach(b=>b.classList.remove('active')); e.target.classList.add('active'); });
+    document.getElementById('btn-speed-2')?.addEventListener('click', (e) => { document.querySelectorAll('#btn-speed-1,#btn-speed-2,#btn-speed-3').forEach(b=>b.classList.remove('active')); e.target.classList.add('active'); });
+    document.getElementById('btn-speed-3')?.addEventListener('click', (e) => { document.querySelectorAll('#btn-speed-1,#btn-speed-2,#btn-speed-3').forEach(b=>b.classList.remove('active')); e.target.classList.add('active'); });
+    document.getElementById('btn-tutorial')?.addEventListener('click', (e) => e.target.classList.toggle('active'));
+    document.querySelectorAll('.faction-btn').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.faction-btn').forEach(c => c.style.border = '1px solid var(--primary-dark)');
+        card.style.border = '2px solid var(--primary)';
+        M.selectedFaction = card.id.replace('btn-faction-', '');
+      });
+    });
+    document.querySelectorAll('.diff-btn').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.diff-btn').forEach(c => { c.style.background = ''; c.style.color = ''; c.style.border = '1px solid var(--primary-dark)'; });
+        card.style.background = 'var(--primary)'; card.style.color = 'var(--text-dark)'; card.style.border = '2px solid var(--primary)';
+        M.selectedDifficulty = card.dataset.diff;
+      });
+    });
+    document.getElementById('btn-start-skirmish')?.addEventListener('click', () => {
+      document.getElementById('screen-skirmish')?.classList.add('hidden');
+      M.startSkirmishWithAI(M.selectedFaction, M.selectedDifficulty);
+    });
+    document.querySelectorAll('.mission-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const m = parseInt(card.dataset.mission);
+        if (!isNaN(m)) {
+          document.getElementById('screen-campaign')?.classList.add('hidden');
+          gameMode = 'campaign';
+          M.startCampaign(m);
+        }
+      });
+    });
+    document.querySelectorAll('#citizen-panel-tasks .unit-task-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const task = btn.dataset.task;
+        const sel = await import('./js/citizen.js');
+        if (sel.selectedCitizen) { sel.selectedCitizen.task = task; }
+      });
+    });
+
+    document.getElementById('gameover-restart')?.addEventListener('click', () => { M.initGame(Date.now()); });
+    document.getElementById('gameover-menu')?.addEventListener('click', () => { gameMode = 'menu'; Screens.show('screen-menu'); });
+    document.getElementById('victory-restart')?.addEventListener('click', () => { M.initGame(Date.now()); });
+    document.getElementById('victory-menu')?.addEventListener('click', () => { gameMode = 'menu'; Screens.show('screen-menu'); });
+    document.getElementById('campaign-result-menu')?.addEventListener('click', () => { gameMode = 'menu'; Screens.show('screen-menu'); });
+    document.getElementById('campaign-refresh')?.addEventListener('click', () => M.refreshCampaignList());
+
+    const FACTION_LIST = [
+      { id: 'roma', emoji: '🏛️', name: 'Roma' },
+      { id: 'vikings', emoji: '⚔️', name: 'Vikings' },
+      { id: 'mongols', emoji: '🐎', name: 'Mongols' },
+      { id: 'egyptians', emoji: '𓂀', name: 'Egypt' },
+      { id: 'celts', emoji: '🌿', name: 'Celts' },
+      { id: 'japanese', emoji: '⛩️', name: 'Japan' },
+    ];
+    let p1FactionSel = 'roma';
+    let p2FactionSel = 'vikings';
+
+    function populate2PFactions() {
+      const p1Row = document.getElementById('p1-faction-row');
+      const p2Row = document.getElementById('p2-faction-row');
+      if (!p1Row || !p2Row) return;
+      p1Row.innerHTML = '';
+      p2Row.innerHTML = '';
+      FACTION_LIST.forEach(f => {
+        const btn1 = document.createElement('button');
+        btn1.className = 'faction-btn menu-btn';
+        btn1.style.padding = '6px';
+        btn1.style.fontSize = '10px';
+        btn1.style.border = p1FactionSel === f.id ? '2px solid var(--primary)' : '1px solid var(--primary-dark)';
+        btn1.textContent = f.emoji + ' ' + f.name;
+        btn1.addEventListener('click', () => {
+          p1FactionSel = f.id;
+          populate2PFactions();
+        });
+        p1Row.appendChild(btn1);
+
+        const btn2 = document.createElement('button');
+        btn2.className = 'faction-btn menu-btn';
+        btn2.style.padding = '6px';
+        btn2.style.fontSize = '10px';
+        btn2.style.border = p2FactionSel === f.id ? '2px solid #9b2226' : '1px solid var(--primary-dark)';
+        btn2.style.color = p2FactionSel === f.id ? 'var(--text-dark)' : '';
+        btn2.style.background = p2FactionSel === f.id ? 'var(--primary)' : '';
+        btn2.textContent = f.emoji + ' ' + f.name;
+        btn2.disabled = f.id === p1FactionSel;
+        btn2.style.opacity = f.id === p1FactionSel ? '0.4' : '1';
+        btn2.addEventListener('click', () => {
+          if (f.id !== p1FactionSel) {
+            p2FactionSel = f.id;
+            populate2PFactions();
+          }
+        });
+        p2Row.appendChild(btn2);
+      });
+    }
+
+    document.getElementById('btn-2p')?.addEventListener('click', () => {
+      populate2PFactions();
+      document.getElementById('screen-2p')?.classList.remove('hidden');
+    });
+    document.getElementById('btn-start-2p')?.addEventListener('click', () => {
+      document.getElementById('screen-2p')?.classList.add('hidden');
+      gameMode = '2p';
+      M.startTwoPlayer(p1FactionSel, p2FactionSel);
+    });
+  </script>
+</body>
+</html>

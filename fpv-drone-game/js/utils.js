@@ -17,16 +17,18 @@ export class ObjectPool {
     this._reset = resetFn;
     /** @type {any[]} */ this._pool = [];
     /** @type {Set<any>} */ this._active = new Set();
+    /** @type {any[]} */ this._free = [];
     for (let i = 0; i < initialSize; i++) {
       const obj = this._create();
       obj.__poolActive = false;
       this._pool.push(obj);
+      this._free.push(obj);
     }
   }
 
-  /** Get an inactive item (or create a new one). */
+  /** Get an inactive item (or create a new one). O(1) via free-list. */
   get() {
-    let obj = this._pool.find(o => !o.__poolActive);
+    let obj = this._free.length > 0 ? this._free.pop() : undefined;
     if (!obj) {
       obj = this._create();
       this._pool.push(obj);
@@ -41,6 +43,7 @@ export class ObjectPool {
     obj.__poolActive = false;
     this._active.delete(obj);
     this._reset(obj);
+    this._free.push(obj);
   }
 
   /** All currently active items. */

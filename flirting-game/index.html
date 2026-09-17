@@ -1,12 +1,22 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Speed Crush</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="A flirty interactive story PWA where fast choices unlock secret scenes. Pick your vibe, answer fast, and see where the night takes you." />
+  <meta name="theme-color" content="#ff4fa3" />
+  <link rel="icon" href="./icons/icon-192.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.svg" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Speed Crush" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="manifest" href="./manifest.json" />
 </head>
 <body>
   <div class="bg-orb orb-a"></div>
@@ -47,12 +57,12 @@
           <strong>Fast choices unlock secrets</strong>
         </div>
         <div class="stat-card">
-          <span class="stat-label">Style</span>
-          <strong>Bright, playful, dynamic</strong>
+          <span class="stat-label">Personal best</span>
+          <strong id="best-value">—</strong>
         </div>
       </div>
 
-      <button class="primary-btn" id="start-btn">Start the story</button>
+      <button class="primary-btn" id="start-btn" type="button">Start the story</button>
     </section>
 
     <section class="panel game-panel" id="game-screen">
@@ -61,7 +71,7 @@
           <div class="badge" id="chapter-label">Chapter 1</div>
           <h2 id="character-name">Character</h2>
         </div>
-        <button class="ghost-btn" id="restart-btn">Restart</button>
+        <button class="ghost-btn" id="restart-btn" type="button">Restart</button>
       </div>
 
       <div class="character-card">
@@ -102,6 +112,8 @@
       </div>
 
       <div class="choices" id="choices"></div>
+
+      <p class="gesture-hint">Swipe left · choice history &nbsp;·&nbsp; Tap · skip reply</p>
     </section>
 
     <section class="panel end-panel" id="end-screen">
@@ -122,10 +134,21 @@
           <strong id="final-secret">0</strong>
         </div>
       </div>
-      <button class="primary-btn" id="play-again-btn">Play again</button>
+      <button class="primary-btn" id="play-again-btn" type="button">Play again</button>
+      <button class="ghost-btn" id="share-btn" type="button">Share your score</button>
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <div class="history-overlay" id="history-overlay" aria-hidden="true">
+    <div class="history-sheet" role="dialog" aria-modal="true" aria-label="Your choices so far">
+      <div class="history-head">
+        <h3>Your choices so far</h3>
+        <button class="ghost-btn" id="history-close" type="button">Close</button>
+      </div>
+      <div class="history-list" id="history-list"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

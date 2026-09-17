@@ -1,0 +1,77 @@
+:root {
+    --bg-deep: #1a1a2e;
+    --bg-panel: #16213e;
+    --bg-chat: #0f3460;
+    --accent-pink: #e94560;
+    --accent-hot: #ff2e63;
+    --text-light: #ffffff;
+    --text-muted: #a0a0b5;
+    --gold: #ffdd59;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-light);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-panel); }
+::-webkit-scrollbar-thumb { background: var(--accent-pink); border-radius: 10px; }
+
+h1, h2, h3 {
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.glowing-text {
+    color: var(--text-light);
+    text-shadow: 0 0 5px var(--accent-pink), 0 0 15px var(--accent-pink);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { text-shadow: 0 0 5px var(--accent-pink), 0 0 10px var(--accent-pink); }
+    100% { text-shadow: 0 0 8px var(--accent-hot), 0 0 20px var(--accent-hot); }
+}
+
+#game-container {
+    flex: 2;
+    height: 100vh;
+    position: relative;
+    box-shadow: inset -10px 0 20px rgba(0,0,0,0.5);
+}
+
+#ui-panel {
+    flex: 1;
+    min-width: 320px;
+    max-width: 450px;
+    background: var(--bg-panel);
+    padding: 20px;
+    border-left: 4px solid var(--accent-pink);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 10;
+}
+
+.event-header {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+@media (max-width: 768px) {
+    body { flex-direction: column; }
+    #game-container { flex: none; height: 40vh; }
+    #ui-panel { flex: none; height: 60vh; min-width: auto; max-width: none; border-left: none; border-top: 4px solid var(--accent-pink); }
+}

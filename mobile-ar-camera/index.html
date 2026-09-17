@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#090b12">
+  <meta name="description" content="AR Snap Camera — Snapchat-style AR camera PWA with WebGL shaders and MediaPipe tracking">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/icon-192x192.png">
   <title>AR Snap Camera</title>
   <link rel="stylesheet" href="./style.css">
   <script type="importmap">
@@ -81,5 +85,16 @@
   </div>
 
   <script type="module" src="./app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          await navigator.serviceWorker.register('/sw.js');
+        } catch (error) {
+          console.warn('SW registration failed:', error);
+        }
+      });
+    }
+  </script>
 </body>
 </html>

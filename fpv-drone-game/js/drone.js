@@ -7,6 +7,8 @@ const _v  = new THREE.Vector3();
 const _v2 = new THREE.Vector3();
 const _euler = new THREE.Euler(0, 0, 0, 'YXZ');
 const _quat  = new THREE.Quaternion();
+const _camOffset = new THREE.Vector3();
+const _targetPos = new THREE.Vector3();
 
 /* ── Simple low-poly drone mesh ── */
 function buildDroneMesh() {
@@ -114,6 +116,57 @@ export class Drone {
     this.engineLight = new THREE.PointLight(0x00ff41, 0, 3);
     this.engineLight.position.set(0, -0.2, 0);
     this.mesh.add(this.engineLight);
+
+    // ── Trail effect (BufferGeometry sliding window) ──
+    this._trailLength = 80;
+    this._trailPositions = new Float32Array(this._trailLength * 3);
+    this._trailColors = new Float32Array(this._trailLength * 3);
+    for (let i = 0; i < this._trailLength; i++) {
+      this._trailPositions[i * 3]     = this.position.x;
+      this._trailPositions[i * 3 + 1] = this.position.y;
+      this._trailPositions[i * 3 + 2] = this.position.z;
+      const t = i / (this._trailLength - 1);
+      this._trailColors[i * 3]     = 0;
+      this._trailColors[i * 3 + 1] = 0.3 + t * 0.7;
+      this._trailColors[i * 3 + 2] = 0.6 + t * 0.4;
+    }
+    this._trailGeo = new THREE.BufferGeometry();
+    this._trailGeo.setAttribute('position', new THREE.BufferAttribute(this._trailPositions, 3));
+    this._trailGeo.setAttribute('color', new THREE.BufferAttribute(this._trailColors, 3));
+    this._trailMat = new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+    });
+    this._trailLine = new THREE.Line(this._trailGeo, this._trailMat);
+    this._trailLine.frustumCulled = false;
+    scene.add(this._trailLine);
+    this._trailCounter = 0;
+
+    // ── Volumetric light cone ──
+    const createConeTexture = () => {
+      const w = 32, h = 128;
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(0,255,200,0.20)');
+      grad.addColorStop(0.4, 'rgba(0,255,200,0.08)');
+      grad.addColorStop(1, 'rgba(0,255,200,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+      return new THREE.CanvasTexture(c);
+    };
+    const coneGeo = new THREE.ConeGeometry(3.5, 30, 16, 1, true);
+    const coneMat = new THREE.MeshBasicMaterial({
+      map: createConeTexture(),
+      transparent: true, opacity: 0.4,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide, depthWrite: false,
+    });
+    this._lightCone = new THREE.Mesh(coneGeo, coneMat);
+    this._lightCone.rotation.x = -Math.PI / 2;
+    this._lightCone.position.set(0, 0, -15);
+    this.mesh.add(this._lightCone);
   }
 
   /* ── Reset to start position ── */
@@ -127,7 +180,33 @@ export class Drone {
     this.health   = this.maxHealth;
     this.isAlive  = true;
     this.invincible = 0;
+
+    // Clean up power-up visuals
+    if (this._shieldMesh) {
+      this.scene.remove(this._shieldMesh);
+      this._shieldMesh.geometry.dispose();
+      this._shieldMesh.material.dispose();
+      this._shieldMesh = null;
+    }
+    this.mesh.traverse(c => {
+      if (c.isMesh && c.material && c.material._origOpacity !== undefined) {
+        c.material.opacity = c.material._origOpacity;
+        c.material.transparent = c.material.opacity < 1;
+        delete c.material._origOpacity;
+      }
+    });
+
     this._syncTransform(1);
+
+    // Reset trail positions to current position
+    for (let i = 0; i < this._trailLength; i++) {
+      this._trailPositions[i * 3]     = this.position.x;
+      this._trailPositions[i * 3 + 1] = this.position.y;
+      this._trailPositions[i * 3 + 2] = this.position.z;
+    }
+    this._trailGeo.attributes.position.needsUpdate = true;
+    this._trailGeo.attributes.color.needsUpdate = true;
+    this._trailCounter = 0;
   }
 
   /* ── Take damage ── */
@@ -229,6 +308,29 @@ export class Drone {
 
     // ── Sync mesh & camera ──
     this._syncTransform(delta);
+
+    // ── Trail update (~30 samples/sec) ──
+    this._trailCounter += delta;
+    if (this._trailCounter >= 0.033) {
+      this._trailCounter = 0;
+      for (let i = 0; i < this._trailLength - 1; i++) {
+        this._trailPositions[i * 3]     = this._trailPositions[(i + 1) * 3];
+        this._trailPositions[i * 3 + 1] = this._trailPositions[(i + 1) * 3 + 1];
+        this._trailPositions[i * 3 + 2] = this._trailPositions[(i + 1) * 3 + 2];
+      }
+      const idx = (this._trailLength - 1) * 3;
+      this._trailPositions[idx]     = this.position.x;
+      this._trailPositions[idx + 1] = this.position.y;
+      this._trailPositions[idx + 2] = this.position.z;
+      for (let i = 0; i < this._trailLength; i++) {
+        const t = i / (this._trailLength - 1);
+        this._trailColors[i * 3]     = 0;
+        this._trailColors[i * 3 + 1] = 0.3 + t * 0.7;
+        this._trailColors[i * 3 + 2] = 0.6 + t * 0.4;
+      }
+      this._trailGeo.attributes.position.needsUpdate = true;
+      this._trailGeo.attributes.color.needsUpdate = true;
+    }
   }
 
   /* ── Sync mesh & FPV camera ── */
@@ -248,10 +350,9 @@ export class Drone {
     this.engineLight.intensity = this.throttle * 2;
 
     // ── FPV Camera ──
-    // Target position: move target to the front of the drone so it's not inside the body
-    const camOffset = new THREE.Vector3(0, 0.15, -0.4);
-    camOffset.applyEuler(_euler);
-    const targetPos = this.position.clone().add(camOffset);
+    _camOffset.set(0, 0.15, -0.4);
+    _camOffset.applyEuler(_euler);
+    _targetPos.copy(this.position).add(_camOffset);
 
     // Apply fixed FPV camera uptilt (20 degrees) so players can see forward while pitched down
     const cameraUptilt = 20 * (Math.PI / 180);
@@ -259,7 +360,7 @@ export class Drone {
     _quat.setFromEuler(_euler);
 
     // Snap camera directly to drone to avoid FPV lag/nausea
-    this.camera.position.copy(targetPos);
+    this.camera.position.copy(_targetPos);
     this.camera.quaternion.copy(_quat);
   }
 

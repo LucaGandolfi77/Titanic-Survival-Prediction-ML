@@ -1,0 +1,220 @@
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+#hud-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-top: calc(var(--spacing-sm) + var(--safe-top));
+  background: linear-gradient(to bottom, rgba(26, 20, 8, 0.92) 0%, rgba(26, 20, 8, 0.7) 70%, transparent 100%);
+  pointer-events: auto;
+  gap: var(--spacing-xs);
+}
+
+#hud-resources {
+  display: flex;
+  gap: var(--spacing-sm);
+  font-size: 11px;
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+
+#hud-resources .res {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.res-icon {
+  font-size: 13px;
+}
+
+#hud-age {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+}
+
+#hud-actions-top {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+#hud-actions-top button {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--bg-card);
+  border: 1px solid var(--primary-dark);
+  border-radius: var(--radius-sm);
+  color: var(--text-light);
+  pointer-events: auto;
+}
+
+#hud-actions-top button:active {
+  background: var(--primary);
+  color: var(--text-dark);
+}
+
+#hud-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-bottom: calc(var(--spacing-sm) + var(--safe-bottom));
+  background: linear-gradient(to top, rgba(26, 20, 8, 0.92) 0%, rgba(26, 20, 8, 0.7) 70%, transparent 100%);
+  pointer-events: auto;
+}
+
+#action-bar {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.action-btn {
+  flex: 1;
+  max-width: 80px;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  background: var(--bg-card);
+  border: 1px solid var(--primary-dark);
+  border-radius: var(--radius-md);
+  color: var(--text-light);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+  pointer-events: auto;
+  transition: background 0.1s;
+}
+
+.action-btn:active {
+  background: var(--primary);
+  color: var(--text-dark);
+}
+
+.action-btn .btn-icon {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+#unit-info {
+  background: rgba(44, 36, 16, 0.9);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 11px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+#unit-info .unit-name {
+  font-weight: 700;
+  color: var(--primary-light);
+}
+
+#unit-info .unit-stat {
+  color: var(--text-muted);
+}
+
+#unit-task-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.unit-task-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--bg-dark);
+  border: 1px solid var(--secondary);
+  border-radius: var(--radius-sm);
+  color: var(--secondary-light);
+  pointer-events: auto;
+}
+
+.unit-task-btn:active {
+  background: var(--secondary);
+  color: var(--text-light);
+}
+
+/* Mini-map */
+#mini-map-container {
+  position: fixed;
+  bottom: calc(var(--action-bar-height) + var(--safe-bottom) + 8px);
+  right: var(--spacing-sm);
+  z-index: 49;
+  border: 2px solid var(--primary-dark);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-dark);
+  pointer-events: auto;
+}
+
+#mini-map-canvas {
+  display: block;
+}
+
+/* Selected citizen panel */
+#citizen-panel {
+  position: fixed;
+  bottom: calc(var(--action-bar-height) + var(--safe-bottom) + 8px);
+  left: var(--spacing-sm);
+  z-index: 49;
+  background: rgba(44, 36, 16, 0.92);
+  border: 1px solid var(--primary-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  min-width: 180px;
+  max-width: 220px;
+  pointer-events: auto;
+}
+
+#citizen-panel .citizen-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-light);
+}
+
+#citizen-panel .citizen-trait {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+#citizen-panel .citizen-skill {
+  font-size: 10px;
+  color: var(--secondary-light);
+}
+
+.morale-bar {
+  height: 6px;
+  background: var(--bg-dark);
+  border-radius: 3px;
+  margin-top: var(--spacing-xs);
+  overflow: hidden;
+}
+
+.morale-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 3px;
+  transition: width 0.3s;
+}

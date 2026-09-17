@@ -205,6 +205,19 @@ export class AudioManager {
     });
   }
 
+  /* ── Cleanup on page unload ── */
+  dispose() {
+    if (this._engineOsc) {
+      try { this._engineOsc.stop(); } catch { /* already stopped */ }
+      this._engineOsc.disconnect();
+      this._engineOsc = null;
+    }
+    if (this.ctx) {
+      this.ctx.close();
+      this.ctx = null;
+    }
+  }
+
   /* ── Toggle mute ── */
   toggleMute() {
     this.muted = !this.muted;

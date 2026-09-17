@@ -73,6 +73,43 @@ function buildGunshipMesh() {
   return g;
 }
 
+/* ── Boss — multi-phase, Wave 10+ ── */
+function buildBossMesh() {
+  const g = new THREE.Group();
+  // Central body
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(3, 4, 2.5, 8),
+    new THREE.MeshStandardMaterial({ color: 0x440022, metalness: 0.8, roughness: 0.3 })
+  );
+  body.rotation.x = Math.PI / 2;
+  g.add(body);
+  // Core glow
+  const core = new THREE.Mesh(
+    new THREE.SphereGeometry(1.5, 16, 12),
+    new THREE.MeshBasicMaterial({ color: 0xff0044, transparent: true, opacity: 0.6 })
+  );
+  g.add(core);
+  // Rotating ring
+  const ringGeo = new THREE.TorusGeometry(4, 0.15, 8, 24);
+  const ringMat = new THREE.MeshStandardMaterial({ color: 0xff4400, emissive: 0xff4400, emissiveIntensity: 0.5 });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.name = 'ring';
+  g.add(ring);
+  // Weapon mounts (4)
+  for (let i = 0; i < 4; i++) {
+    const angle = (i / 4) * Math.PI * 2;
+    const mount = new THREE.Mesh(
+      new THREE.BoxGeometry(0.8, 0.8, 1.2),
+      new THREE.MeshStandardMaterial({ color: 0x660033, metalness: 0.7 })
+    );
+    mount.position.set(Math.cos(angle) * 3, 0, Math.sin(angle) * 3);
+    mount.lookAt(0, 0, 0);
+    g.add(mount);
+  }
+  g.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  return g;
+}
+
 /* ── Enemy projectile mesh (reused from pool) ── */
 function createEnemyProjectile() {
   const mesh = new THREE.Mesh(
@@ -105,16 +142,18 @@ class Enemy {
     this.fireTimer  = 0;
   }
 
+  _flashTimer = null;
+
   takeDamage(amount) {
     this.hp -= amount;
-    // Flash red
     this.mesh.traverse(c => {
       if (c.isMesh && c.material) {
         c.material.emissive = new THREE.Color(0xff0000);
         c.material.emissiveIntensity = 0.8;
       }
     });
-    setTimeout(() => {
+    if (this._flashTimer) clearTimeout(this._flashTimer);
+    this._flashTimer = setTimeout(() => {
       this.mesh.traverse(c => {
         if (c.isMesh && c.material) {
           c.material.emissiveIntensity = 0;
@@ -127,6 +166,7 @@ class Enemy {
   }
 
   dispose(scene) {
+    if (this._flashTimer) { clearTimeout(this._flashTimer); this._flashTimer = null; }
     scene.remove(this.mesh);
   }
 }
@@ -355,6 +395,103 @@ class Gunship extends Enemy {
 }
 
 /* ══════════════════════════════════════════════════════════
+    Boss — multi-phase enemy, spawns Wave 10+
+    ══════════════════════════════════════════════════════════ */
+class Boss extends Enemy {
+  constructor(scene, pos) {
+    const mesh = buildBossMesh();
+    mesh.position.copy(pos);
+    scene.add(mesh);
+    super(mesh, 1000, 500, 5);
+    this.type       = 'boss';
+    this.phase      = 1;
+    this.fireRate   = 0.2;
+    this.projSpeed  = 60;
+    this.range      = 200;
+    this.orbitRadius = 80;
+    this.orbitSpeed  = 0.2;
+    this.orbitAngle  = Math.random() * Math.PI * 2;
+    this._specialTimer = 3;
+  }
+
+  update(delta, dronePos, projectilePool, scene) {
+    if (!this.alive) return;
+
+    // Phase transitions
+    const hpPct = this.hp / this.maxHp;
+    if (hpPct <= 0.33 && this.phase < 3) {
+      this.phase = 3;
+      this.fireRate = 0.1;
+      this.projSpeed = 80;
+    } else if (hpPct <= 0.66 && this.phase < 2) {
+      this.phase = 2;
+      this.fireRate = 0.15;
+      this.projSpeed = 70;
+    }
+
+    const dir = new THREE.Vector3().subVectors(dronePos, this.position);
+    const dist = dir.length();
+
+    // Orbit around player
+    this.orbitAngle += this.orbitSpeed * delta * (this.phase === 3 ? 2 : 1);
+    const targetX = dronePos.x + Math.cos(this.orbitAngle) * this.orbitRadius;
+    const targetZ = dronePos.z + Math.sin(this.orbitAngle) * this.orbitRadius;
+    const targetY = MathUtils.clamp(dronePos.y + 20, 30, 100);
+    this.position.lerp(new THREE.Vector3(targetX, targetY, targetZ), 1 - Math.pow(0.05, delta));
+
+    // Look at player
+    this.mesh.lookAt(dronePos);
+
+    // Animate ring
+    const ring = this.mesh.getObjectByName('ring');
+    if (ring) ring.rotation.z += delta * 2 * this.phase;
+
+    // Phase visual feedback
+    const glowIntensity = this.phase === 3 ? 2 : this.phase === 2 ? 1 : 0;
+    const glowColor = this.phase === 3 ? 0xff0000 : this.phase === 2 ? 0xff6600 : 0x000000;
+    this.mesh.traverse(c => {
+      if (c.isMesh && c.material && c.material.emissive) {
+        c.material.emissive.setHex(glowColor);
+        c.material.emissiveIntensity = glowIntensity;
+      }
+    });
+
+    // Special attack (phase 2+)
+    this._specialTimer -= delta;
+    if (this._specialTimer <= 0) {
+      this._specialTimer = this.phase === 3 ? 3 : 5;
+      this._spreadFire(dir.clone().normalize(), projectilePool, scene);
+    }
+
+    // Normal fire
+    this.fireTimer -= delta;
+    if (this.fireTimer <= 0 && dist < this.range) {
+      this.fireTimer = this.fireRate;
+      this._fire(dir.clone().normalize(), projectilePool, scene);
+    }
+  }
+
+  _fire(direction, pool, scene) {
+    const proj = pool.get();
+    if (!proj) return;
+    proj.mesh.position.copy(this.position);
+    proj.velocity.copy(direction).multiplyScalar(this.projSpeed);
+    proj.life = 0;
+    proj.active = true;
+    proj.mesh.visible = true;
+    if (!proj.mesh.parent) scene.add(proj.mesh);
+  }
+
+  _spreadFire(direction, pool, scene) {
+    for (let i = -2; i <= 2; i++) {
+      const euler = new THREE.Euler(0, i * 0.2, 0);
+      const rotated = direction.clone().applyEuler(euler);
+      this._fire(rotated, pool, scene);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
    EnemyManager — wave system + update loop
    ══════════════════════════════════════════════════════════ */
 export class EnemyManager {
@@ -432,6 +569,11 @@ export class EnemyManager {
     for (let i = 0; i < def.gunships; i++) {
       this.enemies.push(new Gunship(this.scene, spawnAirPos()));
     }
+
+    // Boss at Wave 10+
+    if (waveNum >= 10) {
+      this.enemies.push(new Boss(this.scene, spawnAirPos()));
+    }
   }
 
   /* ── Update all enemies ── */
@@ -461,6 +603,10 @@ export class EnemyManager {
 
   get allEnemies() {
     return this.enemies.filter(e => e.alive);
+  }
+
+  get boss() {
+    return this.enemies.find(e => e.type === 'boss' && e.alive) || null;
   }
 
   getEnemyProjectiles() {

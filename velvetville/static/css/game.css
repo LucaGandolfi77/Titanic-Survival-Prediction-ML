@@ -1,0 +1,144 @@
+#game-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* XP BAR */
+#top-bar {
+    background: var(--bg-panel);
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid var(--accent-pink);
+    flex-wrap: wrap;
+    z-index: 100;
+}
+
+.xp-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.xp-text {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.xp-track {
+    flex: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-pink), var(--gold));
+    border-radius: 5px;
+    transition: width 0.5s ease;
+}
+
+.level-badge {
+    background: var(--accent-pink);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75em;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.badges-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.7em;
+    background: var(--bg-chat);
+    border: 1px solid var(--gold);
+    animation: popIn 0.3s ease;
+}
+
+/* ONLINE INDICATOR */
+.online-indicator {
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+.analytics-link {
+    text-decoration: none;
+    font-size: 1.3em;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1);
+    transition: 0.2s;
+}
+
+.analytics-link:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* LAYOUT */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+#main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+#game-container {
+    flex: 2;
+    height: auto;
+    min-height: 0;
+}
+
+#ui-panel {
+    flex: 1;
+    min-width: 300px;
+    max-width: 450px;
+    background: var(--bg-panel);
+    padding: 15px;
+    border-left: 4px solid var(--accent-pink);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    body { flex-direction: column; overflow: auto; }
+    #app-container { height: auto; min-height: 100vh; }
+    #main-content { flex-direction: column; }
+    #game-container { flex: none; min-height: 40vh; }
+    #ui-panel { flex: none; max-width: none; border-left: none; border-top: 4px solid var(--accent-pink); }
+    .login-card { width: 90vw; padding: 20px; }
+    #top-bar { padding: 5px 8px; gap: 5px; }
+    .xp-bar { min-width: 120px; }
+}
+
+@media (max-width: 480px) {
+    #ui-panel { padding: 10px; gap: 8px; min-width: auto; }
+    .event-header { font-size: 0.85em; top: 5px; left: 5px; }
+    button { padding: 10px 12px; font-size: 0.9em; }
+}

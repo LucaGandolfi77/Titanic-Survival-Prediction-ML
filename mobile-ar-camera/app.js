@@ -7,6 +7,8 @@ import * as THREE from 'three';
 import { SHADER_FILTERS, createShaderMaterial, disposeMaterial } from './shaders.js';
 import { AR_FILTERS, createARState, drawActiveARFilter } from './ar-filters.js';
 import { ensureForFilter, detectForFilter, getCachedResults } from './mediapipe-init.js';
+import { createLifecycleManager } from './src/core/lifecycle.js';
+import { APP_CONFIG } from './src/core/constants.js';
 
 const FILTERS = [...SHADER_FILTERS, ...AR_FILTERS];
 const appState = {
@@ -61,6 +63,7 @@ const els = {
   discardPhoto: document.getElementById('discard-photo'),
 };
 const overlayCtx = els.overlayCanvas.getContext('2d');
+const lifecycle = createLifecycleManager(appState);
 
 boot().catch((error) => {
   console.error(error);
@@ -68,6 +71,14 @@ boot().catch((error) => {
 });
 
 async function boot() {
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('/sw.js');
+    } catch (error) {
+      console.warn('SW registration failed:', error);
+    }
+  }
+
   if (!isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
     els.httpsWarning.classList.remove('hidden');
   }
@@ -76,9 +87,26 @@ async function boot() {
   bindUi();
   initThree();
   await startCamera();
-  resize();
-  window.addEventListener('resize', resize);
+  debouncedResize();
+  window.addEventListener('resize', debouncedResize);
   startLoop();
+
+  lifecycle.on('shutdown', cleanup);
+  window.addEventListener('beforeunload', cleanup);
+}
+
+let resizeTimer = null;
+function debouncedResize() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(resize, APP_CONFIG.RESIZE_DEBOUNCE_MS);
+}
+
+function cleanup() {
+  cancelAnimationFrame(appState.loopHandle);
+  stopCamera();
+  if (appState.renderer) appState.renderer.dispose();
+  disposeMaterial(appState.material);
+  if (appState.lastObjectURL) URL.revokeObjectURL(appState.lastObjectURL);
 }
 
 function buildFilterCarousels() {
@@ -134,7 +162,10 @@ function bindUi() {
     await startCamera();
     updateMirrorMode();
   });
-  els.shutter.addEventListener('click', capturePhoto);
+  els.shutter.addEventListener('click', () => {
+    if ('vibrate' in navigator) navigator.vibrate(APP_CONFIG.SHUTTER_HAPTIC);
+    capturePhoto();
+  });
   els.savePhoto.addEventListener('click', saveOrSharePhoto);
   els.discardPhoto.addEventListener('click', discardPreview);
   els.shareLast.addEventListener('click', saveOrSharePhoto);
@@ -166,7 +197,7 @@ function bindGestures() {
   els.renderStack.addEventListener('touchend', (event) => {
     if (appState.gesture.mode === 'swipe' && event.changedTouches.length === 1) {
       const delta = event.changedTouches[0].clientX - appState.gesture.startX;
-      if (Math.abs(delta) > 40) cycleFilter(delta < 0 ? 1 : -1);
+      if (Math.abs(delta) > APP_CONFIG.SWIPE_THRESHOLD) cycleFilter(delta < 0 ? 1 : -1);
     }
     appState.gesture.mode = null;
   });
@@ -238,6 +269,7 @@ function resize() {
 }
 
 async function selectFilter(filterId) {
+  if ('vibrate' in navigator) navigator.vibrate(APP_CONFIG.FILTER_CHANGE_HAPTIC);
   const filter = FILTERS.find((item) => item.id === filterId);
   if (!filter || filter.id === appState.selectedFilter.id) return;
 
@@ -278,7 +310,7 @@ function applyShaderFilter(filterId) {
 
 function updateMirrorMode() {
   const mirrored = appState.facingMode === 'user';
-  globalThis.__AR_CAMERA_MIRRORED__ = mirrored;
+  appState.mirrorMode = mirrored;
   if (appState.material?.uniforms?.uMirror) appState.material.uniforms.uMirror.value = mirrored ? 1 : 0;
   els.fallbackVideo.style.transform = mirrored ? 'scaleX(-1)' : 'scaleX(1)';
 }
@@ -316,6 +348,9 @@ function startLoop() {
     }
   };
   appState.loopHandle = requestAnimationFrame(loop);
+  lifecycle.on('beforeUnload', () => {
+    cancelAnimationFrame(appState.loopHandle);
+  });
 }
 
 function clearOverlay() {
@@ -348,6 +383,7 @@ async function toggleTorch() {
 
 async function capturePhoto() {
   if (appState.previewing) return;
+  if ('vibrate' in navigator) navigator.vibrate(APP_CONFIG.SHUTTER_HAPTIC);
   const canvas = document.createElement('canvas');
   canvas.width = els.glCanvas.width || innerWidth;
   canvas.height = els.glCanvas.height || innerHeight;

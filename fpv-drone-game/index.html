@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DRONE STRIKE</title>
 
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="description" content="FPV Combat Simulator — Pilot your drone, destroy enemies, survive.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DRONE STRIKE">
+
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/ui.css">
@@ -12,12 +19,14 @@
   <link rel="stylesheet" href="css/controls.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.158.0/build/three.module.js"
+        "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
       }
     }
   </script>
@@ -152,6 +161,13 @@
     // This imports the module build and exposes it as `globalThis.THREE`.
     import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
     globalThis.THREE = THREE;
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
   </script>
   <script type="module" src="js/main.js"></script>
 </body>

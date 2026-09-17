@@ -70,9 +70,9 @@ const FRAGMENTS = {
     float wave = sin(uv.y * 80.0 + uTime * 8.0) * 0.004;
     float noise = rand(vec2(floor(uv.y * 160.0), floor(uTime * 12.0))) * 0.008;
     float shift = wave + noise;
-    float r = texture2D(uTexture, vec2(1.0 - uv.x + shift, uv.y)).r;
-    float g = texture2D(uTexture, vec2(1.0 - uv.x, uv.y)).g;
-    float b = texture2D(uTexture, vec2(1.0 - uv.x - shift, uv.y)).b;
+    float r = texture2D(uTexture, vec2(sampleX + shift, uv.y)).r;
+    float g = texture2D(uTexture, vec2(sampleX, uv.y)).g;
+    float b = texture2D(uTexture, vec2(sampleX - shift, uv.y)).b;
     color = vec3(r, g, b);
   `),
   pixelate: commonFragment(`
@@ -101,7 +101,7 @@ const FRAGMENTS = {
   `),
   'warm-glow': commonFragment(`
     color = color * vec3(1.08, 1.02, 0.9);
-    vec3 glow = vec3(0.12, 0.06, 0.02) * smoothstep(0.1, 0.9, luminance(color));
+    vec3 glow = vec3(0.12, 0.06, 0.02) * smoothstep(0.1, 0.9, luma(color));
     color += glow;
   `),
   'cool-bleach': commonFragment(`

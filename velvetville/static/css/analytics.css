@@ -1,0 +1,146 @@
+.lang-switcher {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    cursor: pointer;
+    outline: none;
+}
+
+.lang-switcher option {
+    background: var(--bg-panel);
+    color: white;
+}
+
+/* ANALYTICS DASHBOARD */
+.analytics-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.back-btn {
+    background: var(--accent-pink);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: var(--accent-hot);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--bg-panel);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: 0.85em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--accent-pink);
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    background: var(--bg-panel);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.chart-container h2 {
+    font-size: 1em;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.chart-container canvas {
+    max-height: 250px;
+}
+
+.recommendations-section {
+    background: var(--bg-panel);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.recommendations-section h2 {
+    margin-bottom: 15px;
+}
+
+.reco-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: transform 0.2s;
+}
+
+.reco-item:hover {
+    transform: translateX(5px);
+}
+
+.reco-rank {
+    background: var(--accent-pink);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.reco-name {
+    flex: 1;
+    font-size: 1.1em;
+}
+
+.reco-score {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}

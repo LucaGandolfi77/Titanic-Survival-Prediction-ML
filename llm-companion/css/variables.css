@@ -1,0 +1,25 @@
+:root {
+  --bg-deep: #0a0e1a;
+  --bg-night: #1a1a2e;
+  --bg-navy: #16213e;
+  --bg-surface: #0f3460;
+  --bg-card: rgba(15, 52, 96, 0.7);
+  --bg-glass: rgba(255, 255, 255, 0.06);
+  --accent-warm: #e94560;
+  --accent-soft: #f5c6a0;
+  --accent-gold: #ffd46f;
+  --accent-fire: #ff6b35;
+  --forest: #2d5a27;
+  --text-primary: #f5f0e8;
+  --text-secondary: #a8a59e;
+  --text-dim: #6b6860;
+  --glow-gold: rgba(255, 212, 111, 0.3);
+  --glow-rose: rgba(233, 69, 96, 0.3);
+  --shadow-warm: rgba(245, 198, 160, 0.15);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.4s ease;
+  --transition-slow: 0.8s ease;
+}

@@ -1,73 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Velvetville Online ??</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        body { background: #1a1a2e; color: #fff; font-family: 'Comic Sans MS', cursive, sans-serif; display: flex; }
-        #game-container { flex: 2; height: 100vh; position: relative; }
-        #ui-panel { flex: 1; background: #16213e; padding: 20px; border-left: 5px solid #e94560; display: flex; flex-direction: column; }
-        .glowing-text { text-shadow: 0 0 10px #e94560; }
-        #chat-box { flex: 1; overflow-y: auto; background: #0f3460; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
-        .msg { margin: 5px 0; animation: popIn 0.3s ease-out; }
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        input, button { padding: 10px; border-radius: 5px; border: none; font-weight: bold; }
-        button { background: #e94560; color: white; cursor: pointer; transition: 0.2s; }
-        button:hover { transform: scale(1.1); rotate: -2deg; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#e94560">
+    <meta name="description" content="Velvetville Fashion Week Arena - Slay or Nai">
+    <title>Velvetville — Fashion Week Arena</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/game.css">
+    <script src="/static/js/app.js" defer></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
 <body>
-    <div id="game-container">
-        <!-- Three.js will inject the canvas here -->
-        <h2 class="glowing-text event-header">
-            Event: {{ event.name }} (Bonus: x{{ event.multiplier }})
-        </h2>
-    </div>
-    
-    <div id="ui-panel">
-        <h1 class="glowing-text">?? Leaderboard</h1>
-        <ul id="leaderboard-list"></ul>
+    <div id="app-container">
+        <div id="top-bar">
+            <div class="xp-bar">
+                <span id="user-xp" class="xp-text">XP: 0</span>
+                <div class="xp-track">
+                    <div id="xp-fill" class="xp-fill"></div>
+                </div>
+                <span id="user-level" class="level-badge">Lv.1</span>
+            </div>
+            <div id="badges-container" class="badges-row"></div>
+            <a href="/analytics" class="analytics-link">📊</a>
+            <select id="lang-switcher" class="lang-switcher" onchange="changeLang(this.value)">
+                <option value="en">EN</option>
+                <option value="it">IT</option>
+                <option value="es">ES</option>
+            </select>
+        </div>
 
-        <!-- Voting Booth Snippet -->
-        <div id="voting-booth" style="background: #e94560; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center; box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);">
-            <h2 class="glowing-text" style="margin-top: 0;">👠 The Runway</h2>
-            <p>Judging: <b id="target-model" style="font-size: 1.2em;">Nobody</b></p>
-            <p>Wearing: <i id="target-outfit">Nothing</i></p>
-            
-            <input type="range" id="score-slider" min="1" max="10" value="5" 
-                   oninput="document.getElementById('score-display').innerText = this.value">
-
-            <div class="score-display-wrap">
-                <span id="score-display">5</span>/10
+        <div id="main-content">
+            <div id="game-container">
+                <h2 class="glowing-text event-header">
+                    Event: Summer Fashion Week (Bonus: x2)
+                </h2>
             </div>
 
-            <button onclick="submitVote()" class="vote-btn slay">Slay/Nay? 💅</button>
-            <button onclick="nextModel()" class="vote-btn skip">Skip ⏭️</button>
+            <div id="ui-panel">
+                <h1 class="glowing-text">🏆 Leaderboard</h1>
+                <ul id="leaderboard-list"></ul>
 
-            <div id="vote-feedback"></div>
-        </div>
-        <!-- End Voting Booth Snippet -->
+                <div id="voting-booth">
+                    <h2 class="glowing-text" style="margin-top:0;">👠 The Runway</h2>
+                    <p>Judging: <b id="target-model">Nobody</b></p>
+                    <p>Wearing: <i id="target-outfit">Nothing</i></p>
+                    <input type="range" id="score-slider" min="1" max="10" value="5">
+                    <div class="score-display-wrap">
+                        <span id="score-display">5</span>/10
+                    </div>
+                    <button id="btn-slay" class="vote-btn slay">Slay/Nay? 💅</button>
+                    <button id="btn-skip" class="vote-btn skip">Skip ⏭️</button>
+                    <div id="vote-feedback"></div>
+                </div>
 
-        <h1 class="glowing-text">?? Gossip Room</h1>
-        <div id="chat-box"></div>
-        <div style="display: flex; gap: 5px;">
-            <input type="text" id="chat-input" placeholder="Type something sassy...">
-            <button onclick="sendMessage()">Send ??</button>
+                <h1 class="glowing-text">💬 Gossip Room</h1>
+                <div id="chat-box"></div>
+                <div class="input-group">
+                    <input type="text" id="chat-input" placeholder="Type something sassy..." maxlength="200">
+                    <button id="btn-send">Send 💬</button>
+                </div>
+                <div id="online-count" class="online-indicator">👥 Connecting...</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Dynamically load game.js. If this template was rendered by Flask
-        // the Jinja expression will be replaced by a real path. If the file
-        // is opened directly (Live Server / file://) the string will still
-        // contain "{{" so we fall back to the relative static path.
-        (function(){
-            var candidate = "{{ url_for('static', filename='game.js') }}";
-            var src = candidate && candidate.indexOf("{{") === -1 ? candidate : '../static/game.js';
-            var s = document.createElement('script');
-            s.src = src; s.defer = true;
-            document.head.appendChild(s);
-        })();
-    </script>
+    <noscript>
+        <p style="text-align:center;color:#e94560;padding:20px;">
+            Velvetville requires JavaScript enabled.
+        </p>
+    </noscript>
 </body>
 </html>

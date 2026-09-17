@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Unravel">
+  <meta name="theme-color" content="#FDF8F3">
+  <meta name="description" content="Untangle the chaos — a gacha puzzle tactics game">
+  <title>UNRAVEL: Chaos Knots</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVV5SZXZhbCAtIENoYXJvcyBLb3VucyIsInNoYXJ0X25hbWUiOiJVblJldmFsIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IkZMRi4wOC4wNyIsInRoZW1lX2NvbG9yIjoiIzk1NzJDRkYiLCJpY29ucyI6W119">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23FDF8F3'/%3E%3Ctext x='90' y='120' font-size='100' text-anchor='middle'%3E🧵%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg-primary: #FDF8F3;
+      --bg-secondary: #F8F6FF;
+      --bg-card: #FFFFFF;
+      --text-primary: #7D6B7B;
+      --text-secondary: #A999AA;
+      --text-muted: #C4B8C0;
+      --accent: #9B72CF;
+      --accent-light: #C9A9E0;
+      --accent-hover: #E8A0BF;
+      --border: #F0D6E0;
+      --shadow: rgba(155, 114, 207, 0.1);
+      --red: #FFB3BA;
+      --blue: #BAE1FF;
+      --gold: #FFF5BA;
+      --shadow-color: #D4BAE1;
+      --chaos-color: #B8E6D0;
+      --success: #99D6B8;
+      --warning: #FFE599;
+      --danger: #FF8FAB;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+    .screen { display: none; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+    .screen.active { display: flex; }
+    .container { width: 100%; max-width: 430px; margin: 0 auto; padding: 1rem; padding-top: max(1rem, env(safe-area-inset-top)); padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- MENU SCREEN -->
+    <div id="screenMenu" class="screen active">
+      <div class="container" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:1.5rem;">
+        <div style="font-size:3.5rem;line-height:1;">🧵</div>
+        <h1 style="font-size:1.8rem;font-weight:700;color:var(--accent);text-align:center;">UNRAVEL</h1>
+        <p style="font-size:0.95rem;color:var(--text-secondary);text-align:center;max-width:260px;line-height:1.5;">Untangle the chaos. Collect Unravelers. Master the knots.</p>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;width:100%;max-width:260px;margin-top:1rem;">
+          <button id="btnContinue" class="btn-primary" style="display:none;">Continue Level <span id="continueLevel"></span></button>
+          <button id="btnPlay" class="btn-primary">Play</button>
+          <button id="btnGacha" class="btn-secondary">Void Pull</button>
+          <button id="btnRoster" class="btn-secondary">Roster</button>
+        </div>
+        <div style="margin-top:1.5rem;text-align:center;">
+          <div class="threads-display">🧶 <span id="menuThreads">150</span></div>
+          <div id="idleNotice" style="font-size:0.75rem;color:var(--accent);margin-top:0.5rem;display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEVEL SELECT SCREEN -->
+    <div id="screenLevels" class="screen">
+      <div class="container" style="display:flex;flex-direction:column;flex:1;">
+        <header style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+          <button id="btnBackFromLevels" class="btn-back">←</button>
+          <h2 style="font-size:1.3rem;font-weight:600;color:var(--accent);">Regions</h2>
+        </header>
+        <div id="levelList" style="display:flex;flex-direction:column;gap:0.75rem;flex:1;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="screenGame" class="screen">
+      <div class="container" style="display:flex;flex-direction:column;flex:1;padding-bottom:0;">
+        <header id="gameHeader" style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;flex-shrink:0;">
+          <button id="btnQuit" class="btn-back">✕</button>
+          <div style="display:flex;gap:1rem;align-items:center;">
+            <span style="font-size:0.85rem;color:var(--text-secondary);">Score: <strong id="gameScore" style="color:var(--accent);">0</strong></span>
+            <span style="font-size:0.85rem;color:var(--text-secondary);">🧶 <span id="gameThreads">150</span></span>
+          </div>
+          <div id="levelInfo" style="font-size:0.85rem;color:var(--text-secondary);font-weight:600;"></div>
+        </header>
+        <div id="bossHealth" style="display:none;margin-bottom:0.75rem;"></div>
+        <div id="boardContainer" style="display:flex;justify-content:center;flex:1;align-items:flex-start;padding:0.25rem 0;"></div>
+        <div id="hotbar" style="display:flex;gap:0.5rem;padding:0.75rem 0;justify-content:center;flex-shrink:0;padding-bottom:max(0.75rem, env(safe-area-inset-bottom));"></div>
+      </div>
+    </div>
+
+    <!-- VICTORY/DEFEAT OVERLAY -->
+    <div id="screenResult" class="screen" style="position:fixed;inset:0;z-index:100;background:rgba(253,248,243,0.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;">
+      <div style="text-align:center;padding:2rem;max-width:300px;">
+        <div id="resultIcon" style="font-size:4rem;margin-bottom:1rem;"></div>
+        <h2 id="resultTitle" style="font-size:1.8rem;font-weight:700;color:var(--accent);margin-bottom:0.5rem;"></h2>
+        <p id="resultSubtitle" style="color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.5;"></p>
+        <div id="resultRewards" style="margin-bottom:1.5rem;"></div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <button id="btnNextLevel" class="btn-primary">Continue</button>
+          <button id="btnResultMenu" class="btn-secondary">Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GACHA SCREEN -->
+    <div id="screenGacha" class="screen">
+      <div class="container" style="display:flex;flex-direction:column;flex:1;">
+        <header style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+          <button id="btnBackFromGacha" class="btn-back">←</button>
+          <h2 style="font-size:1.3rem;font-weight:600;color:var(--accent);">Void Pull</h2>
+        </header>
+        <div id="gachaContent" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;"></div>
+      </div>
+    </div>
+
+    <!-- ROSTER SCREEN -->
+    <div id="screenRoster" class="screen">
+      <div class="container" style="display:flex;flex-direction:column;flex:1;">
+        <header style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;">
+          <button id="btnBackFromRoster" class="btn-back">←</button>
+          <h2 style="font-size:1.3rem;font-weight:600;color:var(--accent);">Roster</h2>
+        </header>
+        <div id="rosterContent" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0.75rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/board.js"></script>
+  <script src="js/combat.js"></script>
+  <script src="js/gacha.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* Touch Controls */
+#touch-controls {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
+#joystick-zone {
+  position: absolute;
+  bottom: calc(var(--action-bar-height) + var(--safe-bottom) + 80px);
+  left: var(--spacing-lg);
+  width: 120px;
+  height: 120px;
+  pointer-events: auto;
+}
+
+#joystick-outer {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(44, 36, 16, 0.4);
+  border: 2px solid var(--primary-dark);
+  position: relative;
+}
+
+#joystick-knob {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(139, 105, 20, 0.5);
+  border: 2px solid var(--primary);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: none;
+}
+
+#action-buttons {
+  position: absolute;
+  bottom: calc(var(--action-bar-height) + var(--safe-bottom) + 16px);
+  right: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-sm);
+  pointer-events: auto;
+}
+
+.action-btn-lg {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(44, 36, 16, 0.6);
+  border: 2px solid var(--primary-dark);
+  color: var(--text-light);
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.1;
+  font-size: 9px;
+  flex-direction: column;
+  padding: 4px;
+}
+
+.action-btn-lg:active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-dark);
+}
+
+/* Multi-select rectangle overlay */
+#select-rect {
+  position: fixed;
+  border: 2px dashed var(--primary);
+  background: rgba(139, 105, 20, 0.1);
+  pointer-events: none;
+  z-index: 60;
+}
+
+/* Drag ghost for citizen */
+.drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 70;
+  font-size: 28px;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Path preview */
+.path-preview {
+  position: fixed;
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* Age transition overlay */
+#age-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+}
+
+#age-transition h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--primary);
+  animation: age-pulse 1.5s infinite;
+}
+
+@keyframes age-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+#age-transition p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Floating combat text */
+.combat-text {
+  position: fixed;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  pointer-events: none;
+  z-index: 65;
+  animation: float-up 0.8s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+/* Ripple effect for Time Ripple */
+.time-ripple-effect {
+  position: fixed;
+  border: 3px solid rgba(30, 95, 168, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 55;
+  animation: ripple-expand 2s ease-out forwards;
+}
+
+@keyframes ripple-expand {
+  0% { width: 20px; height: 20px; opacity: 1; }
+  100% { width: 200px; height: 200px; opacity: 0; }
+}

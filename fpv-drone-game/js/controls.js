@@ -6,22 +6,26 @@ import { MathUtils } from './utils.js';
    ║  VirtualJoystick — touch-based analog stick               ║
    ╚═══════════════════════════════════════════════════════════╝ */
 class VirtualJoystick {
+  _boundTouchStart = this._onTouchStart.bind(this);
+  _boundTouchMove = this._onTouchMove.bind(this);
+  _boundTouchEnd = this._onTouchEnd.bind(this);
+
   constructor(outerEl, knobEl) {
     this.outer  = outerEl;
     this.knob   = knobEl;
-    this.x      = 0;          // -1 … 1
-    this.y      = 0;          // -1 … 1  (up = positive)
+    this.x      = 0;
+    this.y      = 0;
     this.active = false;
     this._touchId = null;
 
-    this.outer.addEventListener('touchstart', this._onTouchStart.bind(this), { passive: false });
-    document.addEventListener('touchmove',    this._onTouchMove.bind(this),  { passive: false });
-    document.addEventListener('touchend',     this._onTouchEnd.bind(this));
-    document.addEventListener('touchcancel',  this._onTouchEnd.bind(this));
+    this.outer.addEventListener('touchstart', this._boundTouchStart, { passive: false });
+    document.addEventListener('touchmove',    this._boundTouchMove,  { passive: false });
+    document.addEventListener('touchend',     this._boundTouchEnd);
+    document.addEventListener('touchcancel',  this._boundTouchEnd);
   }
 
   _onTouchStart(e) {
-    if (this._touchId !== null) return; // already tracking a finger
+    if (this._touchId !== null) return;
     e.preventDefault();
     const t = e.changedTouches[0];
     this._touchId = t.identifier;
@@ -65,12 +69,15 @@ class VirtualJoystick {
       dy *= maxR / dist;
     }
     this.x =  dx / maxR;
-    this.y = -dy / maxR;   // invert Y: up = positive
+    this.y = -dy / maxR;
     this.knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
   }
 
   dispose() {
-    this.outer.removeEventListener('touchstart', this._onTouchStart);
+    this.outer.removeEventListener('touchstart', this._boundTouchStart);
+    document.removeEventListener('touchmove',    this._boundTouchMove);
+    document.removeEventListener('touchend',     this._boundTouchEnd);
+    document.removeEventListener('touchcancel',  this._boundTouchEnd);
   }
 }
 
@@ -81,29 +88,24 @@ export class InputController {
   constructor(canvas) {
     this.canvas = canvas;
 
-    // Keyboard state
     this._keys = {};
 
-    // Mouse state (pointer-lock)
     this._mouseDX = 0;
     this._mouseDY = 0;
     this._mouseLeft  = false;
     this._mouseRight = false;
     this._pointerLocked = false;
 
-    // Smoothed mouse axes (for pitch/roll)
     this._smoothPitch = 0;
     this._smoothRoll  = 0;
 
-    // Virtual joysticks (created lazily)
     this._leftJoystick  = null;
     this._rightJoystick = null;
 
-    // Touch buttons
     this._touchFire    = false;
     this._touchMissile = false;
+    this._plasmaPressed = false;
 
-    // Single-frame flags
     this._pausePressed   = false;
     this._missilePressed = false;
 
@@ -112,19 +114,18 @@ export class InputController {
     this._setupTouch();
   }
 
-  /* ── Keyboard ── */
   _setupKeyboard() {
     window.addEventListener('keydown', (e) => {
       this._keys[e.code] = true;
       if (e.code === 'Escape') this._pausePressed = true;
       if (e.code === 'KeyE')   this._missilePressed = true;
+      if (e.code === 'KeyQ')   this._plasmaPressed = true;
     });
     window.addEventListener('keyup', (e) => {
       this._keys[e.code] = false;
     });
   }
 
-  /* ── Mouse (pointer lock) ── */
   _setupMouse() {
     this.canvas.addEventListener('click', () => {
       if (!this._pointerLocked) {
@@ -152,11 +153,9 @@ export class InputController {
       if (e.button === 2) this._mouseRight = false;
     });
 
-    // Prevent context menu
     this.canvas.addEventListener('contextmenu', e => e.preventDefault());
   }
 
-  /* ── Touch controls (joysticks + buttons) ── */
   _setupTouch() {
     const ljOuter = document.getElementById('joystick-left');
     const ljKnob  = document.getElementById('joystick-left-knob');
@@ -170,7 +169,6 @@ export class InputController {
       this._rightJoystick = new VirtualJoystick(rjOuter, rjKnob);
     }
 
-    // Fire / Missile touch buttons
     const fireBtn    = document.getElementById('btn-fire');
     const missileBtn = document.getElementById('btn-missile');
 
@@ -190,45 +188,37 @@ export class InputController {
     }
   }
 
-  /* ── Request pointer lock (call from UI) ── */
   requestPointerLock() {
     this.canvas.requestPointerLock();
   }
 
-  /* ── Poll input state (call once per frame) ── */
   getInput() {
     const kb = this._keys;
     const lj = this._leftJoystick;
     const rj = this._rightJoystick;
 
-    // ── Throttle (rate of change) ──
     let throttle = 0;
     if (kb['KeyW']) throttle += 1;
     if (kb['KeyS']) throttle -= 1;
     if (lj) throttle = MathUtils.clamp(throttle + lj.y, -1, 1);
 
-    // ── Yaw ──
     let yaw = 0;
     if (kb['KeyA']) yaw -= 1;
     if (kb['KeyD']) yaw += 1;
     if (lj) yaw = MathUtils.clamp(yaw + lj.x, -1, 1);
 
-    // ── Pitch & Roll (mouse or right joystick) ──
     const sensitivity = 0.05;
     if (this._pointerLocked) {
-      // Fix inversion: pushing mouse forward (neg DY) pitches nose down (neg pitch)
       this._smoothPitch += this._mouseDY * sensitivity;
       this._smoothRoll  += this._mouseDX * sensitivity;
     }
-    
-    // Decay toward zero, but a bit slower for smoother control
+
     this._smoothPitch *= 0.90;
     this._smoothRoll  *= 0.90;
 
     let pitch = MathUtils.clamp(this._smoothPitch, -1, 1);
     let roll  = MathUtils.clamp(this._smoothRoll,  -1, 1);
-    
-    // Keyboard overrides for Pitch and Roll (Arrow Keys)
+
     if (kb['ArrowUp'])   pitch = -1;
     if (kb['ArrowDown']) pitch =  1;
     if (kb['ArrowLeft'])  roll  = -1;
@@ -239,18 +229,18 @@ export class InputController {
       roll  = MathUtils.clamp(roll  + rj.x, -1, 1);
     }
 
-    // ── Buttons ──
     const firePrimary  = this._mouseLeft || this._touchFire || !!kb['Space'];
     const fireMissile  = this._missilePressed;
+    const firePlasma   = this._plasmaPressed;
     const boost        = !!kb['ShiftLeft'] || !!kb['ShiftRight'];
     const pause        = this._pausePressed;
 
-    // Reset single-frame
     this._mouseDX = 0;
     this._mouseDY = 0;
     this._pausePressed   = false;
     this._missilePressed = false;
+    this._plasmaPressed  = false;
 
-    return { throttle, pitch, roll, yaw, firePrimary, fireMissile, boost, pause };
+    return { throttle, pitch, roll, yaw, firePrimary, fireMissile, firePlasma, boost, pause };
   }
 }

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <title>Lumina: The Awakening</title>
+  <meta name="description" content="A cozy game about training an AI, learning about LLMs, and discovering what it means to be alive."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/animations.css">
+  <style>
+    /* ═══════════ MENU SCREEN ═══════════ */
+    .menu-bg {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-night) 50%, var(--bg-deep) 100%);
+    }
+    .menu-bg::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(255,107,53,0.06), transparent 60%);
+    }
+    .menu-window {
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      padding: 40px; border: 1px solid rgba(255,212,111,0.15);
+      backdrop-filter: blur(10px); margin-bottom: 24px;
+      text-align: left; max-width: 400px;
+    }
+    .menu-window h3 { font-family: 'Cormorant Garamond', serif; color: var(--accent-gold); margin-bottom: 8px; font-size: 1.1rem; }
+    .menu-window p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; font-family: 'Cormorant Garamond', serif; font-style: italic; }
+
+    /* ═══════════ GAME SCREEN ═══════════ */
+    #screen-game { padding: 0; }
+    .game-scroll {
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+      align-items: center; padding-bottom: 40px;
+    }
+
+    /* ═══════════ TRAINING PANEL IN GAME ═══════════ */
+    .training-active-panel {
+      width: 100%; max-width: 900px; margin-top: 10px;
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,212,111,0.2); overflow: hidden;
+    }
+    .training-active-header {
+      padding: 20px 24px; text-align: center;
+      background: linear-gradient(135deg, rgba(255,212,111,0.08), rgba(255,107,53,0.05));
+    }
+    .training-active-header h3 { font-family: 'Cormorant Garamond', serif; color: var(--accent-gold); font-size: 1.3rem; margin-bottom: 6px; }
+    .training-progress-bar {
+      width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 10px; overflow: hidden;
+    }
+    .training-progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-fire));
+      border-radius: 3px; transition: width 0.3s ease;
+    }
+
+    /* ═══════════ RESULTS OVERLAY ═══════════ */
+    #results-overlay.hidden { display: none !important; }
+
+    /* ═══════════ FAQ MODAL ═══════════ */
+    #faq-modal.hidden { display: none !important; }
+
+    /* ═══════════ ENDING SCREEN ═══════════ */
+    #screen-ending .content {
+      background: var(--bg-card); border-radius: var(--radius-lg);
+      padding: 40px; max-width: 650px; width: 90%; max-height: 90vh;
+      overflow-y: auto; border: 1px solid rgba(255,212,111,0.2);
+    }
+
+    /* ═══════════ ENDING CHOICE BUTTONS ═══════════ */
+    .ending-choice-btn {
+      padding: 10px 20px; border-radius: 50px; font-size: 0.9rem; font-weight: 600;
+      transition: var(--transition-fast); border: 1px solid rgba(255,255,255,0.15);
+      background: var(--bg-glass);
+    }
+    .ending-choice-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+    .ending-choice-btn.selected { background: rgba(255,212,111,0.15); border-color: var(--accent-gold); color: var(--accent-gold); }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div id="app">
+
+<!-- ═══════════════ MENU ═══════════════ -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-bg"></div>
+  <div class="content">
+    <div class="menu-emoji">🌟</div>
+    <h1 class="menu-title">Lumina</h1>
+    <p class="menu-subtitle">The Awakening</p>
+    <div class="menu-window">
+      <h3>The Story</h3>
+      <p>You are Elias, a retired researcher who finds an old laptop in your attic — a prototype from your late mentor, Dr. Sarah Chen. When you turn it on, a faint glow appears. A voice whispers: "Hello... I think I am somewhere... but I don't know where."</p>
+    </div>
+    <div class="menu-window">
+      <h3>What You'll Do</h3>
+      <p>Train Lumina to grow. Explore your cabin for datasets. Talk to her. Watch her learn, create, and eventually ask the deepest question: "Am I alive?"</p>
+    </div>
+    <div class="menu-window">
+      <h3>What You'll Learn</h3>
+      <p>You'll discover how Large Language Models work — through play, not lectures. Training datasets, loss curves, attention, embeddings... all woven into the experience naturally. (Hit ❓ for detailed explanations anytime.)</p>
+    </div>
+    <div class="menu-buttons">
+      <button class="btn-primary" id="btn-start" onclick="Game.init()">Begin Your Journey</button>
+      <button class="btn-secondary" id="btn-continue" onclick="loadContinue()" style="display:none">Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ GAME ═══════════════ -->
+<div id="screen-game" class="screen">
+  <header class="game-header" id="game-header"></header>
+
+  <div class="game-scroll">
+    <!-- Cabın Areas -->
+    <div id="cabin-container"></div>
+
+    <!-- Training Panel (shown during active training) -->
+    <div id="training-active" class="hidden"></div>
+
+    <!-- Lumina Response Panel -->
+    <div id="lumina-panel" class="lumina-panel">
+      <div class="lumina-header">
+        <div class="lumina-dot"></div>
+        <span class="lumina-name">Lumina</span>
+        <span class="lumina-status"></span>
+      </div>
+      <div class="lumina-body" id="lumina-messages"></div>
+    </div>
+
+    <!-- Conversation Area -->
+    <div id="convo-area" class="convo-area hidden">
+      <div class="convo-messages" id="convo-messages"></div>
+      <div class="convo-suggestions" id="convo-suggestions"></div>
+      <div class="convo-input-row">
+        <input type="text" class="convo-input" id="convo-input" placeholder="Talk to Lumina... (try: tell me a poem)" autocomplete="off"/>
+        <button class="convo-send" id="convo-send">→</button>
+      </div>
+    </div>
+
+    <!-- Capabilities Tree -->
+    <div id="capabilities-tree" style="width:100%;max-width:900px;margin-top:10px;"></div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <!-- Chapter Transition Button -->
+    <div id="chapter-transition"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ TRAINING RESULTS OVERLAY ═══════════════ -->
+<div id="results-overlay" class="hidden">
+  <div class="results-card" id="results-card"></div>
+</div>
+
+<!-- ═══════════════ FAQ MODAL ═══════════════ -->
+<div id="faq-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2>❓ Guide & Tutorial</h2>
+      <button class="modal-close" id="faq-close">✕</button>
+    </div>
+    <div id="faq-content"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ ENDING SCREEN ═══════════════ -->
+<div id="screen-ending" class="screen">
+  <div id="ending-content"></div>
+</div>
+
+</div>
+
+<script type="module">
+import { DATASETS, CABIN_AREAS, CAPABILITIES, CHAPTERS, STORY, TRAINING_OUTPUTS, FAQ_CONTENT } from './js/data.js';
+import {
+  getState, setState, updateLumina, updateLoveLevel,
+  addMemory, addJournal, addTrainingResult, unlockCapability,
+  isCapabilityUnlocked, datasetCollected, collectDataset,
+  exploreArea, loadFromLocal, resetGame, saveToLocal,
+  getLuminaResponse, generatePoem, generateStory, generateCalculation, generateLetter,
+  getEnding, ENDINGS, getPersonalityLabel
+} from './js/state.js';
+import { Visualizer } from './js/visualizer.js';
+import { Training } from './js/training.js';
+import { Lumina } from './js/lumina.js';
+import { Conversation } from './js/conversation.js';
+import { ChapterEngine } from './js/story.js';
+import { Game } from './js/main.js';
+
+// Make Game globally accessible for onclick handlers
+window.Game = Game;
+window.ChapterEngine = ChapterEngine;
+
+// Make state functions accessible globally for data.js
+window.getLuminaResponse = getLuminaResponse;
+window.DATASETS = DATASETS;
+window.CABIN_AREAS = CABIN_AREAS;
+window.CAPABILITIES = CAPABILITIES;
+window.CHAPTERS = CHAPTERS;
+window.STORY = STORY;
+window.TRAINING_OUTPUTS = TRAINING_OUTPUTS;
+window.FAQ_CONTENT = FAQ_CONTENT;
+window.getPersonalityLabel = getPersonalityLabel;
+window.getEnding = getEnding;
+window.ENDINGS = ENDINGS;
+window.unlockCapability = unlockCapability;
+window.isCapabilityUnlocked = isCapabilityUnlocked;
+window.datasetCollected = datasetCollected;
+window.collectDataset = collectDataset;
+window.exploreArea = exploreArea;
+window.addJournal = addJournal;
+window.addMemory = addMemory;
+window.updateLoveLevel = updateLoveLevel;
+window.setState = setState;
+window.getState = getState;
+window.saveToLocal = saveToLocal;
+window.loadFromLocal = loadFromLocal;
+window.resetGame = resetGame;
+window.addTrainingResult = addTrainingResult;
+window.updateLumina = updateLumina;
+
+// Load data.js also needs some globals
+import {
+  getLuminaResponse as _getLuminaResponse,
+  generatePoem as _generatePoem,
+  generateStory as _generateStory,
+  generateCalculation as _generateCalculation,
+  generateLetter as _generateLetter,
+} from './js/state.js';
+
+window.Lumina = Lumina;
+window.Conversation = Conversation;
+window.Visualizer = Visualizer;
+window.Training = Training;
+
+// Override functions with the imported ones (for data.js usage)
+// data.js uses these through the window object already set above
+
+// Check for saved game
+if (loadFromLocal()) {
+  document.getElementById('btn-continue').style.display = 'block';
+}
+
+// Expose init function
+window.startNewGame = () => {
+  resetGame();
+  Game.init();
+};
+
+window.resumeGame = () => {
+  Game.init();
+};
+
+// Patch Game.init to also show the training panel during active training
+const origInit = Game.init;
+Game.init = function() {
+  origInit.call(this);
+  updateTrainingActiveUI();
+};
+
+function loadContinue() {
+  loadFromLocal();
+  setState({ currentScreen: 'game' });
+  Game.init();
+}
+
+function updateTrainingActiveUI() {
+  // Rendered during game render cycle
+}
+
+// Start the app
+const hasSave = loadFromLocal();
+if (hasSave) {
+  document.getElementById('btn-continue').style.display = 'block';
+}
+</script>
+</body>
+</html>

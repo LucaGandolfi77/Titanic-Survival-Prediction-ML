@@ -1,0 +1,36 @@
+:root {
+  --primary: #8B6914;
+  --primary-dark: #5c450e;
+  --primary-light: #c4972a;
+  --secondary: #2d5016;
+  --secondary-light: #4a8022;
+  --danger: #9b2226;
+  --danger-light: #c9363a;
+  --bg-dark: #1a1408;
+  --bg-light: #f4e8c1;
+  --bg-card: #2c2410;
+  --text-dark: #2c1810;
+  --text-light: #faf7f0;
+  --text-muted: #a89870;
+  --accent-blue: #1e5fa8;
+  --accent-silver: #a8a8a8;
+  --success: #357a38;
+  --warning: #d4a017;
+  --font-display: 'Chakra Petch', sans-serif;
+  --font-ui: 'Inter', sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --hud-height: 48px;
+  --action-bar-height: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}

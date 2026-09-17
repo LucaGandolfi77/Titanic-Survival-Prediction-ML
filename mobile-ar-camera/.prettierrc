@@ -1,0 +1,13 @@
+{
+  "semi": ["error", "never"],
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "commaSpacing": { "before": false, "after": true },
+  "spaceBeforeFunctionParen": "always",
+  "endOfLine": "lf"
+}

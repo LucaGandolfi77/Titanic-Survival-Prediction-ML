@@ -1,0 +1,88 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+}
+
+input, select {
+  font-family: inherit;
+  color: inherit;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.menu-btn {
+  display: block;
+  width: 80%;
+  max-width: 320px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: var(--spacing-sm) auto;
+  background: var(--bg-card);
+  color: var(--text-light);
+  border: 1px solid var(--primary-dark);
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.menu-btn:active {
+  transform: scale(0.97);
+  background: var(--primary-dark);
+}
+
+.menu-btn.primary {
+  background: var(--primary);
+  color: var(--text-dark);
+  border-color: var(--primary);
+  font-size: 16px;
+}
+
+.menu-btn.primary:active {
+  background: var(--primary-dark);
+}
+
+.menu-btn.small {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 12px;
+  width: auto;
+  margin: var(--spacing-xs);
+}

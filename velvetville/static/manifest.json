@@ -1,0 +1,39 @@
+{
+  "name": "Velvetville",
+  "short_name": "Velvetville",
+  "description": "Fashion Week Arena - Slay or Nay",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#e94560",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "outfit_title",
+      "text": "outfit_description",
+      "files": [
+        {
+          "name": "outfit",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  }
+}

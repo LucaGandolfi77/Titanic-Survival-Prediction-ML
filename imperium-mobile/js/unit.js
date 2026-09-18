@@ -1,11 +1,11 @@
 import { mapState } from './map.js';
-import { hexToPixelCenter } from '../utils/hex-math.js';
-import { rand } from '../utils/helpers.js';
-import { UNITS } from '../data/units.js';
+import { hexToPixelCenter } from './utils/hex-math.js';
+import { rand } from './utils/helpers.js';
+import { UNITS } from './data/units.js';
 import { haptic } from './ui/notifications.js';
 
 export const units = [];
-export const selectedUnit = null;
+export let selectedUnit = null;
 export let nextUnitId = 0;
 
 export function spawnUnit(unitId, q, r, faction) {

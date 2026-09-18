@@ -1,9 +1,9 @@
-import { FACTION_KEYS, FACTIONS } from '../data/factions.js';
+import { FACTION_KEYS, FACTIONS } from './data/factions.js';
 import { showToast, haptic } from './ui/notifications.js';
-import { rand } from '../utils/helpers.js';
+import { rand } from './utils/helpers.js';
 import { units } from './unit.js';
 import { mapState } from './map.js';
-import { hexToPixelCenter } from '../utils/hex-math.js';
+import { hexToPixelCenter } from './utils/hex-math.js';
 import { ai } from './ai.js';
 
 const RELATION_STATES = ['allied', 'friendly', 'neutral', 'tense', 'at_war'];

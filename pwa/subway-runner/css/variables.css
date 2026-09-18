@@ -1,0 +1,35 @@
+:root {
+  --accent-primary: #00e5ff;
+  --accent-secondary: #ff3d00;
+  --accent-gold: #ffd600;
+  --accent-green: #00e676;
+  --accent-red: #ff1744;
+  --accent-purple: #d500f9;
+
+  --bg-dark: #0a0e1a;
+  --bg-overlay: rgba(10, 14, 26, 0.85);
+  --bg-panel: rgba(15, 20, 40, 0.92);
+
+  --text-primary: #ffffff;
+  --text-secondary: #b0bec5;
+  --text-dim: #546e7a;
+
+  --hud-color: rgba(0, 229, 255, 0.9);
+  --hud-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  --hud-score-color: #ffd600;
+
+  --font-title: 'Orbitron', sans-serif;
+  --font-ui: 'Rajdhani', sans-serif;
+  --font-hud: 'Share Tech Mono', monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --joystick-size: 120px;
+  --joystick-knob: 48px;
+}

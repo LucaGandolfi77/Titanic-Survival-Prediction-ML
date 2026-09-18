@@ -116,3 +116,5 @@ export class HUDController {
     }
   }
 }
+
+export const hud = new HUDController();

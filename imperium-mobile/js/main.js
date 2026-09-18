@@ -24,7 +24,7 @@ import { weather } from './weather.js';
 import { dna } from './dna-mutation.js';
 import { hero } from './hero.js';
 import { territory } from './territory.js';
-import { campaign, CAMPAIGN_MISSIONS, loadCampaignState, completeMission, checkCampaignWin, checkCampaignLose, getMissionProgress } from './campaign.js';
+import { CAMPAIGN_MISSIONS, loadCampaignState, completeMission, checkCampaignWin, checkCampaignLose, getMissionProgress } from './campaign.js';
 
 export { manpower, diplomacy, mercenary };
 export let camera, renderer;
@@ -86,7 +86,7 @@ export async function initGame(seed) {
   buildings.length = 0;
   citizens.length = 0;
   units.length = 0;
-  selectedCitizen = null;
+  deselectCitizen();
   selectedUnit = null;
   currentAge = 0;
   researchedTechs.clear();
@@ -151,7 +151,7 @@ export function startTwoPlayer(p1, p2) {
   buildings.length = 0;
   citizens.length = 0;
   units.length = 0;
-  selectedCitizen = null;
+  deselectCitizen();
   selectedUnit = null;
   currentAge = 0;
   researchedTechs.clear();
@@ -224,7 +224,7 @@ export function check2PWin() {
 
 function initCitizensFor2P(p1, p2) {
   citizens.length = 0;
-  selectedCitizen = null;
+  deselectCitizen();
   for (let i = 0; i < 5; i++) {
     const c = createCitizen(
       ['Bruno', 'Elena', 'Marcus', 'Aria', 'Lucan'][i] + ' P1',

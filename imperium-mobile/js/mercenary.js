@@ -1,10 +1,10 @@
 import { resources } from './resource.js';
 import { units, spawnUnit } from './unit.js';
 import { mapState } from './map.js';
-import { hexToPixelCenter } from '../utils/hex-math.js';
-import { FACTION_KEYS, FACTIONS } from '../data/factions.js';
+import { hexToPixelCenter } from './utils/hex-math.js';
+import { FACTION_KEYS, FACTIONS } from './data/factions.js';
 import { showToast, haptic } from './ui/notifications.js';
-import { rand } from '../utils/helpers.js';
+import { rand } from './utils/helpers.js';
 import { particles } from './render/particles.js';
 
 export const mercenary = {

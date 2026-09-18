@@ -1,5 +1,5 @@
 import { generateMap, MAP_SIZE, exploreMap } from './data/map-templates.js';
-import { hexToPixelCenter, hexDistance, pixelToHex } from '../utils/hex-math.js';
+import { hexToPixelCenter, hexDistance, pixelToHex } from './utils/hex-math.js';
 import { Storage } from './utils/storage.js';
 import { fog } from './fog.js';
 

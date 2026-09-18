@@ -1,7 +1,7 @@
-import { mapState } from './map.js';
+import { mapState } from '../map.js';
 import { hexToPixelCenter } from '../utils/hex-math.js';
 import { rand } from '../utils/helpers.js';
-import { haptic } from './ui/notifications.js';
+import { haptic } from '../ui/notifications.js';
 
 export const particles = [];
 

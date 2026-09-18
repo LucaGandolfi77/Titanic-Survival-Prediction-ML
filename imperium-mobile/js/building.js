@@ -1,6 +1,7 @@
 import { mapState } from './map.js';
-import { hexToPixelCenter } from '../utils/hex-math.js';
-import { BUILDINGS } from '../data/buildings.js';
+import { hexToPixelCenter } from './utils/hex-math.js';
+import { BUILDINGS } from './data/buildings.js';
+export { BUILDINGS };
 import { haptic } from './ui/notifications.js';
 import { fog } from './fog.js';
 

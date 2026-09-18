@@ -1,7 +1,7 @@
 import { resources } from './resource.js';
 import { units } from './unit.js';
 import { citizens } from './citizen.js';
-import { BUILDINGS } from '../data/buildings.js';
+import { BUILDINGS } from './data/buildings.js';
 import { showToast, haptic } from './ui/notifications.js';
 
 const AGE_MULTIPLIER = [1, 1.5, 2.5, 4];

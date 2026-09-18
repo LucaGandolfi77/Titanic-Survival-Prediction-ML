@@ -1,4 +1,4 @@
-import { rand } from '../utils/helpers.js';
+import { rand } from './utils/helpers.js';
 import { showToast, haptic } from './ui/notifications.js';
 
 const WEATHER_TYPES = ['clear', 'rain', 'storm', 'fog', 'snow'];

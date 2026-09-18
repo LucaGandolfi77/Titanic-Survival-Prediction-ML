@@ -1,4 +1,4 @@
-import { rand } from '../utils/helpers.js';
+import { rand } from './utils/helpers.js';
 import { showToast } from './ui/notifications.js';
 
 const MUTATION_CHANCE = 0.05;

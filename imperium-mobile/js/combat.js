@@ -2,7 +2,7 @@ import { units, spawnUnit, getEnemyUnitsNear, updateUnits } from './unit.js';
 import { mapState } from './map.js';
 import { resources } from './resource.js';
 import { haptic } from './ui/notifications.js';
-import { FACTIONS } from '../data/factions.js';
+import { FACTIONS } from './data/factions.js';
 import { hero } from './hero.js';
 
 export const combat = {

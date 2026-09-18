@@ -48,3 +48,5 @@ export const FACTIONS = {
     reputation: 0,
   },
 };
+
+export const FACTION_KEYS = Object.keys(FACTIONS);

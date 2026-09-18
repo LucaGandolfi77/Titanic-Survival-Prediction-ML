@@ -1,12 +1,12 @@
-import { FACTION_KEYS, FACTIONS } from '../data/factions.js';
-import { rand } from '../utils/helpers.js';
-import { hexToPixelCenter } from '../utils/hex-math.js';
+import { FACTION_KEYS, FACTIONS } from './data/factions.js';
+import { rand } from './utils/helpers.js';
+import { hexToPixelCenter } from './utils/hex-math.js';
 import { mapState } from './map.js';
 import { units } from './unit.js';
-import { resources } from '../resource.js';
+import { resources } from './resource.js';
 import { buildings, BUILDINGS } from './building.js';
-import { UNITS } from '../data/units.js';
-import { showToast, haptic } from '../ui/notifications.js';
+import { UNITS } from './data/units.js';
+import { showToast, haptic } from './ui/notifications.js';
 import { hero } from './hero.js';
 import { territory } from './territory.js';
 import { weather } from './weather.js';

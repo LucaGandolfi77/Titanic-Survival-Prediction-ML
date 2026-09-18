@@ -1,4 +1,4 @@
-import { FACTION_KEYS, FACTIONS } from '../data/factions.js';
+import { FACTION_KEYS, FACTIONS } from './factions.js';
 
 export const BUILDINGS = {
   town_center: {
